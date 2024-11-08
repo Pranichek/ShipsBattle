@@ -1,4 +1,5 @@
 import socket
+from .screens.server_screen import server_screen
 
 def start_server():
     with socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM) as server_socket:
@@ -13,3 +14,4 @@ def start_server():
         print(response_data)
 
 start_server()
+server_screen()
