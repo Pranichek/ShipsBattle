@@ -1,4 +1,5 @@
 import socket
+import threading
 
 #створємо функцію для запуску серверу
 def start_server():
@@ -16,5 +17,8 @@ def start_server():
         response_data = client_soket.recv(1240).decode()
         #Виводимо отримані дані у консоль
         print(response_data)
+
+server_thred = threading.Thread(target = start_server)
+
 
  
