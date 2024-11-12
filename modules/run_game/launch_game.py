@@ -2,10 +2,12 @@ import pygame
 import modules.screens.server_screen as server_module_screen
 from ..json_functions import write_json , list_users
 from ..screens import screen_server
+from ..classes import CreateImage
 
 # Ініціалізуємо всі модулі pygame для початку роботи
 pygame.init()
 
+first_image = CreateImage(x_cor = 100 , y_cor = 200 , width = 100, height = 100,name_folder= "images_background" , image_name= "image.png")
 
 
 def start_game():
@@ -25,6 +27,7 @@ def start_game():
         print(activa)
         server_module_screen.FPS.tick(60)
         server_module_screen.screen_server.fill((255 , 192 , 203))
+        first_image.draw(screen = screen_server)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False
