@@ -2,7 +2,7 @@
 import pygame
 import modules.screens.user_screen as module_user_screen
 from ..screens import screen_user
-from ..client import connect_user
+from ..client import thread_user
 from ..classes import DrawImage
 from ..game import input_texts
 import sys
@@ -18,7 +18,7 @@ inputd_text_font = DrawImage(width = 346 ,height= 68, x_cor = 467, y_cor= 518,fo
 #створюємо функцію, яка викликається при запуску гри для користувача який приєднується до серверу
 def user_window():
    #викликаємо функцію для підключення користувача до серверу
-   connect_user()
+   thread_user.start()
    #встановлюємо назву вікна гри для користувача
    pygame.display.set_caption("Screen_User")
    #створюжмо змінну для того щоб відстежувати коли треба закривати вікно

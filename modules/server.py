@@ -6,7 +6,7 @@ def start_server():
     # Створюємо сокет з використанням протоколу IPv4 (AF_INET) та TCP (SOCK_STREAM)
     with socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM) as server_socket:
         # Прив'язуємо сокет до порту 6060 , та робимо так щоб до нього могли підключатися користувачи із різних мереж
-        server_socket.bind(("0.0.0.0", 6060))
+        server_socket.bind(("0.0.0.0", 7322))
         #Ставимо сервер у режим очікування підключень
         server_socket.listen()
         print("connecting")
@@ -19,6 +19,7 @@ def start_server():
         print(response_data)
 
 server_thred = threading.Thread(target = start_server)
+
 
 
  

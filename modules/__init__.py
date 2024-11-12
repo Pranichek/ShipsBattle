@@ -1,5 +1,5 @@
 #імпортуємо усі необхідні компоненти проекту, щоб їх можна було легко використовувати в інших частинах програми, та також за межами папки modules 
 from .server import server_thred
-from .client import connect_user
+from .client import thread_user
 from .run_game import *
 from .screens import *
