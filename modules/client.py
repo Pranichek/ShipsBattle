@@ -1,4 +1,5 @@
 import socket
+from threading import Thread
 
 
 #створюємо функцію підключення користувача до серверу
@@ -9,10 +10,6 @@ def connect_user():
         client_socket.connect(("192.168.0.4", 6060))
         # відправляємо дані від користувача на сервер , та кодуємо їх у байти
         client_socket.send("-_-".encode())
-    
 
-
-    
-
-    
-    
+client_thread = Thread(target = connect_user)
+client_thread.start

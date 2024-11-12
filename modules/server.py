@@ -17,4 +17,4 @@ def start_server():
         #Виводимо отримані дані у консоль
         print(response_data)
 
- 
+

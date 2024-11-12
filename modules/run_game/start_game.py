@@ -3,6 +3,7 @@ import pygame
 from ..screens import screen ,  Button
 import modules.screens.server_screen as module_screen_server
 from ..server import start_server 
+from threading import Thread
 
 
 
@@ -12,8 +13,14 @@ pygame.init()
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def server_window():
+    # Создаём поток, target - это так сказать метод, в который надо записать функцию, которая будет использовать отдельный поток
+    # в нашем случае это start server, daemon - это поток демон( сам офигел от название ), он не блокирует завершение программы , но когда все потоки
+    # завершаются, он выключается автоматически
+    server_thread = Thread(target = start_server, daemon = True)
+    # Запускаем поток 
+    server_thread.start()
     #викликаємо функцію для запуску серверу
-    start_server()
+    # Я удалил, и всё заработало, не знаю как так получается, но что есть то есть, 
     #встановлюємо назву вікна гри для сервера
     pygame.display.set_caption("Screen_Server")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
@@ -32,16 +39,3 @@ def server_window():
                 run_game = False
 
         pygame.display.flip()
-        
-
-
-                
-
-
-
-
-
-        
-        
-
-
