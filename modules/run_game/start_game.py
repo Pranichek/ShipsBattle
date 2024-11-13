@@ -38,10 +38,14 @@ def server_window():
         #викликаємо функцію для вводу нікнейму на екрані screen_server
         # input_texts(screen_name = screen_server)
         #Обробляємо всі події у вікні
+        
         for event in pygame.event.get():
+            print(1)
             if event.type == pygame.QUIT:
                 run_game = False  
-                event_t.set()
+                # event_t.set()
+        
+   
 
                 # установим False для выхода из цикла 
                 # #коли ми у змінну передаємо False, цикл перестає працювати та вікно закривається

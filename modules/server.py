@@ -24,8 +24,5 @@ def start_server():
                 print("kfjvjdfnvndjfvjkndfv")
                 break
 
-
-    
-
 #створюємо зміну потока, для запуску серверу
 server_thread = threading.Thread(target = start_server)
