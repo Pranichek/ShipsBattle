@@ -1,28 +1,30 @@
 import socket
-#підключаємо модуль для роботи із потоками
 import threading
 
-#створємо функцію для запуску серверу
+# Створюємо об'єкт Event для управління завершенням потоку
+event_thread = threading.Event()
+
+# Функція для запуску сервера
 def start_server():
-    # Створюємо сокет з використанням протоколу IPv4 (AF_INET) та TCP (SOCK_STREAM)
-    with socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM) as server_socket:
-        # Прив'язуємо сокет до порту 6060 , та робимо так щоб до нього могли підключатися користувачи із різних мереж
-        server_socket.bind(("0.0.0.0", 7322))
-        #Ставимо сервер у режим очікування підключень
-        server_socket.listen()
-        print("connecting")
-        #Приймаємо користувача який приєднався і отримуємо сокет та його адресу
-        client_soket, adress = server_socket.accept()
-        print("connected: ", adress)
-        #Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
-        response_data = client_soket.recv(1240).decode()
-        #Виводимо отримані дані у консоль
-        print(response_data)
+    # Цикл, який працює, поки подія не буде встановлена
+    while not event_thread.is_set():
+        # Створюємо сокет з використанням протоколу IPv4 (AF_INET) та TCP (SOCK_STREAM)
+        with socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM) as server_socket:
+            # Прив'язуємо сокет до порту 7322
+            server_socket.bind(("0.0.0.0", 7322))
+            # Ставимо сервер у режим очікування підключень
+            server_socket.listen()
+            print("Сервер запущено, чекаємо підключень...")
+            # Приймаємо підключення від клієнта
+            client_socket, address = server_socket.accept()
+            print("Підключено: ", address)
+            # Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
+            response_data = client_socket.recv(1240).decode()
+            print("Отримані дані: ", response_data)
 
+# Створюємо потік для запуску сервера
+server_thread = threading.Thread(target=start_server)
+server_thread.start()
 
-#створюємо зміну потока, для запуску серверу
-server_thred = threading.Thread(target = start_server)
-
-
-
- 
+# Для завершення роботи сервера, можна викликати:
+# event_thread.set()  # Це встановить подію, і сервер завершить роботу
