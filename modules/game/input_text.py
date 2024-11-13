@@ -1,15 +1,22 @@
 import pygame
 #імопртуємо функцію запису інформації у джейсон файл, та словарь із користувачами
 from ..json_functions import dump_json , list_users
+import os
 
 
 #іницілізація Pygame
 pygame.init()
+#path - шлях
+#abspath - абсолютний шлях
+
+path_to_font = os.path.abspath(__file__  +  f"/../../../fonts/Jersey15.ttf")
+
+print(path_to_font)
 
 #змінна для збереження тексту користувача, у вигляді списку
 user_text = [""]
 #створення тектсовго поля , та надаємо налаштування шрифта
-font = pygame.font.SysFont("Jersey 15" , 48)
+font = pygame.font.Font(path_to_font ,size = 48)
 #робимо рамку для нашого тексту
 text_box = pygame.Rect(467 , 518, 346 , 68)
 #змінна у вигляді списку, щоб відстежувати чи активне зараз поля для введення тексту
@@ -20,7 +27,6 @@ color = pygame.Color("black")
 
 #функція вводу тексту на екрані
 def input_texts(screen_name):
-
     for event in pygame.event.get():
         #Перевіряємо, чи була натиснута кнопка миші
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -37,7 +43,7 @@ def input_texts(screen_name):
             # Якщо клавіша натиснута, і текстове поле активно
             if check_type[0] == True:
                 # Перевіряємо, чи не перевищив користувач ліміт символів у ніку
-                if len(user_text[0]) <= 10 or event.key == pygame.K_BACKSPACE:
+                if len(user_text[0]) < 10 or event.key == pygame.K_BACKSPACE:
                     #Якщо натиснута клавіша Backspace, видаляємо останній символ
                     if event.key == pygame.K_BACKSPACE:
                         user_text[0] = user_text[0][:-1]

@@ -5,6 +5,7 @@ from ..screens import screen_user
 from ..client import thread_user
 from ..classes import DrawImage
 from ..game import input_texts
+from ..client import event_user
 import sys
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -42,6 +43,7 @@ def user_window():
                 if event.type == pygame.QUIT:
                     sys.exit()
                     pygame.quit()
+                    event_user.clear()
                     # #коли ми у змінну передаємо False , цикл перестає працювати та вікно закривається
                     # start_user = False
         
