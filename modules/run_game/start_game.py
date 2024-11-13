@@ -21,9 +21,9 @@ input_text_font = DrawImage(width = 346 ,height= 68, x_cor = 467, y_cor= 518,fol
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def server_window():
     #викликаємо функцію для запуску серверу
-    server_thread.start()
     #встановлюємо назву вікна гри для сервера
     pygame.display.set_caption("Screen_Server")
+    server_thread.start()
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
     #основний цикл роботи вікна користувача
@@ -41,8 +41,7 @@ def server_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                event_t.clear()
-
+                event_t.set()
 
                 # установим False для выхода из цикла 
                 # #коли ми у змінну передаємо False, цикл перестає працювати та вікно закривається
@@ -51,9 +50,9 @@ def server_window():
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
     # Дожидаемся завершения потока сервера
-    server_thread.join()
-    pygame.quit()
-    sys.exit()
+    # server_thread.join()
+    # pygame.quit()
+    # sys.exit()
 
 
         

@@ -36,13 +36,12 @@ def user_window():
         iced_image.draw_image(screen= screen_user)
         inputd_text_font.draw_image(screen= screen_user)
         #викликаємо функцію для вводу нікнейму на екрані screen_user
-        input_texts(screen_name= screen_user)
+        # input_texts(screen_name= screen_user)
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
                 # Якщо натиснута кнопка закриття вікна, завершуємо цикл
                 if event.type == pygame.QUIT:
-                    sys.exit()
-                    pygame.quit()
+                    start_user = False
                     event_user.clear()
                     # #коли ми у змінну передаємо False , цикл перестає працювати та вікно закривається
                     # start_user = False
