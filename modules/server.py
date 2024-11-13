@@ -1,4 +1,5 @@
 import socket
+#підключаємо модуль для роботи із потоками
 import threading
 
 #створємо функцію для запуску серверу
@@ -18,6 +19,8 @@ def start_server():
         #Виводимо отримані дані у консоль
         print(response_data)
 
+
+#створюємо зміну потока, для запуску серверу
 server_thred = threading.Thread(target = start_server)
 
 

@@ -5,5 +5,5 @@ SCREEN_HEIGHT = 832
 
 FPS = pygame.time.Clock()
 #створюємо екран для користувача який запускає сервер, та встановлюємо для цього екрану розміри
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen_server = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
