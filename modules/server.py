@@ -17,12 +17,15 @@ def start_server():
         while not event_t.is_set():
             client_socket, adress = server_socket.accept()
             print("connected: ", adress)
+            #Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
             response_data = client_socket.recv(1024).decode()
             print(response_data)
-            #Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
             if event_t.is_set():
-                print("kfjvjdfnvndjfvjkndfv")
                 break
 
 #створюємо зміну потока, для запуску серверу
 server_thread = threading.Thread(target = start_server)
+
+
+
+ 
