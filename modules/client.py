@@ -24,6 +24,12 @@ def connect_user():
             if not event_user.is_set():
                 break
 
+        try:
+            print(1)
+        except Exception as e:
+            print(e)
+            
+
 event_user = threading.Event()
 #створюємо зміну потока, із функцією підключення коритсувача до серверу
 thread_user = threading.Thread(target = connect_user)

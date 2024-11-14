@@ -2,7 +2,6 @@ import socket
 #підключаємо модуль для роботи із потоками
 import threading
 
-event_t = threading.Event()
 
 
 #створємо функцію для запуску серверу
@@ -14,14 +13,12 @@ def start_server():
         #Ставимо сервер у режим очікування підключень
         server_socket.listen()
         print("connecting")
-        while not event_t.is_set():
-            client_socket, adress = server_socket.accept()
-            print("connected: ", adress)
-            #Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
-            response_data = client_socket.recv(1024).decode()
-            print(response_data)
-            if event_t.is_set():
-                break
+        client_socket, adress = server_socket.accept()
+        print("connected: ", adress)
+        #Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
+        response_data = client_socket.recv(1024).decode()
+        print(response_data)
+            
 
 #створюємо зміну потока, для запуску серверу
 server_thread = threading.Thread(target = start_server)
