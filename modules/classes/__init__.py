@@ -2,3 +2,4 @@
 from .class_image import *
 from .class_button import *
 from .class_input_text import *
+from .class_font import *
