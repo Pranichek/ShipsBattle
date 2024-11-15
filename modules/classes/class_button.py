@@ -19,5 +19,7 @@ class Button:
             surface.blit(self.image, self.rect.topleft)
 
     def check_click(self):
-        if self.action:
-            self.action()
+        mouse = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse):
+            if self.action:
+                    self.action()
