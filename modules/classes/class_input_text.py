@@ -18,7 +18,7 @@ class InputText:
         self.active = False
         self.name_image = name_image
         self.font = None
-        self.max_length = 10
+        self.max_length = 13
         self.rect = pygame.Rect(self.x_cor, self.y_cor, self.width, self.height)
         self.load_image()
         self.load_font(font_name)
@@ -34,12 +34,12 @@ class InputText:
 
     def check_event(self, event : object):
         if self.active == True:
-            if self.user_text == "nickname":
+            if self.user_text == self.base_text:
                 self.user_text = ""
     # Якщо текстове поле неактивне, встановлюємо значення "nickname", якщо поле пусте
         elif self.active == False:
             if self.user_text == "":
-                self.user_text = "nickname"
+                self.user_text = self.base_text
         # Обработка событий
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
@@ -48,7 +48,13 @@ class InputText:
             elif not self.rect.collidepoint(pos):
                 self.active = False
 
-        elif event.type == pygame.KEYDOWN and self.active == True:
+
+        if self.base_text == "nickname":
+                self.max_length = 10
+        else:
+                self.max_length = 13
+
+        if event.type == pygame.KEYDOWN and self.active == True:
             # Если поле активно, обрабатываем ввод текста
             if event.key == pygame.K_BACKSPACE:
                 self.user_text = self.user_text[:-1]
@@ -61,4 +67,7 @@ class InputText:
 
         text_surface = self.font.render(self.user_text, True, "white")
         self.screen_name.blit(self.image, (self.x_cor, self.y_cor))
-        self.screen_name.blit(text_surface, (self.x_cor + 10, self.y_cor + 10))
+        if self.user_text == "port":
+            self.screen_name.blit(text_surface, (self.x_cor + 125, self.y_cor + 13))
+        else:
+            self.screen_name.blit(text_surface, (self.x_cor + 90, self.y_cor + 13))
