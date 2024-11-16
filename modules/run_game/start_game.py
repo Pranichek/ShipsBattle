@@ -189,3 +189,4 @@ def join_game_window():
 
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
+
