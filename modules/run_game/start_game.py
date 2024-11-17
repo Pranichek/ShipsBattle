@@ -3,6 +3,9 @@ import pygame
 from ..screens import main_screen
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font, InputText
+from ..server import server_thread
+from ..client import thread_connect
+import threading
 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -23,8 +26,12 @@ join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , scr
 #список для проверки нажата ли кнопка
 check_press_button = [None]
 
-def test():
-    print(1)
+
+def start_server():
+    server_thread.start()
+
+def connect_to_server():
+    thread_connect.start()
 
 def button_action():
     check_press_button[0] = "button is pressed"
@@ -44,9 +51,9 @@ join_game_frame = Button(x= 832 , y = 653,image_path= "button_image.png" , image
 #кнопка которая возвращает назад к главному окну
 back_to_menu = Button(x= 30 , y = 41 ,image_path= "back_to_menu.png" , image_hover_path= "back_to_menu2.png" , width= 155 , height= 62 , action= button_action)
 #кнопка которая запускает сервер(игру)
-start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button2.png" , width= 575 , height= 80 , action= test)
+start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button2.png" , width= 575 , height= 80 , action= start_server)
 #кнопка которая подключается к игре
-join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "join_to_game2.png" , width= 575 , height= 80 , action= test)
+join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "join_to_game2.png" , width= 575 , height= 80 , action= connect_to_server)
 
 
 #images decoration
@@ -60,7 +67,8 @@ back_text = DrawImage(width= 131 , height= 41 , x_cor= 54, y_cor= 52 , folder_na
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "main_background.jpg")
-create_game_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "create_game_bg.png")
+#фон для окон д=где вводим данные для запуска сервера и подключение к нему
+input_data = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "input_data.png")
 
 
 
@@ -106,6 +114,7 @@ def main_window():
         pygame.display.flip()
             
     
+
 def create_game_window():
     #викликаємо функцію для запуску серверу
     #встановлюємо назву вікна гри для сервера
@@ -115,7 +124,7 @@ def create_game_window():
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen_server.FPS.tick(60)
-        create_game_bg.draw_image(screen= main_screen)
+        input_data.draw_image(screen= main_screen)
 
         input_nick.draw_text()
         input_ip_adress.draw_text()
@@ -134,6 +143,9 @@ def create_game_window():
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
+                input_nick.user_text =  input_nick.base_text
+                input_ip_adress.user_text = input_ip_adress.base_text
+                input_port.user_text = input_port.base_text
                 run_game = False
                 change_scene(main_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -148,6 +160,7 @@ def create_game_window():
         pygame.display.flip()
 
 
+
 def join_game_window():
     #викликаємо функцію для запуску серверу
     #встановлюємо назву вікна гри для сервера
@@ -157,7 +170,7 @@ def join_game_window():
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen_server.FPS.tick(60)
-        create_game_bg.draw_image(screen= main_screen)
+        input_data.draw_image(screen= main_screen)
 
         input_nick.draw_text()
         input_ip_adress.draw_text()
@@ -176,6 +189,9 @@ def join_game_window():
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
+                input_nick.user_text =  input_nick.base_text
+                input_ip_adress.user_text = input_ip_adress.base_text
+                input_port.user_text = input_port.base_text
                 run_game = False
                 change_scene(main_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:

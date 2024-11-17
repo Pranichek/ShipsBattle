@@ -21,7 +21,7 @@ def start_server():
             
 
 #створюємо зміну потока, для запуску серверу
-server_thread = threading.Thread(target = start_server)
+server_thread = threading.Thread(target = start_server, daemon=True)
 
 
 
