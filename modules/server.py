@@ -9,6 +9,7 @@ from .classes.class_input_text import input_port , input_ip_adress
 def start_server():
     ip_address = input_ip_adress.user_text
     port = int(input_port.user_text)
+    
     print(ip_address , port)
     # Створюємо сокет з використанням протоколу IPv4 (AF_INET) та TCP (SOCK_STREAM)
     with socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM) as server_socket:
