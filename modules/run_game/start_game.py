@@ -5,6 +5,7 @@ import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font, InputText
 from ..server import server_thread
 from ..client import thread_connect
+from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 import threading
 
 
@@ -12,9 +13,9 @@ import threading
 pygame.init()
 
 #input_texts
-input_nick = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 239, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "button_image.png")
-input_ip_adress = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 372, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "button_image.png")
-input_port = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "button_image.png")
+# input_nick = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 239, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "button_image.png")
+# input_ip_adress = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 372, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "button_image.png")
+# input_port = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "button_image.png")
 
 
 #fonts(text)
