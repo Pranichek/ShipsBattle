@@ -3,10 +3,10 @@ import pygame
 from ..screens import main_screen
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font, InputText
-from ..server import server_thread
+from ..server import server_thread 
 from ..client import thread_connect
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
-import threading
+from ..json_functions.read_json import read_json
 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -68,7 +68,7 @@ create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , ima
 #кнопка кторая перекидывает на фрейм по присоеденению к игре(серверу)
 join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_hover_path= "join_button_hover.png" , width= 346 , height= 80 , action= button_action)
 #кнопка которая возвращает назад к главному окну
-back_to_menu = Button(x= 30 , y = 41 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 155 , height= 62 , action= button_action)
+back_to_menu = Button(x= 33 , y = 41 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 158 , height= 41 , action= button_action)
 #кнопка которая запускает сервер(игру)
 start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width= 575 , height= 80 , action= start_server)
 #кнопка которая подключается к игре
@@ -80,15 +80,16 @@ cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folde
 second_cold_image = DrawImage(width= 152 , height= 68 , x_cor= 940, y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
 third_cold_image = DrawImage(width=  150, height= 68 , x_cor= 536 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
-back_text = DrawImage(width= 131 , height= 41 , x_cor= 54, y_cor= 52 , folder_name= "decorations" , image_name= "back_text.png")
+
 
 
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "main_background.jpg")
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
-input_data = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "input_data.png")
-
+input_data_bg= DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "input_data.png")
+#фон для очікування користувача
+waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
 
 
 
@@ -127,9 +128,7 @@ def main_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click()
                 join_game_frame.check_click()
-
             # input_text.check_event(event)
-
         pygame.display.flip()
             
     
@@ -143,18 +142,27 @@ def create_game_window():
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen_server.FPS.tick(60)
-        input_data.draw_image(screen= main_screen)
+        input_data_bg.draw_image(screen= main_screen)
+        data = read_json(name_file = "utility.json")
+        status_server = data["status"]
+
 
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
 
         back_to_menu.draw(surface= main_screen)
-        back_text.draw_image(screen= main_screen)
+
 
         third_cold_image.draw_image(screen= main_screen)
         fourth_cold_image.draw_image(screen= main_screen)
         start_game_button.draw(surface= main_screen)
+
+        if status_server == "wait":
+                    print(1)
+                    run_game = False
+                    change_scene(waiting_window())
+                    check_press_button[0] = None
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -170,7 +178,7 @@ def create_game_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click()
                 start_game_button.check_click()
-
+                
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
             input_port.check_event(event)  
@@ -189,14 +197,14 @@ def join_game_window():
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen_server.FPS.tick(60)
-        input_data.draw_image(screen= main_screen)
+        input_data_bg.draw_image(screen= main_screen)
 
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
 
         back_to_menu.draw(surface= main_screen)
-        back_text.draw_image(screen= main_screen)
+
 
         third_cold_image.draw_image(screen= main_screen)
         fourth_cold_image.draw_image(screen= main_screen)
@@ -225,3 +233,26 @@ def join_game_window():
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
 
+
+def waiting_window():
+    pygame.display.set_caption("Waiting window")
+    run_game = True
+    
+    while run_game:
+        data = read_json(name_file = "utility.json")
+        status_server = data["status"]
+        module_screen_server.FPS.tick(60)
+        waiting_background.draw_image(screen = main_screen)
+
+        if status_server == "connect":
+            change_scene(main_window())
+            check_press_button[0] = None
+            run_game = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run_game = False  
+                change_scene(None)
+            
+
+        pygame.display.flip()
+        

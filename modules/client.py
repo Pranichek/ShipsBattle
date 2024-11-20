@@ -18,7 +18,6 @@ def connect_user():
         encode_text = str(input_nick.user_text)
         # відправляємо дані від користувача на сервер , та кодуємо їх у байти
         client_socket.send(encode_text.encode())
-
         response_data_clinet = client_socket.recv(1024).decode()
         print(response_data_clinet , "from server")
         
