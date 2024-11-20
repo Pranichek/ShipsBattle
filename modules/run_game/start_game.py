@@ -27,12 +27,30 @@ join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , scr
 #список для проверки нажата ли кнопка
 check_press_button = [None]
 
+#список для відслуджування чи нажати кнопка заупску серверу чи ні
+check_server_started = [False]
+#список для відслужування чи нажата кнопка підключення до серверу чи ні
+check_client_connected = [False]
 
 def start_server():
-    server_thread.start()
+    if check_server_started[0] == False:
+        if input_port.user_text == "port" or input_ip_adress.user_text == "ip adress" or input_nick.user_text == "nick":
+            print("Fill text in the input boxes")
+        else:
+            server_thread.start()
+            check_server_started[0] = True
+    elif check_server_started[0] == True:
+        print("Server has been started")
 
 def connect_to_server():
-    thread_connect.start()
+    if check_client_connected[0] == False:
+        if input_port.user_text == "port" or input_ip_adress.user_text == "ip adress" or input_nick.user_text == "nick":
+            print("Fill text in the input boxes")
+        else:
+            thread_connect.start()
+            check_client_connected[0] = True
+    elif check_client_connected[0] == True:
+        print("You are already tried connected to the server")
 
 def button_action():
     check_press_button[0] = "button is pressed"
