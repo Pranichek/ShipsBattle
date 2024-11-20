@@ -19,17 +19,16 @@ def start_server():
         server_socket.listen()
         print("connecting")
         client_socket, adress = server_socket.accept()
-        print("connected: ", adress)
-        #Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
-        response_data = client_socket.recv(1024).decode()
+        with client_socket:  # Використовуємо контекстний менеджер для клієнтського сокета
+            # Отримуємо дані від клієнта
+            response_data = client_socket.recv(1024).decode()
+            print(response_data , "from client")
 
-
-
-        encode_text = str(input_nick.user_text)
-        server_socket.sendall(encode_text.encode())
-        print(response_data)
+            # Відправляємо відповідь клієнту
+            encode_text = str(input_nick.user_text)
+            client_socket.send(encode_text.encode())
+        
             
-
 #створюємо зміну потока, для запуску серверу
 server_thread = threading.Thread(target = start_server, daemon=True)
 

@@ -68,7 +68,7 @@ create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , ima
 #кнопка кторая перекидывает на фрейм по присоеденению к игре(серверу)
 join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_hover_path= "join_button_hover.png" , width= 346 , height= 80 , action= button_action)
 #кнопка которая возвращает назад к главному окну
-back_to_menu = Button(x= 30 , y = 41 ,image_path= "back_to_menu.png" , image_hover_path= "back_to_menu2.png" , width= 155 , height= 62 , action= button_action)
+back_to_menu = Button(x= 30 , y = 41 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 155 , height= 62 , action= button_action)
 #кнопка которая запускает сервер(игру)
 start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width= 575 , height= 80 , action= start_server)
 #кнопка которая подключается к игре
