@@ -28,7 +28,7 @@ class InputText:
     #створюємо метод завантаження картинки
     def load_image(self):
         #знаходимо путь по якому завантажуємо картинку
-        image_path = os.path.abspath(__file__ + f"/../../../images/images_button/{self.name_image}")
+        image_path = os.path.abspath(__file__ + f"/../../../images/images_background/{self.name_image}")
         self.image = pygame.image.load(image_path)
         #завантажуємо картинку зі шляху який ми знайшли та змінюємо по розмірам
         transform_image = pygame.transform.scale(self.image , (self.width, self.height))
@@ -83,6 +83,6 @@ class InputText:
             self.screen_name.blit(text_surface, (self.x_cor + 90, self.y_cor + 13))
 
 
-input_nick = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 239, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "button_image.png")
-input_ip_adress = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 372, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "button_image.png")
-input_port = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "button_image.png")
+input_nick = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 239, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "input_area.png")
+input_ip_adress = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 372, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "input_area.png")
+input_port = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "input_area.png")

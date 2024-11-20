@@ -20,7 +20,7 @@ pygame.init()
 
 #fonts(text)
 createbutton_font = Font(size= 48 , name_font= "Jersey15.ttf" , text= "create" , screen= main_screen , x_cor= 218, y_cor= 663)
-join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , screen= main_screen , x_cor= 978 , y_cor= 663)
+join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , screen= main_screen , x_cor= 974 , y_cor= 663)
 
 
 
@@ -46,15 +46,15 @@ list_current_scene = [None]
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
-create_game_frame = Button(x= 113, y = 653,image_path= "button_image.png" , image_hover_path= "image_hover.png" , width= 346 , height= 80 , action= button_action)
+create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height= 80 , action= button_action)
 #кнопка кторая перекидывает на фрейм по присоеденению к игре(серверу)
-join_game_frame = Button(x= 832 , y = 653,image_path= "button_image.png" , image_hover_path= "image_hover.png" , width= 346 , height= 80 , action= button_action)
+join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_hover_path= "join_button_hover.png" , width= 346 , height= 80 , action= button_action)
 #кнопка которая возвращает назад к главному окну
 back_to_menu = Button(x= 30 , y = 41 ,image_path= "back_to_menu.png" , image_hover_path= "back_to_menu2.png" , width= 155 , height= 62 , action= button_action)
 #кнопка которая запускает сервер(игру)
-start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button2.png" , width= 575 , height= 80 , action= start_server)
+start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width= 575 , height= 80 , action= start_server)
 #кнопка которая подключается к игре
-join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "join_to_game2.png" , width= 575 , height= 80 , action= connect_to_server)
+join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "joint_to_game_hover.png" , width= 575 , height= 80 , action= connect_to_server)
 
 
 #images decoration
@@ -88,11 +88,11 @@ def main_window():
 
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
-        createbutton_font.draw_font()
+        # createbutton_font.draw_font()
         
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
-        join_game_fonts.draw_font()
+        # join_game_fonts.draw_font()
         # input_text.draw_text()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
