@@ -1,7 +1,8 @@
 import socket
 #підключаємо модуль для роботи із потоками
 import threading
-from .classes.class_input_text import input_port , input_ip_adress
+from .classes.class_input_text import input_port , input_ip_adress, input_nick
+from .json_functions.write_json import write_json
 
 
 
@@ -21,6 +22,11 @@ def start_server():
         print("connected: ", adress)
         #Отримуємо дані від клієнта (максимум 1240 байт) і декодуємо їх у текст
         response_data = client_socket.recv(1024).decode()
+
+
+
+        encode_text = str(input_nick.user_text)
+        server_socket.sendall(encode_text.encode())
         print(response_data)
             
 
