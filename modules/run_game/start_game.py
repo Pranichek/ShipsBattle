@@ -9,20 +9,17 @@ from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 
 
+
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
-
-#input_texts
-# input_nick = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 239, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "button_image.png")
-# input_ip_adress = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 372, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "button_image.png")
-# input_port = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "button_image.png")
 
 
 #fonts(text)
 createbutton_font = Font(size= 48 , name_font= "Jersey15.ttf" , text= "create" , screen= main_screen , x_cor= 218, y_cor= 663)
 join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , screen= main_screen , x_cor= 974 , y_cor= 663)
 
-
+def test():
+    print(1)
 
 #список для проверки нажата ли кнопка
 check_press_button = [None]
@@ -73,7 +70,10 @@ back_to_menu = Button(x= 33 , y = 41 ,image_path= "back_button.png" , image_hove
 start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width= 575 , height= 80 , action= start_server)
 #кнопка которая подключается к игре
 join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "joint_to_game_hover.png" , width= 575 , height= 80 , action= connect_to_server)
-
+#кнопка коли розставив кораблі та підлючаєшься до бою
+ready_for_battle = Button(x= 799 , y = 678,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= test)
+#кнопка яка будеть розставляти кораблі у ранломному положені
+random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
 
 #images decoration
 cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
@@ -90,6 +90,8 @@ main_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name=
 input_data_bg= DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "input_data.png")
 #фон для очікування користувача
 waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
+#фон для розташування кораблів перед ігрою
+ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
 
 
 
@@ -245,14 +247,35 @@ def waiting_window():
         waiting_background.draw_image(screen = main_screen)
 
         if status_server == "connect":
-            change_scene(main_window())
+            change_scene(ships_position_window())
             check_press_button[0] = None
             run_game = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-            
+        
+        pygame.display.flip()
 
+def ships_position_window():
+    pygame.display.set_caption("Position Ships")
+    run_game = True
+    
+    while run_game:
+        module_screen_server.FPS.tick(60)
+        ships_position_bg.draw_image(screen = main_screen)
+
+        #draw buttons
+        ready_for_battle.draw(surface= main_screen)
+        random_place_ships.draw(surface= main_screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run_game = False  
+                change_scene(None)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                ready_for_battle.check_click()
+                random_place_ships.check_click()
+        
         pygame.display.flip()
         
