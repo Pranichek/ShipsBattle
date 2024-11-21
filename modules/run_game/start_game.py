@@ -9,7 +9,6 @@ from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 
 
-
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
 
