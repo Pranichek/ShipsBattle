@@ -1,12 +1,13 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen
+from ..screens import main_screen , generate_grid , list_object_map
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font, InputText
 from ..server import server_thread 
 from ..client import thread_connect
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
+
 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -79,8 +80,8 @@ cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folde
 second_cold_image = DrawImage(width= 152 , height= 68 , x_cor= 940, y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
 third_cold_image = DrawImage(width=  150, height= 68 , x_cor= 536 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
-
-
+#image for the grid
+grid_image = DrawImage(width = 600 , height = 597 , x_cor = 40 , y_cor = 89 , folder_name = "grid", image_name = "background_grid.png")
 
 
 #backgrounds
@@ -91,6 +92,7 @@ input_data_bg= DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_
 waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
 #фон для розташування кораблів перед ігрою
 ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
+
 
 
 
@@ -260,9 +262,15 @@ def ships_position_window():
     pygame.display.set_caption("Position Ships")
     run_game = True
     
+    generate_grid()
     while run_game:
         module_screen_server.FPS.tick(60)
         ships_position_bg.draw_image(screen = main_screen)
+
+        #draw grid
+        grid_image.draw_image(screen = main_screen)
+        for object in list_object_map:
+            object.draw(screen = main_screen) 
 
         #draw buttons
         ready_for_battle.draw(surface= main_screen)
