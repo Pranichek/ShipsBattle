@@ -7,7 +7,7 @@ from ..server import server_thread
 from ..client import thread_connect
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
-
+from ..classes.class_sounds import music_load
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -100,6 +100,9 @@ def main_window():
     pygame.display.set_caption("BattleShips")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
+    
+    music_load.play()
+
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen_server.FPS.tick(60)
@@ -122,8 +125,10 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
+                    music_load.stop()
                     change_scene(join_game_window())
                 elif x_pos < 600:
+                    music_load.stop()
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click()
