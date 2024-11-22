@@ -162,7 +162,6 @@ def create_game_window():
         start_game_button.draw(surface= main_screen)
 
         if status_server == "wait":
-                    print(1)
                     run_game = False
                     change_scene(waiting_window())
                     check_press_button[0] = None
@@ -276,8 +275,9 @@ def ships_position_window():
         module_screen_server.FPS.tick(60)
         ships_position_bg.draw_image(screen = main_screen)
 
-        #draw grid
+        #отрисовка картинки цифер и букв для поля
         grid_image.draw_image(screen = main_screen)
+        #отрисовка обьектов(пустых клеток) который хранятся в списке обьектов
         for object in list_object_map:
             object.draw(screen = main_screen) 
 

@@ -3,13 +3,18 @@ import os, json
 #створюємо словарь для збереження нікнеймів та балів користувачів
 list_users = {}
 
-check_server_status = {}
+list_server_status = {}
 
 
 #отримуємо дані з бази даних, яка знаходиться в папці static та у файлі data_base.json
 with open(file = os.path.abspath(__file__ + "/../../../static/utility.json")) as file:
     #загружаємо дані з json-файла в наш словник list_users
-    check_server_status = json.load(file)
+    list_server_status = json.load(file)
+
+#отримуємо дані з бази даних, яка знаходиться в папці static та у файлі data_base.json
+with open(file = os.path.abspath(__file__ + "/../../../static/data_base.json")) as file:
+    #загружаємо дані з json-файла в наш словник list_users
+    list_users = json.load(file)
 
 
 #функція для збереження даних  із словаря list_users у потрібний файл, у нашому випадку filename = "data_base.json"
