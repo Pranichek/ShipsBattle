@@ -4,7 +4,13 @@ import threading
 import json
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 import json
+from .json_functions import write_json
 
+#ліст для перевірки чи зайшов користувач на сервер
+dict_check_server = {
+    "status": None
+}
+write_json(filename= "utility.json" , object_dict = dict_check_server)
 
 #створюємо функцію підключення користувача до серверу
 def connect_user():
@@ -25,6 +31,8 @@ def connect_user():
         data_in_list = json.loads(data)
         print(data_in_list["nick"] , "nick from server")
         print(data_in_list["status"] , "status from server")
+
+        write_json(filename= "utility.json" , object_dict = data_in_list["status"])
         
         
             

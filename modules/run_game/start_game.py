@@ -199,6 +199,8 @@ def join_game_window():
     run_game = True
     #основний цикл роботи вікна користувача
     while run_game:
+        data = read_json(name_file = "utility.json")
+        status_server = data["status"]
         module_screen_server.FPS.tick(60)
         input_data_bg.draw_image(screen= main_screen)
 
@@ -212,6 +214,11 @@ def join_game_window():
         third_cold_image.draw_image(screen= main_screen)
         fourth_cold_image.draw_image(screen= main_screen)
         join_game_button.draw(surface= main_screen)
+
+        if status_server == "connect":
+            change_scene(ships_position_window())
+            check_press_button[0] = None
+            run_game = False
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
