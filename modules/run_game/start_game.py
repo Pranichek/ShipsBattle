@@ -161,10 +161,12 @@ def create_game_window():
         fourth_cold_image.draw_image(screen= main_screen)
         start_game_button.draw(surface= main_screen)
 
+        #если запустили сервер но к нему еще никто не подлючился перекидываем на окно ожидания игрока
         if status_server == "wait":
                     run_game = False
                     change_scene(waiting_window())
                     check_press_button[0] = None
+
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
