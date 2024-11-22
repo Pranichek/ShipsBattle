@@ -5,6 +5,7 @@ import threading
 from .classes.class_input_text import input_port , input_ip_adress, input_nick
 # Импортируем функцию записи в json файлы
 from .json_functions.write_json import write_json , check_server_status
+import json
 
 
 #ліст для перевірки чи зайшов користувач на сервер
@@ -44,14 +45,21 @@ def start_server():
         }
         write_json(filename= "utility.json" , object_dict = check_server_status)
 
-        with client_socket:  # Використовуємо контекстний менеджер для клієнтського сокета
+        with client_socket:  
             # Отримуємо дані від клієнта
             response_data = client_socket.recv(1024).decode()
             print(response_data , "from client")
-          
-            # Відправляємо відповідь клієнту
-            encode_text = str(input_nick.user_text)
-            client_socket.send(encode_text.encode())
+
+            data_for_client = {
+                "nick": str(input_nick.user_text),
+                "status": check_server_status
+            }
+
+            client_socket.send(json.dumps(data_for_client).encode())
+            # # Відправляємо відповідь клієнту
+            # encode_text = str(input_nick.user_text)
+            # client_socket.send(encode_text.encode())
+            # client_socket.sendall(dict_check_server.encode())
         
             
 #створюємо зміну потока, для запуску серверу

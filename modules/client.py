@@ -3,6 +3,7 @@ import socket
 import threading
 import json
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
+import json
 
 
 #створюємо функцію підключення користувача до серверу
@@ -15,11 +16,15 @@ def connect_user():
         # підключаємо користувача до сервера за Lan ip 192.168.0.4 та портом 6060
         print(2)
         client_socket.connect((ip_address, port))
+
         encode_text = str(input_nick.user_text)
         # відправляємо дані від користувача на сервер , та кодуємо їх у байти
         client_socket.send(encode_text.encode())
-        response_data_clinet = client_socket.recv(1024).decode()
-        print(response_data_clinet , "from server")
+
+        data = client_socket.recv(1024).decode()
+        data_in_list = json.loads(data)
+        print(data_in_list["nick"] , "nick from server")
+        print(data_in_list["status"] , "status from server")
         
         
             
