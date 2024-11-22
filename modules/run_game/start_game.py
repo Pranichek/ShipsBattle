@@ -1,6 +1,6 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen , generate_grid , list_object_map
+from ..screens import main_screen , Grid , list_object_map
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font, InputText
 from ..server import server_thread 
@@ -269,7 +269,9 @@ def ships_position_window():
     pygame.display.set_caption("Position Ships")
     run_game = True
     
-    generate_grid()
+    #generate grid with class
+    grid_player = Grid(x_screen = 81 , y_screen = 127)
+    grid_player.generate_grid()
     while run_game:
         module_screen_server.FPS.tick(60)
         ships_position_bg.draw_image(screen = main_screen)
