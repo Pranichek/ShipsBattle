@@ -4,21 +4,27 @@ import threading
 # Импортируем классы
 from .classes.class_input_text import input_port , input_ip_adress, input_nick
 # Импортируем функцию записи в json файлы
-from .json_functions.write_json import write_json , check_server_status
+from .json_functions.write_json import write_json , list_server_status , list_users
+import json
 
 
 #ліст для перевірки чи зайшов користувач на сервер
-dict_check_server = {
+list_server_status = {
     "status": None
 }
-write_json(filename= "utility.json" , object_dict = dict_check_server)
+write_json(filename= "utility.json" , object_dict =  list_server_status)
 
         
-if dict_check_server == False:
+if list_server_status == False:
     print("False")
 
 #створємо функцію для запуску серверу
 def start_server():
+    #
+    if input_nick.user_text not in list_users:
+        list_users[input_nick.user_text] = {"points": 0}
+        write_json(filename = "data_base.json" , object_dict = list_users)
+                    
     ip_address = input_ip_adress.user_text
     port = int(input_port.user_text)
     print(ip_address , port)
@@ -29,29 +35,34 @@ def start_server():
         #Ставимо сервер у режим очікування підключень
         server_socket.listen()
         print("connecting")
-        dict_check_server = "wait"
-
-        check_server_status = {
-            "status": dict_check_server
+        list_server_status = {
+            "status": "wait"
         }
-        write_json(filename= "utility.json" , object_dict = check_server_status)
+        write_json(filename= "utility.json" , object_dict = list_server_status)
 
         client_socket, adress = server_socket.accept()
-        dict_check_server = "connect"
-
-        check_server_status = {
-            "status": dict_check_server
+        list_server_status = {
+            "status": "connect"
         }
-        write_json(filename= "utility.json" , object_dict = check_server_status)
+        write_json(filename= "utility.json" , object_dict = list_server_status)
 
-        with client_socket:  # Використовуємо контекстний менеджер для клієнтського сокета
+        with client_socket:  
             # Отримуємо дані від клієнта
             response_data = client_socket.recv(1024).decode()
             print(response_data , "from client")
-          
-            # Відправляємо відповідь клієнту
-            encode_text = str(input_nick.user_text)
-            client_socket.send(encode_text.encode())
+
+            if response_data not in list_users:
+                list_users[response_data] = {"points": 0}
+                write_json(filename = "data_base.json" , object_dict = list_users)
+            
+            #формуємо дані для відправки від сервера до клієнта
+            data_for_client = {
+                "nick": str(input_nick.user_text),
+                "status": list_server_status
+            }
+            #відправляємо дані на кліжента , dumps - перетворює словарь у звичайну строку 
+            client_socket.send(json.dumps(data_for_client).encode())
+           
         
             
 #створюємо зміну потока, для запуску серверу
