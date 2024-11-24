@@ -5,12 +5,13 @@ import json
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 import json
 from .json_functions import write_json , list_users , list_server_status 
+from .json_functions.read_json import read_json
+
 
 #ліст для перевірки чи зайшов користувач на сервер
 list_server_status = {
     "status": None
 }
-
 #зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не під'єднуємося до серверу
 write_json(filename= "utility.json" , object_dict = list_server_status)
 
@@ -32,12 +33,23 @@ def connect_user():
         # підключаємо користувача до сервера за даними що ввів користувач
         client_socket.connect((ip_address, port))
 
-        #підготовлюємо нашь нік який будемо відправляти на сервевер
-        encode_text = str(input_nick.user_text)
-        # відправляємо дані від користувача на сервер , та кодуємо їх у байти
-        client_socket.send(encode_text.encode())
+        #отримуємо дані користувачів з бази даних (назва файла з базой даних)
+        data_for_server = read_json(name_file = "data_base.json")
+        #беремо кількість балів користувача який приєднується до сервера , щоб користувач на сервері знав останнє їхнє значення
+        points_for_server = data_for_server[input_nick.user_text]["points"]
+        print(points_for_server , "points for client")
 
-        #отримуємо від сервера дані про статус сервера та нік користувача
+        #формуємо дані для відправки на сервер , у виді словника, щоб можна було у одні строці їх відправити
+        data_for_server = {
+            "nick": str(input_nick.user_text),
+            "points": points_for_server,
+            "status": list_server_status
+        }
+        #dump - переводить словник , у джейсон строку(наш словник буде у вигляді звичайної строки, що полегшує відправку даних)
+        # відправляємо дані від користувача на сервер , та кодуємо їх у байти
+        client_socket.send(json.dumps(data_for_server).encode())
+
+        #отримуємовід сервера дані у вигляді байтів , та декодуємо їх
         data = client_socket.recv(1024).decode()
         #переводимо дані які отримали у виді строки у вигляд словаря, щоб модна було брати інйормацію по ключам
         data_in_list = json.loads(data)
@@ -45,13 +57,18 @@ def connect_user():
         #виводимо отримані дані на консоль
         print(data_in_list["nick"] , "nick from server")
         print(data_in_list["status"] , "status from server")
+        print(data_in_list["points"] , "points from server")
 
         #якщо нік користувача який отримали з серверу не існує в словарі, то додаємо його до словаря з базовими очками
         if data_in_list["nick"] not in list_users:
-            list_users[data_in_list["nick"]] = {"points": 0}
+            list_users[data_in_list["nick"]] = {"points": data_in_list["points"]}
+            write_json(filename = "data_base.json" , object_dict = list_users)
+        #якщо його нікнейм вже є (тобто такий користувач вже є), тоді просто оновлюємо його кількість баллів 
+        elif data_in_list["nick"] in list_users:
+            list_users[data_in_list["nick"]]["points"] = data_in_list["points"]
             write_json(filename = "data_base.json" , object_dict = list_users)
 
-        #зберігаємо статус того що підключилис до серверу, у джейсон файл
+        #зберігаємо статус того що підключилися до серверу, у джейсон файл
         write_json(filename= "utility.json" , object_dict = data_in_list["status"])
         
         
