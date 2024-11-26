@@ -2,11 +2,13 @@
 import pygame
 from ..screens import main_screen , Grid , list_object_map
 import modules.screens.screen as module_screen_server
-from ..classes import DrawImage , Button , Font, InputText
+from ..classes import DrawImage , Button , Font, InputText 
 from ..server import server_thread 
-from ..client import thread_connect
+from ..client import thread_connect , list_check_connection
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
+from ..classes.class_music import music_load_main , music_load_waiting, music_click
+
 
 
 
@@ -51,6 +53,8 @@ def connect_to_server():
 
 def button_action():
     check_press_button[0] = "button is pressed"
+    music_click.play(1)
+
 
 #функція для перезаписування яке зараз вікно активне
 def change_scene(scene):
@@ -95,7 +99,6 @@ ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,fo
 
 
 
-
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
     #викликаємо функцію для запуску серверу
@@ -103,7 +106,10 @@ def main_window():
     pygame.display.set_caption("BattleShips")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
+
+    music_load_main.play()
     #основний цикл роботи вікна користувача
+    # dragging = False
     while run_game:
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
@@ -122,6 +128,7 @@ def main_window():
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
+                music_load_main.play()
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
@@ -133,7 +140,8 @@ def main_window():
                 join_game_frame.check_click()
             # input_text.check_event(event)
         pygame.display.flip()
-            
+
+
     
 
 def create_game_window():
@@ -149,13 +157,11 @@ def create_game_window():
         data = read_json(name_file = "utility.json")
         status_server = data["status"]
 
-
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
 
         back_to_menu.draw(surface= main_screen)
-
 
         third_cold_image.draw_image(screen= main_screen)
         fourth_cold_image.draw_image(screen= main_screen)
@@ -173,6 +179,7 @@ def create_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
+                music_click.play()
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
@@ -189,6 +196,8 @@ def create_game_window():
 
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
+
+fail_image = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_background.png")
 
 
 
@@ -216,6 +225,11 @@ def join_game_window():
         fourth_cold_image.draw_image(screen= main_screen)
         join_game_button.draw(surface= main_screen)
 
+        
+        if list_check_connection[0] == False:
+            fail_image.draw_image(screen = main_screen)
+            fail_image.check_touch()
+        
         if status_server == "connect":
             change_scene(ships_position_window())
             check_press_button[0] = None
@@ -226,6 +240,7 @@ def join_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
+                music_click.play()
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
@@ -240,6 +255,8 @@ def join_game_window():
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
             input_port.check_event(event)  
+            
+        
 
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
@@ -248,7 +265,8 @@ def join_game_window():
 def waiting_window():
     pygame.display.set_caption("Waiting window")
     run_game = True
-    
+    music_load_main.stop()
+    music_load_waiting.play()
     while run_game:
         data = read_json(name_file = "utility.json")
         status_server = data["status"]
