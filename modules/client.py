@@ -42,12 +42,16 @@ def connect_user():
         # підключаємо користувача до сервера за даними що ввів користувач
         # client_socket.connect((ip_address, port))
         try:
-            # client_socket.settimeout(5)
+            client_socket.settimeout(0.1)
             client_socket.connect((ip_adress, port))
             list_check_connection[0] = True
+            print("conncting")
         except (socket.timeout, OSError):
             print("server not found")
             list_check_connection[0] =  False
+        
+        print(ip_adress , "ip address")
+        print(port , "port")
 
         #отримуємо дані користувачів з бази даних (назва файла з базой даних)
         data_for_server = read_json(name_file = "data_base.json")
