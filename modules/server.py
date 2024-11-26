@@ -37,6 +37,8 @@ def start_server():
         #Ставимо сервер у режим очікування підключень
         server_socket.listen()
         print("connecting")
+        print(ip_address , "ip address")
+        print(port, "port")
 
         #записуємо в словарь статус очікування підключення до серверу
         #передаем в словарь файл статус ожидания
