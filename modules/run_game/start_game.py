@@ -141,7 +141,7 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(ships_position_window())
+                    change_scene(join_game_button())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
