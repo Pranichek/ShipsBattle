@@ -89,9 +89,3 @@ def input_texts(screen_name):
     #встановлюємо розмііри рамки тексту
     text_box.w = 346
     text_box.h = 68
-
-
-
-
-
-

@@ -9,6 +9,7 @@ from .json_functions.read_json import read_json
 import json
 
 
+
 #ліст для перевірки чи зайшов користувач на сервер
 list_server_status = {
     "status": None

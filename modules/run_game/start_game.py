@@ -1,13 +1,14 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen , Grid , list_object_map
+from ..screens import main_screen , Grid , list_object_map , grid_player
 import modules.screens.screen as module_screen_server
-from ..classes import DrawImage , Button , Font, InputText 
+from ..classes import DrawImage , Button , Font , ship_three , ship_two
 from ..server import server_thread 
 from ..client import thread_connect , list_check_connection
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
-from ..classes.class_music import music_load_main , music_load_waiting, music_click
+from ..classes.class_music import music_load_main , music_load_waiting
+from ..classes.class_click import music_click
 
 
 
@@ -32,16 +33,23 @@ check_server_started = [False]
 check_client_connected = [False]
 
 def start_server():
+    music_click.play2(0)
+    data = read_json(name_file = "utility.json")
+    status_server = data["status"]
     if check_server_started[0] == False:
         if input_port.user_text == "port" or input_ip_adress.user_text == "ip adress" or input_nick.user_text == "nick":
             print("Fill text in the input boxes")
         else:
             server_thread.start()
-            check_server_started[0] = True
+            if status_server == "wait" or status_server == "connect":
+                check_server_started[0] = True
+            else:
+                check_server_started[0] = False
     elif check_server_started[0] == True:
         print("Server has been started")
 
 def connect_to_server():
+    music_click.play2(0)
     if check_client_connected[0] == False:
         if input_port.user_text == "port" or input_ip_adress.user_text == "ip adress" or input_nick.user_text == "nick":
             print("Fill text in the input boxes")
@@ -53,7 +61,7 @@ def connect_to_server():
 
 def button_action():
     check_press_button[0] = "button is pressed"
-    music_click.play(1)
+    music_click.play2(0)
 
 
 #функція для перезаписування яке зараз вікно активне
@@ -97,7 +105,7 @@ waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,f
 #фон для розташування кораблів перед ігрою
 ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
 
-
+once_play_music = [0]
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
@@ -106,8 +114,10 @@ def main_window():
     pygame.display.set_caption("BattleShips")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
-
-    music_load_main.play()
+    if once_play_music[0] < 1:
+        music_load_main.play()
+    
+    once_play_music[0] += 1
     #основний цикл роботи вікна користувача
     # dragging = False
     while run_game:
@@ -117,22 +127,21 @@ def main_window():
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
         # createbutton_font.draw_font()
-        
+ 
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
-        # join_game_fonts.draw_font()
-        # input_text.draw_text()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
+                music_click.play2(0)
                 check_press_button[0] = None
-                music_load_main.play()
+                
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(join_game_window())
+                    change_scene(ships_position_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -179,7 +188,7 @@ def create_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
-                music_click.play()
+                music_click.play2(0)
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
@@ -225,7 +234,7 @@ def join_game_window():
         fourth_cold_image.draw_image(screen= main_screen)
         join_game_button.draw(surface= main_screen)
 
-        
+    
         if list_check_connection[0] == False:
             fail_image.draw_image(screen = main_screen)
             fail_image.check_touch()
@@ -240,7 +249,7 @@ def join_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
-                music_click.play()
+                music_click.play2(0)
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
@@ -284,12 +293,13 @@ def waiting_window():
         
         pygame.display.flip()
 
+
 def ships_position_window():
     pygame.display.set_caption("Position Ships")
     run_game = True
     
     #generate grid with class
-    grid_player = Grid(x_screen = 81 , y_screen = 127)
+    
     grid_player.generate_grid()
     while run_game:
         module_screen_server.FPS.tick(60)
@@ -300,12 +310,18 @@ def ships_position_window():
         #отрисовка обьектов(пустых клеток) который хранятся в списке обьектов
         for object in list_object_map:
             object.draw(screen = main_screen) 
+        ship_three.draw_sheep(screen = main_screen)
+        ship_two.draw_sheep(screen = main_screen)
 
         #draw buttons
         ready_for_battle.draw(surface= main_screen)
         random_place_ships.draw(surface= main_screen)
 
         for event in pygame.event.get():
+            ship_three.rotate_ship(event = event)
+            ship_three.matrix_move(event = event , matrix_width = 558 , matrix_height = 558 , cell = 81)
+            ship_two.rotate_ship(event = event)
+            ship_two.matrix_move(event = event , matrix_width = 558 , matrix_height = 558 , cell = 81)
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)

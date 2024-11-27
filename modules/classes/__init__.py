@@ -4,3 +4,5 @@ from .class_button import *
 from .class_input_text import *
 from .class_font import *
 from .class_ship import *
+from .class_click import *
+from .class_music import *

@@ -41,5 +41,13 @@ class Grid:
                 x_screen += 62
             y_screen += 62
             x_screen = 80
+    def snap_to_grid(self, x, y):
+        grid_x = round((x - self.X_SCREEN) / 62)  
+        grid_y = round((y - self.Y_SCREEN) / 62)  
+        # Ограничиваем координаты индексами сетки
+        grid_x = max(0, min(9 - 1, grid_x))
+        grid_y = max(0, min(9 - 1, grid_y))
+        # Возвращаем координаты центра привязанной клетки
+        return self.X_SCREEN + grid_x * 62, self.Y_SCREEN + grid_y * 62
     
-    
+grid_player = Grid(x_screen = 81 , y_screen = 127)

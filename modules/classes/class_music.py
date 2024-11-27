@@ -39,7 +39,7 @@ class MusicPlayer:
 # Зупинка музики.
         pygame.mixer.music.stop()
         self.is_paused = False
-music_load_main = MusicPlayer(name_sound= "main_music.mp3")
+music_load_main = MusicPlayer(name_sound= "main_screen_music.mp3")
 music_load_waiting = MusicPlayer(name_sound="wait_music.mp3")
-music_click = MusicPlayer(name_sound="click_button.mp3")
+
 
