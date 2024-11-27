@@ -8,6 +8,7 @@ from ..client import thread_connect
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 from ..classes.class_sounds import music_load_main , music_load_waiting
+from ..classes.class_click import music_click
 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -51,6 +52,7 @@ def connect_to_server():
 
 def button_action():
     check_press_button[0] = "button is pressed"
+    music_click.play2(0)
 
 #функція для перезаписування яке зараз вікно активне
 def change_scene(scene):
@@ -123,6 +125,7 @@ def main_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
+                music_click.play2(0)
                 check_press_button[0] = None
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
@@ -173,6 +176,7 @@ def create_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
+                music_click.play2(0)
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
@@ -226,6 +230,7 @@ def join_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
+                music_click.play2(0)
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
