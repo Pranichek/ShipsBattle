@@ -91,7 +91,7 @@ class Ship:
 
             elif event.type == pygame.MOUSEBUTTONUP and self.FLAG:
                 # Привязываем корабль к сетке 
-                if self.X_COR >= grid_player.X_SCREEN and self.X_COR <= grid_player.X_SCREEN + 558:
+                if self.X_COR >= grid_player.X_SCREEN  - 50 and self.X_COR <= grid_player.X_SCREEN + 558:
                     self.snap_to_grid()  
                 else:
                     self.X_COR = self.STASIC_X  
