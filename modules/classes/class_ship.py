@@ -47,12 +47,11 @@ class Ship:
         self.READY_IMAGE_SHIP = pygame.transform.scale(image_ship, size_ship)
         self.IMAGE_ROTATE_SHIP = pygame.transform.scale(image_rotate_ship, size_ship)
         
-        # Создаём метод "прилепания" корабля к сетке 
+    # Создаём метод "прилепания" корабля к сетке 
     def snap_to_grid(self): 
         # Привязываем координаты к сетке, это что бы корабль не уходил на саму сетку
         self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
     def center_to_cell_number(self, x, y):
-        
         # Рассчитываем индекс столбца и строки, в которые попадает корабль.
         # grid_player.X_SCREEN - координаты сетки по иксу
         # grid_player.Y_SCREEN - координаты сетки по игреку
@@ -133,11 +132,12 @@ class Ship:
         elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
             # Завершаем перемещение
             right_x = self.X_COR + self.WIDTH
-            if grid_player.X_SCREEN - 50 <= self.X_COR <= grid_player.X_SCREEN + 558:
-                if grid_player.X_SCREEN - 50 <= right_x <= grid_player.X_SCREEN + 558:
+            print(right_x)
+            if grid_player.X_SCREEN <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 558:
+                if grid_player.Y_SCREEN <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 558:
                     self.snap_to_grid()
                     number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
-                
+
                     if self.LENGHT == 4:
                         self.number_ship[self.LENGHT] = [number_ship_cell]
                         if self.ORIENTATION_SHIP == "horizontal":
@@ -171,16 +171,41 @@ class Ship:
                             for coord_ship in range(1, self.LENGHT):
                                 self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 9)
                         
-
                     print(self.number_ship[self.LENGHT])
-   
+                else:
+                    self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
+                    self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+                    self.ORIENTATION_SHIP = "horizontal"
+                    # Записываем в переменную для проверки
+                    self.CHEK_ROTATION = self.ORIENTATION_SHIP
+                    # Отрисовываем изображение при помощи метода
+                    self.load_image()
+                    # Записываем в переменную изменённую позицию
+                    self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+               
             else:
                 self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
+                self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+                self.ORIENTATION_SHIP = "horizontal"
+                # Записываем в переменную для проверки
+                self.CHEK_ROTATION = self.ORIENTATION_SHIP
+                # Отрисовываем изображение при помощи метода
+                self.load_image()
+                # Записываем в переменную изменённую позицию
+                self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+               
 
             # Проверка пересечения с другими кораблями
             for ship in list_ships:
                 if ship != self and self.RECT.colliderect(ship.RECT):
                     self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
+                    self.ORIENTATION_SHIP = "horizontal"
+                    # Записываем в переменную для проверки
+                    self.CHEK_ROTATION = self.ORIENTATION_SHIP
+                    # Отрисовываем изображение при помощи метода
+                    self.load_image()
+                    # Записываем в переменную изменённую позицию
+                    self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
                     break
 
             # Обновляем прямоугольник в конце
