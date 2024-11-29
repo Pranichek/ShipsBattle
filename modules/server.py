@@ -52,6 +52,7 @@ def start_server():
         #приймаємо користувача який під'єднується до серверу
         client_socket, adress = server_socket.accept()
 
+
         #записуємо у словарь статус того що до серверу під'єднався користувач
         list_server_status = {
             "status": "connect"

@@ -4,13 +4,26 @@ from ..screens import main_screen , Grid , list_object_map , grid_player
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font , ship_three , ship_two
 from ..server import server_thread 
-from ..client import thread_connect , list_check_connection
+from ..client import thread_connect , event_connect_to_server , list_check_connection
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 from ..classes.class_music import music_load_main , music_load_waiting
 from ..classes.class_click import music_click
+import socket
 
 
+#список для проверки нажата ли кнопка
+check_press_button = [None]
+#список для відслужування чи нажата кнопка підключення до серверу чи ні
+check_client_connected = [False]
+#ліст для зберігання яке зараз вікно активне
+list_current_scene = [None]
+#список для того щоб головна музика починала грати лише один раз і не приривалася
+once_play_music = [0]
+#список для відслуджування чи нажати кнопка заупску серверу чи ні
+check_server_started = [False]
+# #список для відслуджування чи підключився користувач до серверу чи ні
+# list_check_connection = [False]
 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -24,40 +37,117 @@ join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , scr
 def test():
     print(1)
 
-#список для проверки нажата ли кнопка
-check_press_button = [None]
-
-#список для відслуджування чи нажати кнопка заупску серверу чи ні
-check_server_started = [False]
-#список для відслужування чи нажата кнопка підключення до серверу чи ні
-check_client_connected = [False]
-
 def start_server():
     music_click.play2(0)
-    data = read_json(name_file = "utility.json")
-    status_server = data["status"]
-    if check_server_started[0] == False:
-        if input_port.user_text == "port" or input_ip_adress.user_text == "ip adress" or input_nick.user_text == "nick":
-            print("Fill text in the input boxes")
-        else:
-            server_thread.start()
-            if status_server == "wait" or status_server == "connect":
-                check_server_started[0] = True
-            else:
-                check_server_started[0] = False
-    elif check_server_started[0] == True:
-        print("Server has been started")
+    ip_address = input_ip_adress.user_text.split(".")
+    if len(ip_address) != 4:
+        check_server_started[0] = "error_server"
+        print("зашло")
+        if fail_start_server.visible == False:
+            fail_start_server.visible = True
+            print("error_server")
+        return False
+    for number in ip_address:
+        if not number.isdigit():
+            check_server_started[0] = "error_server"
+            print("зашло")
+            if fail_start_server.visible == False:
+                fail_start_server.visible = True
+                print("error_server")
+            return False
+        if not 0 <= int(number) <= 255:
+            check_server_started[0] = "error_server"
+            print("зашло")
+            if fail_start_server.visible == False:
+                fail_start_server.visible = True
+                print("error_server")
+            return False
+    try:
+        port = int(input_port.user_text)
+        if len(ip_address) <= 1:
+                check_server_started[0] = "error_server"
+                print("зашло")
+                if fail_start_server.visible == False:
+                    fail_start_server.visible = True
+                    print("error_server")
+                return False
+        elif not 1240 < port < 65553:
+            check_server_started[0] = "error_server"
+            print("зашло")
+            if fail_start_server.visible == False:
+                fail_start_server.visible = True
+                print("error_server")
+            return False
+    except ValueError:
+        check_server_started[0] = "error_server"
+        print("зашло")
+        if fail_start_server.visible == False:
+            fail_start_server.visible = True
+            print("error_server")
+        return False
+    
+    server_thread.start()
+
+
+
+
 
 def connect_to_server():
     music_click.play2(0)
-    if check_client_connected[0] == False:
-        if input_port.user_text == "port" or input_ip_adress.user_text == "ip adress" or input_nick.user_text == "nick":
-            print("Fill text in the input boxes")
-        else:
-            thread_connect.start()
-            check_client_connected[0] = True
-    elif check_client_connected[0] == True:
-        print("You are already tried connected to the server")
+    ip_address = input_ip_adress.user_text.split(".")
+    if len(ip_address) != 4:
+        list_check_connection[0] = "error_connection"
+        print("зашло")
+        if fail_connect.visible == False:
+            fail_connect.visible = True
+            print("error_connection")
+        return False
+    for number in ip_address:
+        if not number.isdigit():
+            list_check_connection[0] = "error_connection"
+            print("зашло")
+            if fail_connect.visible == False:
+                fail_connect.visible = True
+                print("error_connection")
+            return False
+        if not 0 <= int(number) <= 255:
+            list_check_connection[0] = "error_connection"
+            print("зашло")
+            if fail_connect.visible == False:
+                fail_connect.visible = True
+                print("error_connection")
+            return False
+    try:
+        port = int(input_port.user_text)
+        if len(ip_address) <= 1:
+                list_check_connection[0] = "error_connection"
+                print("зашло")
+                if fail_connect.visible == False:
+                    fail_connect.visible = True
+                    print("error_connection")
+                return False
+        elif not 1240 < port < 65553:
+            list_check_connection[0] = "error_connection"
+            print("зашло")
+            if fail_connect.visible == False:
+                fail_connect.visible = True
+                print("error_connection")
+            return False
+    except ValueError:
+        list_check_connection[0] = "error_connection"
+        print("зашло")
+        if fail_connect.visible == False:
+            fail_connect.visible = True
+            print("error_server")
+        return False
+    
+    if event_connect_to_server.is_set():
+        thread_connect.start()
+    elif not event_connect_to_server.is_set():
+        event_connect_to_server.set()
+    
+  
+
 
 def button_action():
     check_press_button[0] = "button is pressed"
@@ -68,8 +158,7 @@ def button_action():
 def change_scene(scene):
     list_current_scene[0] = scene
 
-#ліст для зберігання яке зараз вікно активне
-list_current_scene = [None]
+
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
@@ -104,8 +193,13 @@ input_data_bg= DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_
 waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
 #фон для розташування кораблів перед ігрою
 ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
+#фон коли користувач пробує підключитися до серверу якого немає
+fail_connect = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_background.png")
+#фон коли користувач пробує запустити сервер який вже запущений
+fail_start_server = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_server.png")
 
-once_play_music = [0]
+
+
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
@@ -137,7 +231,6 @@ def main_window():
             elif check_press_button[0] == "button is pressed":
                 music_click.play2(0)
                 check_press_button[0] = None
-                
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
@@ -176,6 +269,14 @@ def create_game_window():
         fourth_cold_image.draw_image(screen= main_screen)
         start_game_button.draw(surface= main_screen)
 
+        #если попытались создать сервер кторый нельзя(например неправильны айпи) , то выводим предуприждение об этом
+        if check_server_started[0] == "error_server":
+            fail_start_server.draw_image(screen = main_screen)
+            fail_start_server.check_touch()
+            #когда игрок закрыл табличку записываем True в список , чтобы знали что уже пытались запустить сервер
+            if fail_start_server.visible == False:
+                check_server_started[0] = True
+
         #если запустили сервер но к нему еще никто не подлючился перекидываем на окно ожидания игрока
         if status_server == "wait":
                     run_game = False
@@ -206,7 +307,6 @@ def create_game_window():
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
 
-fail_image = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_background.png")
 
 
 
@@ -229,15 +329,16 @@ def join_game_window():
 
         back_to_menu.draw(surface= main_screen)
 
-
         third_cold_image.draw_image(screen= main_screen)
         fourth_cold_image.draw_image(screen= main_screen)
         join_game_button.draw(surface= main_screen)
 
-    
-        if list_check_connection[0] == False:
-            fail_image.draw_image(screen = main_screen)
-            fail_image.check_touch()
+        #если не нашли сервер по которому подключаемся , выводим табличку о том что таокго сервера нет
+        if list_check_connection[0] == "error_connection":
+            fail_connect.draw_image(screen = main_screen)
+            fail_connect.check_touch()
+            if fail_connect.visible == False:
+                list_check_connection[0] = True
         
         if status_server == "connect":
             change_scene(ships_position_window())
@@ -266,8 +367,7 @@ def join_game_window():
             input_port.check_event(event)  
             
         
-
-        #оновлюєио екран щоб можна було бачити зміни на ньому
+        #оновлюємо екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
 
 
@@ -299,8 +399,8 @@ def ships_position_window():
     run_game = True
     
     #generate grid with class
-    
     grid_player.generate_grid()
+
     while run_game:
         module_screen_server.FPS.tick(60)
         ships_position_bg.draw_image(screen = main_screen)

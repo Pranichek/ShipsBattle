@@ -7,9 +7,13 @@ from .classes.class_input_text import input_port, input_ip_adress, input_nick
 import json
 from .json_functions import write_json , list_users , list_server_status 
 from .json_functions.read_json import read_json
-from .screens import main_screen
+import time
+
 
 pygame.init()
+
+#список для відслуджування чи підключився користувач до серверу чи ні
+list_check_connection = [False]
 
 
 
@@ -20,9 +24,9 @@ list_server_status = {
 #зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не під'єднуємося до серверу
 write_json(filename= "utility.json" , object_dict = list_server_status)
 
-list_check_connection = [None]
+event_connect_to_server = threading.Event()
+event_connect_to_server.set()
 
-    
 #створюємо функцію підключення користувача до серверу
 def connect_user():
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
@@ -33,22 +37,36 @@ def connect_user():
         write_json(filename = "data_base.json" , object_dict = list_users)
 
     #берем из поля ввода данные для запуска сервера(айпи и порт)
-    ip_adress = input_ip_adress.user_text
-    port = int(input_port.user_text)
-    
+    # ip_adress = input_ip_adress.user_text
+    # port = int(input_port.user_text)
     
     # створюємо сокет з використанням протоколу IPv4 (AF_INET) та TCP (SOCK_STREAM)
     with socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM) as client_socket:
         # підключаємо користувача до сервера за даними що ввів користувач
         # client_socket.connect((ip_address, port))
-        try:
-            client_socket.settimeout(0.1)
-            client_socket.connect((ip_adress, port))
-            list_check_connection[0] = True
-            print("conncting")
-        except (socket.timeout, OSError):
-            print("server not found")
-            list_check_connection[0] =  False
+        # while list_server_status["status"] == None:
+        while True:
+            try:
+                print(1)
+                ip_adress = input_ip_adress.user_text
+                port = int(input_port.user_text)
+                client_socket.settimeout(0.1)
+                client_socket.connect((ip_adress, port))
+                print("підключено до сервера")
+                event_connect_to_server.clear()
+                break
+            except (socket.timeout, OSError):
+                print("server not found")
+                list_check_connection[0] = "error_connection"
+                event_connect_to_server.clear()  # Сбрасываем событие
+                event_connect_to_server.wait()
+            # event_connect_to_server.clear()
+            # time
+            # False - значит что не нашли такого сервера 
+            # list_check_connection[0] =  False
+            # client_socket.connect((ip_adress, port))
+
+        # client_socket.connect((ip_adress, port))
         
         print(ip_adress , "ip address")
         print(port , "port")
