@@ -46,20 +46,22 @@ def connect_user():
         # client_socket.connect((ip_address, port))
         # while list_server_status["status"] == None:
         while True:
+            print(event_connect_to_server)
             try:
-                print(1)
-                ip_adress = input_ip_adress.user_text
-                port = int(input_port.user_text)
-                client_socket.settimeout(0.1)
-                client_socket.connect((ip_adress, port))
-                print("підключено до сервера")
-                event_connect_to_server.clear()
-                break
+                if event_connect_to_server.is_set():
+                    ip_adress = input_ip_adress.user_text
+                    port = int(input_port.user_text)
+                    client_socket.settimeout(0.1)
+                    client_socket.connect((ip_adress, port))
+                    print("підключено до сервера")
+                    event_connect_to_server.clear()
+                    break
             except (socket.timeout, OSError):
                 print("server not found")
-                list_check_connection[0] = "error_connection"
-                event_connect_to_server.clear()  # Сбрасываем событие
-                event_connect_to_server.wait()
+                list_check_connection[0] = "error_connection"  # Сбрасываем событие
+                event_connect_to_server.clear()
+                print(event_connect_to_server)
+            time.sleep(1)
             # event_connect_to_server.clear()
             # time
             # False - значит что не нашли такого сервера 

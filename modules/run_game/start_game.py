@@ -2,14 +2,14 @@
 import pygame
 from ..screens import main_screen , Grid , list_object_map , grid_player
 import modules.screens.screen as module_screen_server
-from ..classes import DrawImage , Button , Font , ship_three , ship_two
+from ..classes import DrawImage , Button , Font , ship_three , ship_two , ship_one , ship_four , list_ships
 from ..server import server_thread 
 from ..client import thread_connect , event_connect_to_server , list_check_connection
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 from ..classes.class_music import music_load_main , music_load_waiting
 from ..classes.class_click import music_click
-import socket
+import time
 
 
 #список для проверки нажата ли кнопка
@@ -143,8 +143,18 @@ def connect_to_server():
     
     if event_connect_to_server.is_set():
         thread_connect.start()
-    elif not event_connect_to_server.is_set():
+    else:
         event_connect_to_server.set()
+        # Додаємо затримку для того, щоб потік встиг виконатися хоча б один раз
+        # і оновити стан події
+        # time.sleep(0.5)
+
+        # # Перевіряємо стан події ще раз і, якщо вона скинута, то повторно запускаємо потік
+        # if not event_connect_to_server.is_set():
+        #     event_connect_to_server.set()
+           
+    # elif not event_connect_to_server.is_set():
+    #     event_connect_to_server.set()
     
   
 
@@ -210,10 +220,8 @@ def main_window():
     run_game = True
     if once_play_music[0] < 1:
         music_load_main.play()
-    
+
     once_play_music[0] += 1
-    #основний цикл роботи вікна користувача
-    # dragging = False
     while run_game:
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
@@ -229,7 +237,7 @@ def main_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
-                music_click.play2(0)
+                # music_click.play2(0)
                 check_press_button[0] = None
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
@@ -410,18 +418,20 @@ def ships_position_window():
         #отрисовка обьектов(пустых клеток) который хранятся в списке обьектов
         for object in list_object_map:
             object.draw(screen = main_screen) 
-        ship_three.draw_sheep(screen = main_screen)
-        ship_two.draw_sheep(screen = main_screen)
 
+        for ship in list_ships:
+            ship.draw_sheep(screen = main_screen)
+        
+        
         #draw buttons
         ready_for_battle.draw(surface= main_screen)
         random_place_ships.draw(surface= main_screen)
 
         for event in pygame.event.get():
-            ship_three.rotate_ship(event = event)
-            ship_three.matrix_move(event = event , matrix_width = 558 , matrix_height = 558 , cell = 81)
-            ship_two.rotate_ship(event = event)
-            ship_two.matrix_move(event = event , matrix_width = 558 , matrix_height = 558 , cell = 81)
+            for ship in list_ships:
+                ship.rotate_ship(event = event)
+                ship.matrix_move(event = event, matrix_width = 558, matrix_height = 558, cell = 81)
+
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
