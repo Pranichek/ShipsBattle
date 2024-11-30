@@ -1,21 +1,19 @@
 import socket
-#підключаємо модуль для роботи із потоками
 import threading
 import json
 import pygame
+import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
-import json
 from .json_functions import write_json , list_users , list_server_status 
 from .json_functions.read_json import read_json
-import time
+
+
 
 
 pygame.init()
 
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
-
-
 
 #ліст для перевірки чи зайшов користувач на сервер
 list_server_status = {

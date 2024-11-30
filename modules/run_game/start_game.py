@@ -1,16 +1,17 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen , Grid , list_object_map , grid_player
+from ..screens import main_screen , list_object_map , grid_player
 import modules.screens.screen as module_screen_server
-from ..classes import DrawImage , Button , Font , ship_three , ship_two , ship_one , ship_four , list_ships
-from ..server import server_thread 
-from ..client import thread_connect , event_connect_to_server , list_check_connection
+from ..classes import DrawImage , Button , Font  , list_ships
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 from ..classes.class_music import music_load_main , music_load_waiting
 from ..classes.class_click import music_click
 from .start_server import start_server , fail_start_server , check_server_started
 from .connect_to_server import connect_to_server , list_check_connection , fail_connect
+
+#ініціалізуємо pygame щоб можна було із ним працювати
+pygame.init()
 
 
 #список для проверки нажата ли кнопка
@@ -21,14 +22,7 @@ check_client_connected = [False]
 list_current_scene = [None]
 #список для того щоб головна музика починала грати лише один раз і не приривалася
 once_play_music = [0]
-#список для відслуджування чи нажати кнопка заупску серверу чи ні
-# check_server_started = [False]
-# #список для відслуджування чи підключився користувач до серверу чи ні
-# list_check_connection = [False]
 
-
-#ініціалізуємо pygame щоб можна було із ним працювати
-pygame.init()
 
 
 #fonts(text)
@@ -37,159 +31,6 @@ join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , scr
 
 def test():
     print(1)
-
-#функція для запуску серверу
-# def start_server():
-#     #запускаємо звук кліку кнопки
-#     music_click.play2(0)
-#     # розділяем нашь айпі на числа , тобо якщо воно було таке 192.168.0.1 то стане таким 192 168 0 1
-#     # це для того щоб можна було перевірити кожне число окремо
-#     ip_address = input_ip_adress.user_text.split(".")
-#     # якщо цих чисел не 4 , то користувач не правильно увів дані 
-#     if len(ip_address) != 4:
-#         # передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
-#         check_server_started[0] = "error_server"
-#         # якщо вже було це вікно , то робимо його видимим 
-#         if fail_start_server.visible == False:
-#             fail_start_server.visible = True
-#             print("error_server")
-#         # return False - означає що сталася помилка ,та код не буде далі рухатися
-#         return False
-#     # перевіряємо чи кожне число в межах допустимого діапазону
-#     for number in ip_address:
-#         # перевіряємо чи це взагалі числа а не наприклад літери
-#         if not number.isdigit():
-#             # якшо це не цифри, то передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
-#             check_server_started[0] = "error_server"
-#             print("зашло")
-#             # якщо вже було це вікно , то робимо його видимим 
-#             if fail_start_server.visible == False:
-#                 fail_start_server.visible = True
-#                 print("error_server")
-#             # return False - означає що сталася помилка ,та код не буде далі рухатися
-#             return False
-#         # якщо користувач увів числа але вони не підходять під рамки для нормального айпі, то виводимо окно про помилку
-#         if not 0 <= int(number) <= 255:
-#             check_server_started[0] = "error_server"
-#             print("зашло")
-#             if fail_start_server.visible == False:
-#                 fail_start_server.visible = True
-#                 print("error_server")
-#             # return False - означає що сталася помилка ,та код не буде далі рухатися
-#             return False
-#     try:
-#         # тепер перівіряємо на правильність порт 
-#         port = int(input_port.user_text)
-#         #  якщо користувач увів нічого або лише тільки одну цифру то виводимо окно с помилкою
-#         if len(ip_address) <= 1:
-#                 check_server_started[0] = "error_server"
-#                 print("зашло")
-#                 if fail_start_server.visible == False:
-#                     fail_start_server.visible = True
-#                     print("error_server")
-#                 # return False - означає що сталася помилка ,та код не буде далі рухатися
-#                 return False
-#         # якщо порт не підходить під рамки, то виводимо окно с помилкою
-#         elif not 1240 < port < 65553:
-#             check_server_started[0] = "error_server"
-#             print("зашло")
-#             if fail_start_server.visible == False:
-#                 fail_start_server.visible = True
-#                 print("error_server")
-#             # return False - означає що сталася помилка ,та код не буде далі рухатися
-#             return False
-#     except ValueError:
-#         #  якщо порт взагалі не цифри то також виводимо окно із помилкою
-#         check_server_started[0] = "error_server"
-#         print("зашло")
-#         if fail_start_server.visible == False:
-#             fail_start_server.visible = True
-#             print("error_server")
-#         # return False - означає що сталася помилка ,та код не буде далі рухатися
-#         return False
-#     # якщо все вірно , то запускаємо сервер
-#     server_thread.start()
-
-
-
-
-
-# def connect_to_server():
-#     #запускаємо звук кліку кнопки
-#     music_click.play2(0)
-#     # розділяем нашь айпі на числа , тобо якщо воно було таке 192.168.0.1 то стане таким 192 168 0 1
-#     # це для того щоб можна було перевірити кожне число окремо
-#     ip_address = input_ip_adress.user_text.split(".")
-#     # якщо воно має більше чисел ніж 4 або менш ніж 4 чисел, то такий айпі не є вірним , і виводимо помилку
-#     if len(ip_address) != 4:
-#         list_check_connection[0] = "error_connection"
-#         print("зашло")
-#         if fail_connect.visible == False:
-#             fail_connect.visible = True
-#             print("error_connection")
-#         # return False - означає що сталася помилка ,та код не буде далі рухатися
-#         return False
-    
-#     # перевіряємо чи кожне число в межах допустимого діапазону
-#     for number in ip_address:
-#         # перевіряємо чи це взагалі числа а не наприклад літери
-#         if not number.isdigit():
-#             # якшо це не цифри, то передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
-#             list_check_connection[0] = "error_server"
-#             print("зашло")
-#             # якщо вже було це вікно , то робимо його видимим 
-#             if fail_connect.visible == False:
-#                 fail_connect.visible = True
-#                 print("error_server")
-#             # return False - означає що сталася помилка ,та код не буде далі рухатися
-#             return False
-#         # якщо айпі не підходить у рамки нормальних значеннь виводимо помулку
-#         if not 0 <= int(number) <= 255:
-#             list_check_connection[0] = "error_connection"
-#             print("зашло")
-#             if fail_connect.visible == False:
-#                 fail_connect.visible = True
-#                 print("error_connection")
-#             # return False - означає що сталася помилка ,та код не буде далі рухатися
-#             return False
-#     try:
-#         #  тепер первіряємо порт на правильність написання
-#         port = int(input_port.user_text)
-#         # якщо користувач взагалі не увів цифр або тільки одну то виводимо помилку за допомогою передавання про помилку у список
-#         if len(ip_address) <= 1:
-#                 list_check_connection[0] = "error_connection"
-#                 print("зашло")
-#                 if fail_connect.visible == False:
-#                     fail_connect.visible = True
-#                     print("error_connection")
-#                 # return False - означає що сталася помилка ,та код не буде далі рухатися
-#                 return False
-#         # якщо користувач увів порт який не підходить у рамки портів то виводимо помилку за допомогою передавання про помилку у список
-#         elif not 1240 < port < 65553:
-#             list_check_connection[0] = "error_connection"
-#             print("зашло")
-#             if fail_connect.visible == False:
-#                 fail_connect.visible = True
-#                 print("error_connection")
-#             # return False - означає що сталася помилка ,та код не буде далі рухатися
-#             return False
-#     except ValueError:
-#         # якщо порт взагалі не цифра , то  виводимо помилку за допомогою передавання про помилку у список
-#         list_check_connection[0] = "error_connection"
-#         print("зашло")
-#         if fail_connect.visible == False:
-#             fail_connect.visible = True
-#             print("error_server")
-#         # return False - означає що сталася помилка ,та код не буде далі рухатися
-#         return False
-#     # якщо усі перевірки пройдені і користувач вперше натиснув на цю кнопку то запускаємо підключення до серверу
-#     if event_connect_to_server.is_set():
-#         thread_connect.start()
-#     # якщо усі перевікри пройдені але це не перший запуск, наприклад перший раз увів айди сервера якого ще немає, а тепер такий сервер є 
-#     # то передаємо у  event_connect_to_server значення True за допомогою .set()
-#     else:
-#         event_connect_to_server.set()
-        
     
 def button_action():
     check_press_button[0] = "button is pressed"
@@ -199,7 +40,6 @@ def button_action():
 #функція для перезаписування яке зараз вікно активне
 def change_scene(scene):
     list_current_scene[0] = scene
-
 
 
 #buttons
@@ -328,7 +168,6 @@ def create_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
-                music_click.play2(0)
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
@@ -372,9 +211,13 @@ def join_game_window():
         fourth_cold_image.draw_image(screen= main_screen)
         join_game_button.draw(surface= main_screen)
 
-        #если не нашли сервер по которому подключаемся , выводим табличку о том что таокго сервера нет
+        #если не нашли сервер по которому подключаемся или ввели что то неправильно, выводим табличку о том что таокго сервера нет
+        #этот список находится в файле connect_to_server.py
         if list_check_connection[0] == "error_connection":
+            # рисуем табличку ошибки
             fail_connect.draw_image(screen = main_screen)
+            # вызываем метод этой таблички который позволяет отслеживать наведен ли курсор на нее или нет
+            # если он находится на картинке то она пропадет
             fail_connect.check_touch()
             if fail_connect.visible == False:
                 list_check_connection[0] = True
@@ -389,7 +232,6 @@ def join_game_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
-                music_click.play2(0)
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
@@ -429,8 +271,8 @@ def waiting_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-        
         pygame.display.flip()
+
 
 
 def ships_position_window():

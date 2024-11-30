@@ -31,4 +31,5 @@ class DrawImage:
         mouse_pos = pygame.mouse.get_pos()
         # Якщо мишка наводиться на картинку, робимо її невидимою
         if self.rect.collidepoint(mouse_pos):
-            self.visible = False  # Змінюємо стан на невидимий
+            # False -  значить шо змінюємо стан на невидимий
+            self.visible = False  

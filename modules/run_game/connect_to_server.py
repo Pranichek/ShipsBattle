@@ -1,10 +1,8 @@
 from ..classes.class_input_text import input_ip_adress , input_port
 from..classes.class_image import DrawImage
 from ..classes.class_click import music_click
-from ..client import thread_connect , event_connect_to_server
+from ..client import thread_connect , event_connect_to_server , list_check_connection
 
-
-list_check_connection = [False]
 
 #фон коли користувач пробує підключитися до серверу якого немає
 fail_connect = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_background.png")

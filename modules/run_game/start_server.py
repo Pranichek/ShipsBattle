@@ -3,9 +3,9 @@ from ..classes.class_input_text import input_port, input_ip_adress, input_nick
 from ..classes.class_image import DrawImage
 from ..server import server_thread
 
+#список для відслуджування чи нажати кнопка заупску серверу чи ні
 check_server_started = [False]
-
-#фон коли користувач пробує запустити сервер який вже запущений
+#фон який говорить про помилку, коли користувач пробує запистити сервер, але він це робить не правильно
 fail_start_server = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_server.png")
 
 
