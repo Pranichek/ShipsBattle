@@ -1,6 +1,6 @@
 import pygame
 import os
-from ..screens import grid_player , list_grid
+from ..screens import grid_player , list_grid , list_object_map
 
  
 
@@ -22,9 +22,13 @@ class Ship:
         self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))#прямоугольник для того чтобы могли отслеживать курсор ли на кораблике или нет
         self.STASIC_X = self.X_COR # Static_x = это начальные координаты
         self.STASIC_Y = self.Y_COR # Static_y = это начальные координаты
-        self.number_ship = { # Словарь для хранения длины(координат) корабля 
-            self.LENGHT : [0]
-        }
+        self.number_cell = 0
+        self.row = 0
+        self.col = 0
+        self.number_ship_cell = 0
+        # self.number_ship = { # Словарь для хранения длины(координат) корабля 
+        #     self.LENGHT : [0]
+        # }
     
     # Метод загрузки картинок кораблей
     def load_image(self):
@@ -62,7 +66,7 @@ class Ship:
 
         # Учитываем, что клетки нумеруются с 1, поэтому:
         # Номер клетки = (строка * количество столбцов) + (столбец) + 1.
-        cell_number = row * 9 + col + 1
+        cell_number = row * 10 + col + 1
 
         # Возвращаем номер клетки.
         return cell_number
@@ -108,6 +112,8 @@ class Ship:
                         self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
                         
     def matrix_move(self, event: pygame.event, matrix_width: int, matrix_height: int, cell: int):
+        
+        
         mouse = pygame.mouse.get_pos()  # Получаем текущие координаты мыши
 
         if event.type == pygame.MOUSEBUTTONDOWN and self.RECT.collidepoint(event.pos):
@@ -132,46 +138,92 @@ class Ship:
         elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
             # Завершаем перемещение
             right_x = self.X_COR + self.WIDTH
-            print(right_x)
-            if grid_player.X_SCREEN <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 558:
-                if grid_player.Y_SCREEN <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 558:
+            
+            if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
+                if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
                     self.snap_to_grid()
-                    number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
+                    self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
 
-                    if self.LENGHT == 4:
-                        self.number_ship[self.LENGHT] = [number_ship_cell]
-                        if self.ORIENTATION_SHIP == "horizontal":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
-                        elif self.ORIENTATION_SHIP == "vertical":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 9)
-                    if self.LENGHT == 3:
-                        self.number_ship[self.LENGHT] = [number_ship_cell]
-                        if self.ORIENTATION_SHIP == "horizontal":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
-                        elif self.ORIENTATION_SHIP == "vertical":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 9)
-                    if self.LENGHT == 2:
-                        self.number_ship[self.LENGHT] = [number_ship_cell]
-                        if self.ORIENTATION_SHIP == "horizontal":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
-                        elif self.ORIENTATION_SHIP == "vertical":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 9)
-                    if self.LENGHT == 1:
-                        self.number_ship[self.LENGHT] = [number_ship_cell]
-                        if self.ORIENTATION_SHIP == "horizontal":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
-                        elif self.ORIENTATION_SHIP == "vertical":
-                            for coord_ship in range(1, self.LENGHT):
-                                self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 9)
-                        
-                    print(self.number_ship[self.LENGHT])
+                    if self.number_ship_cell != self.number_cell:
+                        for i in range(0 , self.LENGHT + 1):
+                            list_grid[self.row][self.col + i] = 0
+
+                    print(list_grid)
+                    print("------------------------------------------------------------------------------------------------")
+
+                    # for idx, value in enumerate(list_grid[0]):
+                    #         if idx != self.number_cell:
+                    #             list_grid[0][idx] = 0
+
+                    for cell in list_object_map: 
+                            if cell.x <= self.X_COR and self.X_COR < cell.x + 62:
+                                if cell.y <= self.Y_COR and self.Y_COR < cell.y + 62:
+                                    # Узнаем номер клетки где стоит кораблик
+                                    self.number_cell = list_object_map.index(cell)
+                                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                    str_col = str(self.number_cell)
+                                    # Вычисляем номер столбца где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                    self.row = self.number_cell // 10  
+                                    print(self.row)
+                                    #Колонку кораблика вычисляем по такому принципу
+                                    # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                    self.col = int(str_col[-1])
+                                    # for lenght_ship in list_grid[row]:
+                                        # Устанавливаем значение где стоит корабль в матрице
+                                    for i in range(0 , self.LENGHT):
+                                        list_grid[self.row][self.col + i] = self.LENGHT
+                    print("------------------------------------------------------------------------------------------------")
+                    print(list_grid)
+                    
+                    
+
+                    # for check in list_grid[row]:
+                    #     if check == self.LENGHT:
+                    #         list_grid[row][col] = 0
+
+                    # for i in list_grid[0]:
+                    #     if list_grid[0].index(i) != number_cell:
+                    #         print(list_grid[0].index(i))
+                    #         list_grid[0][i] = 0
+                    # for idx, value in enumerate(list_grid[0]):
+                    #         if idx != self.number_cell:
+                    #             list_grid[0][idx] = 0
+
+                    
+                            
+                    # if self.LENGHT == 4:
+                    #     self.number_ship[self.LENGHT] = [number_ship_cell]
+                    #     if self.ORIENTATION_SHIP == "horizontal":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
+                    #     elif self.ORIENTATION_SHIP == "vertical":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 10)
+                    # if self.LENGHT == 3:
+                    #     self.number_ship[self.LENGHT] = [number_ship_cell]
+                    #     if self.ORIENTATION_SHIP == "horizontal":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
+                    #     elif self.ORIENTATION_SHIP == "vertical":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 10)
+                    # if self.LENGHT == 2:
+                    #     self.number_ship[self.LENGHT] = [number_ship_cell]
+                    #     if self.ORIENTATION_SHIP == "horizontal":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
+                    #     elif self.ORIENTATION_SHIP == "vertical":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 10)
+                    # if self.LENGHT == 1:
+                    #     self.number_ship[self.LENGHT] = [number_ship_cell]
+                    #     if self.ORIENTATION_SHIP == "horizontal":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(number_ship_cell + coord_ship)
+                    #     elif self.ORIENTATION_SHIP == "vertical":
+                    #         for coord_ship in range(1, self.LENGHT):
+                    #             self.number_ship[self.LENGHT].append(self.number_ship[self.LENGHT][-1] + 10)
+                    # print(self.number_ship[self.LENGHT])
                 else:
                     self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
                     self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))

@@ -35,12 +35,12 @@ class Grid:
         x_screen , y_screen = self.X_SCREEN , self.Y_SCREEN
         for row in list_grid:
             for cell in row:
-                if cell == "c":
+                if cell == 0:
                     empty_cell = Cell(x = x_screen , y = y_screen ,width = 62 , height = 62 , image_name = "empty_cell.png")
                     list_object_map.append(empty_cell)
                 x_screen += 62
             y_screen += 62
-            x_screen = 80
+            x_screen = 81
     def snap_to_grid(self, x, y):
     # Рассчитываем индекс столбца сетки (grid_x), в который попадает точка (x)-координата корабля.
     # 1. Вычитаем координату начала сетки по X (self.X_SCREEN), чтобы получить относительное положение.
@@ -56,11 +56,11 @@ class Grid:
     
     # Ограничиваем индекс столбца (grid_x) в пределах от 0 до 8 (максимальное количество столбцов минус 1).
     # Если координата выходит за пределы сетки, она будет приведена к ближайшей границе.
-        grid_x = max(0, min(9 - 1, grid_x))
+        grid_x = max(0, min(10 - 1, grid_x))
     
     # Ограничиваем индекс строки (grid_y) в пределах от 0 до 8 (максимальное количество строк минус 1).
     # Если координата выходит за пределы сетки, она будет приведена к ближайшей границе.
-        grid_y = max(0, min(9 - 1, grid_y))
+        grid_y = max(0, min(10 - 1, grid_y))
     
     # Возвращаем координаты центра привязанной ячейки:
     # 1. Рассчитываем экранные координаты центра ячейки по X:
@@ -68,4 +68,4 @@ class Grid:
     # 2. Аналогично, рассчитываем экранные координаты центра ячейки по Y.
         return self.X_SCREEN + grid_x * 62, self.Y_SCREEN + grid_y * 62
     
-grid_player = Grid(x_screen = 81 , y_screen = 127)
+grid_player = Grid(x_screen = 81 , y_screen = 128)

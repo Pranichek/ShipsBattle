@@ -64,7 +64,7 @@ second_cold_image = DrawImage(width= 152 , height= 68 , x_cor= 940, y_cor= 716 ,
 third_cold_image = DrawImage(width=  150, height= 68 , x_cor= 536 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 #image for the grid
-grid_image = DrawImage(width = 600 , height = 597 , x_cor = 40 , y_cor = 89 , folder_name = "grid", image_name = "background_grid.png")
+grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 89 , folder_name = "grid", image_name = "background_grid.png")
 
 
 #backgrounds
@@ -113,7 +113,7 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(join_game_window())
+                    change_scene(ships_position_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -303,7 +303,7 @@ def ships_position_window():
         for event in pygame.event.get():
             for ship in list_ships:
                 ship.rotate_ship(event = event)
-                ship.matrix_move(event = event, matrix_width = 558, matrix_height = 558, cell = 81)
+                ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
 
             if event.type == pygame.QUIT:
                 run_game = False  
