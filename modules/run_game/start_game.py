@@ -57,6 +57,9 @@ join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , imag
 ready_for_battle = Button(x= 799 , y = 678,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= test)
 #кнопка яка будеть розставляти кораблі у ранломному положені
 random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
+# кнопка для добавления звука
+button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= test)
+
 
 #images decoration
 cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
@@ -75,12 +78,12 @@ input_data_bg= DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_
 waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
 #фон для розташування кораблів перед ігрою
 ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
-# #фон коли користувач пробує підключитися до серверу якого немає
-# fail_connect = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_background.png")
-# #фон коли користувач пробує запустити сервер який вже запущений
-# fail_start_server = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_server.png")
 
-
+# def get_volume():
+#     if :
+#         return 1.0
+#     return
+#     pygame.mixer.music.get_volume()
 
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
@@ -313,4 +316,3 @@ def ships_position_window():
                 random_place_ships.check_click()
         
         pygame.display.flip()
-        
