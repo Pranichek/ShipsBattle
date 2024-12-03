@@ -1,97 +1,110 @@
+import pygame
 import socket
-#підключаємо модуль для роботи із потоками
 import threading
-# Импортируем классы
-from .classes.class_input_text import input_port , input_ip_adress, input_nick
-# Импортируем функцию записи в json файлы
-from .json_functions.write_json import write_json , list_server_status , list_users
-from .json_functions.read_json import read_json
 import json
+from .classes.class_input_text import input_port, input_ip_adress, input_nick
+from .json_functions.write_json import write_json, list_server_status, list_users
+from .json_functions.read_json import read_json
 
+# Ліст для перевірки чи зайшов користувач на сервер
+list_server_status = {"status": None}
+write_json(filename="utility.json", object_dict=list_server_status)
 
+# Подія для зупинки сервера
+stop_event = threading.Event()
 
-#ліст для перевірки чи зайшов користувач на сервер
-list_server_status = {
-    "status": None
-}
-#зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не запустили сервер
-write_json(filename= "utility.json" , object_dict =  list_server_status)
-
-
-#створємо функцію для запуску серверу
+# Функція для запуску сервера
 def start_server():
-    #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
-        #создаем игрока с его ником и даем базовое количество баллов
         list_users[input_nick.user_text] = {"points": 0}
-        #зберігаємо інформацію у json файл
-        write_json(filename = "data_base.json" , object_dict = list_users)
+        write_json(filename="data_base.json", object_dict=list_users)
 
-    #берем из поля ввода данные для запуска сервера(айпи и порт)
     ip_address = input_ip_adress.user_text
     port = int(input_port.user_text)
-    
-    # Створюємо сокет з використанням протоколу IPv4 (AF_INET) та TCP (SOCK_STREAM)
+
     with socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM) as server_socket:
-        # Прив'язуємо сокет до порту що ввів користувач, та Прив'язуємо по якому айпі можуть до нього підключитися
         server_socket.bind((ip_address, port))
-        #Ставимо сервер у режим очікування підключень
         server_socket.listen()
-        print("connecting")
-        print(ip_address , "ip address")
-        print(port, "port")
+        print("Server is waiting for a connection...")
+        list_server_status["status"] = "wait"
+        write_json(filename="utility.json", object_dict=list_server_status)
 
-        #записуємо в словарь статус очікування підключення до серверу
-        #передаем в словарь файл статус ожидания
-        list_server_status = {
-            "status": "wait"
-        }
-        #зберігаємо інформацію про статус підлючення до серверу у json файл
-        write_json(filename= "utility.json" , object_dict = list_server_status)
-        
-        #приймаємо користувача який під'єднується до серверу
-        client_socket, adress = server_socket.accept()
+        while not stop_event.is_set():
+            server_socket.settimeout(1.0)
+            try:
+                client_socket, address = server_socket.accept()
+                break
+            except socket.timeout:
+                continue
 
-        #записуємо у словарь статус того що до серверу під'єднався користувач
-        list_server_status = {
-            "status": "connect"
-        }
-        #зберігаємо інформацію про статус підлючення до серверу у json файл
-        write_json(filename= "utility.json" , object_dict = list_server_status)
+        if stop_event.is_set():
+            print("Server was canceled.")
+            list_server_status["status"] = "canceled"
+            write_json(filename="utility.json", object_dict=list_server_status)
+            return
 
-        # with client_socket:  
+        print(f"Connection established with {address}.")
+        list_server_status["status"] = "connect"
+        write_json(filename="utility.json", object_dict=list_server_status)
 
-        # Отримуємо дані від клієнта(нікнейм та скільки у нього баллів), у виді джейсон строки
-        response_data = client_socket.recv(1024).decode()
-        #перетворюємо json сктроку , у словник
-        data_in_list = json.loads(response_data)
-        print(data_in_list, "from client")
+        with client_socket:
+            response_data = client_socket.recv(1024).decode()
+            data_in_list = json.loads(response_data)
+            if data_in_list["nick"] not in list_users:
+                list_users[data_in_list["nick"]] = {"points": data_in_list["points"]}
+            else:
+                list_users[data_in_list["nick"]]["points"] = data_in_list["points"]
+            write_json(filename="data_base.json", object_dict=list_users)
 
-        #якщо нікнейма суперника ще немає у словарі то записуємо його нік у джейосн файл
-        if data_in_list["nick"] not in list_users:
-            list_users[data_in_list["nick"]] = {"points": data_in_list["points"]}
-            write_json(filename = "data_base.json" , object_dict = list_users)
-        #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
-        elif data_in_list["nick"] in list_users:
-            list_users[data_in_list["nick"]]["points"] = data_in_list["points"]
-            write_json(filename = "data_base.json" , object_dict = list_users)
+            points_for_client = list_users[input_nick.user_text]["points"]
+            data_for_client = {
+                "nick": input_nick.user_text,
+                "points": points_for_client,
+                "status": list_server_status,
+            }
+            client_socket.send(json.dumps(data_for_client).encode())
 
-        #отримуємо дані про користувачів з бази даних  (назва файла з базой даних)
-        data_for_client = read_json(name_file = "data_base.json")
-        #беремо кол-во баллів користувача який запсукає сервер, щоб відправати оновлену кількість 
-        points_for_client = data_for_client[input_nick.user_text]["points"]
-        print(points_for_client , "points for client")
-        
-        #формуємо дані користувача який запустив серве ,для відправки до клієнта який під'єднався
-        data_for_client = {
-            "nick": str(input_nick.user_text),
-            "points": points_for_client,
-            "status": list_server_status
-        }
-        #відправляємо дані на клієнта , dumps - перетворює словарь у джейсон строку 
-        client_socket.send(json.dumps(data_for_client).encode())
-           
-        
-            
-#створюємо зміну потока, для запуску серверу
-server_thread = threading.Thread(target = start_server, daemon=True)
+# Функція для скасування сервера
+def cancel_server():
+    stop_event.set()
+    print("Canceling the server...")
+
+# Функція для запуску потоку сервера
+def start_server_thread():
+    global server_thread
+    server_thread = threading.Thread(target=start_server, daemon=True)
+    server_thread.start()
+
+# Інтерфейс з використанням Pygame
+def pygame_interface():
+    pygame.init()
+    screen = pygame.display.set_mode((400, 300))
+    pygame.display.set_caption("Server Control")
+    font = pygame.font.Font(None, 36)
+
+    # Кнопка отмены
+    button_color = (200, 0, 0)
+    button_rect = pygame.Rect(100, 100, 200, 50)
+    button_text = font.render("Cancel Server", True, (255, 255, 255))
+
+    running = True
+    while running:
+        screen.fill((30, 30, 30))
+        pygame.draw.rect(screen, button_color, button_rect)
+        screen.blit(button_text, (button_rect.x + 20, button_rect.y + 10))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                cancel_server()  # Отмена сервера при выходе
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if button_rect.collidepoint(event.pos):
+                    cancel_server()  # Отмена сервера по нажатию кнопки
+
+        pygame.display.flip()
+
+    pygame.quit()
+
+# Запуск сервера и интерфейса
+start_server_thread()  # Запускаем сервер в отдельном потоке
+pygame_interface()  # Запускаем интерфейс
