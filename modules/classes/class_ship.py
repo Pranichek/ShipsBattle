@@ -137,6 +137,8 @@ class Ship:
             self.RECT.topleft = (self.X_COR, self.Y_COR)
 
         elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
+            print(self.WIDTH , "self_width")
+            print(self.RECT.width , "self_rect")
             
             if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
                 if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
@@ -146,13 +148,16 @@ class Ship:
                     if self.ORIENTATION_SHIP == "horizontal":
                         # Если старая клетка не совпадает с новой, то меняем значение клеток в матрице
                         if self.number_ship_cell != self.number_cell:
-                            # Добавляем к номеру клетки по +1, столько, сколько у нас длина корабля 
-                            for index_col in range(0 , self.LENGHT):
-                                # Добалвяем к ячейке 
-                                list_grid[self.row][self.col + index_col] = 0
-                                # Очищаем прошлое место корабля
-                            for index_row in range(0 , self.LENGHT):
-                                list_grid [self.row + index_row][self.col] = 0
+                            try:
+                                # Добавляем к номеру клетки по +1, столько, сколько у нас длина корабля 
+                                for index_col in range(0 , self.LENGHT):
+                                    # Добалвяем к ячейке 
+                                    list_grid[self.row][self.col + index_col] = 0
+                                    # Очищаем прошлое место корабля
+                                for index_row in range(0 , self.LENGHT):
+                                    list_grid [self.row + index_row][self.col] = 0
+                            except Exception as error:
+                                print("Помилка трпалась можлиов із зі того що координати цього корабля на матриці вже почистили")
                                 
 
                     # Если ориентация корабля = вертикальной
@@ -185,11 +190,13 @@ class Ship:
                                     # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
                                     str_col = str(self.number_cell) 
                                     # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
-
                                     self.row = self.number_cell // 10  
                                     #Колонку кораблика вычисляем по такому принципу
                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                     self.col = int(str_col[-1])
+
+                                    print(self.Y_COR)
+                                
                                     
                                     # Устанавливаем значение где стоит корабль в матрице
                                     if self.ORIENTATION_SHIP == "horizontal":
@@ -202,44 +209,62 @@ class Ship:
 
                     for shiper in list_ships:
                         # if shiper.X_COR <= self.X_COR and self.X_COR <= shiper.X_COR
-                        if shiper.X_COR != self.X_COR:
-                            print(shiper.X_COR, self.X_COR)
-                            # Если координата X корабля который мы пытаемся установить + ширина прямоугольника МЕНЬШЕ ИЛИ РАВНЯЕТСЯ чем координата X коробля который мы уже установили,
-                            #  + ширина этого прямоугольника и + периметр ячейки, и всё это дело умноженное на длину этого самого коробля. Тогда идём ниже
-                            if self.X_COR + self.RECT.width  <= shiper.X_COR + shiper.RECT.width + 62 * self.LENGHT:
-                                print(777)
-                                # Если координата коробля который мы уже установили - периметр ячейки МЕНЬШЕ ИЛИ РАВНЯЕТСЯ чем координата коробля который мы пытаемся установить,
-                                # или координата коробля котой мы пытаемся установить + ширина прямоугольника БОЛЬШЕ ИЛИ РАВНЯЕТСЯ чем координата X коробля который
-                                if shiper.X_COR - 62 <= self.X_COR:
-                                        print("yyyyyeah")
-                                        if self.X_COR + self.RECT.width >= shiper.X_COR:
-                                    # if shiper.Y_COR - 62 <= self.Y_COR:
-                                            print("y")
+                        if list_ships.index(shiper) != list_ships.index(self):
+                        #     # для правой стороны горзионтально
+                            if self.X_COR <= shiper.X_COR + shiper.RECT.width + 61:
+                                if self.X_COR >= shiper.X_COR + shiper.RECT.width:
+                                    if self.Y_COR < shiper.Y_COR + 124:
+                                        if self.Y_COR > shiper.Y_COR - 124:
+                                            print(shiper.X_COR)
+                                            print(self.X_COR)
                                             self.X_COR = self.STASIC_X
                                             self.Y_COR = self.STASIC_Y
-                                            for index_col in range(0 , self.LENGHT):
-                                                # Добалвяем к ячейке 
-                                                list_grid[self.row][self.col + index_col] = 0
-                                                # Очищаем прошлое место корабля
                                             for index_row in range(0 , self.LENGHT):
+                                                # Добалвяем к ячейке 
                                                 list_grid [self.row + index_row][self.col] = 0
+                                                # Очищаем прошлое место корабля
+                                            for index_col in range(0 , self.LENGHT):
+                                                list_grid[self.row][self.col + index_col] = 0
 
+                            # для верха когда корадлик горизонтально
+                            if self.X_COR >= shiper.X_COR:
+                                print(4)
+                                print(self.X_COR)
+                                if self.X_COR < shiper.X_COR + shiper.RECT.width:
+                                    print(2)
+                                    if self.Y_COR >= shiper.Y_COR - 62:
+                                        print(7)
+                                        if self.Y_COR <= shiper.Y_COR:
+                                            print(3)
+                                            self.X_COR = self.STASIC_X
+                                            self.Y_COR = self.STASIC_Y
+                                            for index_row in range(0 , self.LENGHT):
+                                                # Добалвяем к ячейке 
+                                                list_grid [self.row + index_row][self.col] = 0
+                                                # Очищаем прошлое место корабля
+                                            for index_col in range(0 , self.LENGHT):
+                                                list_grid[self.row][self.col + index_col] = 0
 
-                
+                            # для низа когда корабль горизонтально
+                            print(1)
+                            if self.X_COR >= shiper.X_COR:
+                                print(2)
+                                if self.X_COR < shiper.X_COR + shiper.RECT.width:
+                                    print(3)
+                                    if self.Y_COR < shiper.Y_COR + 124:
+                                        print(4)
+                                        if self.Y_COR >= shiper.Y_COR + 62:
+                                            print(5)    
+                                            self.X_COR = self.STASIC_X
+                                            self.Y_COR = self.STASIC_Y
+                                            for index_row in range(0 , self.LENGHT):
+                                                # Добалвяем к ячейке 
+                                                list_grid [self.row + index_row][self.col] = 0
+                                                # Очищаем прошлое место корабля
+                                            for index_col in range(0 , self.LENGHT):
+                                                list_grid[self.row][self.col + index_col] = 0
 
-                        
-                    #     if s.col + s.LENGHT == self.col:
-                    #         print("зашло")
-                    #         self.X_COR = self.STASIC_X
-                    #         self.Y_COR = self.STASIC_Y
-                    #         for index_row in range(0 , self.LENGHT):
-                    #             # Добалвяем к ячейке 
-                    #             list_grid [self.row + index_row][self.col] = 0
-                    #             # Очищаем прошлое место корабля
-                    #         for index_col in range(0 , self.LENGHT):
-                    #             list_grid[self.row][self.col + index_col] = 0
-                
-                                            
+            
                     print("------------------------------------------------------------------------------------------------")
                     print(list_grid)
                 else:
@@ -270,7 +295,7 @@ class Ship:
             for ship in list_ships:
                 # Проверяем ship != self - это для того чтобы не проверять кораблик сам с собой
                 # self.RECT.colliderect(ship.RECT) - проверям каждый корабль из списка с текущим кораблем, если ихние прямоугольники(колизии) пересекаются то ставим кораблик на начальные координаты
-                if ship != self and self.RECT.colliderect(ship.RECT):
+                if list_ships.index(ship) != list_ships.index(self) and self.RECT.colliderect(ship.RECT):
                     # Если столкнулись, то ставим кораблик на начальные координаты
                     self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
                     # поворачиваем его по горизонтале если он был вертикальным
@@ -293,7 +318,18 @@ ship_four = Ship(
     x_cor = 900 , 
     y_cor = 100 , 
     width = 62 , 
-    height =62 , 
+    height = 62 , 
+    image_ship = "ship_four.png", 
+    image_rotate_ship = "rotate_ship_four.png", 
+    length = 4 , 
+    position_ship = "horizontal"
+)
+
+ship_four_two = Ship(
+    x_cor = 900 , 
+    y_cor = 600 , 
+    width = 62 , 
+    height = 62 , 
     image_ship = "ship_four.png", 
     image_rotate_ship = "rotate_ship_four.png", 
     length = 4 , 
@@ -341,3 +377,4 @@ list_ships.append(ship_four)
 list_ships.append(ship_two)
 list_ships.append(ship_one)
 list_ships.append(ship_three)
+list_ships.append(ship_four_two)
