@@ -41,6 +41,16 @@ def button_action():
 def change_scene(scene):
     list_current_scene[0] = scene
 
+def music_up():
+    get = pygame.mixer.music.get_volume()
+    print(get)
+    pygame.mixer.music.set_volume(get + 0.1)
+
+def music_lower():
+    get2 = pygame.mixer.music.get_volume()
+    print(get2)
+    pygame.mixer.music.set_volume(get2 - 0.1)
+
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
@@ -58,8 +68,8 @@ ready_for_battle = Button(x= 799 , y = 678,image_path= "start_battle.png" , imag
 #кнопка яка будеть розставляти кораблі у ранломному положені
 random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
 # кнопка для добавления звука
-button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= test)
-
+button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_up)
+button_lower = Button(x=53,y=136, image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_lower)
 
 #images decoration
 cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
@@ -79,11 +89,7 @@ waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,f
 #фон для розташування кораблів перед ігрою
 ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
 
-# def get_volume():
-#     if :
-#         return 1.0
-#     return
-#     pygame.mixer.music.get_volume()
+
 
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
@@ -103,6 +109,7 @@ def main_window():
 
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
+        
  
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
@@ -316,3 +323,6 @@ def ships_position_window():
                 random_place_ships.check_click()
         
         pygame.display.flip()
+
+
+
