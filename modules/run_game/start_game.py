@@ -50,6 +50,9 @@ def music_lower():
     get2 = pygame.mixer.music.get_volume()
     print(get2)
     pygame.mixer.music.set_volume(get2 - 0.1)
+    if get2 - 0.1 < 0.01:
+        pygame.mixer.music.set_volume(0)
+
 
 
 #buttons
@@ -69,7 +72,7 @@ ready_for_battle = Button(x= 799 , y = 678,image_path= "start_battle.png" , imag
 random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
 # кнопка для добавления звука
 button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_up)
-button_lower = Button(x=53,y=136, image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_lower)
+button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width= 74, height= 71, action= music_lower)
 
 #images decoration
 cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
@@ -109,6 +112,8 @@ def main_window():
 
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
+        button_upp.draw(surface= main_screen)
+        button_lower.draw(surface= main_screen)
         
  
         second_cold_image.draw_image(screen= main_screen)
@@ -129,6 +134,8 @@ def main_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click()
                 join_game_frame.check_click()
+                button_upp.check_click()
+                button_lower.check_click()
 
         pygame.display.flip()
 
