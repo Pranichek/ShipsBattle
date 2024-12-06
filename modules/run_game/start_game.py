@@ -2,13 +2,14 @@
 import pygame
 from ..screens import main_screen , list_object_map , grid_player
 import modules.screens.screen as module_screen_server
-from ..classes import DrawImage , Button , Font  , list_ships
+from ..classes import DrawImage , Button , Font  , list_ships,random_ships,ship_four#-----------------------------------------------    
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 from ..classes.class_music import music_load_main , music_load_waiting
 from ..classes.class_click import music_click
 from .start_server import start_server , fail_start_server , check_server_started
 from .connect_to_server import connect_to_server , list_check_connection , fail_connect
+from ..screens import list_grid
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -22,6 +23,7 @@ check_client_connected = [False]
 list_current_scene = [None]
 #список для того щоб головна музика починала грати лише один раз і не приривалася
 once_play_music = [0]
+
 
 
 
@@ -40,7 +42,14 @@ def button_action():
 #функція для перезаписування яке зараз вікно активне
 def change_scene(scene):
     list_current_scene[0] = scene
+#-----------------------------------------------    
+        
+def random_place_ships_buton(): 
+    random_ships()
+  #-----------------------------------------------    
+          
 
+    
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
@@ -56,7 +65,7 @@ join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , imag
 #кнопка коли розставив кораблі та підлючаєшься до бою
 ready_for_battle = Button(x= 799 , y = 678,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= test)
 #кнопка яка будеть розставляти кораблі у ранломному положені
-random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
+random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= random_place_ships_buton)#-------------------------------
 # кнопка для добавления звука
 button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= test)
 
@@ -284,6 +293,7 @@ def ships_position_window():
     
     #generate grid with class
     grid_player.generate_grid()
+    
 
     while run_game:
         module_screen_server.FPS.tick(60)
@@ -291,12 +301,15 @@ def ships_position_window():
 
         #отрисовка картинки цифер и букв для поля
         grid_image.draw_image(screen = main_screen)
+        
         #отрисовка обьектов(пустых клеток) который хранятся в списке обьектов
         for object in list_object_map:
             object.draw(screen = main_screen) 
 
         for ship in list_ships:
             ship.draw_sheep(screen = main_screen)
+        
+       
         
         
         #draw buttons
@@ -312,7 +325,13 @@ def ships_position_window():
                 run_game = False  
                 change_scene(None)
             elif event.type == pygame.MOUSEBUTTONDOWN:
+
                 ready_for_battle.check_click()
+                #-----------------------------------------------    
+        
                 random_place_ships.check_click()
+                #-----------------------------------------------    
+        
+                
         
         pygame.display.flip()

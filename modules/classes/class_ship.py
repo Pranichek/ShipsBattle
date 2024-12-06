@@ -1,8 +1,141 @@
 import pygame
 import os
-from ..screens import grid_player , list_grid , list_object_map
+from ..screens import grid_player , list_grid , list_object_map,Grid #-----------------
+import random
 
  
+import random
+#-----------------------------------------------    
+        
+def create_battlefield():
+    # Размер игрового поля
+    size = 10
+    # Инициализация пустой матрицы
+    battlefield = [[0 for _ in range(size)] for _ in range(size)]
+    
+    # Описание кораблей: количество палуб и их число
+    #ships = {4: 1, 3: 2, 2: 3, 1: 4}
+    ships = {4: 1, 3: 2, 2: 3, 1: 4}
+    
+    def is_valid_position(bf, x, y, length, vertical):
+        """Проверяет, можно ли разместить корабль."""
+        for i in range(length):
+            nx = x + (i if vertical else 0)
+            ny = y + (i if not vertical else 0)
+            # Проверка выхода за границы
+            if nx < 0 or ny < 0 or nx >= size or ny >= size:
+                return False
+            # Проверка соседних клеток
+            for dx in [-1, 0, 1]:
+                for dy in [-1, 0, 1]:
+                    adj_x = nx + dx
+                    adj_y = ny + dy
+                    if 0 <= adj_x < size and 0 <= adj_y < size and bf[adj_x][adj_y] != 0:
+                        return False
+        return True
+
+    def place_ship(bf, length):
+        """Размещает корабль на поле."""
+        while True:
+            # Выбор случайной стартовой позиции
+            x = random.randint(0, size - 1)
+            y = random.randint(0, size - 1)
+            # Выбор ориентации (True - вертикально, False - горизонтально)
+            vertical = random.choice([True, False])
+            # Проверка, можно ли разместить корабль
+            if is_valid_position(bf, x, y, length, vertical):
+                for i in range(length):
+                    nx = x + (i if vertical else 0)
+                    ny = y + (i if not vertical else 0)
+                    bf[nx][ny] = length
+                break
+
+    # Размещение всех кораблей
+    for length, count in ships.items():
+        for _ in range(count):
+            place_ship(battlefield, length)
+
+    return battlefield
+
+def find_ships(matrix, grid: Grid):
+    ship_positions = []  # Список для хранения информации о кораблях
+    ship_count = {}  # Словарь для подсчета кораблей каждого типа
+
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    visited = set()  # Чтобы избежать повторного учета клеток кораблей
+
+    for i in range(rows):
+        for j in range(cols):
+            if (i, j) not in visited and matrix[i][j] > 0:
+                # Это начало нового корабля
+                ship_type = matrix[i][j]
+                start_cell = i * cols + j + 1  # Номер клетки
+                visited.add((i, j))
+
+                # Проверим направление (горизонтально или вертикально)
+                if j + 1 < cols and matrix[i][j + 1] == ship_type:
+                    direction = "horizontal"
+                    # Пройти по горизонтали
+                    k = j
+                    while k < cols and matrix[i][k] == ship_type:
+                        visited.add((i, k))
+                        k += 1
+                    start_coordinates = grid.cell_number_to_coordinates(start_cell)  # Координаты начала корабля
+                elif i + 1 < rows and matrix[i + 1][j] == ship_type:
+                    direction = "vertical"
+                    # Пройти по вертикали
+                    k = i
+                    while k < rows and matrix[k][j] == ship_type:
+                        visited.add((k, j))
+                        k += 1
+                    start_coordinates = grid.cell_number_to_coordinates(start_cell)  # Координаты начала корабля
+                else:
+                    direction = "single-cell"  # Одноклеточный корабль
+                    start_coordinates = grid.cell_number_to_coordinates(start_cell)  # Координаты начала одноклеточного корабля
+
+                # Добавить информацию о корабле
+                ship_positions.append({
+                    "ship_type": ship_type,
+                    "start_cell": start_cell,
+                    "start_coordinates": start_coordinates,
+                    "direction": direction
+                })
+
+                # Увеличиваем счетчик для данного типа корабля
+                if ship_type not in ship_count:
+                    ship_count[ship_type] = 1
+                else:
+                    ship_count[ship_type] += 1
+
+    # Сортировка кораблей по количеству палуб (ship_type)
+    ship_positions.sort(key=lambda x: x['ship_type'])
+
+    # Уникализация названий кораблей (например, 1,1-палубный, 1,2-палубный)
+    for ship in ship_positions:
+        ship_type = ship['ship_type']
+        index = ship_count[ship_type]
+        ship['name'] = f"{ship_count[ship_type]},{ship_type}-палубный"
+        ship_count[ship_type] -= 1  # Уменьшаем счетчик после использования
+
+    return ship_positions
+def random_ships():
+    battlefield = create_battlefield()
+    ships = find_ships(battlefield, grid_player)
+    print(battlefield)
+    print("-------------------------------------------")
+    print(ships)
+    for ship in ships:
+        print(f"{ship['name']} начинается с клетки {ship['start_cell']} ({ship['start_coordinates']}) и ориентирован {ship['direction']}.")
+
+
+#-----------------------------------------------    
+        
+            
+            
+
+
 
 class Ship:
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
@@ -76,6 +209,7 @@ class Ship:
 
     # Cоздаём метод отрисовки корабля, параметр screen - там где он у нас будет отрисовываться 
     def draw_sheep(self, screen: pygame.Surface):
+        
         # Отрисовываем корабль на экране, зависит от ориентации
         if self.ORIENTATION_SHIP == "horizontal":
             screen.blit(self.READY_IMAGE_SHIP, (self.X_COR, self.Y_COR))
@@ -315,8 +449,8 @@ class Ship:
 
 # Тут мы создаём сами корабли, цифры в словах, типа: three, two, one , это деления корабля, на сколько клеточек он задуман
 ship_four = Ship(
-    x_cor = 900 , 
-    y_cor = 100 , 
+    x_cor = 900 , #900
+    y_cor = 100 , # 100
     width = 62 , 
     height = 62 , 
     image_ship = "ship_four.png", 
