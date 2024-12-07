@@ -67,7 +67,7 @@ start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png"
 #кнопка которая подключается к игре
 join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "joint_to_game_hover.png" , width= 575 , height= 80 , action= connect_to_server)
 #кнопка коли розставив кораблі та підлючаєшься до бою
-ready_for_battle = Button(x= 799 , y = 678,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= test)
+ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= test)
 #кнопка яка будеть розставляти кораблі у ранломному положені
 random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
 # кнопка для добавления звука
@@ -80,17 +80,19 @@ second_cold_image = DrawImage(width= 152 , height= 68 , x_cor= 940, y_cor= 716 ,
 third_cold_image = DrawImage(width=  150, height= 68 , x_cor= 536 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 #image for the grid
-grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 89 , folder_name = "grid", image_name = "background_grid.png")
+grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , folder_name = "grid", image_name = "background_grid.png")
 
 
 #backgrounds
-main_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "main_background.jpg")
+main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "images_background" , image_name= "main_background.jpg")
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
-input_data_bg= DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "input_data.png")
+input_data_bg= DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "images_background" , image_name= "input_data.png")
 #фон для очікування користувача
-waiting_background = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
+waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
 #фон для розташування кораблів перед ігрою
-ships_position_bg = DrawImage(width = 1280,height= 832 , x_cor= 0 , y_cor= 0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
+ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
+# фон на якомй стоять кораблі перед початком бою
+place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 37 ,folder_name= "images_background" , image_name= "bg_place_for_ships.png")
 
 
 
@@ -302,6 +304,9 @@ def ships_position_window():
     while run_game:
         module_screen_server.FPS.tick(60)
         ships_position_bg.draw_image(screen = main_screen)
+
+        # прямокутник де стоять коряблі перед початком бою
+        place_for_ships.draw_image(screen = main_screen)
 
         #отрисовка картинки цифер и букв для поля
         grid_image.draw_image(screen = main_screen)

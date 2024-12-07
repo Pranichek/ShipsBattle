@@ -443,68 +443,253 @@ class Ship:
             self.CHECK_MOVE = False
 
 
-# Тут мы создаём сами корабли, цифры в словах, типа: three, two, one , это деления корабля, на сколько клеточек он задуман
+# # Тут мы создаём сами корабли, цифры в словах, типа: three, two, one , это деления корабля, на сколько клеточек он задуман
+# ship_four = Ship(
+#     x_cor = 887 , 
+#     y_cor = 484 , 
+#     width = 62 , 
+#     height = 62 , 
+#     image_ship = "ship_four.png", 
+#     image_rotate_ship = "rotate_ship_four.png", 
+#     length = 4 , 
+#     position_ship = "horizontal"
+# )
+
+# ship_three = Ship(
+#     x_cor = 783 , 
+#     y_cor = 350 , 
+#     width = 62 , 
+#     height =62 , 
+#     image_ship = "ship_three.png", 
+#     image_rotate_ship = "rotate_ship_three.png", 
+#     length = 3 , 
+#     position_ship = "horizontal"
+# )
+
+# ship_three2 = Ship(
+#     x_cor = 1052, 
+#     y_cor =  350 , 
+#     width = 62 , 
+#     height =62 , 
+#     image_ship = "ship_three.png", 
+#     image_rotate_ship = "rotate_ship_three.png", 
+#     length = 3 , 
+#     position_ship = "horizontal"
+# )
+
+
+
+
+# ship_two = Ship(
+#     x_cor = 793,
+#     y_cor =  224,
+#     width = 62,
+#     height = 62,
+#     image_ship = "ship_two.png",
+#     image_rotate_ship = "rotate_ship_two.png",
+#     length = 2,
+#     position_ship = "horizontal"
+# )
+
+# ship_two2 = Ship(
+#     x_cor = 949,
+#     y_cor =  224,
+#     width = 62,
+#     height = 62,
+#     image_ship = "ship_two.png",
+#     image_rotate_ship = "rotate_ship_two.png",
+#     length = 2,
+#     position_ship = "horizontal"
+# )
+
+# ship_two3 = Ship(
+#     x_cor = 1104,
+#     y_cor =  224,
+#     width = 62,
+#     height = 62,
+#     image_ship = "ship_two.png",
+#     image_rotate_ship = "rotate_ship_two.png",
+#     length = 2,
+#     position_ship = "horizontal"
+# )
+
+# ship_one = Ship(
+#     x_cor = 814 , 
+#     y_cor = 80 , 
+#     width = 62 , 
+#     height = 62 , 
+#     image_ship = "ship_one.png", 
+#     image_rotate_ship = "rotate_ship_one.png", 
+#     length = 1 , 
+#     position_ship = "horizontal"
+# )
+
+# ship_one2 = Ship(
+#     x_cor = 918 , 
+#     y_cor = 80 , 
+#     width = 62 , 
+#     height = 62 , 
+#     image_ship = "ship_one.png", 
+#     image_rotate_ship = "rotate_ship_one.png", 
+#     length = 1 , 
+#     position_ship = "horizontal"
+# )
+
+# ship_one3 = Ship(
+#     x_cor = 1022 , 
+#     y_cor = 80 , 
+#     width = 62 , 
+#     height = 62 , 
+#     image_ship = "ship_one.png", 
+#     image_rotate_ship = "rotate_ship_one.png", 
+#     length = 1 , 
+#     position_ship = "horizontal"
+# )
+
+# ship_one4 = Ship(
+#     x_cor = 1126 , 
+#     y_cor = 80 , 
+#     width = 62 , 
+#     height = 62 , 
+#     image_ship = "ship_one.png", 
+#     image_rotate_ship = "rotate_ship_one.png", 
+#     length = 1 , 
+#     position_ship = "horizontal"
+# )
+
+
+# Чотирипалубний корабель
 ship_four = Ship(
-    x_cor = 900 , 
-    y_cor = 100 , 
-    width = 62 , 
-    height = 62 , 
-    image_ship = "ship_four.png", 
-    image_rotate_ship = "rotate_ship_four.png", 
-    length = 4 , 
-    position_ship = "horizontal"
-)
-
-ship_four_two = Ship(
-    x_cor = 900 , 
-    y_cor = 600 , 
-    width = 62 , 
-    height = 62 , 
-    image_ship = "ship_four.png", 
-    image_rotate_ship = "rotate_ship_four.png", 
-    length = 4 , 
-    position_ship = "horizontal"
-)
-
-ship_two = Ship(
-    x_cor = 900,
-    y_cor =  300,
+    x_cor = 882,  # x кордината для чотирипалубного корабля
+    y_cor = 475,   # y кордината для першого ряду
     width = 62,
     height = 62,
-    image_ship = "ship_two.png",
-    image_rotate_ship = "rotate_ship_two.png",
-    length = 2,
+    image_ship = "ship_four.png", 
+    image_rotate_ship = "rotate_ship_four.png", 
+    length = 4, 
     position_ship = "horizontal"
 )
 
-ship_one = Ship(
-    x_cor = 900 , 
-    y_cor = 400 , 
-    width = 62 , 
-    height = 62 , 
-    image_ship = "ship_one.png", 
-    image_rotate_ship = "rotate_ship_one.png", 
-    length = 1 , 
-    position_ship = "horizontal"
-)
-
+# Тріпалубні кораблі (перший ряд)
 ship_three = Ship(
-    x_cor = 900 , 
-    y_cor = 500 , 
-    width = 62 , 
-    height =62 , 
+    x_cor = 773, 
+    y_cor = 350,  # y кордината для другого ряду
+    width = 62,
+    height = 62,
     image_ship = "ship_three.png", 
     image_rotate_ship = "rotate_ship_three.png", 
-    length = 3 , 
+    length = 3, 
     position_ship = "horizontal"
 )
+
+# Тріпалубні кораблі (другий ряд)
+ship_three2 = Ship(
+    x_cor = 1038,  # зміщення по x
+    y_cor = 350,
+    width = 62,
+    height = 62,
+    image_ship = "ship_three.png", 
+    image_rotate_ship = "rotate_ship_three.png", 
+    length = 3, 
+    position_ship = "horizontal"
+)
+
+# Двопалубні кораблі (перший ряд)
+ship_two = Ship(
+    x_cor = 783, 
+    y_cor = 215,  # y кордината для третього ряду
+    width = 62,
+    height = 62,
+    image_ship = "ship_two.png", 
+    image_rotate_ship = "rotate_ship_two.png", 
+    length = 2, 
+    position_ship = "horizontal"
+)
+
+# Двопалубні кораблі (другий ряд)
+ship_two2 = Ship(
+    x_cor = 933,  # зміщення по x
+    y_cor = 215,
+    width = 62,
+    height = 62,
+    image_ship = "ship_two.png", 
+    image_rotate_ship = "rotate_ship_two.png", 
+    length = 2, 
+    position_ship = "horizontal"
+)
+
+# Двопалубні кораблі (третій ряд)
+ship_two3 = Ship(
+    x_cor = 1082,  # зміщення по x
+    y_cor = 215,
+    width = 62,
+    height = 62,
+    image_ship = "ship_two.png", 
+    image_rotate_ship = "rotate_ship_two.png", 
+    length = 2, 
+    position_ship = "horizontal"
+)
+
+# Однопалубні кораблі (перший ряд)
+ship_one = Ship(
+    x_cor = 814, 
+    y_cor = 80,  # y кордината для четвертого ряду
+    width = 62,
+    height = 62,
+    image_ship = "ship_one.png", 
+    image_rotate_ship = "rotate_ship_one.png", 
+    length = 1, 
+    position_ship = "horizontal"
+)
+
+# Однопалубні кораблі (другий ряд)
+ship_one2 = Ship(
+    x_cor = 918,  # зміщення по x
+    y_cor = 80,
+    width = 62,
+    height = 62,
+    image_ship = "ship_one.png", 
+    image_rotate_ship = "rotate_ship_one.png", 
+    length = 1, 
+    position_ship = "horizontal"
+)
+
+# Однопалубні кораблі (третій ряд)
+ship_one3 = Ship(
+    x_cor = 1022,  # зміщення по x
+    y_cor = 80,
+    width = 62,
+    height = 62,
+    image_ship = "ship_one.png", 
+    image_rotate_ship = "rotate_ship_one.png", 
+    length = 1, 
+    position_ship = "horizontal"
+)
+
+# Однопалубні кораблі (четвертий ряд)
+ship_one4 = Ship(
+    x_cor = 1126,  # зміщення по x
+    y_cor = 80,
+    width = 62,
+    height = 62,
+    image_ship = "ship_one.png", 
+    image_rotate_ship = "rotate_ship_one.png", 
+    length = 1, 
+    position_ship = "horizontal"
+)
+
+
+
+
+
+
 
 # Создаём всех список кораблей
 list_ships = []
 
 # Добавляем В КОНЕЦ СПИСКА все корабли
 list_ships.append(ship_four)
-list_ships.append(ship_two)
-list_ships.append(ship_one)
-list_ships.append(ship_three)
-list_ships.append(ship_four_two)
+list_ships.extend([ship_three , ship_three2])
+list_ships.extend([ship_two , ship_two2 , ship_two3])
+list_ships.extend([ship_one , ship_one2 , ship_one3, ship_one4])
+
