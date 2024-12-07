@@ -129,15 +129,29 @@ class Ship:
                 check_prev_pos = 1
 
         print(check_prev_pos)
+        if self.b != True:
+            if check_prev_pos == 0:
+                print("clear col")
+                for index_col in range(0 , self.LENGHT):
+                    list_grid[self.row][self.col + index_col] = 0
+            elif check_prev_pos > 0:
+                print("cler row")
+                for index_row in range(0 , self.LENGHT):
+                    list_grid[self.row + index_row][self.col] = 0
+        elif self.b == True:
+            print("banana")
+            if self.ORIENTATION_SHIP == "vertical":
+                print("clean row")
+                for index_row in range(0 , self.LENGHT):
+                    list_grid[self.row + index_row][self.col] = 0
+            elif self.ORIENTATION_SHIP == "horizontal":
+                print("clean col")
+                for index_col in range(0 , self.LENGHT):
+                    list_grid[self.row][self.col + index_col] = 0
+            
+       
 
-        if check_prev_pos == 0:
-            print("clear col")
-            for index_col in range(0 , self.LENGHT):
-                list_grid[self.row][self.col + index_col] = 0
-        elif check_prev_pos > 0:
-            print("cler row")
-            for index_row in range(0 , self.LENGHT):
-                list_grid[self.row + index_row][self.col] = 0
+        
 
 
                         
@@ -172,11 +186,15 @@ class Ship:
                 if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
                     self.snap_to_grid()
                     
+                    
           
                     if self.number_ship_cell != self.number_cell and self.b != True:
                         self.clear_matrix()
 
                     self.b = None
+
+                    
+                    
       
                     # Пересчитываем номер клетки где стоит корабль для старых координат
                     self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
@@ -217,8 +235,10 @@ class Ship:
                                                 self.X_COR = self.STASIC_X
                                                 self.Y_COR = self.STASIC_Y
                                                 print(self.row , self.col)
-                                                self.clear_matrix()
                                                 self.b = True
+                                                self.clear_matrix()
+                            
+                                                break
                                          
                                 
                                 if self.X_COR + self.RECT.width > shiper.X_COR - 62:
@@ -229,8 +249,10 @@ class Ship:
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
                                                             print(self.row , self.col)
-                                                            self.clear_matrix()
                                                             self.b = True
+                                                            self.clear_matrix()
+                                                            
+                                                            break
                                                    
                                             elif self.ORIENTATION_SHIP == "vertical":
                                                 if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
@@ -238,8 +260,10 @@ class Ship:
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
                                                             print(self.row , self.col)
-                                                            self.clear_matrix()
                                                             self.b = True
+                                                            self.clear_matrix()
+                                                            
+                                                            break
                                                       
 
                             elif shiper.ORIENTATION_SHIP == "vertical":
@@ -250,8 +274,10 @@ class Ship:
                                                     self.X_COR = self.STASIC_X
                                                     self.Y_COR = self.STASIC_Y
                                                     print(self.row , self.col)
-                                                    self.clear_matrix()
                                                     self.b = True
+                                                    self.clear_matrix()
+                                                    
+                                                    break
                                               
 
                                 if self.X_COR + self.RECT.width > shiper.X_COR - 62:
@@ -261,8 +287,10 @@ class Ship:
                                                         self.X_COR = self.STASIC_X
                                                         self.Y_COR = self.STASIC_Y
                                                         print(self.row , self.col)
-                                                        self.clear_matrix()
                                                         self.b = True
+                                                        self.clear_matrix()
+                                                        
+                                                        break
                                                    
                                                 
             
