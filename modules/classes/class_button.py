@@ -23,3 +23,5 @@ class Button:
         if self.rect.collidepoint(mouse):
             if self.action:
                     self.action()
+                    return True
+    

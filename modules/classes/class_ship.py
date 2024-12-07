@@ -1,12 +1,9 @@
 import pygame
 import os
-from ..screens import grid_player , list_grid , list_object_map,Grid #-----------------
+from ..screens import grid_player, list_grid, list_object_map, Grid  # Заготовленные импорты
 import random
 
- 
-import random
-#-----------------------------------------------    
-        
+# Функция для создания игрового поля
 def create_battlefield():
     # Размер игрового поля
     size = 10
@@ -14,7 +11,6 @@ def create_battlefield():
     battlefield = [[0 for _ in range(size)] for _ in range(size)]
     
     # Описание кораблей: количество палуб и их число
-    #ships = {4: 1, 3: 2, 2: 3, 1: 4}
     ships = {4: 1, 3: 2, 2: 3, 1: 4}
     
     def is_valid_position(bf, x, y, length, vertical):
@@ -57,77 +53,68 @@ def create_battlefield():
 
     return battlefield
 
+# Функция для нахождения кораблей на поле
 def find_ships(matrix, grid: Grid):
-    ship_positions = []  # Список для хранения информации о кораблях
-    ship_count = {}  # Словарь для подсчета кораблей каждого типа
+    ship_positions = {}  # Словарь для хранения информации о кораблях
 
     rows = len(matrix)
     cols = len(matrix[0])
-
     visited = set()  # Чтобы избежать повторного учета клеток кораблей
+
+    ship_counters = {1: 0, 2: 0, 3: 0, 4: 0}  # Счётчики для каждого типа кораблей
 
     for i in range(rows):
         for j in range(cols):
             if (i, j) not in visited and matrix[i][j] > 0:
-                # Это начало нового корабля
-                ship_type = matrix[i][j]
+                ship_type = matrix[i][j]  # Тип корабля (количество палуб)
+                ship_counters[ship_type] += 1  # Увеличиваем номер корабля данного типа
+                ship_number = ship_counters[ship_type]  # Порядковый номер
+
                 start_cell = i * cols + j + 1  # Номер клетки
                 visited.add((i, j))
 
-                # Проверим направление (горизонтально или вертикально)
                 if j + 1 < cols and matrix[i][j + 1] == ship_type:
                     direction = "horizontal"
-                    # Пройти по горизонтали
                     k = j
                     while k < cols and matrix[i][k] == ship_type:
                         visited.add((i, k))
                         k += 1
-                    start_coordinates = grid.cell_number_to_coordinates(start_cell)  # Координаты начала корабля
+                    start_coordinates = grid.cell_number_to_coordinates(start_cell)
                 elif i + 1 < rows and matrix[i + 1][j] == ship_type:
                     direction = "vertical"
-                    # Пройти по вертикали
                     k = i
                     while k < rows and matrix[k][j] == ship_type:
                         visited.add((k, j))
                         k += 1
-                    start_coordinates = grid.cell_number_to_coordinates(start_cell)  # Координаты начала корабля
+                    start_coordinates = grid.cell_number_to_coordinates(start_cell)
                 else:
-                    direction = "single-cell"  # Одноклеточный корабль
-                    start_coordinates = grid.cell_number_to_coordinates(start_cell)  # Координаты начала одноклеточного корабля
+                    direction = "single-cell"
+                    start_coordinates = grid.cell_number_to_coordinates(start_cell)
 
-                # Добавить информацию о корабле
-                ship_positions.append({
-                    "ship_type": ship_type,
-                    "start_cell": start_cell,
-                    "start_coordinates": start_coordinates,
-                    "direction": direction
-                })
+                # Создаем ключ в формате (количество палуб, порядковый номер)
+                key = (ship_type, ship_number)
 
-                # Увеличиваем счетчик для данного типа корабля
-                if ship_type not in ship_count:
-                    ship_count[ship_type] = 1
-                else:
-                    ship_count[ship_type] += 1
-
-    # Сортировка кораблей по количеству палуб (ship_type)
-    ship_positions.sort(key=lambda x: x['ship_type'])
-
-    # Уникализация названий кораблей (например, 1,1-палубный, 1,2-палубный)
-    for ship in ship_positions:
-        ship_type = ship['ship_type']
-        index = ship_count[ship_type]
-        ship['name'] = f"{ship_count[ship_type]},{ship_type}-палубный"
-        ship_count[ship_type] -= 1  # Уменьшаем счетчик после использования
+                # Сохраняем информацию о корабле в словарь
+                ship_positions[key] = [
+                    start_coordinates[0], start_coordinates[1], direction
+                ]
 
     return ship_positions
+
+# Функция для создания и отображения случайных кораблей
 def random_ships():
     battlefield = create_battlefield()
-    ships = find_ships(battlefield, grid_player)
-    print(battlefield)
-    print("-------------------------------------------")
-    print(ships)
-    for ship in ships:
-        print(f"{ship['name']} начинается с клетки {ship['start_cell']} ({ship['start_coordinates']}) и ориентирован {ship['direction']}.")
+    location_of_ships = find_ships(battlefield, grid_player)
+    #print(location_of_ships)
+    return location_of_ships
+
+
+# Использование:
+
+    
+    
+
+        
 
 
 #-----------------------------------------------    
@@ -512,3 +499,74 @@ list_ships.append(ship_two)
 list_ships.append(ship_one)
 list_ships.append(ship_three)
 list_ships.append(ship_four_two)
+
+
+
+
+
+def create_list_ship(ship_data):
+   
+    # Используем данные из словаря для кораблей
+    list_ships = []
+
+    # Корабль на 4 палубы
+    ship_four_data = ship_data[(4, 1)]
+    #print(ship_four_data[0])
+    ship_four = Ship(
+        x_cor=ship_four_data[0],
+        y_cor=ship_four_data[1],
+        width=62,
+        height=62,
+        image_ship="ship_four.png",
+        image_rotate_ship="rotate_ship_four.png",
+        length=4,
+        position_ship=ship_four_data[2]
+    )
+
+    # Корабль на 2 палубы
+    ship_two_data = ship_data[(2, 1)]
+    ship_two = Ship(
+        x_cor=ship_two_data[0],
+        y_cor=ship_two_data[1],
+        width=62,
+        height=62,
+        image_ship="ship_two.png",
+        image_rotate_ship="rotate_ship_two.png",
+        length=2,
+        position_ship=ship_two_data[2]
+    )
+
+    # Корабль на 1 палубу
+    ship_one_data = ship_data[(1, 1)]
+    ship_one = Ship(
+        x_cor=ship_one_data[0],
+        y_cor=ship_one_data[1],
+        width=62,
+        height=62,
+        image_ship="ship_one.png",
+        image_rotate_ship="rotate_ship_one.png",
+        length=1,
+        position_ship="horizontal"
+    )
+
+    # Корабль на 3 палубы
+    ship_three_data = ship_data[(3, 1)]
+    ship_three = Ship(
+        x_cor=ship_three_data[0],
+        y_cor=ship_three_data[1],
+        width=62,
+        height=62,
+        image_ship="ship_three.png",
+        image_rotate_ship="rotate_ship_three.png",
+        length=3,
+        position_ship=ship_three_data[2]
+    )
+
+    # Собираем все корабли в список
+    list_ships.append(ship_four)
+    list_ships.append(ship_two)
+    list_ships.append(ship_one)
+    list_ships.append(ship_three)
+
+    return list_ships
+    

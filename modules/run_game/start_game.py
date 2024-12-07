@@ -2,7 +2,7 @@
 import pygame
 from ..screens import main_screen , list_object_map , grid_player
 import modules.screens.screen as module_screen_server
-from ..classes import DrawImage , Button , Font  , list_ships,random_ships,ship_four#-----------------------------------------------    
+from ..classes import DrawImage , Button , Font  ,list_ships,random_ships,create_list_ship#-----------------------------------------------    
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 from ..classes.class_music import music_load_main , music_load_waiting
@@ -45,7 +45,10 @@ def change_scene(scene):
 #-----------------------------------------------    
         
 def random_place_ships_buton(): 
-    random_ships()
+    matrix =random_ships()
+    location_of_ships =create_list_ship(matrix)
+    return location_of_ships
+    
   #-----------------------------------------------    
           
 
@@ -290,6 +293,8 @@ def waiting_window():
 def ships_position_window():
     pygame.display.set_caption("Position Ships")
     run_game = True
+    list_ships_test = list_ships
+   
     
     #generate grid with class
     grid_player.generate_grid()
@@ -306,7 +311,7 @@ def ships_position_window():
         for object in list_object_map:
             object.draw(screen = main_screen) 
 
-        for ship in list_ships:
+        for ship in list_ships_test:
             ship.draw_sheep(screen = main_screen)
         
        
@@ -317,7 +322,7 @@ def ships_position_window():
         random_place_ships.draw(surface= main_screen)
 
         for event in pygame.event.get():
-            for ship in list_ships:
+            for ship in list_ships_test:
                 ship.rotate_ship(event = event)
                 ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
 
@@ -329,7 +334,18 @@ def ships_position_window():
                 ready_for_battle.check_click()
                 #-----------------------------------------------    
         
-                random_place_ships.check_click()
+                #random_place_ships.check_click()
+                
+                test =random_place_ships.check_click()
+                
+                if  test== True:
+                    print (1)
+                    matrix =random_ships()
+                    location_of_ships =create_list_ship(matrix)
+                    list_ships_test = location_of_ships
+                    test = False
+                    
+                
                 #-----------------------------------------------    
         
                 
