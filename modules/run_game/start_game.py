@@ -2,7 +2,7 @@
 import pygame
 from ..screens import main_screen , list_object_map , grid_player
 import modules.screens.screen as module_screen_server
-from ..classes import DrawImage , Button , Font  , list_ships
+from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions.read_json import read_json
 from ..classes.class_music import music_load_main , music_load_waiting
@@ -12,6 +12,8 @@ from .connect_to_server import connect_to_server , list_check_connection , fail_
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
+
+
 
 
 #список для проверки нажата ли кнопка
@@ -52,6 +54,7 @@ def music_lower():
     pygame.mixer.music.set_volume(get2 - 0.1)
     if get2 - 0.1 < 0.01:
         pygame.mixer.music.set_volume(0)
+
 
 
 
@@ -333,6 +336,8 @@ def ships_position_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 ready_for_battle.check_click()
                 random_place_ships.check_click()
+                
+        
         
         pygame.display.flip()
 

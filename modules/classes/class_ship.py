@@ -1,8 +1,7 @@
 import pygame
 import os
-from ..screens import grid_player , list_grid , list_object_map
+from ..screens import grid_player , list_grid , list_object_map 
 
- 
 
 class Ship:
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
@@ -443,121 +442,7 @@ class Ship:
             self.CHECK_MOVE = False
 
 
-# # Тут мы создаём сами корабли, цифры в словах, типа: three, two, one , это деления корабля, на сколько клеточек он задуман
-# ship_four = Ship(
-#     x_cor = 887 , 
-#     y_cor = 484 , 
-#     width = 62 , 
-#     height = 62 , 
-#     image_ship = "ship_four.png", 
-#     image_rotate_ship = "rotate_ship_four.png", 
-#     length = 4 , 
-#     position_ship = "horizontal"
-# )
-
-# ship_three = Ship(
-#     x_cor = 783 , 
-#     y_cor = 350 , 
-#     width = 62 , 
-#     height =62 , 
-#     image_ship = "ship_three.png", 
-#     image_rotate_ship = "rotate_ship_three.png", 
-#     length = 3 , 
-#     position_ship = "horizontal"
-# )
-
-# ship_three2 = Ship(
-#     x_cor = 1052, 
-#     y_cor =  350 , 
-#     width = 62 , 
-#     height =62 , 
-#     image_ship = "ship_three.png", 
-#     image_rotate_ship = "rotate_ship_three.png", 
-#     length = 3 , 
-#     position_ship = "horizontal"
-# )
-
-
-
-
-# ship_two = Ship(
-#     x_cor = 793,
-#     y_cor =  224,
-#     width = 62,
-#     height = 62,
-#     image_ship = "ship_two.png",
-#     image_rotate_ship = "rotate_ship_two.png",
-#     length = 2,
-#     position_ship = "horizontal"
-# )
-
-# ship_two2 = Ship(
-#     x_cor = 949,
-#     y_cor =  224,
-#     width = 62,
-#     height = 62,
-#     image_ship = "ship_two.png",
-#     image_rotate_ship = "rotate_ship_two.png",
-#     length = 2,
-#     position_ship = "horizontal"
-# )
-
-# ship_two3 = Ship(
-#     x_cor = 1104,
-#     y_cor =  224,
-#     width = 62,
-#     height = 62,
-#     image_ship = "ship_two.png",
-#     image_rotate_ship = "rotate_ship_two.png",
-#     length = 2,
-#     position_ship = "horizontal"
-# )
-
-# ship_one = Ship(
-#     x_cor = 814 , 
-#     y_cor = 80 , 
-#     width = 62 , 
-#     height = 62 , 
-#     image_ship = "ship_one.png", 
-#     image_rotate_ship = "rotate_ship_one.png", 
-#     length = 1 , 
-#     position_ship = "horizontal"
-# )
-
-# ship_one2 = Ship(
-#     x_cor = 918 , 
-#     y_cor = 80 , 
-#     width = 62 , 
-#     height = 62 , 
-#     image_ship = "ship_one.png", 
-#     image_rotate_ship = "rotate_ship_one.png", 
-#     length = 1 , 
-#     position_ship = "horizontal"
-# )
-
-# ship_one3 = Ship(
-#     x_cor = 1022 , 
-#     y_cor = 80 , 
-#     width = 62 , 
-#     height = 62 , 
-#     image_ship = "ship_one.png", 
-#     image_rotate_ship = "rotate_ship_one.png", 
-#     length = 1 , 
-#     position_ship = "horizontal"
-# )
-
-# ship_one4 = Ship(
-#     x_cor = 1126 , 
-#     y_cor = 80 , 
-#     width = 62 , 
-#     height = 62 , 
-#     image_ship = "ship_one.png", 
-#     image_rotate_ship = "rotate_ship_one.png", 
-#     length = 1 , 
-#     position_ship = "horizontal"
-# )
-
-
+# Тут мы создаём сами корабли, цифры в словах, типа: three, two, one , это деления корабля, на сколько клеточек он задуман
 # Чотирипалубний корабель
 ship_four = Ship(
     x_cor = 882,  # x кордината для чотирипалубного корабля
@@ -692,4 +577,6 @@ list_ships.append(ship_four)
 list_ships.extend([ship_three , ship_three2])
 list_ships.extend([ship_two , ship_two2 , ship_two3])
 list_ships.extend([ship_one , ship_one2 , ship_one3, ship_one4])
+
+
 

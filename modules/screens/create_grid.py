@@ -68,4 +68,5 @@ class Grid:
     # 2. Аналогично, рассчитываем экранные координаты центра ячейки по Y.
         return self.X_SCREEN + grid_x * 62, self.Y_SCREEN + grid_y * 62
     
+    
 grid_player = Grid(x_screen = 81 , y_screen = 76)
