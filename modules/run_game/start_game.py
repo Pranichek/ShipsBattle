@@ -1,6 +1,6 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen , list_object_map , grid_player
+from ..screens import main_screen , list_object_map , grid_player , list_grid
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
@@ -55,6 +55,15 @@ def music_lower():
     if get2 - 0.1 < 0.01:
         pygame.mixer.music.set_volume(0)
 
+def random_places_ships():
+    # чистка матрицы
+    for row in range(len(list_grid)):
+        for column in range(len(list_grid[row])):
+            print(column)
+            list_grid[row][column] = 0
+    print(list_grid)
+
+
 
 
 
@@ -72,7 +81,7 @@ join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , imag
 #кнопка коли розставив кораблі та підлючаєшься до бою
 ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= test)
 #кнопка яка будеть розставляти кораблі у ранломному положені
-random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
+random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= random_places_ships)
 # кнопка для добавления звука
 button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_up)
 button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width= 74, height= 71, action= music_lower)
@@ -133,7 +142,7 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(join_game_window())
+                    change_scene(ships_position_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -327,8 +336,9 @@ def ships_position_window():
 
         for event in pygame.event.get():
             for ship in list_ships:
-                ship.rotate_ship(event = event)
                 ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
+                ship.rotate_ship(event = event)
+                
 
             if event.type == pygame.QUIT:
                 run_game = False  

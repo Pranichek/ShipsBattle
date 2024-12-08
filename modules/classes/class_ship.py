@@ -29,7 +29,8 @@ class Ship:
         self.row = 0
         # номер клетки где он стоит
         self.col = 0
-        self.b = None
+        # флаг для проверки столкновения с кораблями(коллизиями)
+        self.check_collision = None
     
     # Метод загрузки картинок кораблей
     def load_image(self):
@@ -52,12 +53,15 @@ class Ship:
         self.READY_IMAGE_SHIP = pygame.transform.scale(image_ship, size_ship)
         self.IMAGE_ROTATE_SHIP = pygame.transform.scale(image_rotate_ship, size_ship)
         
+
+        
+        
     # Создаём метод "прилепания" корабля к сетке 
     def snap_to_grid(self): 
         # Привязываем координаты к сетке, это что бы корабль не уходил на саму сетку
         self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
     def center_to_cell_number(self, x, y):
-        # Рассчитываем индекс столбца и строки, в которые попадает корабль.
+        #Рассчитываем индекс столбца и строки, в которые попадает корабль.
         # grid_player.X_SCREEN - координаты сетки по иксу
         # grid_player.Y_SCREEN - координаты сетки по игреку
         # x - координаты кораблы по иску
@@ -69,7 +73,7 @@ class Ship:
         # Номер клетки = (строка * количество столбцов) + (столбец) + 1.
         cell_number = row * 10 + col + 1
 
-        # Возвращаем номер клетки.
+        # Возвращаем номер клетки
         return cell_number
 
 
@@ -83,6 +87,7 @@ class Ship:
             screen.blit(self.IMAGE_ROTATE_SHIP, (self.X_COR, self.Y_COR))
     # Создаём метод разворота корабля 
     def rotate_ship(self, event: pygame.event):
+        self.RECT.topleft = (self.X_COR, self.Y_COR)
         # Создаём переменную мышки, и получаем координаты мышки игрока
         mouse = pygame.mouse.get_pos()
         # Если координаты мышки равняются координатам корабля
@@ -90,29 +95,29 @@ class Ship:
             # И если клавиша отпущена 
             if event.type == pygame.KEYDOWN:
                 # И если клавиша R нажата
-                if event.key == pygame.K_r: 
+                if event.key == pygame.K_r and self.CHECK_MOVE == True: 
                     # Если ориентация корабля horizontal
                     if self.CHEK_ROTATION == "horizontal":
-                        # Присваиваем значение vertical
                         self.ORIENTATION_SHIP = "vertical"
-                        # Записываем в переменную для проверки 
                         self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                        # Отрисовываем изображение при помощи метода
                         self.load_image()
-                        # Записываем в переменную изменённую позицию
                         self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-                        print(self.RECT.width)
-                        # Если ориентация корабля vertical
+    
+                        # Обновляем прямоугольник только при движении
+                       
+
                     elif self.CHEK_ROTATION == "vertical":
-                        # Присваиваем значение horizontal
                         self.ORIENTATION_SHIP = "horizontal"
-                        # Записываем в переменную для проверки
                         self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                        # Отрисовываем изображение при помощи метода
                         self.load_image()
-                        # Записываем в переменную изменённую позицию
                         self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-                        print(self.RECT.width)
+                        
+                        
+                    self.X_COR = mouse[0] - self.RECT.width // 2
+                    self.Y_COR = mouse[1] - self.RECT.height // 2
+
+                    
+                    
 
     # метод який чистить положення корабля на матриці якщо його передвинули
     def clear_matrix(self):
@@ -128,7 +133,7 @@ class Ship:
                 check_prev_pos = 1
 
         print(check_prev_pos)
-        if self.b != True:
+        if self.check_collision != True:
             if check_prev_pos == 0:
                 print("clear col")
                 for index_col in range(0 , self.LENGHT):
@@ -137,7 +142,7 @@ class Ship:
                 print("cler row")
                 for index_row in range(0 , self.LENGHT):
                     list_grid[self.row + index_row][self.col] = 0
-        elif self.b == True:
+        elif self.check_collision == True:
             print("banana")
             if self.ORIENTATION_SHIP == "vertical":
                 print("clean row")
@@ -147,29 +152,35 @@ class Ship:
                 print("clean col")
                 for index_col in range(0 , self.LENGHT):
                     list_grid[self.row][self.col + index_col] = 0
+
+    # метод который телепортирует коарбль на начальную точку  и поворачивает в положение по горизонатали
+    def return_start_code(self):
+        self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
+        self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+        self.ORIENTATION_SHIP = "horizontal"
+        # Записываем в переменную для проверки
+        self.CHEK_ROTATION = self.ORIENTATION_SHIP
+        # Отрисовываем изображение при помощи метода
+        self.load_image()
+        # Записываем в переменную изменённую позицию
+        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
             
        
 
-        
-
-
-                        
     def matrix_move(self, event: pygame.event, matrix_width: int, matrix_height: int, cell: int):
-        
-        mouse = pygame.mouse.get_pos()  # Получаем текущие координаты мыши
+         # Получаем текущие координаты мыши
+        mouse = pygame.mouse.get_pos() 
 
         if event.type == pygame.MOUSEBUTTONDOWN and self.RECT.collidepoint(event.pos):
             # Начало перемещения
             self.CHECK_MOVE = True
-            self.STATIC_MOUSE_OFFSET = (
-                mouse[0] - self.X_COR,
-                mouse[1] - self.Y_COR,
-            )  # Смещение мышки относительно корабля
 
+        # Если мы двигаем курсором по экрану , и уже нажимали на корабль
         elif event.type == pygame.MOUSEMOTION and self.CHECK_MOVE:
-            # Обновляем координаты с учётом смещения
-            self.X_COR = mouse[0] - self.STATIC_MOUSE_OFFSET[0]
-            self.Y_COR = mouse[1] - self.STATIC_MOUSE_OFFSET[1]
+
+            self.X_COR = mouse[0] - self.RECT.width // 2
+            self.Y_COR = mouse[1] - self.RECT.height // 2
+
 
             # Ограничиваем движение корабля границами матрицы
             self.X_COR = max(0, min(self.X_COR, matrix_width * cell - self.RECT.width))
@@ -177,7 +188,9 @@ class Ship:
             # Обновляем прямоугольник только при движении
             self.RECT.topleft = (self.X_COR, self.Y_COR)
 
+
         elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
+            self.CHECK_MOVE = False
             print(self.WIDTH , "self_width")
             print(self.RECT.width , "self_rect")
             
@@ -185,16 +198,13 @@ class Ship:
                 if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
                     self.snap_to_grid()
                     
-                    
-          
-                    if self.number_ship_cell != self.number_cell and self.b != True:
+    
+                    if self.number_ship_cell != self.number_cell and self.check_collision != True:
                         self.clear_matrix()
 
-                    self.b = None
+                    self.check_collision = None
 
                     
-                    
-      
                     # Пересчитываем номер клетки где стоит корабль для старых координат
                     self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
 
@@ -221,8 +231,6 @@ class Ship:
                                         for index_row in range(0 , self.LENGHT):
                                             list_grid[self.row + index_row][self.col] = self.LENGHT
 
-
-
                     for shiper in list_ships:
                         # проверка чтобы корабль который двигаем не сравнивали с самим собой
                         if list_ships.index(shiper) != list_ships.index(self):
@@ -234,9 +242,9 @@ class Ship:
                                                 self.X_COR = self.STASIC_X
                                                 self.Y_COR = self.STASIC_Y
                                                 print(self.row , self.col)
-                                                self.b = True
+                                                self.check_collision = True
                                                 self.clear_matrix()
-                            
+                                                self.return_start_code()
                                                 break
                                          
                                 
@@ -248,9 +256,9 @@ class Ship:
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
                                                             print(self.row , self.col)
-                                                            self.b = True
+                                                            self.check_collision = True
                                                             self.clear_matrix()
-                                                            
+                                                            self.return_start_code()
                                                             break
                                                    
                                             elif self.ORIENTATION_SHIP == "vertical":
@@ -259,9 +267,9 @@ class Ship:
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
                                                             print(self.row , self.col)
-                                                            self.b = True
+                                                            self.check_collision = True
                                                             self.clear_matrix()
-                                                            
+                                                            self.return_start_code()
                                                             break
                                                       
 
@@ -273,9 +281,9 @@ class Ship:
                                                     self.X_COR = self.STASIC_X
                                                     self.Y_COR = self.STASIC_Y
                                                     print(self.row , self.col)
-                                                    self.b = True
+                                                    self.check_collision = True
                                                     self.clear_matrix()
-                                                    
+                                                    self.return_start_code()
                                                     break
                                               
 
@@ -286,137 +294,23 @@ class Ship:
                                                         self.X_COR = self.STASIC_X
                                                         self.Y_COR = self.STASIC_Y
                                                         print(self.row , self.col)
-                                                        self.b = True
+                                                        self.check_collision = True
                                                         self.clear_matrix()
-                                                        
+                                                        self.return_start_code()
                                                         break
-                                                   
-                                                
-            
-
-                        
-                            # # для верха , для задней части корабля
-                            # if self.X_COR + self.RECT.width > shiper.X_COR:
-                            #     if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width:
-                            #         if self.ORIENTATION_SHIP == "horizontal":
-                            #             if self.Y_COR >= shiper.Y_COR - 62:
-                            #                 if self.Y_COR <= shiper.Y_COR:
-                            #                         self.X_COR = self.STASIC_X
-                            #                         self.Y_COR = self.STASIC_Y
-                            #                         self.clear_matrix()
-                            #         elif self.ORIENTATION_SHIP == "vertical":
-                            #             if self.Y_COR + self.RECT.height >= shiper.Y_COR - 62:
-                            #                 if self.Y_COR + self.RECT.height <= shiper.Y_COR:
-                            #                         self.X_COR = self.STASIC_X
-                            #                         self.Y_COR = self.STASIC_Y
-                            #                         self.clear_matrix()
-                            # # для нижней части , для задней части корабля
-                            # if self.X_COR + self.RECT.width > shiper.X_COR:
-                            #     if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width:
-                            #         if self.Y_COR < shiper.Y_COR + 124:
-                            #             if self.Y_COR >= shiper.Y_COR + 62:  
-                            #                 self.X_COR = self.STASIC_X
-                            #                 self.Y_COR = self.STASIC_Y
-                            #                 self.clear_matrix()
-
-                            # # для левой стороны, корабль ввертикально
-                            # if self.X_COR + self.RECT.width > shiper.X_COR - 62:
-                            #     print(2)
-                            #     if self.X_COR + self.RECT.width <= shiper.X_COR:
-                            #         if self.ORIENTATION_SHIP == "horizontal":
-                            #             if self.Y_COR < shiper.Y_COR + 124:
-                            #                 if self.Y_COR > shiper.Y_COR - 124:
-                            #                     self.X_COR = self.STASIC_X
-                            #                     self.Y_COR = self.STASIC_Y
-                            #                     self.clear_matrix()
-                            #         elif self.ORIENTATION_SHIP == "vertical":
-                            #             print(7)
-                            #             if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
-                            #                 if self.Y_COR + self.RECT.height <= shiper.Y_COR + 124:
-                            #                     self.X_COR = self.STASIC_X
-                            #                     self.Y_COR = self.STASIC_Y
-                            #                     self.clear_matrix()
-
-                            # #для правой стороны , задней части корабля
-                            # if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
-                            #     print(888)
-                            #     if self.X_COR + self.RECT.width > shiper.X_COR + shiper.RECT.width:
-                            #         print(777)
-                            #         if self.ORIENTATION_SHIP == "horizontal":
-                            #             print(3)
-                            #             if self.Y_COR < shiper.Y_COR + 124:
-                            #                 print(4)
-                            #                 if self.Y_COR > shiper.Y_COR - 124:
-                            #                     print(5)
-                            #                     self.X_COR = self.STASIC_X
-                            #                     self.Y_COR = self.STASIC_Y
-                            #                     self.clear_matrix()
-                            #         elif self.ORIENTATION_SHIP == "vertical":
-                            #             print(7)
-                            #             if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
-                            #                 if self.Y_COR + self.RECT.height <= shiper.Y_COR + 124:
-                            #                     self.X_COR = self.STASIC_X
-                            #                     self.Y_COR = self.STASIC_Y
-                            #                     self.clear_matrix()
-                            # print("--------------------------------")
-                            # # для правой стороны горзионтально
-                            # if self.X_COR <= shiper.X_COR + shiper.RECT.width + 61:
-                            #     if self.X_COR >= shiper.X_COR + shiper.RECT.width:
-                            #         if self.Y_COR < shiper.Y_COR + 124:
-                            #             if self.Y_COR > shiper.Y_COR - 124:
-                            #                 self.X_COR = self.STASIC_X
-                            #                 self.Y_COR = self.STASIC_Y
-                            #                 self.clear_matrix()
-                            # # для верха когда корадлик горизонтально
-                            # if self.X_COR >= shiper.X_COR:
-                            #     if self.X_COR < shiper.X_COR + shiper.RECT.width:
-                            #         if self.Y_COR >= shiper.Y_COR - 62:
-                            #             if self.Y_COR <= shiper.Y_COR:
-                            #                 self.X_COR = self.STASIC_X
-                            #                 self.Y_COR = self.STASIC_Y
-                            #                 self.clear_matrix()
-
-                            # # для низа когда корабль горизонтально
-                            # if self.X_COR >= shiper.X_COR:
-                            #     if self.X_COR < shiper.X_COR + shiper.RECT.width:
-                            #         if self.Y_COR < shiper.Y_COR + 124:
-                            #             if self.Y_COR >= shiper.Y_COR + 62:  
-                            #                 self.X_COR = self.STASIC_X
-                            #                 self.Y_COR = self.STASIC_Y
-                            #                 self.clear_matrix()
-                            # # для левой стороны 
-                            # if self.X_COR >= shiper.X_COR - 62:
-                            #     if self.X_COR < shiper.X_COR:
-                            #         if self.Y_COR < shiper.Y_COR + 124:
-                            #             if self.Y_COR > shiper.Y_COR - 124:
-                            #                 self.X_COR = self.STASIC_X
-                            #                 self.Y_COR = self.STASIC_Y
-                            #                 self.clear_matrix()
-
-            
+         
                     print("------------------------------------------------------------------------------------------------")
                     print(list_grid)
                 else:
-                    self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
-                    self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-                    self.ORIENTATION_SHIP = "horizontal"
-                    # Записываем в переменную для проверки
-                    self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                    # Отрисовываем изображение при помощи метода
-                    self.load_image()
-                    # Записываем в переменную изменённую позицию
-                    self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-               
+                    self.clear_matrix()
+                    self.return_start_code()
+                    print(list_grid)
+       
             else:
-                self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
-                self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-                self.ORIENTATION_SHIP = "horizontal"
-                # Записываем в переменную для проверки
-                self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                # Отрисовываем изображение при помощи метода
-                self.load_image()
-                # Записываем в переменную изменённую позицию
-                self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+                self.clear_matrix()
+                self.return_start_code()
+                print(list_grid)
+                
                
 
             # Проверка пересечения с другими кораблями
@@ -425,21 +319,22 @@ class Ship:
                 # Проверяем ship != self - это для того чтобы не проверять кораблик сам с собой
                 # self.RECT.colliderect(ship.RECT) - проверям каждый корабль из списка с текущим кораблем, если ихние прямоугольники(колизии) пересекаются то ставим кораблик на начальные координаты
                 if ship != self and self.RECT.colliderect(ship.RECT):
-                    # Если столкнулись, то ставим кораблик на начальные координаты
-                    self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
-                    # поворачиваем его по горизонтале если он был вертикальным
-                    self.ORIENTATION_SHIP = "horizontal"
-                    # Записываем в переменную для проверки
-                    self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                    # Отрисовываем изображение при помощи метода
-                    self.load_image()
-                    # Записываем в переменную изменённую позицию
-                    self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+                    self.return_start_code()
+                    # # Если столкнулись, то ставим кораблик на начальные координаты
+                    # self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
+                    # # поворачиваем его по горизонтале если он был вертикальным
+                    # self.ORIENTATION_SHIP = "horizontal"
+                    # # Записываем в переменную для проверки
+                    # self.CHEK_ROTATION = self.ORIENTATION_SHIP
+                    # # Отрисовываем изображение при помощи метода
+                    # self.load_image()
+                    # # Записываем в переменную изменённую позицию
+                    # self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
                     break
 
             # Обновляем прямоугольник в конце
             self.RECT.topleft = (self.X_COR, self.Y_COR)
-            self.CHECK_MOVE = False
+       
 
 
 # Тут мы создаём сами корабли, цифры в словах, типа: three, two, one , это деления корабля, на сколько клеточек он задуман
