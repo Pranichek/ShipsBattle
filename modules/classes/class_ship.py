@@ -35,9 +35,9 @@ class Ship:
     # Метод загрузки картинок кораблей
     def load_image(self):
         # Переменная с абсолютным путём, до папки картинок кораблей ( абсолютный путь строится через модуль os.path.abspath()
-        ship = os.path.abspath(__file__ + f"/../../../images/ships/{self.IMAGE_SHIP}")
+        ship = os.path.abspath(__file__ + f"/../../../media/ships/{self.IMAGE_SHIP}")
         # Переменная с абсолютным путём, до папки перевёрнутых кораблей 
-        rotate_ship = os.path.abspath(__file__ + f"/../../../images/ships/{self.ROTATE_SHIP}")
+        rotate_ship = os.path.abspath(__file__ + f"/../../../media/ships/{self.ROTATE_SHIP}")
         # Загружаем картинку при помощи метода load
         image_ship = pygame.image.load(ship)
         # Загружаем картинку повернутого корабля при
@@ -311,8 +311,7 @@ class Ship:
                 self.return_start_code()
                 print(list_grid)
                 
-               
-
+ 
             # Проверка пересечения с другими кораблями
             # делаем перебор списка с кораблями , чтобы модно было проверять не пытается ли поставить пользователь корабль на корабль
             for ship in list_ships:
@@ -320,17 +319,6 @@ class Ship:
                 # self.RECT.colliderect(ship.RECT) - проверям каждый корабль из списка с текущим кораблем, если ихние прямоугольники(колизии) пересекаются то ставим кораблик на начальные координаты
                 if ship != self and self.RECT.colliderect(ship.RECT):
                     self.return_start_code()
-                    # # Если столкнулись, то ставим кораблик на начальные координаты
-                    # self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
-                    # # поворачиваем его по горизонтале если он был вертикальным
-                    # self.ORIENTATION_SHIP = "horizontal"
-                    # # Записываем в переменную для проверки
-                    # self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                    # # Отрисовываем изображение при помощи метода
-                    # self.load_image()
-                    # # Записываем в переменную изменённую позицию
-                    # self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-                    break
 
             # Обновляем прямоугольник в конце
             self.RECT.topleft = (self.X_COR, self.Y_COR)

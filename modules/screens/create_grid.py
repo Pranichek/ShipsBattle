@@ -14,7 +14,7 @@ class Cell:
         self.image = None
         self.load_image()
     def load_image(self):
-        image_path = os.path.abspath(__file__ + f"/../../../images/grid/{self.image_name}")
+        image_path = os.path.abspath(__file__ + f"/../../../media/grid/{self.image_name}")
         image = pygame.image.load(image_path)
         transformed_image = pygame.transform.scale(image, (self.width, self.height))
         self.image = transformed_image

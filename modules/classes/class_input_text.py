@@ -28,7 +28,7 @@ class InputText:
     #створюємо метод завантаження картинки
     def load_image(self):
         #знаходимо путь по якому завантажуємо картинку
-        image_path = os.path.abspath(__file__ + f"/../../../images/images_background/{self.name_image}")
+        image_path = os.path.abspath(__file__ + f"/../../../media/images_background/{self.name_image}")
         self.image = pygame.image.load(image_path)
         #завантажуємо картинку зі шляху який ми знайшли та змінюємо по розмірам
         transform_image = pygame.transform.scale(self.image , (self.width, self.height))
@@ -38,7 +38,7 @@ class InputText:
     #завантажуємо шрифт який ми будемо використовувати коли пишемо 
     def load_font(self, font_name : str): 
             #отримуємо шрифт по шляху та передаємо назву його(font_name)
-            font_path = os.path.abspath(__file__ + f"/../../../fonts/{font_name}")
+            font_path = os.path.abspath(__file__ + f"/../../../media/fonts/{font_name}")
             #ствоюємо текст зі шрифтом який ми отримали
             self.font = pygame.font.Font(font_path, size = 48)
 

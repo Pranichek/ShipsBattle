@@ -15,7 +15,7 @@ class DrawImage:
         self.load_image()
 
     def load_image(self):
-        image_path = os.path.abspath(__file__ + f"/../../../images/{self.folder_name}/{self.image_name}")
+        image_path = os.path.abspath(__file__ + f"/../../../media/{self.folder_name}/{self.image_name}")
         load_image = pygame.image.load(image_path)
         transformed_image = pygame.transform.scale(load_image, (self.width, self.height))
         self.image = transformed_image

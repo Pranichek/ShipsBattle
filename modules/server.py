@@ -83,7 +83,7 @@ def start_server():
         points_for_client = data_for_client[input_nick.user_text]["points"]
         print(points_for_client , "points for client")
         
-        #формуємо дані користувача який запустив серве ,для відправки до клієнта який під'єднався
+        #формуємо дані користувача який запустив сервер ,для відправки до клієнта який під'єднався
         data_for_client = {
             "nick": str(input_nick.user_text),
             "points": points_for_client,

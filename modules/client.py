@@ -76,6 +76,7 @@ def connect_user():
         #беремо кількість балів користувача який приєднується до сервера , щоб користувач на сервері знав останнє їхнє значення
         points_for_server = data_for_server[input_nick.user_text]["points"]
         print(points_for_server , "points for client")
+        
 
         #формуємо дані для відправки на сервер , у виді словника, щоб можна було у одні строці їх відправити
         data_for_server = {

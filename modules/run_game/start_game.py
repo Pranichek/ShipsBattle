@@ -4,7 +4,7 @@ from ..screens import main_screen , list_object_map , grid_player , list_grid
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
-from ..json_functions.read_json import read_json
+from ..json_functions import read_json , write_json
 from ..classes.class_music import music_load_main , music_load_waiting
 from ..classes.class_click import music_click
 from .start_server import start_server , fail_start_server , check_server_started
@@ -55,13 +55,27 @@ def music_lower():
     if get2 - 0.1 < 0.01:
         pygame.mixer.music.set_volume(0)
 
-def random_places_ships():
-    # чистка матрицы
-    for row in range(len(list_grid)):
-        for column in range(len(list_grid[row])):
-            print(column)
-            list_grid[row][column] = 0
-    print(list_grid)
+# функция для подключения к бою
+def connect_to_fight():
+    count_zero = 0
+    for row in list_grid:
+        for cell in row:
+            if cell == 0:
+                count_zero += 1
+
+    if count_zero == 80:
+        print("You can connect to the game")
+        dict_game_status = {
+                "status": "You can connect to the game"
+            }
+    else:
+        print("You can't connect to the game")
+        dict_game_status = {
+                "status": "You can't connect to the game"
+            }
+
+
+    write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
 
 
 
@@ -79,9 +93,9 @@ start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png"
 #кнопка которая подключается к игре
 join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "joint_to_game_hover.png" , width= 575 , height= 80 , action= connect_to_server)
 #кнопка коли розставив кораблі та підлючаєшься до бою
-ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= test)
+ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= connect_to_fight)
 #кнопка яка будеть розставляти кораблі у ранломному положені
-random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= random_places_ships)
+random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
 # кнопка для добавления звука
 button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_up)
 button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width= 74, height= 71, action= music_lower)
@@ -142,7 +156,7 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(ships_position_window())
+                    change_scene(join_game_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
