@@ -7,7 +7,7 @@ from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions import read_json , write_json
 from ..classes.class_music import music_load_main , music_load_waiting
 from ..classes.class_click import music_click
-from .start_server import start_server , fail_start_server , check_server_started
+from .launch_server import start_server , fail_start_server , check_server_started
 from .connect_to_server import connect_to_server , list_check_connection , fail_connect
 
 #ініціалізуємо pygame щоб можна було із ним працювати
