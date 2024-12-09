@@ -28,7 +28,7 @@ class InputText:
     #створюємо метод завантаження картинки
     def load_image(self):
         #знаходимо путь по якому завантажуємо картинку
-        image_path = os.path.abspath(__file__ + f"/../../../media/images_background/{self.name_image}")
+        image_path = os.path.abspath(__file__ + f"/../../../media/backgrounds/{self.name_image}")
         self.image = pygame.image.load(image_path)
         #завантажуємо картинку зі шляху який ми знайшли та змінюємо по розмірам
         transform_image = pygame.transform.scale(self.image , (self.width, self.height))

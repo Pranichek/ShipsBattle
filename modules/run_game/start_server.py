@@ -6,7 +6,7 @@ from ..server import server_thread
 #список для відслуджування чи нажати кнопка заупску серверу чи ні
 check_server_started = [False]
 #фон який говорить про помилку, коли користувач пробує запистити сервер, але він це робить не правильно
-fail_start_server = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "images_background" , image_name = "fail_server.png")
+fail_start_server = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "backgrounds" , image_name = "fail_server.png")
 
 
 def start_server():

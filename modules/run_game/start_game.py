@@ -110,15 +110,15 @@ grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , f
 
 
 #backgrounds
-main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "images_background" , image_name= "main_background.jpg")
+main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.jpg")
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
-input_data_bg= DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "images_background" , image_name= "input_data.png")
+input_data_bg= DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "input_data.png")
 #фон для очікування користувача
-waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "images_background" , image_name= "waiting_background.png")
+waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "waiting_background.png")
 #фон для розташування кораблів перед ігрою
-ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 ,folder_name= "images_background" , image_name= "position_ships_bg.png")
+ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 ,folder_name= "backgrounds" , image_name= "position_ships_bg.png")
 # фон на якомй стоять кораблі перед початком бою
-place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 37 ,folder_name= "images_background" , image_name= "bg_place_for_ships.png")
+place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 37 ,folder_name= "backgrounds" , image_name= "bg_place_for_ships.png")
 
 
 
