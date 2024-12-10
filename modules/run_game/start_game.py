@@ -1,6 +1,6 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen , list_object_map , grid_player , list_grid
+from ..screens import main_screen , list_object_map , grid_player , list_grid 
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
@@ -9,6 +9,7 @@ from ..classes.class_music import music_load_main , music_load_waiting
 from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .connect_to_server import connect_to_server , list_check_connection , fail_connect
+import random
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -79,6 +80,187 @@ def connect_to_fight():
 
 
 
+list_random_position = ["horizontal", "vertical"]
+is_collision = False
+def random_places_ships():
+    global is_collision
+
+    for rowe in range(len(list_grid)):
+        for celle in range(len(list_grid[rowe])):
+            list_grid[rowe][celle] = 0
+
+    for shipka in range(10):
+        if shipka == 0:
+            while True: 
+                random_number_cell = random.randint(0 , 99)
+                number_cell = list_object_map.index(list_object_map[random_number_cell])
+                # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                str_col = str(number_cell) 
+                # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                row = number_cell // 10  
+                #Колонку кораблика вычисляем по такому принципу
+                # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                col = int(str_col[-1])
+                orientation = random.choice(list_random_position)
+
+                if orientation == 'horizontal':
+                    if col + list_ships[shipka].LENGHT < 9:
+                        for index_column in range(0 , list_ships[shipka].LENGHT):
+                            list_grid[row][col + index_column] = list_ships[shipka].LENGHT
+                        list_ships[shipka].WIDTH = 62
+                        list_ships[shipka].HEIGHT = 62 
+                        list_ships[shipka].ORIENTATION_SHIP = orientation
+                        list_ships[shipka].CHEK_ROTATION = orientation
+                        list_ships[shipka].load_image()
+                        list_ships[shipka].RECT = list_ships[shipka].READY_IMAGE_SHIP.get_rect(topleft=(list_ships[shipka].X_COR, list_ships[shipka].Y_COR))
+                        x_cor = list_object_map[number_cell].x
+                        y_cor = list_object_map[number_cell].y
+                        list_ships[shipka].X_COR = x_cor
+                        list_ships[shipka].Y_COR = y_cor
+                        list_ships[shipka].row = row
+                        list_ships[shipka].col = col
+                        list_ships[shipka].check_after_random = True
+                        print(list_grid)
+                        break
+                if orientation == 'vertical':
+                    if row + list_ships[shipka].LENGHT < 10:
+                        for index_row in range(0 , list_ships[shipka].LENGHT):
+                                list_grid[row + index_row][col] = list_ships[shipka].LENGHT
+                        list_ships[shipka].ORIENTATION_SHIP = orientation
+                        list_ships[shipka].CHEK_ROTATION = orientation
+                        list_ships[shipka].load_image()
+                        list_ships[shipka].RECT = list_ships[shipka].IMAGE_ROTATE_SHIP.get_rect(topleft=(list_ships[shipka].X_COR, list_ships[shipka].Y_COR))
+                        x_cor = list_object_map[number_cell].x
+                        y_cor = list_object_map[number_cell].y
+                        list_ships[shipka].X_COR = x_cor
+                        list_ships[shipka].Y_COR = y_cor
+                        list_ships[shipka].row = row
+                        list_ships[shipka].col = col
+                        list_ships[shipka].check_after_random = True
+                        print(list_grid)
+                        break
+                else:
+                    continue
+        else:
+            while True:
+                is_collision = False
+                random_number_cell = random.randint(0 , 99)
+                number_cell = list_object_map.index(list_object_map[random_number_cell])
+                # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                str_col = str(number_cell) 
+                # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                row = number_cell // 10  
+                #Колонку кораблика вычисляем по такому принципу
+                # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                col = int(str_col[-1])
+                orientation = random.choice(list_random_position)
+
+                list_ships[shipka].ORIENTATION_SHIP = orientation
+                list_ships[shipka].CHEK_ROTATION = orientation
+                list_ships[shipka].load_image()
+                list_ships[shipka].RECT = list_ships[shipka].IMAGE_ROTATE_SHIP.get_rect(topleft=(list_ships[shipka].X_COR, list_ships[shipka].Y_COR))
+                x_cor = list_object_map[number_cell].x
+                y_cor = list_object_map[number_cell].y
+                list_ships[shipka].X_COR = x_cor
+                list_ships[shipka].Y_COR = y_cor
+                list_ships[shipka].row = row
+                list_ships[shipka].col = col
+
+    
+                for shiper in list_ships:
+                    # проверка чтобы корабль который двигаем не сравнивали с самим собой
+                    if list_ships.index(shiper) != shipka:
+                        if shiper.ORIENTATION_SHIP == "horizontal":
+                            if list_ships[shipka].X_COR >= shiper.X_COR - 62:
+                                if list_ships[shipka].X_COR < shiper.X_COR + shiper.RECT.width + 62:
+                                    if list_ships[shipka].Y_COR >= shiper.Y_COR - 62:
+                                        if list_ships[shipka].Y_COR < shiper.Y_COR + 124:
+                                            is_collision = True
+                                            break
+                                        
+                            if list_ships[shipka].X_COR + list_ships[shipka].RECT.width > shiper.X_COR - 62:
+                                if list_ships[shipka].X_COR + list_ships[shipka].RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
+                                        if list_ships[shipka].ORIENTATION_SHIP == "horizontal":
+                                            if list_ships[shipka].Y_COR >= shiper.Y_COR - 62:
+                                                if list_ships[shipka].Y_COR < shiper.Y_COR + 124:
+                                                        is_collision = True
+                                                        break
+                                                
+                                        elif list_ships[shipka].ORIENTATION_SHIP == "vertical":
+                                            if list_ships[shipka].Y_COR + list_ships[shipka].RECT.height > shiper.Y_COR - 62:
+                                                if list_ships[shipka].Y_COR + list_ships[shipka].RECT.height <= shiper.Y_COR + 124:
+                                                        is_collision = True
+                                                        break
+                                                
+                                                    
+                        elif shiper.ORIENTATION_SHIP == "vertical":
+                            if list_ships[shipka].X_COR >= shiper.X_COR - 62:
+                                if list_ships[shipka].X_COR < shiper.X_COR + shiper.RECT.width + 62:
+                                    if list_ships[shipka].Y_COR >= shiper.Y_COR - 62:
+                                        if list_ships[shipka].Y_COR < shiper.Y_COR + shiper.RECT.height + 62:
+                                                is_collision = True
+                                                break
+                                            
+                            if list_ships[shipka].X_COR + list_ships[shipka].RECT.width > shiper.X_COR - 62:
+                                if list_ships[shipka].X_COR + list_ships[shipka].RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
+                                        if list_ships[shipka].Y_COR + list_ships[shipka].RECT.height > shiper.Y_COR - 62:
+                                            if list_ships[shipka].Y_COR + list_ships[shipka].RECT.height <= shiper.Y_COR + shiper.RECT.height + 62:
+                                                    is_collision = True
+                                                    break             
+    
+                if is_collision == True:
+                    continue
+                else:
+                    if orientation == 'horizontal':
+                        if col + list_ships[shipka].LENGHT < 9:
+                            for index_column in range(0 , list_ships[shipka].LENGHT):
+                                list_grid[row][col + index_column] = list_ships[shipka].LENGHT
+                            list_ships[shipka].WIDTH = 62
+                            list_ships[shipka].HEIGHT = 62 
+                            list_ships[shipka].ORIENTATION_SHIP = orientation
+                            list_ships[shipka].CHEK_ROTATION = orientation
+                            list_ships[shipka].load_image()
+                            list_ships[shipka].RECT = list_ships[shipka].READY_IMAGE_SHIP.get_rect(topleft=(list_ships[shipka].X_COR, list_ships[shipka].Y_COR))
+                            x_cor = list_object_map[number_cell].x
+                            y_cor = list_object_map[number_cell].y
+                            list_ships[shipka].X_COR = x_cor
+                            list_ships[shipka].Y_COR = y_cor
+                            list_ships[shipka].row = row
+                            list_ships[shipka].col = col
+                            list_ships[shipka].check_after_random = True
+                            print(list_grid)
+                            break
+                    if orientation == 'vertical':
+                        if row + list_ships[shipka].LENGHT < 10:
+                            for index_row in range(0 , list_ships[shipka].LENGHT):
+                                    list_grid[row + index_row][col] = list_ships[shipka].LENGHT
+                            list_ships[shipka].ORIENTATION_SHIP = orientation
+                            list_ships[shipka].CHEK_ROTATION = orientation
+                            list_ships[shipka].load_image()
+                            list_ships[shipka].RECT = list_ships[shipka].IMAGE_ROTATE_SHIP.get_rect(topleft=(list_ships[shipka].X_COR, list_ships[shipka].Y_COR))
+                            x_cor = list_object_map[number_cell].x
+                            y_cor = list_object_map[number_cell].y
+                            list_ships[shipka].X_COR = x_cor
+                            list_ships[shipka].Y_COR = y_cor
+                            list_ships[shipka].row = row
+                            list_ships[shipka].col = col
+                            list_ships[shipka].check_after_random = True
+                            print(list_grid)
+                            is_collision = True
+                            break
+                    else:
+                        continue
+                                                
+                    
+
+
+    
+
+                    
+    
+        
+
+
 
 
 #buttons
@@ -95,7 +277,7 @@ join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , imag
 #кнопка коли розставив кораблі та підлючаєшься до бою
 ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= connect_to_fight)
 #кнопка яка будеть розставляти кораблі у ранломному положені
-random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= test)
+random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= random_places_ships)
 # кнопка для добавления звука
 button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_up)
 button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width= 74, height= 71, action= music_lower)
@@ -151,12 +333,12 @@ def main_window():
                 run_game = False  
                 change_scene(None)
             elif check_press_button[0] == "button is pressed":
-                # music_click.play2(0)
+                # music_click.check_after_randomlay2(0)
                 check_press_button[0] = None
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(join_game_window())
+                    change_scene(ships_position_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -257,7 +439,7 @@ def join_game_window():
         join_game_button.draw(surface= main_screen)
 
         #если не нашли сервер по которому подключаемся или ввели что то неправильно, выводим табличку о том что таокго сервера нет
-        #этот список находится в файле connect_to_server.py
+        #этот список находится в файле connect_to_server.check_after_randomy
         if list_check_connection[0] == "error_connection":
             # рисуем табличку ошибки
             fail_connect.draw_image(screen = main_screen)
@@ -301,7 +483,7 @@ def waiting_window():
     pygame.display.set_caption("Waiting window")
     run_game = True
     music_load_main.stop()
-    music_load_waiting.play()
+    music_load_waiting.check_after_randomlay()
     while run_game:
         data = read_json(name_file = "utility.json")
         status_server = data["status"]

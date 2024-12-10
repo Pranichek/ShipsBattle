@@ -31,6 +31,8 @@ class Ship:
         self.col = 0
         # флаг для проверки столкновения с кораблями(коллизиями)
         self.check_collision = None
+
+        self.check_after_random = None
     
     # Метод загрузки картинок кораблей
     def load_image(self):
@@ -126,30 +128,30 @@ class Ship:
         for index_col in range(0 , 2):
             # Добалвяем к ячейке 
             try:
-                print(list_grid[self.row][self.col + index_col])
+                # print(list_grid[self.row][self.col + index_col])
                 if list_grid[self.row][self.col + index_col] == 0:
                     check_prev_pos += 1
             except Exception as e:
                 check_prev_pos = 1
 
-        print(check_prev_pos)
+        # print(check_prev_pos)
         if self.check_collision != True:
             if check_prev_pos == 0:
-                print("clear col")
+                # print("clear col")
                 for index_col in range(0 , self.LENGHT):
                     list_grid[self.row][self.col + index_col] = 0
             elif check_prev_pos > 0:
-                print("cler row")
+                # print("cler row")
                 for index_row in range(0 , self.LENGHT):
                     list_grid[self.row + index_row][self.col] = 0
         elif self.check_collision == True:
-            print("banana")
+            # print("banana")
             if self.ORIENTATION_SHIP == "vertical":
-                print("clean row")
+                # print("clean row")
                 for index_row in range(0 , self.LENGHT):
                     list_grid[self.row + index_row][self.col] = 0
             elif self.ORIENTATION_SHIP == "horizontal":
-                print("clean col")
+                # print("clean col")
                 for index_col in range(0 , self.LENGHT):
                     list_grid[self.row][self.col + index_col] = 0
 
@@ -188,23 +190,24 @@ class Ship:
             # Обновляем прямоугольник только при движении
             self.RECT.topleft = (self.X_COR, self.Y_COR)
 
-
         elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
             self.CHECK_MOVE = False
             print(self.WIDTH , "self_width")
             print(self.RECT.width , "self_rect")
-            
+            if self.check_after_random == True:
+                self.clear_matrix()
+                self.check_after_random = None
+
             if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
                 if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
                     self.snap_to_grid()
-                    
-    
+
+   
                     if self.number_ship_cell != self.number_cell and self.check_collision != True:
                         self.clear_matrix()
 
                     self.check_collision = None
 
-                    
                     # Пересчитываем номер клетки где стоит корабль для старых координат
                     self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
 
