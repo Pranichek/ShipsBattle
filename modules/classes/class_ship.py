@@ -2,6 +2,7 @@ import pygame
 import os
 from ..screens import grid_player , list_grid , list_object_map 
 
+a = False
 
 class Ship:
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
@@ -134,26 +135,38 @@ class Ship:
             except Exception as e:
                 check_prev_pos = 1
 
-        # print(check_prev_pos)
+
         if self.check_collision != True:
             if check_prev_pos == 0:
-                # print("clear col")
-                for index_col in range(0 , self.LENGHT):
-                    list_grid[self.row][self.col + index_col] = 0
+                print("clear col")
+                if list_grid[self.row][self.col] == 0:
+                    print("already clear")
+                else:
+                    for index_col in range(0 , self.LENGHT):
+                        list_grid[self.row][self.col + index_col] = 0
             elif check_prev_pos > 0:
-                # print("cler row")
-                for index_row in range(0 , self.LENGHT):
-                    list_grid[self.row + index_row][self.col] = 0
+                print("cler row")
+                if list_grid[self.row][self.col] == 0:
+                    print("already clear")
+                else:
+                    for index_row in range(0 , self.LENGHT):
+                        list_grid[self.row + index_row][self.col] = 0
         elif self.check_collision == True:
-            # print("banana")
+            print("banana")
             if self.ORIENTATION_SHIP == "vertical":
-                # print("clean row")
-                for index_row in range(0 , self.LENGHT):
-                    list_grid[self.row + index_row][self.col] = 0
+                print("clean row")
+                if list_grid[self.row][self.col] == 0:
+                    print("already clear")
+                else:
+                    for index_row in range(0 , self.LENGHT):
+                        list_grid[self.row + index_row][self.col] = 0
             elif self.ORIENTATION_SHIP == "horizontal":
-                # print("clean col")
-                for index_col in range(0 , self.LENGHT):
-                    list_grid[self.row][self.col + index_col] = 0
+                print("clean col")
+                if list_grid[self.row][self.col] == 0:
+                    print("already clear")
+                else:
+                    for index_col in range(0 , self.LENGHT):
+                        list_grid[self.row][self.col + index_col] = 0
 
     # метод который телепортирует коарбль на начальную точку  и поворачивает в положение по горизонатали
     def return_start_code(self):
@@ -194,15 +207,29 @@ class Ship:
             self.CHECK_MOVE = False
             print(self.WIDTH , "self_width")
             print(self.RECT.width , "self_rect")
+
             if self.check_after_random == True:
+                print("Зашло")
                 self.clear_matrix()
                 self.check_after_random = None
+                print(list_grid)
 
+            # Проверка пересечения с другими кораблями
+            # делаем перебор списка с кораблями , чтобы модно было проверять не пытается ли поставить пользователь корабль на корабль
+            for ship in list_ships:
+                # Проверяем ship != self - это для того чтобы не проверять кораблик сам с собой
+                # self.RECT.colliderect(ship.RECT) - проверям каждый корабль из списка с текущим кораблем, если ихние прямоугольники(колизии) пересекаются то ставим кораблик на начальные координаты
+                if ship != self and self.RECT.colliderect(ship.RECT):
+                    print("пересекается")
+                    self.return_start_code()
+                    self.clear_matrix()
+        
+ 
             if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
                 if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
                     self.snap_to_grid()
 
-   
+       
                     if self.number_ship_cell != self.number_cell and self.check_collision != True:
                         self.clear_matrix()
 
@@ -233,7 +260,8 @@ class Ship:
                                     elif self.ORIENTATION_SHIP == "vertical":
                                         for index_row in range(0 , self.LENGHT):
                                             list_grid[self.row + index_row][self.col] = self.LENGHT
-
+                    
+                     
                     for shiper in list_ships:
                         # проверка чтобы корабль который двигаем не сравнивали с самим собой
                         if list_ships.index(shiper) != list_ships.index(self):
@@ -249,13 +277,14 @@ class Ship:
                                                 self.clear_matrix()
                                                 self.return_start_code()
                                                 break
-                                         
+                                        
                                 
                                 if self.X_COR + self.RECT.width > shiper.X_COR - 62:
                                     if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
                                             if self.ORIENTATION_SHIP == "horizontal":
                                                 if self.Y_COR >= shiper.Y_COR - 62:
                                                     if self.Y_COR < shiper.Y_COR + 124:
+                                                            
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
                                                             print(self.row , self.col)
@@ -263,10 +292,11 @@ class Ship:
                                                             self.clear_matrix()
                                                             self.return_start_code()
                                                             break
-                                                   
+                                                
                                             elif self.ORIENTATION_SHIP == "vertical":
                                                 if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
                                                     if self.Y_COR + self.RECT.height <= shiper.Y_COR + 124:
+                                                            print("HAAHAHAHAHHAHA")
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
                                                             print(self.row , self.col)
@@ -274,7 +304,7 @@ class Ship:
                                                             self.clear_matrix()
                                                             self.return_start_code()
                                                             break
-                                                      
+                                                    
 
                             elif shiper.ORIENTATION_SHIP == "vertical":
                                 if self.X_COR >= shiper.X_COR - 62:
@@ -288,7 +318,7 @@ class Ship:
                                                     self.clear_matrix()
                                                     self.return_start_code()
                                                     break
-                                              
+                                            
 
                                 if self.X_COR + self.RECT.width > shiper.X_COR - 62:
                                     if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
@@ -301,7 +331,8 @@ class Ship:
                                                         self.clear_matrix()
                                                         self.return_start_code()
                                                         break
-         
+                        
+            
                     print("------------------------------------------------------------------------------------------------")
                     print(list_grid)
                 else:
@@ -310,18 +341,13 @@ class Ship:
                     print(list_grid)
        
             else:
+
                 self.clear_matrix()
                 self.return_start_code()
                 print(list_grid)
                 
  
-            # Проверка пересечения с другими кораблями
-            # делаем перебор списка с кораблями , чтобы модно было проверять не пытается ли поставить пользователь корабль на корабль
-            for ship in list_ships:
-                # Проверяем ship != self - это для того чтобы не проверять кораблик сам с собой
-                # self.RECT.colliderect(ship.RECT) - проверям каждый корабль из списка с текущим кораблем, если ихние прямоугольники(колизии) пересекаются то ставим кораблик на начальные координаты
-                if ship != self and self.RECT.colliderect(ship.RECT):
-                    self.return_start_code()
+            
 
             # Обновляем прямоугольник в конце
             self.RECT.topleft = (self.X_COR, self.Y_COR)
