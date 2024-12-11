@@ -110,7 +110,15 @@ def connect_user():
 
         #зберігаємо статус того що підключилися до серверу, у джейсон файл
         write_json(filename= "utility.json" , object_dict = data_in_list["status"])
-                
+
+        ready_server = False
+        while True:
+            data_connect = client_socket.recv(1024).decode()
+            break
+            # data_ready = read_json(name_file = "status_connect_game.json")
+            # data_connect = data_ready["status"] 
+
+            # client_socket.send(data_connect.encode())
                 
                     
 

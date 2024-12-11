@@ -91,6 +91,23 @@ def start_server():
         }
         #відправляємо дані на клієнта , dumps - перетворює словарь у джейсон строку 
         client_socket.send(json.dumps(data_for_client).encode())
+
+        ready_server = False
+        while True:
+            data_ready = read_json(name_file = "status_connect_game.json")
+            data_connect = data_ready["status"] 
+
+            client_socket.send(data_connect.encode())
+            break
+
+            # if "status" in data_ready and data_ready["status"] == "You can connect to the game":
+            #     ready_server = True
+            #     client_socket.send(ready_client.encode())
+            #     print("Переменная отправлена")
+            #     break
+            # elif "status" in data_ready and data_ready["status"] == "You can't connect to the game":
+            #     print(" Сервер принял, клиент готов сервер нет ")
+            #     break
            
         
             

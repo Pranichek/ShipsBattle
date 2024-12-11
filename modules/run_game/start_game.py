@@ -75,7 +75,6 @@ def connect_to_fight():
                 "status": "You can't connect to the game"
             }
 
-
     write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
 
 

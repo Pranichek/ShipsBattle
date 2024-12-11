@@ -144,13 +144,17 @@ class Ship:
                 else:
                     for index_col in range(0 , self.LENGHT):
                         list_grid[self.row][self.col + index_col] = 0
+                        # return False
             elif check_prev_pos > 0:
                 print("cler row")
                 if list_grid[self.row][self.col] == 0:
                     print("already clear")
                 else:
+                    print(self.row , self.col)
+                    print(list_grid[self.row][self.col])
                     for index_row in range(0 , self.LENGHT):
                         list_grid[self.row + index_row][self.col] = 0
+                        # return False
         elif self.check_collision == True:
             print("banana")
             if self.ORIENTATION_SHIP == "vertical":
@@ -160,6 +164,7 @@ class Ship:
                 else:
                     for index_row in range(0 , self.LENGHT):
                         list_grid[self.row + index_row][self.col] = 0
+                        # return False
             elif self.ORIENTATION_SHIP == "horizontal":
                 print("clean col")
                 if list_grid[self.row][self.col] == 0:
@@ -167,6 +172,7 @@ class Ship:
                 else:
                     for index_col in range(0 , self.LENGHT):
                         list_grid[self.row][self.col + index_col] = 0
+                        # return False
 
     # метод который телепортирует коарбль на начальную точку  и поворачивает в положение по горизонатали
     def return_start_code(self):
@@ -222,8 +228,14 @@ class Ship:
                 if ship != self and self.RECT.colliderect(ship.RECT):
                     print("пересекается")
                     self.return_start_code()
+                    self.number_cell = self.number_ship_cell
+                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                    str_col = str(self.number_cell) 
+                    # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                    self.row = self.number_cell // 10  
                     self.clear_matrix()
-        
+                    print(list_grid)
+                    return False
  
             if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
                 if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
@@ -336,12 +348,13 @@ class Ship:
                     print("------------------------------------------------------------------------------------------------")
                     print(list_grid)
                 else:
+                    print("Колбаsa")
                     self.clear_matrix()
                     self.return_start_code()
                     print(list_grid)
        
             else:
-
+                print("Колбаса")
                 self.clear_matrix()
                 self.return_start_code()
                 print(list_grid)
