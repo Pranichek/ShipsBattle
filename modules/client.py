@@ -6,6 +6,7 @@ import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 from .json_functions import write_json , list_users , list_server_status 
 from .json_functions.read_json import read_json
+from .server import list_check_ready_to_fight
 
 
 
@@ -21,7 +22,11 @@ list_server_status = {
 }
 #зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не під'єднуємося до серверу
 write_json(filename= "utility.json" , object_dict = list_server_status)
-# write_json(filename= "status_connect_game.json" , object_dict =  list_server_status)
+
+dict_status_game = {
+    "status" : "places ships"
+}
+write_json(filename= "status_connect_game.json" , object_dict =  dict_status_game)
 
 event_connect_to_server = threading.Event()
 event_connect_to_server.set()
@@ -137,7 +142,10 @@ def connect_user():
             # Перевірка завершення
             if status_from_file == data_in_dict["status"] and status_from_file is not None:
                 print("End")
+                list_check_ready_to_fight[0] = "fight"
                 break
+            elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
+                list_check_ready_to_fight[0] = "wait"
             
             
             # data_ready = read_json(name_file = "status_connect_game.json")

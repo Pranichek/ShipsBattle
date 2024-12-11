@@ -2,7 +2,7 @@ import pygame
 import os
 from ..screens import grid_player , list_grid , list_object_map 
 
-a = False
+b = 0
 
 class Ship:
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
@@ -124,55 +124,62 @@ class Ship:
 
     # метод який чистить положення корабля на матриці якщо його передвинули
     def clear_matrix(self):
-        check_prev_pos = 0
+        global b
+        print(b , "b")
+        if b == 0:
+            check_prev_pos = 0
 
-        for index_col in range(0 , 2):
-            # Добалвяем к ячейке 
-            try:
-                # print(list_grid[self.row][self.col + index_col])
-                if list_grid[self.row][self.col + index_col] == 0:
-                    check_prev_pos += 1
-            except Exception as e:
-                check_prev_pos = 1
+            for index_col in range(0 , 2):
+                # Добалвяем к ячейке 
+                try:
+                    # print(list_grid[self.row][self.col + index_col])
+                    if list_grid[self.row][self.col + index_col] == 0:
+                        check_prev_pos += 1
+                except Exception as e:
+                    check_prev_pos = 1
 
 
-        if self.check_collision != True:
-            if check_prev_pos == 0:
-                print("clear col")
-                if list_grid[self.row][self.col] == 0:
-                    print("already clear")
-                else:
-                    for index_col in range(0 , self.LENGHT):
-                        list_grid[self.row][self.col + index_col] = 0
-                        # return False
-            elif check_prev_pos > 0:
-                print("cler row")
-                if list_grid[self.row][self.col] == 0:
-                    print("already clear")
-                else:
-                    print(self.row , self.col)
-                    print(list_grid[self.row][self.col])
-                    for index_row in range(0 , self.LENGHT):
-                        list_grid[self.row + index_row][self.col] = 0
-                        # return False
-        elif self.check_collision == True:
-            print("banana")
-            if self.ORIENTATION_SHIP == "vertical":
-                print("clean row")
-                if list_grid[self.row][self.col] == 0:
-                    print("already clear")
-                else:
-                    for index_row in range(0 , self.LENGHT):
-                        list_grid[self.row + index_row][self.col] = 0
-                        # return False
-            elif self.ORIENTATION_SHIP == "horizontal":
-                print("clean col")
-                if list_grid[self.row][self.col] == 0:
-                    print("already clear")
-                else:
-                    for index_col in range(0 , self.LENGHT):
-                        list_grid[self.row][self.col + index_col] = 0
-                        # return False
+            if self.check_collision != True:
+                if check_prev_pos == 0:
+                    print("clear col")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        for index_col in range(0 , self.LENGHT):
+                            list_grid[self.row][self.col + index_col] = 0
+                            # return False
+                elif check_prev_pos > 0:
+                    print("cler row")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        print(self.row , self.col)
+                        print(list_grid[self.row][self.col])
+                        for index_row in range(0 , self.LENGHT):
+                            print(self.LENGHT , "length")
+                            print(list_grid[self.row + index_row][self.col])
+                            list_grid[self.row + index_row][self.col] = 0
+                            # return False
+            elif self.check_collision == True:
+                print("banana")
+                if self.ORIENTATION_SHIP == "vertical":
+                    print("clean row")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        for index_row in range(0 , self.LENGHT):
+                            list_grid[self.row + index_row][self.col] = 0
+                            # return False
+                elif self.ORIENTATION_SHIP == "horizontal":
+                    print("clean col")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        for index_col in range(0 , self.LENGHT):
+                            list_grid[self.row][self.col + index_col] = 0
+                            # return False
+        b = 0
+       
 
     # метод который телепортирует коарбль на начальную точку  и поворачивает в положение по горизонатали
     def return_start_code(self):
@@ -189,6 +196,8 @@ class Ship:
        
 
     def matrix_move(self, event: pygame.event, matrix_width: int, matrix_height: int, cell: int):
+        global b
+        
          # Получаем текущие координаты мыши
         mouse = pygame.mouse.get_pos() 
 
@@ -228,13 +237,19 @@ class Ship:
                 if ship != self and self.RECT.colliderect(ship.RECT):
                     print("пересекается")
                     self.return_start_code()
-                    self.number_cell = self.number_ship_cell
-                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
-                    str_col = str(self.number_cell) 
-                    # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
-                    self.row = self.number_cell // 10  
+                    # self.number_cell = self.number_ship_cell
+                    # # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                    # str_col = str(self.number_cell) 
+                    # # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                    # self.row = self.number_cell // 10  
+                    if ship.col == self.col and ship.row == self.row:
+                        b += 1
+                    else:
+                        b = 0
                     self.clear_matrix()
                     print(list_grid)
+                    
+                    print(b , "bbb")
                     return False
  
             if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:

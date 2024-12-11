@@ -10,6 +10,7 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .connect_to_server import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
+from ..server import list_check_ready_to_fight
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -307,6 +308,11 @@ def waiting_window():
         data = read_json(name_file = "utility.json")
         status_server = data["status"]
         module_screen_server.FPS.tick(60)
+
+        if list_check_ready_to_fight[0] == "fight":
+            print("переход на окно боя")
+            run_game = False
+            
         waiting_background.draw_image(screen = main_screen)
         back_to_server.draw(surface= main_screen)
 
@@ -318,18 +324,6 @@ def waiting_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-
-            # elif check_press_button[0] == "button is pressed":
-            #     # music_click.play2(0)
-            #     check_press_button[0] = None
-            #     print("hhh")
-            #     run_game = False
-            #     print("hh")
-            #     change_scene(create_game_window())
-          
-                
-            # elif event.type == pygame.MOUSEBUTTONDOWN:
-            #     back_to_server.check_click()
                  
         pygame.display.flip()
 
@@ -344,6 +338,13 @@ def ships_position_window():
 
     while run_game:
         module_screen_server.FPS.tick(60)
+        if list_check_ready_to_fight[0] == "fight":
+            print("переход на окно боя")
+            run_game = False
+        elif list_check_ready_to_fight[0] == "wait":
+            change_scene(scene = waiting_window())
+            run_game = False
+        
         ships_position_bg.draw_image(screen = main_screen)
 
         # прямокутник де стоять коряблі перед початком бою

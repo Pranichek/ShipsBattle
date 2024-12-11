@@ -9,7 +9,7 @@ from .json_functions.read_json import read_json
 import json
 import time
 
-
+list_check_ready_to_fight = [None]
 
 #ліст для перевірки чи зайшов користувач на сервер
 list_server_status = {
@@ -17,7 +17,11 @@ list_server_status = {
 }
 #зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не запустили сервер
 write_json(filename= "utility.json" , object_dict =  list_server_status)
-# write_json(filename= "status_connect_game.json" , object_dict =  list_server_status)
+
+dict_status_game = {
+    "status" : "places ships"
+}
+write_json(filename= "status_connect_game.json" , object_dict =  dict_status_game)
 
 
 #створємо функцію для запуску серверу
@@ -102,6 +106,7 @@ def start_server():
 
             # Зчитуємо дані з файлу
             data_ready = read_json(name_file="status_connect_game.json")
+            #нащи данные
             status_from_file = data_ready["status"]
 
             # Формуємо відповідь
@@ -113,6 +118,7 @@ def start_server():
 
             # Отримуємо дані від клієнта
             data_connect = client_socket.recv(1024).decode()
+            #другого ігрока 
             data_in_dict = json.loads(data_connect)
 
             # Вивід статусу з клієнта
@@ -123,8 +129,10 @@ def start_server():
 
             # Перевірка завершення
             if status_from_file == data_in_dict["status"] and status_from_file is not None:
-                print("End")
+                list_check_ready_to_fight[0] = "fight"
                 break
+            elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
+                list_check_ready_to_fight[0] = "wait"
         # while True:
         #     time.sleep(1)
         #     data_ready = read_json(name_file = "status_connect_game.json")
