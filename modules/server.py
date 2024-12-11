@@ -7,6 +7,7 @@ from .classes.class_input_text import input_port , input_ip_adress, input_nick
 from .json_functions.write_json import write_json , list_server_status , list_users
 from .json_functions.read_json import read_json
 import json
+import time
 
 
 
@@ -16,6 +17,7 @@ list_server_status = {
 }
 #зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не запустили сервер
 write_json(filename= "utility.json" , object_dict =  list_server_status)
+# write_json(filename= "status_connect_game.json" , object_dict =  list_server_status)
 
 
 #створємо функцію для запуску серверу
@@ -92,13 +94,66 @@ def start_server():
         #відправляємо дані на клієнта , dumps - перетворює словарь у джейсон строку 
         client_socket.send(json.dumps(data_for_client).encode())
 
+    
+
         ready_server = False
         while True:
-            data_ready = read_json(name_file = "status_connect_game.json")
-            data_connect = data_ready["status"] 
+            time.sleep(1)
 
-            client_socket.send(data_connect.encode())
-            break
+            # Зчитуємо дані з файлу
+            data_ready = read_json(name_file="status_connect_game.json")
+            status_from_file = data_ready["status"]
+
+            # Формуємо відповідь
+            response = {
+                "status": status_from_file
+                }
+            client_socket.send(json.dumps(response).encode())
+       
+
+            # Отримуємо дані від клієнта
+            data_connect = client_socket.recv(1024).decode()
+            data_in_dict = json.loads(data_connect)
+
+            # Вивід статусу з клієнта
+            # print(data_in_dict, "from_client")
+            # print(data_in_dict.get("status", "No status found"))
+            print(status_from_file)
+            print(data_in_dict["status"])
+
+            # Перевірка завершення
+            if status_from_file == data_in_dict["status"] and status_from_file is not None:
+                print("End")
+                break
+        # while True:
+        #     time.sleep(1)
+        #     data_ready = read_json(name_file = "status_connect_game.json")
+        #     data_connect = data_ready["status"] 
+
+        #     data_ready = {
+        #         "status" : data_connect
+        #     }
+        #     client_socket.send(json.dumps(data_ready).encode())
+
+
+        #     data_connect = client_socket.recv(1024).decode()
+        #     data_in_dict = json.loads(data_connect)
+            
+        #     print(data_in_dict , "from_client")
+        #     print(data_connect)
+
+
+        
+            # data_connect = client_socket.recv(1024).decode()
+            # data_in_dict = json.loads(data_connect)
+            
+            # print(data_in_dict , "from_client")
+            # print(data_connect)
+
+            # if data_connect == data_in_dict["status"] and data_connect != None:
+            #     # time.sleep(10)
+            #     print("Ended")
+    
 
             # if "status" in data_ready and data_ready["status"] == "You can connect to the game":
             #     ready_server = True

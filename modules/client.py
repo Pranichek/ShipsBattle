@@ -21,6 +21,7 @@ list_server_status = {
 }
 #зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не під'єднуємося до серверу
 write_json(filename= "utility.json" , object_dict = list_server_status)
+# write_json(filename= "status_connect_game.json" , object_dict =  list_server_status)
 
 event_connect_to_server = threading.Event()
 event_connect_to_server.set()
@@ -113,8 +114,32 @@ def connect_user():
 
         ready_server = False
         while True:
+            time.sleep(1)
+
+            # Зчитуємо дані з файлу
+            data_ready = read_json(name_file="status_connect_game.json")
+            status_from_file = data_ready["status"]
+
+            # Формуємо відповідь
+            response = {
+                "status": status_from_file
+                }
+            client_socket.send(json.dumps(response).encode())
+
+            # Отримуємо дані від клієнта
             data_connect = client_socket.recv(1024).decode()
-            break
+            data_in_dict = json.loads(data_connect)
+
+            # Вивід статусу з клієнта і нашого
+            print(status_from_file)
+            print(data_in_dict["status"])
+
+            # Перевірка завершення
+            if status_from_file == data_in_dict["status"] and status_from_file is not None:
+                print("End")
+                break
+            
+            
             # data_ready = read_json(name_file = "status_connect_game.json")
             # data_connect = data_ready["status"] 
 
