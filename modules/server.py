@@ -128,7 +128,7 @@ def start_server():
             print(data_in_dict["status"])
 
             # Перевірка завершення
-            if status_from_file == data_in_dict["status"] and status_from_file is not None:
+            if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
                 list_check_ready_to_fight[0] = "fight"
                 break
             elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:

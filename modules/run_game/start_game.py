@@ -108,6 +108,8 @@ third_cold_image = DrawImage(width=  150, height= 68 , x_cor= 536 , y_cor= 705 ,
 fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 #image for the grid
 grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , folder_name = "grid", image_name = "background_grid.png")
+# image for window where players are fighting against each other
+fight_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 , folder_name= "backgrounds" , image_name= "fight_background.png")
 
 
 #backgrounds
@@ -126,6 +128,7 @@ place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 3
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
+    list_check_ready_to_fight[0] = None
     #викликаємо функцію для запуску серверу
     #встановлюємо назву вікна гри для сервера
     pygame.display.set_caption("BattleShips")
@@ -300,6 +303,7 @@ def join_game_window():
 
 
 def waiting_window():
+    print("Зашло")
     pygame.display.set_caption("Waiting window")
     run_game = True
     music_load_main.stop()
@@ -310,16 +314,17 @@ def waiting_window():
         module_screen_server.FPS.tick(60)
 
         if list_check_ready_to_fight[0] == "fight":
-            print("переход на окно боя")
+            change_scene(fight_window())
             run_game = False
-            
+
         waiting_background.draw_image(screen = main_screen)
         back_to_server.draw(surface= main_screen)
 
-        if status_server == "connect":
-            change_scene(ships_position_window())
-            check_press_button[0] = None
-            run_game = False
+        if list_check_ready_to_fight[0] == None:
+            if status_server == "connect":
+                change_scene(ships_position_window())
+                check_press_button[0] = None
+                run_game = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -378,8 +383,28 @@ def ships_position_window():
                 random_place_ships.check_click()
                 
         
-        
         pygame.display.flip()
+
+
+def fight_window():
+    pygame.display.set_caption("Battle Screen")
+    run_game = True
+
+    while run_game:
+        module_screen_server.FPS.tick(60)
+
+        fight_bg.draw_image(screen = main_screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run_game = False  
+                change_scene(None)
+                 
+        pygame.display.flip()
+
+
+
+
 
 
 
