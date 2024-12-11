@@ -2,7 +2,8 @@ import pygame
 import os
 from ..screens import grid_player , list_grid , list_object_map 
 
-b = 0
+# Лист для проверки когда накладываем корабль на корабль
+check_for_shipsmoving = [0]
 
 class Ship:
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
@@ -124,9 +125,7 @@ class Ship:
 
     # метод який чистить положення корабля на матриці якщо його передвинули
     def clear_matrix(self):
-        global b
-        print(b , "b")
-        if b == 0:
+        if check_for_shipsmoving[0] == 0:
             check_prev_pos = 0
 
             for index_col in range(0 , 2):
@@ -178,7 +177,7 @@ class Ship:
                         for index_col in range(0 , self.LENGHT):
                             list_grid[self.row][self.col + index_col] = 0
                             # return False
-        b = 0
+        check_for_shipsmoving[0] = 0
        
 
     # метод который телепортирует коарбль на начальную точку  и поворачивает в положение по горизонатали
@@ -196,9 +195,7 @@ class Ship:
        
 
     def matrix_move(self, event: pygame.event, matrix_width: int, matrix_height: int, cell: int):
-        global b
-        
-         # Получаем текущие координаты мыши
+        # Получаем текущие координаты мыши
         mouse = pygame.mouse.get_pos() 
 
         if event.type == pygame.MOUSEBUTTONDOWN and self.RECT.collidepoint(event.pos):
@@ -243,13 +240,11 @@ class Ship:
                     # # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
                     # self.row = self.number_cell // 10  
                     if ship.col == self.col and ship.row == self.row:
-                        b += 1
+                        check_for_shipsmoving[0] += 1
                     else:
-                        b = 0
+                        check_for_shipsmoving[0] = 0
                     self.clear_matrix()
                     print(list_grid)
-                    
-                    print(b , "bbb")
                     return False
  
             if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:

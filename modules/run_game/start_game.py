@@ -344,7 +344,7 @@ def ships_position_window():
     while run_game:
         module_screen_server.FPS.tick(60)
         if list_check_ready_to_fight[0] == "fight":
-            print("переход на окно боя")
+            change_scene(fight_window())
             run_game = False
         elif list_check_ready_to_fight[0] == "wait":
             change_scene(scene = waiting_window())
