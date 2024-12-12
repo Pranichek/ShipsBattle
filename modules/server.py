@@ -11,6 +11,13 @@ import time
 
 list_check_ready_to_fight = [None]
 
+dict_save_information = {
+    "player_nick": "",
+    "player_points" : 0,
+    "enemy_nick" : "",
+    "enemy_points" : 0,
+}
+
 #ліст для перевірки чи зайшов користувач на сервер
 list_server_status = {
     "status": None
@@ -99,8 +106,6 @@ def start_server():
         client_socket.send(json.dumps(data_for_client).encode())
 
     
-
-        ready_server = False
         while True:
             time.sleep(1)
 
@@ -133,44 +138,11 @@ def start_server():
                 break
             elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
                 list_check_ready_to_fight[0] = "wait"
-        # while True:
-        #     time.sleep(1)
-        #     data_ready = read_json(name_file = "status_connect_game.json")
-        #     data_connect = data_ready["status"] 
 
-        #     data_ready = {
-        #         "status" : data_connect
-        #     }
-        #     client_socket.send(json.dumps(data_ready).encode())
-
-
-        #     data_connect = client_socket.recv(1024).decode()
-        #     data_in_dict = json.loads(data_connect)
-            
-        #     print(data_in_dict , "from_client")
-        #     print(data_connect)
-
-
-        
-            # data_connect = client_socket.recv(1024).decode()
-            # data_in_dict = json.loads(data_connect)
-            
-            # print(data_in_dict , "from_client")
-            # print(data_connect)
-
-            # if data_connect == data_in_dict["status"] and data_connect != None:
-            #     # time.sleep(10)
-            #     print("Ended")
-    
-
-            # if "status" in data_ready and data_ready["status"] == "You can connect to the game":
-            #     ready_server = True
-            #     client_socket.send(ready_client.encode())
-            #     print("Переменная отправлена")
-            #     break
-            # elif "status" in data_ready and data_ready["status"] == "You can't connect to the game":
-            #     print(" Сервер принял, клиент готов сервер нет ")
-            #     break
+        dict_save_information["player_nick"] = str(input_nick.user_text)
+        dict_save_information["enemy_nick"] = data_in_list["nick"]
+        dict_save_information["player_points"] = points_for_client
+        dict_save_information["enemy_points"] = data_in_list["points"]
            
         
             

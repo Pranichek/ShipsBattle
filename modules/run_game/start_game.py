@@ -10,7 +10,7 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .connect_to_server import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight
+from ..server import list_check_ready_to_fight , dict_save_information
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -32,6 +32,14 @@ once_play_music = [0]
 #fonts(text)
 createbutton_font = Font(size= 48 , name_font= "Jersey15.ttf" , text= "create" , screen= main_screen , x_cor= 218, y_cor= 663)
 join_game_fonts = Font(size= 48 , name_font= "Jersey15.ttf" , text= "join" , screen= main_screen , x_cor= 974 , y_cor= 663)
+#Текст с никами игроков
+player_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["player_nick"] , screen = main_screen , x_cor = 914 , y_cor = 126)
+enemy_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["enemy_nick"] , screen = main_screen , x_cor = 437 , y_cor = 126)
+player_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["player_points"]) , screen = main_screen , x_cor = 743 , y_cor = 126)
+enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["enemy_points"]) , screen = main_screen , x_cor = 270 , y_cor = 126)
+
+
+
 
 def test():
     print(1)
@@ -110,6 +118,12 @@ fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 ,
 grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , folder_name = "grid", image_name = "background_grid.png")
 # image for window where players are fighting against each other
 fight_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 , folder_name= "backgrounds" , image_name= "fight_background.png")
+# Зображення для декаративної рамки для ніку та очок на фремі бою
+frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
+second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
+
+player_face = DrawImage(width = 195 , height = 122  ,x_cor = 1065 , y_cor = 64 , folder_name = "decorations" , image_name = "player_image.png")
+enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , folder_name = "decorations" , image_name = "enemy_image.png")
 
 
 #backgrounds
@@ -142,6 +156,7 @@ def main_window():
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
 
+
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
         button_upp.draw(surface= main_screen)
@@ -160,7 +175,7 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(ships_position_window())
+                    change_scene(join_game_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -335,6 +350,8 @@ def waiting_window():
   
 
 def ships_position_window():
+    music_load_waiting.stop()
+    music_load_main.play()
     pygame.display.set_caption("Position Ships")
     run_game = True
     
@@ -387,6 +404,8 @@ def ships_position_window():
 
 
 def fight_window():
+    music_load_waiting.stop()
+    music_load_main.play()
     pygame.display.set_caption("Battle Screen")
     run_game = True
 
@@ -394,6 +413,21 @@ def fight_window():
         module_screen_server.FPS.tick(60)
 
         fight_bg.draw_image(screen = main_screen)
+
+        frame_nick_player.draw_image(screen = main_screen)
+        second_frame_nick_player.draw_image(screen = main_screen)
+
+        player_face.draw_image(screen = main_screen)
+        enemy_face.draw_image(screen = main_screen)
+
+        player_nick.text = dict_save_information["player_nick"]
+        player_nick.draw_font()
+        enemy_nick.text = dict_save_information["enemy_nick"]
+        enemy_nick.draw_font()
+        player_points.text = str(dict_save_information["player_points"])
+        player_points.draw_font()
+        enemy_points.text = str(dict_save_information["enemy_points"])
+        enemy_points.draw_font()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

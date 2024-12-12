@@ -6,7 +6,7 @@ import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 from .json_functions import write_json , list_users , list_server_status 
 from .json_functions.read_json import read_json
-from .server import list_check_ready_to_fight
+from .server import list_check_ready_to_fight , dict_save_information
 
 
 
@@ -148,12 +148,10 @@ def connect_user():
                 list_check_ready_to_fight[0] = "wait"
             
             
-            # data_ready = read_json(name_file = "status_connect_game.json")
-            # data_connect = data_ready["status"] 
-
-            # client_socket.send(data_connect.encode())
-                
-                    
+        dict_save_information["player_nick"] = str(input_nick.user_text)
+        dict_save_information["enemy_nick"] = data_in_list["nick"]
+        dict_save_information["player_points"] = points_for_server
+        dict_save_information["enemy_points"] = data_in_list["points"]
 
         #створюємо зміну потока, із функцією підключення коритсувача до серверу
 thread_connect = threading.Thread(target = connect_user, daemon=True)
