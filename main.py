@@ -12,4 +12,3 @@ sys.exit()
     
   
 
-print("Hi")
