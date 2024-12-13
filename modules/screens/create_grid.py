@@ -70,3 +70,4 @@ class Grid:
     
     
 grid_player = Grid(x_screen = 81 , y_screen = 76)
+

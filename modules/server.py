@@ -107,8 +107,7 @@ def start_server():
 
     
         while True:
-            time.sleep(1)
-
+            time.sleep(0.1)
             # Зчитуємо дані з файлу
             data_ready = read_json(name_file="status_connect_game.json")
             #нащи данные

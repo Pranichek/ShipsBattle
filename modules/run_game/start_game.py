@@ -138,6 +138,9 @@ ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 
 place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 37 ,folder_name= "backgrounds" , image_name= "bg_place_for_ships.png")
 
 
+#Ships 
+# ship_one = DrawImage(width = , height = , x_cor = , y_cor = , folder_name = "ships" , image_name = "ship_one.png")
+
 
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
@@ -152,6 +155,8 @@ def main_window():
         music_load_main.play()
 
     once_play_music[0] += 1
+
+
     while run_game:
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
@@ -175,7 +180,7 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(join_game_window())
+                    change_scene(fight_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -399,15 +404,23 @@ def ships_position_window():
                 ready_for_battle.check_click()
                 random_place_ships.check_click()
                 
-        
         pygame.display.flip()
 
+x = 0
 
 def fight_window():
+    global x
+
+    #568 - по иску
+    #127 - по игреку 
+
     music_load_waiting.stop()
     music_load_main.play()
     pygame.display.set_caption("Battle Screen")
     run_game = True
+
+    grid_player.generate_grid()
+
 
     while run_game:
         module_screen_server.FPS.tick(60)
@@ -429,16 +442,19 @@ def fight_window():
         enemy_points.text = str(dict_save_information["enemy_points"])
         enemy_points.draw_font()
 
+        #отрисовка обьектов(пустых клеток) который хранятся в списке обьектов
+        for object in list_object_map:
+            object.x += 568
+            object.y += 127 
+            object.draw(screen = main_screen)
+            x += 1
+            print(x)
+        
+        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
                  
         pygame.display.flip()
-
-
-
-
-
-
-
