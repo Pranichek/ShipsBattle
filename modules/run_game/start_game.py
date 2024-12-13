@@ -1,5 +1,6 @@
 #імпортуємо усі потрібні модулі
 import pygame
+import sys
 from ..screens import main_screen , list_object_map , grid_player , list_grid 
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font  , list_ships 
@@ -78,6 +79,78 @@ def connect_to_fight():
 
     write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
 
+#============================================================================================================
+def show_instructions(screen, instructions, background_image_path):
+    clock = pygame.time.Clock()
+    font_path = "handwritten_font.ttf"  # Путь к шрифту
+    font = pygame.font.Font(font_path, 36)
+
+    # Загружаем изображение для фона
+    background_image = pygame.image.load(background_image_path)
+    background_image = pygame.transform.scale(background_image, screen.get_size())
+
+    # Создаём полупрозрачную поверхность для затемнения
+    overlay = pygame.Surface(screen.get_size())
+    overlay.fill((0, 0, 0))  # Черный цвет
+    overlay.set_alpha(0)  # Начальная прозрачность (0 - полностью прозрачный)
+
+    # Разбиваем текст на строки для отображения
+    lines = instructions.split("\n")
+    run_game = True  # Флаг для выхода из цикла
+
+    # Плавное затемнение
+    fade_speed = 3  # Скорость плавного затемнения (больше значение - медленнее)
+    max_fade_alpha = 76  # 30% прозрачности (0-255)
+
+    # Индикатор для отображения текста
+    text_visible = False
+
+    while run_game:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run_game = False  
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:  # Нажмите Enter, чтобы выйти
+                    run_game = False
+
+        # Отображение изображения фона
+        screen.blit(background_image, (0, 0))
+
+        # Постепенное увеличение альфа-канала для эффекта затемнения
+        if overlay.get_alpha() < max_fade_alpha:
+            overlay.set_alpha(min(overlay.get_alpha() + fade_speed, max_fade_alpha))
+
+        # Когда затемнение достигнет 30%, начинаем отображать текст
+        if overlay.get_alpha() >= max_fade_alpha:
+            text_visible = True
+
+        # Отображение затемнения
+        screen.blit(overlay, (0, 0))
+
+        # Отображение текста, если затемнение достигло порога
+        if text_visible:
+            y_offset = (screen.get_height() - len(lines) * 50) // 2  # Центрируем по вертикали
+            for line in lines:
+                text_surface = font.render(line, True, (255, 255, 255))
+                text_rect = text_surface.get_rect(center=(screen.get_width() // 2, y_offset))
+                screen.blit(text_surface, text_rect)
+                y_offset += 50  # Расстояние между строками
+
+        pygame.display.flip()
+        clock.tick(30)
+
+
+instructions = (
+                        "Добро пожаловать в игру!\n"
+                        "Правила игры:\n"
+                        "1. Используйте стрелки для движения.\n"
+                        "2. Набирайте очки!\n"
+                        "Нажмите Enter, чтобы продолжить."
+                    )
+
+#============================================================================================================
+def test880 ():
+    pass
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
@@ -99,6 +172,8 @@ button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_
 button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width= 74, height= 71, action= music_lower)
 #кнопка возвращения на сервер
 back_to_server = Button(x= 39 , y = 56 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 158 , height= 41 , action= button_action)
+#кнопка для гайда 
+guide_button= Button(x=200,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width= 74, height= 71, action= test880)
 
 
 #images decoration
@@ -123,7 +198,6 @@ place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 3
 
 
 
-
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
     #викликаємо функцію для запуску серверу
@@ -131,19 +205,19 @@ def main_window():
     pygame.display.set_caption("BattleShips")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
-    if once_play_music[0] < 1:
-        music_load_main.play()
+    #if once_play_music[0] < 1:
+    #    music_load_main.play()
 
-    once_play_music[0] += 1
+    #once_play_music[0] += 1
     while run_game:
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
 
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
-        button_upp.draw(surface= main_screen)
-        button_lower.draw(surface= main_screen)
-        
+        #button_upp.draw(surface= main_screen)
+        #button_lower.draw(surface= main_screen)
+        guide_button.draw(surface= main_screen)
  
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
@@ -163,8 +237,13 @@ def main_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click()
                 join_game_frame.check_click()
-                button_upp.check_click()
-                button_lower.check_click()
+                #button_upp.check_click()
+                #button_lower.check_click()
+                check_guide_button =guide_button.check_click()
+                print (check_guide_button)
+                if check_guide_button == True:
+                    show_instructions(screen=main_screen,instructions= instructions ,background_image_path = "background_image_path.jpg")
+                    check_guide_button = False
 
         pygame.display.flip()
 
