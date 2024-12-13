@@ -56,10 +56,7 @@ class Ship:
             # self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
         self.READY_IMAGE_SHIP = pygame.transform.scale(image_ship, size_ship)
         self.IMAGE_ROTATE_SHIP = pygame.transform.scale(image_rotate_ship, size_ship)
-        
-
-        
-        
+      
     # Создаём метод "прилепания" корабля к сетке 
     def snap_to_grid(self): 
         # Привязываем координаты к сетке, это что бы корабль не уходил на саму сетку

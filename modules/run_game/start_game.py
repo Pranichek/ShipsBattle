@@ -1,6 +1,6 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen , list_object_map , grid_player , list_grid 
+from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 import modules.screens.screen as module_screen_server
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
@@ -47,6 +47,7 @@ def test():
 def button_action():
     check_press_button[0] = "button is pressed"
     music_click.play2(0)
+    #apply_fade_effect(screen= main_screen)
 
 
 #функція для перезаписування яке зараз вікно активне
@@ -85,6 +86,25 @@ def connect_to_fight():
             }
 
     write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
+    
+def apply_fade_effect(screen, fade_speed=3, max_fade_alpha=76):
+    #fade_speed=3 -скорочть затемнения 
+    #max_fade_alpha=76 -максимальное затемнение  до 255
+    # Создаём полупрозрачную поверхность для затемнения
+    overlay = pygame.Surface(screen.get_size())
+    overlay.fill((0, 0, 0))  # Черный цвет
+    overlay.set_alpha(0)  # Начальная прозрачность (0 - полностью прозрачный)
+
+    # Постепенное увеличение альфа-канала для эффекта затемнения
+    while overlay.get_alpha() < max_fade_alpha:
+        # Увеличиваем альфа-канал с каждой итерацией
+        overlay.set_alpha(min(overlay.get_alpha() + fade_speed, max_fade_alpha))
+
+        # Отображаем затемнение
+        screen.blit(overlay, (0, 0))
+        pygame.display.flip()
+        pygame.time.Clock().tick(30)
+    
 
 
 #buttons
@@ -116,6 +136,7 @@ third_cold_image = DrawImage(width=  150, height= 68 , x_cor= 536 , y_cor= 705 ,
 fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 #image for the grid
 grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , folder_name = "grid", image_name = "background_grid.png")
+grid_image_for_enemy = DrawImage(width = 596  , height = 597 , x_cor = 23 , y_cor = 211 , folder_name = "grid", image_name = "background_grid.png")
 # image for window where players are fighting against each other
 fight_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 , folder_name= "backgrounds" , image_name= "fight_background.png")
 # Зображення для декаративної рамки для ніку та очок на фремі бою
@@ -156,7 +177,6 @@ def main_window():
 
     once_play_music[0] += 1
 
-
     while run_game:
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
@@ -180,19 +200,16 @@ def main_window():
                 run_game = False
                 x_pos , y_pos = pygame.mouse.get_pos()
                 if x_pos > 600:
-                    change_scene(fight_window())
+                    change_scene(join_game_window())
                 elif x_pos < 600:
                     change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                create_game_frame.check_click()
-                join_game_frame.check_click()
-                button_upp.check_click()
-                button_lower.check_click()
+                create_game_frame.check_click(event = event)
+                join_game_frame.check_click(event = event)
+                button_upp.check_click(event = event)
+                button_lower.check_click(event = event)
 
         pygame.display.flip()
-
-
-    
 
 def create_game_window():
     #викликаємо функцію для запуску серверу
@@ -245,8 +262,8 @@ def create_game_window():
                 print(100)
                 change_scene(main_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                back_to_menu.check_click()
-                start_game_button.check_click()
+                back_to_menu.check_click(event = event)
+                start_game_button.check_click(event = event)
                 
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
@@ -254,7 +271,6 @@ def create_game_window():
 
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
-
 
 
 
@@ -309,8 +325,8 @@ def join_game_window():
                 run_game = False
                 change_scene(main_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                back_to_menu.check_click()
-                join_game_button.check_click()
+                back_to_menu.check_click(event = event)
+                join_game_button.check_click(event = event)
                
 
             input_nick.check_event(event)
@@ -334,8 +350,10 @@ def waiting_window():
         module_screen_server.FPS.tick(60)
 
         if list_check_ready_to_fight[0] == "fight":
+            check_press_button[0] = None
             change_scene(fight_window())
             run_game = False
+            change_scene(None)
 
         waiting_background.draw_image(screen = main_screen)
         back_to_server.draw(surface= main_screen)
@@ -366,11 +384,17 @@ def ships_position_window():
     while run_game:
         module_screen_server.FPS.tick(60)
         if list_check_ready_to_fight[0] == "fight":
+            run_game = False
+            change_scene(None)
             change_scene(fight_window())
-            run_game = False
+            check_press_button[0] = None
+            
         elif list_check_ready_to_fight[0] == "wait":
-            change_scene(scene = waiting_window())
             run_game = False
+            change_scene(None)
+            change_scene(scene = waiting_window())
+            check_press_button[0] = None
+            
         
         ships_position_bg.draw_image(screen = main_screen)
 
@@ -386,7 +410,6 @@ def ships_position_window():
         for ship in list_ships:
             ship.draw_sheep(screen = main_screen)
         
-        
         #draw buttons
         ready_for_battle.draw(surface= main_screen)
         random_place_ships.draw(surface= main_screen)
@@ -395,36 +418,51 @@ def ships_position_window():
             for ship in list_ships:
                 ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
                 ship.rotate_ship(event = event)
-                
 
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                ready_for_battle.check_click()
-                random_place_ships.check_click()
+                ready_for_battle.check_click(event = event)
+                random_place_ships.check_click(event = event)
                 
         pygame.display.flip()
 
-x = 0
+
 
 def fight_window():
-    global x
-
-    #568 - по иску
-    #127 - по игреку 
-
     music_load_waiting.stop()
     music_load_main.play()
     pygame.display.set_caption("Battle Screen")
     run_game = True
 
-    grid_player.generate_grid()
+    enemy_grid.X_SCREEN = 67
+    enemy_grid.Y_SCREEN = 257
+    enemy_grid.generate_grid(width_cell=55, height_cell=55)
 
+    grid_player.X_SCREEN = 705
+    grid_player.Y_SCREEN = 257
+    grid_player.generate_grid(width_cell=55, height_cell=55)
+
+
+    for num , ship  in enumerate(list_ships):
+        grid_x = list_ships[num].col
+        grid_y = list_ships[num].row
+        list_ships[num].X_COR = grid_player.X_SCREEN + grid_x * 55
+        list_ships[num].Y_COR = grid_player.Y_SCREEN + grid_y * 55
+        list_ships[num].WIDTH = 55
+        list_ships[num].HEIGHT = 55
+        list_ships[num].load_image()
+
+    grid_image.width = 597
+    grid_image.height = 597
+    grid_image.x_cor = 659
+    grid_image.y_cor = 211
+    grid_image.load_image()
+    
 
     while run_game:
-        module_screen_server.FPS.tick(60)
-
+        module_screen_server.FPS.tick(60)       
         fight_bg.draw_image(screen = main_screen)
 
         frame_nick_player.draw_image(screen = main_screen)
@@ -442,19 +480,24 @@ def fight_window():
         enemy_points.text = str(dict_save_information["enemy_points"])
         enemy_points.draw_font()
 
-        #отрисовка обьектов(пустых клеток) который хранятся в списке обьектов
-        for object in list_object_map:
-            object.x += 568
-            object.y += 127 
-            object.draw(screen = main_screen)
-            x += 1
-            print(x)
-        
-        
+        grid_image.draw_image(screen = main_screen)
+        grid_image_for_enemy.draw_image(screen = main_screen)
 
+        for cell in list_object_map:
+            cell.draw(screen=main_screen)
+
+        for empty_cell in list_object_map_enemy:
+            empty_cell.draw(screen=main_screen)
+
+        for num , ship  in enumerate(list_ships):
+            list_ships[num].draw_sheep(screen = main_screen)
+
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
+
                  
         pygame.display.flip()
+

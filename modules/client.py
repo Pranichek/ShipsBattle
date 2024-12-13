@@ -119,7 +119,7 @@ def connect_user():
 
         ready_server = False
         while True:
-            time.sleep(0.1)
+            time.sleep(0.5)
             # Зчитуємо дані з файлу
             data_ready = read_json(name_file="status_connect_game.json")
             status_from_file = data_ready["status"]

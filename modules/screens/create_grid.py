@@ -25,22 +25,33 @@ class Cell:
 #список для хранения объектов клеток сетки
 list_object_map = []
 
+list_object_map_enemy = []
+
 
 #класс для создания сетки
 class Grid:
     def __init__(self , x_screen: int , y_screen: int):
         self.X_SCREEN = x_screen
         self.Y_SCREEN = y_screen
-    def generate_grid(self):
+    def generate_grid(self , width_cell = 62 , height_cell = 62):
+        if self.X_SCREEN == 67:
+                    list_object_map_enemy.clear()
+        else:
+             list_object_map.clear()
+    
         x_screen , y_screen = self.X_SCREEN , self.Y_SCREEN
         for row in list_grid:
             for cell in row:
-                if cell == 0:
-                    empty_cell = Cell(x = x_screen , y = y_screen ,width = 62 , height = 62 , image_name = "empty_cell.png")
+                # if cell == 0:
+                empty_cell = Cell(x = x_screen , y = y_screen ,width = width_cell , height = height_cell , image_name = "empty_cell.png")
+                if self.X_SCREEN == 67:
+                    list_object_map_enemy.append(empty_cell)
+                else:
                     list_object_map.append(empty_cell)
-                x_screen += 62
-            y_screen += 62
-            x_screen = 81
+                    
+                x_screen += width_cell
+            y_screen += height_cell
+            x_screen = self.X_SCREEN
     def snap_to_grid(self, x, y):
     # Рассчитываем индекс столбца сетки (grid_x), в который попадает точка (x)-координата корабля.
     # 1. Вычитаем координату начала сетки по X (self.X_SCREEN), чтобы получить относительное положение.
@@ -70,4 +81,5 @@ class Grid:
     
     
 grid_player = Grid(x_screen = 81 , y_screen = 76)
+enemy_grid = Grid(x_screen = 67 , y_screen = 257)
 
