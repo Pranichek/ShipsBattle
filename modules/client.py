@@ -132,8 +132,11 @@ def connect_user():
 
             # Отримуємо дані від клієнта
             data_connect = client_socket.recv(1024).decode()
-            data_in_dict = json.loads(data_connect)
-
+            if data_connect.strip:  # Перевірка, чи є дані
+                data_in_dict = json.loads(data_connect)
+            else:
+                print("Почему то данных нет , и рядок пустой")
+            
             # Вивід статусу з клієнта і нашого
             print(status_from_file)
             print(data_in_dict["status"])
