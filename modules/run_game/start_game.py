@@ -147,7 +147,7 @@ enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , fo
 
 
 #backgrounds
-main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.jpg")
+main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
 input_data_bg= DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "input_data.png")
 #фон для очікування користувача
