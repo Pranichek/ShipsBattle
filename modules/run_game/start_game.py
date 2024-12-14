@@ -1,21 +1,19 @@
 #імпортуємо усі потрібні модулі
 import pygame
-from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 import modules.screens.screen as module_screen_server
+from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..json_functions import read_json , write_json
-from ..classes.class_music import music_load_main , music_load_waiting
+from ..classes.class_music import music_load_main , music_load_waiting , fight_music
 from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
-from .connect_to_server import connect_to_server , list_check_connection , fail_connect
+from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
-
-
 
 
 #список для проверки нажата ли кнопка
@@ -47,12 +45,13 @@ def test():
 def button_action():
     check_press_button[0] = "button is pressed"
     music_click.play2(0)
-    #apply_fade_effect(screen= main_screen)
+    # apply_fade_effect(screen = main_screen)
 
 
 #функція для перезаписування яке зараз вікно активне
 def change_scene(scene):
     list_current_scene[0] = scene
+    # apply_fade_effect(screen = main_screen)
 
 def music_up():
     get = pygame.mixer.music.get_volume()
@@ -103,7 +102,7 @@ def apply_fade_effect(screen, fade_speed=3, max_fade_alpha=76):
         # Отображаем затемнение
         screen.blit(overlay, (0, 0))
         pygame.display.flip()
-        pygame.time.Clock().tick(30)
+        pygame.time.Clock().tick(60)
     
 
 
@@ -158,12 +157,6 @@ ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 
 # фон на якомй стоять кораблі перед початком бою
 place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 37 ,folder_name= "backgrounds" , image_name= "bg_place_for_ships.png")
 
-
-#Ships 
-# ship_one = DrawImage(width = , height = , x_cor = , y_cor = , folder_name = "ships" , image_name = "ship_one.png")
-
-
-
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
     list_check_ready_to_fight[0] = None
@@ -178,37 +171,43 @@ def main_window():
     once_play_music[0] += 1
 
     while run_game:
+        # print(111)
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
-
 
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
         button_upp.draw(surface= main_screen)
         button_lower.draw(surface= main_screen)
         
- 
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-            elif check_press_button[0] == "button is pressed":
-                # music_click.check_after_randomlay2(0)
-                check_press_button[0] = None
-                run_game = False
-                x_pos , y_pos = pygame.mouse.get_pos()
-                if x_pos > 600:
-                    change_scene(join_game_window())
-                elif x_pos < 600:
-                    change_scene(create_game_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click(event = event)
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
-
+            elif check_press_button[0] == "button is pressed":
+                x_pos , y_pos = pygame.mouse.get_pos()
+                check_press_button[0] = None 
+                run_game = False
+                if x_pos >= join_game_frame.x:
+                    if x_pos <= join_game_frame.x + join_game_frame.width:
+                        if y_pos >= join_game_frame.y:
+                            if y_pos <= join_game_frame.y + join_game_frame.height:
+                                print("Join windo")
+                                change_scene(join_game_window())
+                elif x_pos >= create_game_frame.x:
+                    if x_pos <= create_game_frame.x + create_game_frame.width:
+                        if y_pos >= create_game_frame.y:
+                            if y_pos <= create_game_frame.y + create_game_frame.height:
+                                print("Create window")
+                                change_scene(create_game_window())
         pygame.display.flip()
 
 def create_game_window():
@@ -219,6 +218,7 @@ def create_game_window():
     run_game = True
     #основний цикл роботи вікна користувача
     while run_game:
+        # print(222)
         module_screen_server.FPS.tick(60)
         input_data_bg.draw_image(screen= main_screen)
         data = read_json(name_file = "utility.json")
@@ -244,26 +244,26 @@ def create_game_window():
 
         #если запустили сервер но к нему еще никто не подлючился перекидываем на окно ожидания игрока
         if status_server == "wait":
+                    check_press_button[0] = None 
                     run_game = False
+                    apply_fade_effect(screen = main_screen)
                     change_scene(waiting_window())
-                    check_press_button[0] = None
-
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-            elif check_press_button[0] == "button is pressed":
-                check_press_button[0] = None
-                input_nick.user_text =  input_nick.base_text
-                input_ip_adress.user_text = input_ip_adress.base_text
-                input_port.user_text = input_port.base_text
-                run_game = False
-                print(100)
-                change_scene(main_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)
+            elif check_press_button[0] == "button is pressed":
+                check_press_button[0] = None
+                run_game = False
+                input_nick.user_text = input_nick.base_text
+                input_ip_adress.user_text = input_ip_adress.base_text
+                input_port.user_text = input_port.base_text
+                change_scene(main_window())
+        
                 
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
@@ -275,66 +275,57 @@ def create_game_window():
 
 
 def join_game_window():
-    #викликаємо функцію для запуску серверу
-    #встановлюємо назву вікна гри для сервера
-    pygame.display.set_caption("Join to Game Window")
-    #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
+    # Встановлюємо назву вікна гри для клієнта
+    pygame.display.set_caption("Join Game Window")
+    # Змінна для відстеження стану вікна
     run_game = True
-    #основний цикл роботи вікна користувача
+
+    # Основний цикл вікна підключення до гри
     while run_game:
-        data = read_json(name_file = "utility.json")
-        status_server = data["status"]
+        # print(333)  # Дебаг вивід для перевірки
         module_screen_server.FPS.tick(60)
-        input_data_bg.draw_image(screen= main_screen)
+        input_data_bg.draw_image(screen=main_screen)
 
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
 
-        back_to_menu.draw(surface= main_screen)
+        back_to_menu.draw(surface=main_screen)
+        join_game_button.draw(surface=main_screen)
 
-        third_cold_image.draw_image(screen= main_screen)
-        fourth_cold_image.draw_image(screen= main_screen)
-        join_game_button.draw(surface= main_screen)
-
-        #если не нашли сервер по которому подключаемся или ввели что то неправильно, выводим табличку о том что таокго сервера нет
-        #этот список находится в файле connect_to_server.check_after_randomy
+        # Обробка невдалої спроби підключення
         if list_check_connection[0] == "error_connection":
-            # рисуем табличку ошибки
-            fail_connect.draw_image(screen = main_screen)
-            # вызываем метод этой таблички который позволяет отслеживать наведен ли курсор на нее или нет
-            # если он находится на картинке то она пропадет
+            fail_connect.draw_image(screen=main_screen)
             fail_connect.check_touch()
+            # Якщо табличка зникла, ставимо значення назад
             if fail_connect.visible == False:
-                list_check_connection[0] = True
-        
-        if status_server == "connect":
-            change_scene(ships_position_window())
-            check_press_button[0] = None
+                list_check_connection[0] = None
+
+        # Перевірка успішного підключення
+        if list_check_connection[0] == "connected":
             run_game = False
-        #Обробляємо всі події у вікні
+            # apply_fade_effect(screen=main_screen)
+            change_scene(ships_position_window())
+
+        # Обробка подій
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run_game = False  
+                run_game = False
                 change_scene(None)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                back_to_menu.check_click(event=event)
+                join_game_button.check_click(event=event)
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
-                input_nick.user_text =  input_nick.base_text
-                input_ip_adress.user_text = input_ip_adress.base_text
-                input_port.user_text = input_port.base_text
                 run_game = False
                 change_scene(main_window())
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                back_to_menu.check_click(event = event)
-                join_game_button.check_click(event = event)
-               
 
+            # Обробка полів вводу
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
-            input_port.check_event(event)  
-            
-        
-        #оновлюємо екран щоб можна було бачити зміни на ньому
+            input_port.check_event(event)
+
+        # Оновлюємо екран
         pygame.display.flip()
 
 
@@ -350,19 +341,21 @@ def waiting_window():
         module_screen_server.FPS.tick(60)
 
         if list_check_ready_to_fight[0] == "fight":
+            apply_fade_effect(screen = main_screen)
             check_press_button[0] = None
-            change_scene(fight_window())
             run_game = False
-            change_scene(None)
+            change_scene(fight_window())
+            
 
         waiting_background.draw_image(screen = main_screen)
-        back_to_server.draw(surface= main_screen)
 
         if list_check_ready_to_fight[0] == None:
             if status_server == "connect":
-                change_scene(ships_position_window())
                 check_press_button[0] = None
                 run_game = False
+                apply_fade_effect(screen = main_screen)
+                change_scene(ships_position_window())
+                
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -384,12 +377,14 @@ def ships_position_window():
     while run_game:
         module_screen_server.FPS.tick(60)
         if list_check_ready_to_fight[0] == "fight":
+            apply_fade_effect(screen = main_screen)
             run_game = False
             change_scene(None)
             change_scene(fight_window())
             check_press_button[0] = None
             
         elif list_check_ready_to_fight[0] == "wait":
+            apply_fade_effect(screen = main_screen)
             run_game = False
             change_scene(None)
             change_scene(scene = waiting_window())
@@ -432,7 +427,8 @@ def ships_position_window():
 
 def fight_window():
     music_load_waiting.stop()
-    music_load_main.play()
+    # music_load_main.play()
+    fight_music.play()
     pygame.display.set_caption("Battle Screen")
     run_game = True
 
@@ -497,7 +493,6 @@ def fight_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-
-                 
+      
         pygame.display.flip()
 

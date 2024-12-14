@@ -33,5 +33,6 @@ class MusicPlayer:
 
 music_load_main = MusicPlayer(name_sound= "main_screen_music.mp3")
 music_load_waiting = MusicPlayer(name_sound="wait_music.mp3")
+fight_music = MusicPlayer(name_sound = "fight_music.mp3")
 
 

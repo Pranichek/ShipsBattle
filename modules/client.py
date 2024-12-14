@@ -5,7 +5,7 @@ import pygame
 import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 from .json_functions import write_json , list_users , list_server_status 
-from .json_functions.read_json import read_json
+from .json_functions.json_read import read_json
 from .server import list_check_ready_to_fight , dict_save_information
 
 

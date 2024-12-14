@@ -1,5 +1,5 @@
 from ..classes.class_input_text import input_ip_adress , input_port
-from..classes.class_image import DrawImage
+from ..classes.class_image import DrawImage
 from ..classes.class_click import music_click
 from ..client import thread_connect , event_connect_to_server , list_check_connection
 
@@ -80,5 +80,3 @@ def connect_to_server():
     thread_connect.start()
     # якщо усі перевікри пройдені але це не перший запуск, наприклад перший раз увів айди сервера якого ще немає, а тепер такий сервер є 
     # то передаємо у  event_connect_to_server значення True за допомогою .set()
-    # else:
-    #     event_connect_to_server.set()

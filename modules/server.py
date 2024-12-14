@@ -5,7 +5,7 @@ import threading
 from .classes.class_input_text import input_port , input_ip_adress, input_nick
 # Импортируем функцию записи в json файлы
 from .json_functions.write_json import write_json , list_server_status , list_users
-from .json_functions.read_json import read_json
+from .json_functions.json_read import read_json
 import json
 import time
 
@@ -122,8 +122,12 @@ def start_server():
 
             # Отримуємо дані від клієнта
             data_connect = client_socket.recv(1024).decode()
+            if data_connect.strip:  # Перевірка, чи є дані
+                data_in_dict = json.loads(data_connect)
+            else:
+                print("Почему то данных нет , и рядок пустой")
             #другого ігрока 
-            data_in_dict = json.loads(data_connect)
+            # data_in_dict = json.loads(data_connect)
 
             # Вивід статусу з клієнта
             # print(data_in_dict, "from_client")
