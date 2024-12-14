@@ -9,7 +9,14 @@ from .json_functions.json_read import read_json
 import json
 import time
 
+# список для проверки перезода на фрейм боя
 list_check_ready_to_fight = [None]
+# лист очереди
+turn = ["server_turn"]
+# лист таймер времени
+check_time = [0]
+# Лист для проверки за кого мы играем(сервер или клиент)
+list_player_role = [""]
 
 dict_save_information = {
     "player_nick": "",
@@ -73,7 +80,7 @@ def start_server():
         #зберігаємо інформацію про статус підлючення до серверу у json файл
         write_json(filename= "utility.json" , object_dict = list_server_status)
 
-        # with client_socket:  
+        list_player_role[0] = "server_player"  
 
         # Отримуємо дані від клієнта(нікнейм та скільки у нього баллів), у виді джейсон строки
         response_data = client_socket.recv(1024).decode()
@@ -107,45 +114,92 @@ def start_server():
 
     
         while True:
-            time.sleep(1)
-            # Зчитуємо дані з файлу
-            data_ready = read_json(name_file="status_connect_game.json")
-            #нащи данные
-            status_from_file = data_ready["status"]
+            try:
+                time.sleep(1)
+                # Зчитуємо дані з файлу
+                data_ready = read_json(name_file="status_connect_game.json")
+                #нащи данные
+                status_from_file = data_ready["status"]
 
-            # Формуємо відповідь
-            response = {
-                "status": status_from_file
-                }
-            client_socket.send(json.dumps(response).encode())
-       
+                # Формуємо відповідь
+                response = {
+                    "status": status_from_file
+                    }
+                client_socket.send(json.dumps(response).encode())
+        
 
-            # Отримуємо дані від клієнта
-            data_connect = client_socket.recv(1024).decode()
-            if data_connect.strip:  # Перевірка, чи є дані
-                data_in_dict = json.loads(data_connect)
-            else:
-                print("Почему то данных нет , и рядок пустой")
-            #другого ігрока 
-            # data_in_dict = json.loads(data_connect)
+                # Отримуємо дані від клієнта
+                data_connect = client_socket.recv(1024).decode()
+                if data_connect.strip():  # Перевірка, чи є дані
+                    data_in_dict = json.loads(data_connect)
+                else:
+                    print("Почему то данных нет , и рядок пустой")
+        
+                print(status_from_file)
+                print(data_in_dict["status"])
 
-            # Вивід статусу з клієнта
-            # print(data_in_dict, "from_client")
-            # print(data_in_dict.get("status", "No status found"))
-            print(status_from_file)
-            print(data_in_dict["status"])
-
-            # Перевірка завершення
-            if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
-                list_check_ready_to_fight[0] = "fight"
-                break
-            elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
-                list_check_ready_to_fight[0] = "wait"
+                # Перевірка завершення
+                if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
+                    list_check_ready_to_fight[0] = "fight"
+                    break
+                elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
+                    list_check_ready_to_fight[0] = "wait"
+            except TimeoutError:
+                print("Час очікування відповіді сервера вичерпано")
+                continue
+            except json.JSONDecodeError:
+                print("Помилка декодування даних")
+                continue
+            except Exception as e:
+                print(f"Несподівана помилка: {e}")
+                continue
 
         dict_save_information["player_nick"] = str(input_nick.user_text)
         dict_save_information["enemy_nick"] = data_in_list["nick"]
         dict_save_information["player_points"] = points_for_client
         dict_save_information["enemy_points"] = data_in_list["points"]
+
+
+    while True:
+        try:
+            time.sleep(1)
+            check_time[0] += 1
+            game_information = {
+                'turn': turn[0],
+                'time': check_time[0]
+            }
+            client_socket.send(json.dumps(game_information).encode())
+            client_data = client_socket.recv(1024).decode()
+            ready_clinet_data = json.loads(client_data)
+
+            if ready_clinet_data["need"] == "no":
+                print("nothing")
+            elif ready_clinet_data["need"] == "yes":
+                print("зашло сюда")
+                turn[0] = ready_clinet_data["turn"]
+                check_time[0] = 0
+            
+            if check_time[0] == 29:
+                check_time[0] = 0
+                if turn[0] == "server_turn":
+                    turn[0] = "client_turn"
+                elif turn[0] == "client_turn":
+                    turn[0] = "server_turn"
+            print(check_time[0])
+        except TimeoutError:
+                print("Час очікування відповіді сервера вичерпано")
+                continue
+        except json.JSONDecodeError:
+            print("Помилка декодування даних")
+            continue
+        except Exception as e:
+            print(f"Несподівана помилка: {e}")
+            continue
+
+        
+        
+
+        
            
         
             

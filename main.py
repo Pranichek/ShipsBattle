@@ -1,4 +1,6 @@
 import modules
+import pygame
+import sys
 
 
 if __name__ == '__main__':
@@ -6,8 +8,8 @@ if __name__ == '__main__':
     while modules.list_current_scene[0] is not None:
         modules.list_current_scene[0]()#вызываем функцию которая тут запущена
 
-# pygame.quit()
-# sys.exit()
+pygame.quit()
+sys.exit()
     
   
 

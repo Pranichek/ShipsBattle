@@ -10,7 +10,8 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role
+from ..client import list_check_need_send 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -145,6 +146,8 @@ second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_
 player_face = DrawImage(width = 195 , height = 122  ,x_cor = 1065 , y_cor = 64 , folder_name = "decorations" , image_name = "player_image.png")
 enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , folder_name = "decorations" , image_name = "enemy_image.png")
 
+clock_image = DrawImage(width = 231 , height = 231 , x_cor = 640 , y_cor = 31 , folder_name = "animation_clock" , image_name = "0.png")
+
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -275,57 +278,67 @@ def create_game_window():
 
 
 def join_game_window():
-    # Встановлюємо назву вікна гри для клієнта
-    pygame.display.set_caption("Join Game Window")
-    # Змінна для відстеження стану вікна
+    #викликаємо функцію для запуску серверу
+    #встановлюємо назву вікна гри для сервера
+    pygame.display.set_caption("Join to Game Window")
+    #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
-
-    # Основний цикл вікна підключення до гри
+    #основний цикл роботи вікна користувача
     while run_game:
-        # print(333)  # Дебаг вивід для перевірки
+        data = read_json(name_file = "utility.json")
+        status_server = data["status"]
         module_screen_server.FPS.tick(60)
-        input_data_bg.draw_image(screen=main_screen)
+        input_data_bg.draw_image(screen= main_screen)
 
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
 
-        back_to_menu.draw(surface=main_screen)
-        join_game_button.draw(surface=main_screen)
+        back_to_menu.draw(surface= main_screen)
 
-        # Обробка невдалої спроби підключення
+        third_cold_image.draw_image(screen= main_screen)
+        fourth_cold_image.draw_image(screen= main_screen)
+        join_game_button.draw(surface= main_screen)
+
+        #если не нашли сервер по которому подключаемся или ввели что то неправильно, выводим табличку о том что таокго сервера нет
+        #этот список находится в файле connect_to_server.check_after_randomy
         if list_check_connection[0] == "error_connection":
-            fail_connect.draw_image(screen=main_screen)
+            # рисуем табличку ошибки
+            fail_connect.draw_image(screen = main_screen)
+            # вызываем метод этой таблички который позволяет отслеживать наведен ли курсор на нее или нет
+            # если он находится на картинке то она пропадет
             fail_connect.check_touch()
-            # Якщо табличка зникла, ставимо значення назад
             if fail_connect.visible == False:
-                list_check_connection[0] = None
+                list_check_connection[0] = True
 
-        # Перевірка успішного підключення
-        if list_check_connection[0] == "connected":
-            run_game = False
-            # apply_fade_effect(screen=main_screen)
+        if status_server == "connect":
+            apply_fade_effect(screen = main_screen)
             change_scene(ships_position_window())
-
-        # Обробка подій
+            check_press_button[0] = None
+            run_game = False
+        #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run_game = False
+                run_game = False  
                 change_scene(None)
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                back_to_menu.check_click(event=event)
-                join_game_button.check_click(event=event)
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
+                input_nick.user_text =  input_nick.base_text
+                input_ip_adress.user_text = input_ip_adress.base_text
+                input_port.user_text = input_port.base_text
                 run_game = False
                 change_scene(main_window())
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                back_to_menu.check_click(event= event)
+                join_game_button.check_click(event= event)
 
-            # Обробка полів вводу
+
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
-            input_port.check_event(event)
+            input_port.check_event(event)  
 
-        # Оновлюємо екран
+
+        #оновлюємо екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
 
 
@@ -456,8 +469,9 @@ def fight_window():
     grid_image.y_cor = 211
     grid_image.load_image()
     
-
     while run_game:
+        clock_image.image_name = f'{check_time[0]}.png'
+        clock_image.load_image()
         module_screen_server.FPS.tick(60)       
         fight_bg.draw_image(screen = main_screen)
 
@@ -479,6 +493,8 @@ def fight_window():
         grid_image.draw_image(screen = main_screen)
         grid_image_for_enemy.draw_image(screen = main_screen)
 
+        clock_image.draw_image(screen = main_screen)
+
         for cell in list_object_map:
             cell.draw(screen=main_screen)
 
@@ -489,10 +505,24 @@ def fight_window():
             list_ships[num].draw_sheep(screen = main_screen)
 
         
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
+            
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if list_player_role[0] == "player_client":
+                    if turn[0] == "client_turn":
+                        turn[0] = "server_turn"
+                        check_time[0] = 0
+                        list_check_need_send[0] = "yes"
+                elif list_player_role[0] == "server_player":
+                    if turn[0] == "server_turn":
+                        check_time[0] = 0
+                        turn[0] = "client_turn"
+                
+
       
         pygame.display.flip()
 

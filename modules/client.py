@@ -6,15 +6,15 @@ import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 from .json_functions import write_json , list_users , list_server_status 
 from .json_functions.json_read import read_json
-from .server import list_check_ready_to_fight , dict_save_information
+from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role
 
-
-
+list_check_need_send = ["no"]
 
 pygame.init()
 
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
+
 
 #ліст для перевірки чи зайшов користувач на сервер
 list_server_status = {
@@ -65,14 +65,6 @@ def connect_user():
             list_check_connection[0] = "error_connection"  # Сбрасываем событие
             event_connect_to_server.clear()
             print(event_connect_to_server)
-            # time.sleep(1)
-            # event_connect_to_server.clear()
-            # time
-            # False - значит что не нашли такого сервера 
-            # list_check_connection[0] =  False
-            # client_socket.connect((ip_adress, port))
-
-        # client_socket.connect((ip_adress, port))
         
         print(ip_adress , "ip address")
         print(port , "port")
@@ -117,43 +109,104 @@ def connect_user():
         #зберігаємо статус того що підключилися до серверу, у джейсон файл
         write_json(filename= "utility.json" , object_dict = data_in_list["status"])
 
-        ready_server = False
+        list_player_role[0] = "player_client"
         while True:
-            time.sleep(1)
-            # Зчитуємо дані з файлу
-            data_ready = read_json(name_file="status_connect_game.json")
-            status_from_file = data_ready["status"]
+            try:
+                time.sleep(1)
+                # Зчитуємо дані з файлу
+                data_ready = read_json(name_file="status_connect_game.json")
+                #нащи данные
+                status_from_file = data_ready["status"]
 
-            # Формуємо відповідь
-            response = {
-                "status": status_from_file
-                }
-            client_socket.send(json.dumps(response).encode())
+                # Формуємо відповідь
+                response = {
+                    "status": status_from_file
+                    }
+                client_socket.send(json.dumps(response).encode())
+        
+                # Отримуємо дані від клієнта
+                data_connect = client_socket.recv(1024).decode()
+                if data_connect.strip():  # Перевірка, чи є дані
+                    data_in_dict = json.loads(data_connect)
+                else:
+                    print("Почему то данных нет , и рядок пустой")
+        
+                print(status_from_file)
+                print(data_in_dict["status"])
 
-            # Отримуємо дані від клієнта
-            data_connect = client_socket.recv(1024).decode()
-            if data_connect.strip:  # Перевірка, чи є дані
-                data_in_dict = json.loads(data_connect)
-            else:
-                print("Почему то данных нет , и рядок пустой")
-            
-            # Вивід статусу з клієнта і нашого
-            print(status_from_file)
-            print(data_in_dict["status"])
-
-            # Перевірка завершення
-            if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
-                print("End")
-                list_check_ready_to_fight[0] = "fight"
-                break
-            elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
-                list_check_ready_to_fight[0] = "wait"
-            
+                # Перевірка завершення
+                if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
+                    list_check_ready_to_fight[0] = "fight"
+                    break
+                elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
+                    list_check_ready_to_fight[0] = "wait"
+            except TimeoutError:
+                print("Час очікування відповіді сервера вичерпано")
+                continue
+            except json.JSONDecodeError:
+                print("Помилка декодування даних")
+                continue
+            except Exception as e:
+                print(f"Несподівана помилка: {e}")
+                continue
             
         dict_save_information["player_nick"] = str(input_nick.user_text)
         dict_save_information["enemy_nick"] = data_in_list["nick"]
         dict_save_information["player_points"] = points_for_server
         dict_save_information["enemy_points"] = data_in_list["points"]
 
+        while True:
+            try:
+                time.sleep(1)
+                data_turn = client_socket.recv(1024).decode()
+                normal_data = json.loads(data_turn)
+                turn[0] = normal_data['turn']
+                check_time[0] = normal_data['time']
+                if list_check_need_send[0] == "no":
+                    client_dict = {
+                        "turn": "server_turn",
+                        "time": 0 , 
+                        "need" : "no"
+                    }
+                    client_socket.send(json.dumps(client_dict).encode())
+                elif list_check_need_send[0] == "yes":
+                    client_dict = {
+                        "turn": "server_turn",
+                        "time": 0 , 
+                        "need" : "yes"
+                    }
+                    client_socket.send(json.dumps(client_dict).encode())
+                    check_time[0] = 0
+                    list_check_need_send[0] = "no"
+                print(normal_data['turn'])
+                print(normal_data['time'])
+
+  
+            except TimeoutError:
+                print("Час очікування відповіді сервера вичерпано")
+                continue
+            except json.JSONDecodeError:
+                print("Помилка декодування даних")
+                continue
+            except Exception as e:
+                print(f"Несподівана помилка: {e}")
+                continue
+
+        # while True:
+        #     time.sleep(1)
+        #     client_socket.send("hi".encode())
+        #     data_turn = client_socket.recv(1024).decode()
+        #     normal_data = json.loads(data_turn)
+        #     print(normal_data['turn'])
+        #     print(normal_data['time'])
+
+        #     turn[0] = normal_data['turn']
+        #     check_time[0] = normal_data['time']
+           
+            
+            
+    
+        #зберігаємо ��нформацію у json файл
+
         #створюємо зміну потока, із функцією підключення коритсувача до серверу
-thread_connect = threading.Thread(target = connect_user, daemon=True)
+thread_connect = threading.Thread(target = connect_user, daemon=True) 
