@@ -6,7 +6,6 @@ import random
 list_random_position = ["horizontal", "vertical"]
 is_collision = [False]
 def random_places_ships():
-
     for rowe in range(len(list_grid)):
         for celle in range(len(list_grid[rowe])):
             list_grid[rowe][celle] = 0
@@ -23,8 +22,8 @@ def random_places_ships():
                 #Колонку кораблика вычисляем по такому принципу
                 # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                 col = int(str_col[-1])
+                
                 orientation = random.choice(list_random_position)
-
                 if orientation == 'horizontal':
                     if col + list_ships[shipka].LENGHT < 9:
                         for index_column in range(0 , list_ships[shipka].LENGHT):

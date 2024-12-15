@@ -10,7 +10,7 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matix
 from ..client import list_check_need_send 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -146,7 +146,7 @@ second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_
 player_face = DrawImage(width = 195 , height = 122  ,x_cor = 1065 , y_cor = 64 , folder_name = "decorations" , image_name = "player_image.png")
 enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , folder_name = "decorations" , image_name = "enemy_image.png")
 
-clock_image = DrawImage(width = 231 , height = 231 , x_cor = 640 , y_cor = 31 , folder_name = "animation_clock" , image_name = "0.png")
+clock_image = DrawImage(width = 206 , height = 57 , x_cor = 544 , y_cor = 20 , folder_name = "animation_clock" , image_name = "0.png")
 
 
 #backgrounds
@@ -174,7 +174,6 @@ def main_window():
     once_play_music[0] += 1
 
     while run_game:
-        # print(111)
         module_screen_server.FPS.tick(60)
         main_bg.draw_image(screen= main_screen)
 
@@ -470,6 +469,7 @@ def fight_window():
     grid_image.load_image()
     
     while run_game:
+        x_mouse , y_mouse = pygame.mouse.get_pos()
         clock_image.image_name = f'{check_time[0]}.png'
         clock_image.load_image()
         module_screen_server.FPS.tick(60)       
@@ -514,14 +514,69 @@ def fight_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if list_player_role[0] == "player_client":
                     if turn[0] == "client_turn":
-                        turn[0] = "server_turn"
-                        check_time[0] = 0
-                        list_check_need_send[0] = "yes"
+                        if x_mouse >= 67 and x_mouse <= 67 + 550:
+                            if y_mouse >= 257 and y_mouse <= 257 + 550:
+                                for cell in list_object_map_enemy: 
+                                    if cell.x <= x_mouse and x_mouse < cell.x + 55:
+                                        if cell.y <= y_mouse and y_mouse < cell.y + 55:
+                                            # Узнаем номер клетки где стоит кораблик
+                                            number_cell = list_object_map_enemy.index(cell)
+                                            # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                            str_col = str(number_cell) 
+                                            # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                            row = number_cell // 10  
+                                            #Колонку кораблика вычисляем по такому принципу
+                                            # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                            col = int(str_col[-1])
+                                            if enemy_matix[0][row][col] == 0:
+                                                print("Промах")
+                                                enemy_matix[0][row][col] = 5
+                                                list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+                                                turn[0] = "server_turn"  # Передаємо хід серверу
+
+                                            elif enemy_matix[0][row][col] == 5 or enemy_matix[0][row][col] == 7:
+                                                print("Уже стреляли в эту клетку")
+                                                
+                                            elif enemy_matix[0][row][col] != 0 and enemy_matix[0][row][col] != 5 and enemy_matix[0][row][col] != 7:
+                                                print("Попало")
+                                                enemy_matix[0][row][col] = 7
+                                                check_time[0] = 0
+                                                list_check_need_send[0] = "yes"
+                                                turn[0] = "client_turn" 
+                                                                          
+                                            
                 elif list_player_role[0] == "server_player":
                     if turn[0] == "server_turn":
-                        check_time[0] = 0
-                        turn[0] = "client_turn"
-                
+                        if x_mouse >= 67 and x_mouse <= 67 + 550:
+                            if y_mouse >= 257 and y_mouse <= 257 + 550:
+                                for cell in list_object_map_enemy: 
+                                    if cell.x <= x_mouse and x_mouse < cell.x + 55:
+                                        if cell.y <= y_mouse and y_mouse < cell.y + 55:
+                                            # Узнаем номер клетки где стоит кораблик
+                                            number_cell = list_object_map_enemy.index(cell)
+                                            # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                            str_col = str(number_cell) 
+                                            # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                            row = number_cell // 10  
+                                            #Колонку кораблика вычисляем по такому принципу
+                                            # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                            col = int(str_col[-1])
+                                            if enemy_matix[0][row][col] == 0:
+                                                enemy_matix[0][row][col] = 5
+                                                check_time[0] = 0
+                                                turn[0] = "client_turn"
+
+                                            elif enemy_matix[0][row][col] == 5 or enemy_matix[0][row][col] == 7:
+                                                print("Уже стреляли в эту клетку")
+                    
+                                            elif enemy_matix[0][row][col] != 0 and enemy_matix[0][row][col] != 5 and enemy_matix[0][row][col] != 7:
+                                                enemy_matix[0][row][col] = 7
+                                                check_time[0] = 0
+
+                                            
+                                                
+                                            
+                            
 
       
         pygame.display.flip()

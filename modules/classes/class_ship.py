@@ -105,8 +105,7 @@ class Ship:
                         self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
     
                         # Обновляем прямоугольник только при движении
-                       
-
+                    
                     elif self.CHEK_ROTATION == "vertical":
                         self.ORIENTATION_SHIP = "horizontal"
                         self.CHEK_ROTATION = self.ORIENTATION_SHIP
@@ -355,20 +354,16 @@ class Ship:
                     print("------------------------------------------------------------------------------------------------")
                     print(list_grid)
                 else:
-                    print("Колбаsa")
                     self.clear_matrix()
                     self.return_start_code()
                     print(list_grid)
        
             else:
-                print("Колбаса")
                 self.clear_matrix()
                 self.return_start_code()
                 print(list_grid)
                 
  
-            
-
             # Обновляем прямоугольник в конце
             self.RECT.topleft = (self.X_COR, self.Y_COR)
        

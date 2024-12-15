@@ -6,7 +6,8 @@ import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 from .json_functions import write_json , list_users , list_server_status 
 from .json_functions.json_read import read_json
-from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role
+from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matix , check_repeat
+from .screens import list_grid 
 
 list_check_need_send = ["no"]
 
@@ -32,7 +33,7 @@ event_connect_to_server = threading.Event()
 event_connect_to_server.set()
 
 #створюємо функцію підключення користувача до серверу
-def connect_user():
+def connect_user(list_grid):
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
@@ -160,26 +161,56 @@ def connect_user():
                 time.sleep(1)
                 data_turn = client_socket.recv(1024).decode()
                 normal_data = json.loads(data_turn)
-                turn[0] = normal_data['turn']
-                check_time[0] = normal_data['time']
+
                 if list_check_need_send[0] == "no":
                     client_dict = {
                         "turn": "server_turn",
                         "time": 0 , 
-                        "need" : "no"
+                        "need" : "no",
+                        'client_matrix':list_grid,
+                        "new_for_server" : enemy_matix[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 elif list_check_need_send[0] == "yes":
-                    client_dict = {
-                        "turn": "server_turn",
-                        "time": 0 , 
-                        "need" : "yes"
-                    }
+                    print(1)
+                    print(turn[0])
+                    if turn[0] == "server_turn":
+                        print(2)
+                        client_dict = {
+                            "turn": "server_turn",
+                            "time": 0 , 
+                            "need" : "yes",
+                            'client_matrix':list_grid,
+                            "new_for_server" : enemy_matix[0]
+                        }
+                    elif turn[0] == "client_turn":
+                        print(3)
+                        client_dict = {
+                            "turn": "client_turn",
+                            "time": 0 , 
+                            "need" : "yes",
+                            'client_matrix':list_grid,
+                            "new_for_server" : enemy_matix[0]
+                        }
+
                     client_socket.send(json.dumps(client_dict).encode())
-                    check_time[0] = 0
                     list_check_need_send[0] = "no"
-                print(normal_data['turn'])
-                print(normal_data['time'])
+                    check_time[0] = 0
+
+                if check_repeat[0] == 0:
+                    # сохраняем матрицу сервера 
+                    enemy_matix[0] = normal_data["server_matrix"]
+                turn[0] = normal_data['turn']
+                check_time[0] = normal_data['time']
+
+                # обновляем матрицу клиента
+                if check_repeat[0] >= 1:
+                    list_grid = normal_data["new_for_client"]
+
+                # print(normal_data['turn'])
+                # print(normal_data['time'])
+                print(list_grid , "client_matrix")
+                check_repeat[0] += 1
 
   
             except TimeoutError:
@@ -192,16 +223,6 @@ def connect_user():
                 print(f"Несподівана помилка: {e}")
                 continue
 
-        # while True:
-        #     time.sleep(1)
-        #     client_socket.send("hi".encode())
-        #     data_turn = client_socket.recv(1024).decode()
-        #     normal_data = json.loads(data_turn)
-        #     print(normal_data['turn'])
-        #     print(normal_data['time'])
-
-        #     turn[0] = normal_data['turn']
-        #     check_time[0] = normal_data['time']
            
             
             
@@ -209,4 +230,4 @@ def connect_user():
         #зберігаємо ��нформацію у json файл
 
         #створюємо зміну потока, із функцією підключення коритсувача до серверу
-thread_connect = threading.Thread(target = connect_user, daemon=True) 
+thread_connect = threading.Thread(target = connect_user,args= (list_grid,) ,daemon=True) 

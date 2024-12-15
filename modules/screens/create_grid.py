@@ -1,6 +1,6 @@
 import os
 import pygame
-from .list_grid import list_grid
+from .grid_list import list_grid
 
 
 #класс для создания одной пустой клетки 

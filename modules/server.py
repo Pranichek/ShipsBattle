@@ -1,4 +1,5 @@
 import socket
+from .screens import list_grid
 #підключаємо модуль для роботи із потоками
 import threading
 # Импортируем классы
@@ -9,6 +10,10 @@ from .json_functions.json_read import read_json
 import json
 import time
 
+# список для того чтобы мы получили матрицу соперника только один раз
+check_repeat = [0]
+
+
 # список для проверки перезода на фрейм боя
 list_check_ready_to_fight = [None]
 # лист очереди
@@ -17,6 +22,8 @@ turn = ["server_turn"]
 check_time = [0]
 # Лист для проверки за кого мы играем(сервер или клиент)
 list_player_role = [""]
+
+enemy_matix = ["yes"]
 
 dict_save_information = {
     "player_nick": "",
@@ -39,7 +46,7 @@ write_json(filename= "status_connect_game.json" , object_dict =  dict_status_gam
 
 
 #створємо функцію для запуску серверу
-def start_server():
+def start_server(list_grid):
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
@@ -164,20 +171,31 @@ def start_server():
         try:
             time.sleep(1)
             check_time[0] += 1
+            # print(turn[0])
             game_information = {
                 'turn': turn[0],
-                'time': check_time[0]
+                'time': check_time[0],
+                'server_matrix': list_grid,
+                "new_for_client" : enemy_matix[0]
             }
             client_socket.send(json.dumps(game_information).encode())
             client_data = client_socket.recv(1024).decode()
             ready_clinet_data = json.loads(client_data)
+
+            if check_repeat[0] == 0:
+                enemy_matix[0] = ready_clinet_data["client_matrix"]
+            # обновляем матрицу сервера
+            if check_repeat[0] >= 1:
+                list_grid = list(ready_clinet_data["new_for_server"])
 
             if ready_clinet_data["need"] == "no":
                 print("nothing")
             elif ready_clinet_data["need"] == "yes":
                 print("зашло сюда")
                 turn[0] = ready_clinet_data["turn"]
+                # print(ready_clinet_data["turn"], "jnnfwjnjnefjnfjnkerjknjrefjnrenjrefnrk") 
                 check_time[0] = 0
+                # print(turn[0])
             
             if check_time[0] == 29:
                 check_time[0] = 0
@@ -185,15 +203,18 @@ def start_server():
                     turn[0] = "client_turn"
                 elif turn[0] == "client_turn":
                     turn[0] = "server_turn"
-            print(check_time[0])
+        
+            # print(turn[0])
+            print(list_grid)
+            check_repeat[0] += 1
         except TimeoutError:
-                print("Час очікування відповіді сервера вичерпано")
+                print("Слишком долгое ожидание")
                 continue
         except json.JSONDecodeError:
-            print("Помилка декодування даних")
+            print("Не получилось декодировать данные/")
             continue
-        except Exception as e:
-            print(f"Несподівана помилка: {e}")
+        except Exception as error:
+            print(f"Тупая ошибка: {error}")
             continue
 
         
@@ -204,4 +225,4 @@ def start_server():
         
             
 #створюємо зміну потока, для запуску серверу
-server_thread = threading.Thread(target = start_server, daemon=True)
+server_thread = threading.Thread(target = start_server,args=(list_grid,), daemon=True)
