@@ -134,7 +134,7 @@ def start_server(list_grid):
                     }
                 client_socket.send(json.dumps(response).encode())
         
-
+                client_socket.settimeout(3)
                 # Отримуємо дані від клієнта
                 data_connect = client_socket.recv(1024).decode()
                 if data_connect.strip():  # Перевірка, чи є дані
@@ -179,6 +179,7 @@ def start_server(list_grid):
                 "new_for_client" : enemy_matix[0]
             }
             client_socket.send(json.dumps(game_information).encode())
+            client_socket.settimeout(3)
             client_data = client_socket.recv(1024).decode()
             ready_clinet_data = json.loads(client_data)
 

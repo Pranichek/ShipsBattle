@@ -159,6 +159,10 @@ waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 
 ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 ,folder_name= "backgrounds" , image_name= "position_ships_bg.png")
 # фон на якомй стоять кораблі перед початком бою
 place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 37 ,folder_name= "backgrounds" , image_name= "bg_place_for_ships.png")
+# Фон який показує що користувач може зараз ходити
+can_attack = DrawImage(width = 191 , height = 53 , x_cor = 820 , y_cor = 118 , folder_name = "backgrounds" , image_name = "active_player.png")
+# Фон який вказує що користувач зараз не може ходити
+can_not_attack = DrawImage(width = 191 , height = 53 , x_cor = 311 , y_cor = 118 , folder_name = "backgrounds" , image_name = "not_active.png")
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
@@ -469,17 +473,33 @@ def fight_window():
     grid_image.load_image()
     
     while run_game:
+        if list_player_role[0] == "server_player" and turn[0] == "server_turn":
+            can_attack.x_cor = 865
+            can_not_attack.x_cor = 391
+        elif list_player_role[0] == "player_client" and turn[0] == "client_turn":
+            can_attack.x_cor = 865
+            can_not_attack.x_cor = 391
+        else:
+            can_attack.x_cor = 391
+            can_not_attack.x_cor = 865
+
+
         x_mouse , y_mouse = pygame.mouse.get_pos()
         clock_image.image_name = f'{check_time[0]}.png'
         clock_image.load_image()
         module_screen_server.FPS.tick(60)       
         fight_bg.draw_image(screen = main_screen)
 
+        can_attack.draw_image(screen = main_screen)
+        can_not_attack.draw_image(screen = main_screen)
+
         frame_nick_player.draw_image(screen = main_screen)
         second_frame_nick_player.draw_image(screen = main_screen)
 
         player_face.draw_image(screen = main_screen)
         enemy_face.draw_image(screen = main_screen)
+
+        
 
         player_nick.text = dict_save_information["player_nick"]
         player_nick.draw_font()
@@ -572,11 +592,6 @@ def fight_window():
                                             elif enemy_matix[0][row][col] != 0 and enemy_matix[0][row][col] != 5 and enemy_matix[0][row][col] != 7:
                                                 enemy_matix[0][row][col] = 7
                                                 check_time[0] = 0
-
-                                            
-                                                
-                                            
-                            
 
       
         pygame.display.flip()

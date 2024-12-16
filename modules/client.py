@@ -124,7 +124,7 @@ def connect_user(list_grid):
                     "status": status_from_file
                     }
                 client_socket.send(json.dumps(response).encode())
-        
+                client_socket.settimeout(3)
                 # Отримуємо дані від клієнта
                 data_connect = client_socket.recv(1024).decode()
                 if data_connect.strip():  # Перевірка, чи є дані
@@ -159,8 +159,11 @@ def connect_user(list_grid):
         while True:
             try:
                 time.sleep(1)
+                client_socket.settimeout(3)
                 data_turn = client_socket.recv(1024).decode()
                 normal_data = json.loads(data_turn)
+               
+                check_time[0] = normal_data['time']
 
                 if list_check_need_send[0] == "no":
                     client_dict = {
@@ -201,7 +204,8 @@ def connect_user(list_grid):
                     # сохраняем матрицу сервера 
                     enemy_matix[0] = normal_data["server_matrix"]
                 turn[0] = normal_data['turn']
-                check_time[0] = normal_data['time']
+                # turn[0] = normal_data['turn']
+                # check_time[0] = normal_data['time']
 
                 # обновляем матрицу клиента
                 if check_repeat[0] >= 1:
@@ -222,6 +226,75 @@ def connect_user(list_grid):
             except Exception as e:
                 print(f"Несподівана помилка: {e}")
                 continue
+
+
+
+        # while True:
+        #     try:
+        #         time.sleep(1)
+        #         data_turn = client_socket.recv(1024).decode()
+        #         normal_data = json.loads(data_turn)
+
+        #         if list_check_need_send[0] == "no":
+        #             client_dict = {
+        #                 "turn": "server_turn",
+        #                 "time": 0 , 
+        #                 "need" : "no",
+        #                 'client_matrix':list_grid,
+        #                 "new_for_server" : enemy_matix[0]
+        #             }
+        #             client_socket.send(json.dumps(client_dict).encode())
+        #         elif list_check_need_send[0] == "yes":
+        #             print(1)
+        #             print(turn[0])
+        #             if turn[0] == "server_turn":
+        #                 print(2)
+        #                 client_dict = {
+        #                     "turn": "server_turn",
+        #                     "time": 0 , 
+        #                     "need" : "yes",
+        #                     'client_matrix':list_grid,
+        #                     "new_for_server" : enemy_matix[0]
+        #                 }
+        #             elif turn[0] == "client_turn":
+        #                 print(3)
+        #                 client_dict = {
+        #                     "turn": "client_turn",
+        #                     "time": 0 , 
+        #                     "need" : "yes",
+        #                     'client_matrix':list_grid,
+        #                     "new_for_server" : enemy_matix[0]
+        #                 }
+
+        #             client_socket.send(json.dumps(client_dict).encode())
+        #             list_check_need_send[0] = "no"
+        #             check_time[0] = 0
+
+        #         if check_repeat[0] == 0:
+        #             # сохраняем матрицу сервера 
+        #             enemy_matix[0] = normal_data["server_matrix"]
+        #         turn[0] = normal_data['turn']
+        #         check_time[0] = normal_data['time']
+
+        #         # обновляем матрицу клиента
+        #         if check_repeat[0] >= 1:
+        #             list_grid = normal_data["new_for_client"]
+
+        #         # print(normal_data['turn'])
+        #         # print(normal_data['time'])
+        #         print(list_grid , "client_matrix")
+        #         check_repeat[0] += 1
+
+  
+        #     except TimeoutError:
+        #         print("Час очікування відповіді сервера вичерпано")
+        #         continue
+        #     except json.JSONDecodeError:
+        #         print("Помилка декодування даних")
+        #         continue
+        #     except Exception as e:
+        #         print(f"Несподівана помилка: {e}")
+        #         continue
 
            
             
