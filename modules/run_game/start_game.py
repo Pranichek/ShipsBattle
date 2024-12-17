@@ -143,8 +143,8 @@ fight_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 , folder_
 frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 
-player_face = DrawImage(width = 195 , height = 122  ,x_cor = 1065 , y_cor = 64 , folder_name = "decorations" , image_name = "player_image.png")
-enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , folder_name = "decorations" , image_name = "enemy_image.png")
+player_face = DrawImage(width = 195 , height = 122  ,x_cor = 1065 , y_cor = 64 , folder_name = "decorations" , image_name = "active_player.png")
+enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , folder_name = "decorations" , image_name = "not_active_enemy.png")
 
 clock_image = DrawImage(width = 206 , height = 57 , x_cor = 544 , y_cor = 20 , folder_name = "animation_clock" , image_name = "0.png")
 
@@ -188,6 +188,7 @@ def main_window():
         
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -474,14 +475,20 @@ def fight_window():
     
     while run_game:
         if list_player_role[0] == "server_player" and turn[0] == "server_turn":
-            can_attack.x_cor = 865
-            can_not_attack.x_cor = 391
+            player_face.image_name = "active_player.png"
+            enemy_face.image_name = "not_active_enemy.png"
+            player_face.load_image()
+            enemy_face.load_image()
         elif list_player_role[0] == "player_client" and turn[0] == "client_turn":
-            can_attack.x_cor = 865
-            can_not_attack.x_cor = 391
+            player_face.image_name = "active_player.png"
+            enemy_face.image_name = "not_active_enemy.png"
+            player_face.load_image()
+            enemy_face.load_image()
         else:
-            can_attack.x_cor = 391
-            can_not_attack.x_cor = 865
+            player_face.image_name = "not_active_player.png"
+            enemy_face.image_name = "active_enemy.png"
+            player_face.load_image()
+            enemy_face.load_image()
 
 
         x_mouse , y_mouse = pygame.mouse.get_pos()
@@ -491,9 +498,6 @@ def fight_window():
         clock_image.load_image()
         module_screen_server.FPS.tick(60)       
         fight_bg.draw_image(screen = main_screen)
-
-        can_attack.draw_image(screen = main_screen)
-        can_not_attack.draw_image(screen = main_screen)
 
         frame_nick_player.draw_image(screen = main_screen)
         second_frame_nick_player.draw_image(screen = main_screen)

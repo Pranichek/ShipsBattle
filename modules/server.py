@@ -209,6 +209,7 @@ def start_server(list_grid):
                     turn[0] = "server_turn"
         
             check_repeat[0] += 1
+            print(list_grid)
         except TimeoutError:
                 print("Слишком долгое ожидание")
                 continue
