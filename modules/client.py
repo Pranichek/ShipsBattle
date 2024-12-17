@@ -204,15 +204,11 @@ def connect_user(list_grid):
                     # сохраняем матрицу сервера 
                     enemy_matix[0] = normal_data["server_matrix"]
                 turn[0] = normal_data['turn']
-                # turn[0] = normal_data['turn']
-                # check_time[0] = normal_data['time']
-
                 # обновляем матрицу клиента
                 if check_repeat[0] >= 1:
                     list_grid = normal_data["new_for_client"]
 
-                # print(normal_data['turn'])
-                # print(normal_data['time'])
+
                 print(list_grid , "client_matrix")
                 check_repeat[0] += 1
 

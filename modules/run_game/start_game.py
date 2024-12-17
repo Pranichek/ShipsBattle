@@ -485,6 +485,8 @@ def fight_window():
 
 
         x_mouse , y_mouse = pygame.mouse.get_pos()
+        # if type(check_time[0]) != float:
+        #     print("Chane picture")
         clock_image.image_name = f'{check_time[0]}.png'
         clock_image.load_image()
         module_screen_server.FPS.tick(60)       

@@ -13,6 +13,7 @@ import time
 # список для того чтобы мы получили матрицу соперника только один раз
 check_repeat = [0]
 
+a = 0
 
 # список для проверки перезода на фрейм боя
 list_check_ready_to_fight = [None]
@@ -47,6 +48,7 @@ write_json(filename= "status_connect_game.json" , object_dict =  dict_status_gam
 
 #створємо функцію для запуску серверу
 def start_server(list_grid):
+    global a
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
@@ -171,7 +173,8 @@ def start_server(list_grid):
         try:
             time.sleep(1)
             check_time[0] += 1
-            # print(turn[0])
+            # print(check_time[0])
+            
             game_information = {
                 'turn': turn[0],
                 'time': check_time[0],
@@ -198,15 +201,13 @@ def start_server(list_grid):
                 check_time[0] = 0
                 # print(turn[0])
             
-            if check_time[0] == 29:
+            if check_time[0] >= 29:
                 check_time[0] = 0
                 if turn[0] == "server_turn":
                     turn[0] = "client_turn"
                 elif turn[0] == "client_turn":
                     turn[0] = "server_turn"
         
-            # print(turn[0])
-            print(list_grid)
             check_repeat[0] += 1
         except TimeoutError:
                 print("Слишком долгое ожидание")
