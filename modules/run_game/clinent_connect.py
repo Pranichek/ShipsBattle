@@ -4,6 +4,7 @@ from ..classes.class_click import music_click
 from ..client import thread_connect , event_connect_to_server , list_check_connection
 
 
+
 #фон коли користувач пробує підключитися до серверу якого немає
 fail_connect = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "backgrounds" , image_name = "fail_background.png")
 

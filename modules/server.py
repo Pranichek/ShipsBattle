@@ -173,7 +173,7 @@ def start_server(list_grid):
         try:
             time.sleep(1)
             check_time[0] += 1
-            # print(check_time[0])
+           
             
             game_information = {
                 'turn': turn[0],

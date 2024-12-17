@@ -50,8 +50,6 @@ def connect_user(list_grid):
         # підключаємо користувача до сервера за даними що ввів користувач
         # client_socket.connect((ip_address, port))
         # while list_server_status["status"] == None:
-        # while True:
-        #     print(event_connect_to_server)
         try:
             if event_connect_to_server.is_set():
                 ip_adress = input_ip_adress.user_text
@@ -165,10 +163,11 @@ def connect_user(list_grid):
                
                 check_time[0] = normal_data['time']
 
+
                 if list_check_need_send[0] == "no":
                     client_dict = {
                         "turn": "server_turn",
-                        "time": 0 , 
+                        "time": 0 ,
                         "need" : "no",
                         'client_matrix':list_grid,
                         "new_for_server" : enemy_matix[0]
@@ -181,29 +180,41 @@ def connect_user(list_grid):
                         print(2)
                         client_dict = {
                             "turn": "server_turn",
-                            "time": 0 , 
+                            "time": 0 ,
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matix[0]
                         }
-                    elif turn[0] == "client_turn":
+                        client_socket.send(json.dumps(client_dict).encode())
+                        list_check_need_send[0] = "no"
+                        check_time[0] = 0
+                        continue
+                    if turn[0] == "client_turn":
                         print(3)
                         client_dict = {
                             "turn": "client_turn",
-                            "time": 0 , 
+                            "time": 0 ,
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matix[0]
                         }
+                        client_socket.send(json.dumps(client_dict).encode())
+                        list_check_need_send[0] = "no"
+                        check_time[0] = 0
+                        continue
 
-                    client_socket.send(json.dumps(client_dict).encode())
-                    list_check_need_send[0] = "no"
-                    check_time[0] = 0
+
+                    # client_socket.send(json.dumps(client_dict).encode())
+                    # list_check_need_send[0] = "no"
+                    # check_time[0] = 0
+
 
                 if check_repeat[0] == 0:
-                    # сохраняем матрицу сервера 
+                    # сохраняем матрицу сервера
                     enemy_matix[0] = normal_data["server_matrix"]
                 turn[0] = normal_data['turn']
+
+
                 # обновляем матрицу клиента
                 if check_repeat[0] >= 1:
                     list_grid = normal_data["new_for_client"]
@@ -212,7 +223,8 @@ def connect_user(list_grid):
                 print(list_grid , "client_matrix")
                 check_repeat[0] += 1
 
-  
+
+ 
             except TimeoutError:
                 print("Час очікування відповіді сервера вичерпано")
                 continue
