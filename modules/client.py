@@ -6,7 +6,7 @@ import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 from .json_functions import write_json , list_users , list_server_status 
 from .json_functions.json_read import read_json
-from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matix , check_repeat
+from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat
 from .screens import list_grid 
 
 list_check_need_send = ["no"]
@@ -140,13 +140,13 @@ def connect_user(list_grid):
                 elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
                     list_check_ready_to_fight[0] = "wait"
             except TimeoutError:
-                print("Час очікування відповіді сервера вичерпано")
+                print("Слишком долгое ожидание")
                 continue
             except json.JSONDecodeError:
-                print("Помилка декодування даних")
+                print("Не получилось декодировать данные/")
                 continue
-            except Exception as e:
-                print(f"Несподівана помилка: {e}")
+            except Exception as error:
+                print(f"Тупая ошибка: {error}")
                 continue
             
         dict_save_information["player_nick"] = str(input_nick.user_text)
@@ -160,8 +160,13 @@ def connect_user(list_grid):
                 client_socket.settimeout(3)
                 data_turn = client_socket.recv(1024).decode()
                 normal_data = json.loads(data_turn)
-               
+
+                # созраняем соклько времени прошло
                 check_time[0] = normal_data['time']
+
+                # Завершение игры
+                if normal_data["check_end_game"] != None:
+                    break
 
 
                 if list_check_need_send[0] == "no":
@@ -170,7 +175,7 @@ def connect_user(list_grid):
                         "time": 0 ,
                         "need" : "no",
                         'client_matrix':list_grid,
-                        "new_for_server" : enemy_matix[0]
+                        "new_for_server" : enemy_matrix[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 elif list_check_need_send[0] == "yes":
@@ -183,7 +188,7 @@ def connect_user(list_grid):
                             "time": 0 ,
                             "need" : "yes",
                             'client_matrix':list_grid,
-                            "new_for_server" : enemy_matix[0]
+                            "new_for_server" : enemy_matrix[0]
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -196,7 +201,7 @@ def connect_user(list_grid):
                             "time": 0 ,
                             "need" : "yes",
                             'client_matrix':list_grid,
-                            "new_for_server" : enemy_matix[0]
+                            "new_for_server" : enemy_matrix[0]
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -204,14 +209,9 @@ def connect_user(list_grid):
                         continue
 
 
-                    # client_socket.send(json.dumps(client_dict).encode())
-                    # list_check_need_send[0] = "no"
-                    # check_time[0] = 0
-
-
                 if check_repeat[0] == 0:
                     # сохраняем матрицу сервера
-                    enemy_matix[0] = normal_data["server_matrix"]
+                    enemy_matrix[0] = normal_data["server_matrix"]
                 turn[0] = normal_data['turn']
 
 
@@ -226,14 +226,15 @@ def connect_user(list_grid):
 
  
             except TimeoutError:
-                print("Час очікування відповіді сервера вичерпано")
+                print("Слишком долгое ожидание")
                 continue
             except json.JSONDecodeError:
-                print("Помилка декодування даних")
+                print("Не получилось декодировать данные/")
                 continue
-            except Exception as e:
-                print(f"Несподівана помилка: {e}")
+            except Exception as error:
+                print(f"Тупая ошибка: {error}")
                 continue
+
 
 
 
@@ -249,7 +250,7 @@ def connect_user(list_grid):
         #                 "time": 0 , 
         #                 "need" : "no",
         #                 'client_matrix':list_grid,
-        #                 "new_for_server" : enemy_matix[0]
+        #                 "new_for_server" : enemy_matrix[0]
         #             }
         #             client_socket.send(json.dumps(client_dict).encode())
         #         elif list_check_need_send[0] == "yes":
@@ -262,7 +263,7 @@ def connect_user(list_grid):
         #                     "time": 0 , 
         #                     "need" : "yes",
         #                     'client_matrix':list_grid,
-        #                     "new_for_server" : enemy_matix[0]
+        #                     "new_for_server" : enemy_matrix[0]
         #                 }
         #             elif turn[0] == "client_turn":
         #                 print(3)
@@ -271,7 +272,7 @@ def connect_user(list_grid):
         #                     "time": 0 , 
         #                     "need" : "yes",
         #                     'client_matrix':list_grid,
-        #                     "new_for_server" : enemy_matix[0]
+        #                     "new_for_server" : enemy_matrix[0]
         #                 }
 
         #             client_socket.send(json.dumps(client_dict).encode())
@@ -280,7 +281,7 @@ def connect_user(list_grid):
 
         #         if check_repeat[0] == 0:
         #             # сохраняем матрицу сервера 
-        #             enemy_matix[0] = normal_data["server_matrix"]
+        #             enemy_matrix[0] = normal_data["server_matrix"]
         #         turn[0] = normal_data['turn']
         #         check_time[0] = normal_data['time']
 

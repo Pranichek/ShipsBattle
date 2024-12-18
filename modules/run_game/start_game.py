@@ -10,7 +10,7 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matix
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix
 from ..client import list_check_need_send 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -554,18 +554,18 @@ def fight_window():
                                             #Колонку кораблика вычисляем по такому принципу
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
-                                            if enemy_matix[0][row][col] == 0:
+                                            if enemy_matrix[0][row][col] == 0:
                                                 print("Промах")
-                                                enemy_matix[0][row][col] = 5
+                                                enemy_matrix[0][row][col] = 5
                                                 list_check_need_send[0] = "yes"  # Готуємо дані для відправки
                                                 turn[0] = "server_turn"  # Передаємо хід серверу
 
-                                            elif enemy_matix[0][row][col] == 5 or enemy_matix[0][row][col] == 7:
+                                            elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
                                                 print("Уже стреляли в эту клетку")
                                                 
-                                            elif enemy_matix[0][row][col] != 0 and enemy_matix[0][row][col] != 5 and enemy_matix[0][row][col] != 7:
+                                            elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
                                                 print("Попало")
-                                                enemy_matix[0][row][col] = 7
+                                                enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
                                                 list_check_need_send[0] = "yes"
                                                 turn[0] = "client_turn" 
@@ -587,16 +587,16 @@ def fight_window():
                                             #Колонку кораблика вычисляем по такому принципу
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
-                                            if enemy_matix[0][row][col] == 0:
-                                                enemy_matix[0][row][col] = 5
+                                            if enemy_matrix[0][row][col] == 0:
+                                                enemy_matrix[0][row][col] = 5
                                                 check_time[0] = 0
                                                 turn[0] = "client_turn"
 
-                                            elif enemy_matix[0][row][col] == 5 or enemy_matix[0][row][col] == 7:
+                                            elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
                                                 print("Уже стреляли в эту клетку")
                     
-                                            elif enemy_matix[0][row][col] != 0 and enemy_matix[0][row][col] != 5 and enemy_matix[0][row][col] != 7:
-                                                enemy_matix[0][row][col] = 7
+                                            elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
+                                                enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
 
       

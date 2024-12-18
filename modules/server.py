@@ -23,9 +23,10 @@ turn = ["server_turn"]
 check_time = [0]
 # Лист для проверки за кого мы играем(сервер или клиент)
 list_player_role = [""]
-
-enemy_matix = ["yes"]
-
+# лист где храним матрицу врага
+enemy_matrix = ["yes"]
+# список куда сохраняем кто выиграл
+list_check_win = [None]
 dict_save_information = {
     "player_nick": "",
     "player_points" : 0,
@@ -48,7 +49,6 @@ write_json(filename= "status_connect_game.json" , object_dict =  dict_status_gam
 
 #створємо функцію для запуску серверу
 def start_server(list_grid):
-    global a
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
@@ -89,6 +89,7 @@ def start_server(list_grid):
         #зберігаємо інформацію про статус підлючення до серверу у json файл
         write_json(filename= "utility.json" , object_dict = list_server_status)
 
+        # 
         list_player_role[0] = "server_player"  
 
         # Отримуємо дані від клієнта(нікнейм та скільки у нього баллів), у виді джейсон строки
@@ -154,14 +155,15 @@ def start_server(list_grid):
                 elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
                     list_check_ready_to_fight[0] = "wait"
             except TimeoutError:
-                print("Час очікування відповіді сервера вичерпано")
+                print("Слишком долгое ожидание")
                 continue
             except json.JSONDecodeError:
-                print("Помилка декодування даних")
+                print("Не получилось декодировать данные/")
                 continue
-            except Exception as e:
-                print(f"Несподівана помилка: {e}")
+            except Exception as error:
+                print(f"Тупая ошибка: {error}")
                 continue
+
 
         dict_save_information["player_nick"] = str(input_nick.user_text)
         dict_save_information["enemy_nick"] = data_in_list["nick"]
@@ -172,6 +174,7 @@ def start_server(list_grid):
     while True:
         try:
             time.sleep(1)
+            # список который сохраняет данные по поводу времени
             check_time[0] += 1
            
             
@@ -179,15 +182,17 @@ def start_server(list_grid):
                 'turn': turn[0],
                 'time': check_time[0],
                 'server_matrix': list_grid,
-                "new_for_client" : enemy_matix[0]
+                "new_for_client": enemy_matrix[0],
+                "check_end_game": list_check_win[0]
             }
+
             client_socket.send(json.dumps(game_information).encode())
             client_socket.settimeout(3)
             client_data = client_socket.recv(1024).decode()
             ready_clinet_data = json.loads(client_data)
 
             if check_repeat[0] == 0:
-                enemy_matix[0] = ready_clinet_data["client_matrix"]
+                enemy_matrix[0] = ready_clinet_data["client_matrix"]
             # обновляем матрицу сервера
             if check_repeat[0] >= 1:
                 list_grid = list(ready_clinet_data["new_for_server"])
@@ -197,7 +202,6 @@ def start_server(list_grid):
             elif ready_clinet_data["need"] == "yes":
                 print("зашло сюда")
                 turn[0] = ready_clinet_data["turn"]
-                # print(ready_clinet_data["turn"], "jnnfwjnjnefjnfjnkerjknjrefjnrenjrefnrk") 
                 check_time[0] = 0
                 # print(turn[0])
             
@@ -210,15 +214,45 @@ def start_server(list_grid):
         
             check_repeat[0] += 1
             print(list_grid)
+
+            count_server_ships = 0
+            count_client_ships = 0
+
+            for row_server in range(len(list_grid)):
+                for cell_server in range(len(list_grid[row_server])):
+                    if list_grid[row_server][cell_server] != 0 and list_grid[row_server][cell_server] != 5 and list_grid[row_server][cell_server] != 7:
+                        count_server_ships += 1
+
+            for row_client in range(len(enemy_matrix[0])):
+                for cell_client in range(len(enemy_matrix[0][row_client])):
+                    if enemy_matrix[0][row_client][cell_client] != 0 and enemy_matrix[0][row_client][cell_client] != 5 and enemy_matrix[0][row_client][cell_client] != 7:
+                        count_client_ships += 1
+
+            print(count_server_ships)
+            print(count_client_ships)
+            print(enemy_matrix[0])
+            if count_server_ships == 0 and count_client_ships > 0:
+                list_check_win[0] = "win_client"
+                
+            elif count_client_ships == 0 and count_server_ships > 0:
+                list_check_win[0] = "win_server"
+
+                
         except TimeoutError:
                 print("Слишком долгое ожидание")
                 continue
         except json.JSONDecodeError:
-            print("Не получилось декодировать данные/")
-            continue
+            if list_check_win[0] != None:
+                break
+            else:
+                print("Не получилось декодировать данные/")
+                continue
         except Exception as error:
             print(f"Тупая ошибка: {error}")
-            continue
+            if list_check_win[0] != None:
+                break
+            else:
+                continue
 
         
         
