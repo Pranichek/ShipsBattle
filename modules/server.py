@@ -27,6 +27,7 @@ list_player_role = [""]
 enemy_matrix = ["yes"]
 # список куда сохраняем кто выиграл
 list_check_win = [None]
+
 dict_save_information = {
     "player_nick": "",
     "player_points" : 0,
@@ -176,8 +177,6 @@ def start_server(list_grid):
             time.sleep(1)
             # список который сохраняет данные по поводу времени
             check_time[0] += 1
-           
-            
             game_information = {
                 'turn': turn[0],
                 'time': check_time[0],
@@ -242,11 +241,11 @@ def start_server(list_grid):
                 print("Слишком долгое ожидание")
                 continue
         except json.JSONDecodeError:
-            if list_check_win[0] != None:
-                break
-            else:
-                print("Не получилось декодировать данные/")
-                continue
+            # if list_check_win[0] != None:
+            #     break
+            # else:
+            print("Не получилось декодировать данные/")
+            continue
         except Exception as error:
             print(f"Тупая ошибка: {error}")
             if list_check_win[0] != None:

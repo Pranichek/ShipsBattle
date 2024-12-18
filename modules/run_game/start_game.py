@@ -10,7 +10,7 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win
 from ..client import list_check_need_send 
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -36,6 +36,8 @@ player_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_info
 enemy_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["enemy_nick"] , screen = main_screen , x_cor = 437 , y_cor = 126)
 player_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["player_points"]) , screen = main_screen , x_cor = 743 , y_cor = 126)
 enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["enemy_points"]) , screen = main_screen , x_cor = 270 , y_cor = 126)
+# Текста для фрейму де показують переміг ти чи програв№
+win_lose_text = Font(size = 96 , name_font= "Goldman_Bold.ttf" , text = "" , screen = main_screen , x_cor = 383 , y_cor = 248)
 
 
 
@@ -142,12 +144,15 @@ fight_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 , folder_
 # Зображення для декаративної рамки для ніку та очок на фремі бою
 frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
-
+# Зображення аватрів гравців
 player_face = DrawImage(width = 195 , height = 122  ,x_cor = 1065 , y_cor = 64 , folder_name = "decorations" , image_name = "active_player.png")
 enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , folder_name = "decorations" , image_name = "not_active_enemy.png")
-
+# Зображення яке показує скуільки залишилось часу
 clock_image = DrawImage(width = 206 , height = 57 , x_cor = 544 , y_cor = 20 , folder_name = "animation_clock" , image_name = "0.png")
-
+# Зображення для фрейми де показують виграв чи програв користувач
+win_background = DrawImage(width = 431 , height = 255 , x_cor = 822 , y_cor = 392 , folder_name = "backgrounds" , image_name = "victory_bg.png")
+defeat_background = DrawImage(width = 431 , height = 255 , x_cor = 37 , y_cor = 392 , folder_name = "backgrounds" , image_name = "defeat_bg.png")
+end_game_image  = DrawImage(width = 606 , height = 78 , x_cor = 337 , y_cor = 80 , folder_name = "decorations" , image_name = "end_game.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -163,6 +168,8 @@ place_for_ships = DrawImage(width = 477 , height = 559 , x_cor = 763 , y_cor = 3
 can_attack = DrawImage(width = 191 , height = 53 , x_cor = 820 , y_cor = 118 , folder_name = "backgrounds" , image_name = "active_player.png")
 # Фон який вказує що користувач зараз не може ходити
 can_not_attack = DrawImage(width = 191 , height = 53 , x_cor = 311 , y_cor = 118 , folder_name = "backgrounds" , image_name = "not_active.png")
+# Finish background
+finish_bg = DrawImage(width = 1280 , height = 832 , x_cor = 0 , y_cor = 0 , folder_name = "backgrounds" , image_name = "end_background.png")
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
@@ -474,6 +481,7 @@ def fight_window():
     grid_image.load_image()
     
     while run_game:
+        module_screen_server.FPS.tick(60)
         if list_player_role[0] == "server_player" and turn[0] == "server_turn":
             player_face.image_name = "active_player.png"
             enemy_face.image_name = "not_active_enemy.png"
@@ -489,6 +497,12 @@ def fight_window():
             enemy_face.image_name = "active_enemy.png"
             player_face.load_image()
             enemy_face.load_image()
+
+        if list_check_win[0] != None:
+            apply_fade_effect(screen = main_screen)
+            run_game = False
+            change_scene(scene = finish_window())
+            check_press_button[0] = None
 
 
         x_mouse , y_mouse = pygame.mouse.get_pos()
@@ -599,6 +613,142 @@ def fight_window():
                                                 enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
 
-      
         pygame.display.flip()
+
+
+def finish_window():
+    pygame.display.set_caption("Finish Window")
+    run_game = False
+
+    while run_game:
+        module_screen_server.FPS.tick(60)
+        finish_bg.draw_image(screen = main_screen)
+
+        end_game_image.draw_image(screen = main_screen)
+
+        win_background.draw_image(screen = main_screen)
+        defeat_background.draw_image(screen = main_screen)
+
+        if list_player_role[0] == "player_client":
+            if list_check_win[0] == "win_client":
+                win_lose_text.text = dict_save_information["player_nick"] + "won"
+                win_lose_text.draw_font()
+
+                player_nick.text = dict_save_information["player_nick"]
+                player_nick.size = 52
+                player_nick.x_cor = 968
+                player_nick.y_cor = 447
+                player_nick.draw_font()
+                player_points.text = str(dict_save_information["player_points"])
+                player_points.size = 52
+                player_points.x_cor = 987
+                player_points.y_cor = 531
+                player_points.draw_font()
+                enemy_nick.text = dict_save_information["enemy_nick"]
+                enemy_nick.size = 52
+                enemy_nick.x_cor = 163
+                enemy_nick.y_cor = 447
+                enemy_nick.draw_font()
+                enemy_points.text = str(dict_save_information["enemy_points"])
+                enemy_points.size = 52
+                enemy_points.x_cor = 208
+                enemy_points.y_cor = 531
+                enemy_points.draw_font()
+            else:
+                win_lose_text.text = dict_save_information["enemy_nick"] + "won"
+                win_lose_text.draw_font()
+
+                player_nick.text = dict_save_information["player_nick"]
+                player_nick.size = 52
+                player_nick.x_cor = 163
+                player_nick.y_cor = 447
+                player_nick.draw_font()
+
+                player_points.text = str(dict_save_information["player_points"])
+                player_points.size = 52
+                player_points.x_cor = 208
+                player_points.y_cor = 531
+                player_points.draw_font()
+
+                enemy_nick.text = dict_save_information["enemy_nick"]
+                enemy_nick.size = 52
+                enemy_nick.x_cor = 968
+                enemy_nick.y_cor = 447
+                enemy_nick.draw_font()
+
+                enemy_points.text = str(dict_save_information["enemy_points"])
+                enemy_points.size = 52
+                enemy_points.x_cor = 987
+                enemy_points.y_cor = 531
+                enemy_points.draw_font()
+        elif list_player_role[0] == "server_player":
+            if list_check_win[0] == "win_server":
+                win_lose_text.text = dict_save_information["player_nick"] + "won"
+                win_lose_text.draw_font()
+
+                player_nick.text = dict_save_information["player_nick"]
+                player_nick.size = 52
+                player_nick.x_cor = 968
+                player_nick.y_cor = 447
+                player_nick.draw_font()
+                player_points.text = str(dict_save_information["player_points"])
+                player_points.size = 52
+                player_points.x_cor = 987
+                player_points.y_cor = 531
+                player_points.draw_font()
+                enemy_nick.text = dict_save_information["enemy_nick"]
+                enemy_nick.size = 52
+                enemy_nick.x_cor = 163
+                enemy_nick.y_cor = 447
+                enemy_nick.draw_font()
+                enemy_points.text = str(dict_save_information["enemy_points"])
+                enemy_points.size = 52
+                enemy_points.x_cor = 208
+                enemy_points.y_cor = 531
+                enemy_points.draw_font()
+            else:
+                win_lose_text.text = dict_save_information["enemy_nick"] + "won"
+                win_lose_text.draw_font()
+
+                player_nick.text = dict_save_information["player_nick"]
+                player_nick.size = 52
+                player_nick.x_cor = 163
+                player_nick.y_cor = 447
+                player_nick.draw_font()
+
+                player_points.text = str(dict_save_information["player_points"])
+                player_points.size = 52
+                player_points.x_cor = 208
+                player_points.y_cor = 531
+                player_points.draw_font()
+
+                enemy_nick.text = dict_save_information["enemy_nick"]
+                enemy_nick.size = 52
+                enemy_nick.x_cor = 968
+                enemy_nick.y_cor = 447
+                enemy_nick.draw_font()
+
+                enemy_points.text = str(dict_save_information["enemy_points"])
+                enemy_points.size = 52
+                enemy_points.x_cor = 987
+                enemy_points.y_cor = 531
+                enemy_points.draw_font()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run_game = False  
+                    change_scene(None)
+                
+
+
+
+            
+
+
+
+
+
+
+
+
 
