@@ -4,7 +4,7 @@ import modules.screens.screen as module_screen_server
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
-from ..json_functions import read_json , write_json
+from ..json_functions import read_json , write_json , list_users
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
 from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
@@ -360,8 +360,12 @@ def waiting_window():
     music_load_main.stop()
     music_load_waiting.play()
     while run_game:
-        data = read_json(name_file = "utility.json")
-        status_server = data["status"]
+        try:
+            data = read_json(name_file = "utility.json")
+            status_server = data["status"]
+        except Exception as e:
+            status_server = "wait"
+            continue
         module_screen_server.FPS.tick(60)
 
         if list_check_ready_to_fight[0] == "fight":
@@ -498,17 +502,12 @@ def fight_window():
             player_face.load_image()
             enemy_face.load_image()
 
-        # if list_check_win[0] != None:
-        #     apply_fade_effect(screen = main_screen)
-        #     run_game = False
-        #     change_scene(scene = finish_window())
-        #     check_press_button[0] = None
-
 
         x_mouse , y_mouse = pygame.mouse.get_pos()
   
         clock_image.image_name = f'{check_time[0]}.png'
         clock_image.load_image()
+
         module_screen_server.FPS.tick(60)       
         fight_bg.draw_image(screen = main_screen)
 
@@ -612,7 +611,6 @@ def fight_window():
                                                 enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
 
-        
         if list_check_win[0] != None:
             apply_fade_effect(screen = main_screen)
             run_game = False
@@ -621,12 +619,15 @@ def fight_window():
 
         pygame.display.flip()
 
+# спсиок для того чтобы для игрока добавлились/отнимались очки только один раз
+check_points = [0]
 
 def finish_window():
     pygame.display.set_caption("Finish Window")
     run_game = True
 
     while run_game:
+        check_points[0] += 1
         module_screen_server.FPS.tick(60)
         finish_bg.draw_image(screen = main_screen)
 
@@ -646,7 +647,7 @@ def finish_window():
                 player_nick.x_cor = 990
                 player_nick.y_cor = 470
                 player_nick.draw_font()
-                player_points.text = str(dict_save_information["player_points"])
+                player_points.text = str(dict_save_information["player_points"] + 100) 
                 player_points.size = 52
                 player_points.x_cor = 1020
                 player_points.y_cor = 531
@@ -656,11 +657,20 @@ def finish_window():
                 enemy_nick.x_cor = 180
                 enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
-                enemy_points.text = str(dict_save_information["enemy_points"])
+                if dict_save_information["enemy_points"] == 0:
+                    enemy_points.text = str(dict_save_information["enemy_points"])
+                else:
+                    enemy_points.text = str(dict_save_information["enemy_points"] - 50)
                 enemy_points.size = 52
                 enemy_points.x_cor = 220
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
+
+                nickname = input_nick.user_text
+                if check_points[0] == 1:
+                    list_users[nickname]["points"] += 100
+                    write_json(filename = "data_base.json" , object_dict = list_users)
+
             else:
                 win_lose_text.text = dict_save_information["enemy_nick"] + " won"
                 win_lose_text.draw_font()
@@ -670,8 +680,10 @@ def finish_window():
                 player_nick.x_cor = 180
                 player_nick.y_cor = 470
                 player_nick.draw_font()
-
-                player_points.text = str(dict_save_information["player_points"])
+                if dict_save_information["player_points"] == 0:
+                    player_points.text = str(dict_save_information["player_points"])
+                else:
+                    player_points.text = str(dict_save_information["player_points"] - 50)
                 player_points.size = 52
                 player_points.x_cor = 220
                 player_points.y_cor = 531
@@ -683,11 +695,23 @@ def finish_window():
                 enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
 
-                enemy_points.text = str(dict_save_information["enemy_points"])
+                enemy_points.text = str(dict_save_information["enemy_points"] + 100)
                 enemy_points.size = 52
                 enemy_points.x_cor = 1020
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
+
+                data_base = read_json(name_file = "data_base.json")
+                #беремо кол-во баллів користувача який запсукає сервер, щоб відправати оновлену кількість 
+                data_points = data_base[input_nick.user_text]["points"]
+
+                nickname = input_nick.user_text
+                if check_points[0] == 1:
+                    if data_points > 0:
+                        list_users[nickname]["points"] -= 50
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+         
+
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
@@ -698,7 +722,7 @@ def finish_window():
                 player_nick.x_cor = 990
                 player_nick.y_cor = 470
                 player_nick.draw_font()
-                player_points.text = str(dict_save_information["player_points"])
+                player_points.text = str(dict_save_information["player_points"] + 100)
                 player_points.size = 52
                 player_points.x_cor = 1020
                 player_points.y_cor = 531
@@ -708,11 +732,19 @@ def finish_window():
                 enemy_nick.x_cor = 180
                 enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
-                enemy_points.text = str(dict_save_information["enemy_points"])
+                if dict_save_information["enemy_points"] == 0:
+                    enemy_points.text = str(dict_save_information["enemy_points"])
+                else:
+                    enemy_points.text = str(dict_save_information["enemy_points"] - 50)
                 enemy_points.size = 52
                 enemy_points.x_cor = 220
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
+
+                nickname = input_nick.user_text
+                if check_points[0] == 1:
+                    list_users[nickname]["points"] += 100
+                    write_json(filename = "data_base.json" , object_dict = list_users)
             else:
                 win_lose_text.text = dict_save_information["enemy_nick"] + " won"
                 win_lose_text.draw_font()
@@ -722,8 +754,10 @@ def finish_window():
                 player_nick.x_cor = 180
                 player_nick.y_cor = 470
                 player_nick.draw_font()
-
-                player_points.text = str(dict_save_information["player_points"])
+                if dict_save_information["player_points"] == 0:
+                    player_points.text = str(dict_save_information["player_points"])
+                else:
+                    player_points.text = str(dict_save_information["player_points"] - 50)
                 player_points.size = 52
                 player_points.x_cor = 220
                 player_points.y_cor = 531
@@ -735,16 +769,26 @@ def finish_window():
                 enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
 
-                enemy_points.text = str(dict_save_information["enemy_points"])
+                enemy_points.text = str(dict_save_information["enemy_points"] + 100)
                 enemy_points.size = 52
                 enemy_points.x_cor = 1020
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
 
+                data_base = read_json(name_file = "data_base.json")
+                #беремо кол-во баллів користувача який запсукає сервер, щоб відправати оновлену кількість 
+                data_points = data_base[input_nick.user_text]["points"]
+
+                nickname = input_nick.user_text
+                if check_points[0] == 1:
+                    if data_points > 0:
+                        list_users[nickname]["points"] -= 50
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+
         for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run_game = False  
-                    change_scene(None)
+            if event.type == pygame.QUIT:
+                run_game = False  
+                change_scene(None)
 
         pygame.display.flip()
 

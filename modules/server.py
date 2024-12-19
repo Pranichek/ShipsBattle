@@ -26,6 +26,8 @@ enemy_matrix = ["yes"]
 # список куда сохраняем кто выиграл
 list_check_win = [None]
 
+
+# словарь для зберігання інформаці про гравців
 dict_save_information = {
     "player_nick": "",
     "player_points" : 0,
@@ -88,7 +90,7 @@ def start_server(list_grid):
         #зберігаємо інформацію про статус підлючення до серверу у json файл
         write_json(filename= "utility.json" , object_dict = list_server_status)
 
-        # 
+      
         list_player_role[0] = "server_player"  
 
         # Отримуємо дані від клієнта(нікнейм та скільки у нього баллів), у виді джейсон строки
@@ -101,6 +103,7 @@ def start_server(list_grid):
         if data_in_list["nick"] not in list_users:
             list_users[data_in_list["nick"]] = {"points": data_in_list["points"]}
             write_json(filename = "data_base.json" , object_dict = list_users)
+
         #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
         elif data_in_list["nick"] in list_users:
             list_users[data_in_list["nick"]]["points"] = data_in_list["points"]
@@ -121,7 +124,7 @@ def start_server(list_grid):
         #відправляємо дані на клієнта , dumps - перетворює словарь у джейсон строку 
         client_socket.send(json.dumps(data_for_client).encode())
 
-    
+        # Бесконечный цикл для провери расстановки кораблей
         while True:
             try:
                 time.sleep(1)
@@ -139,7 +142,8 @@ def start_server(list_grid):
                 client_socket.settimeout(3)
                 # Отримуємо дані від клієнта
                 data_connect = client_socket.recv(1024).decode()
-                if data_connect.strip():  # Перевірка, чи є дані
+
+                if data_connect.strip():  
                     data_in_dict = json.loads(data_connect)
                 else:
                     print("Почему то данных нет , и рядок пустой")
@@ -169,15 +173,20 @@ def start_server(list_grid):
         dict_save_information["player_points"] = points_for_client
         dict_save_information["enemy_points"] = data_in_list["points"]
 
-
+    # бесконечный цикл для боя
     while True:
         try:
             time.sleep(1)
+            # счетчик кораблей сервера
             count_server_ships = 0
+            # счетчик кораблей клиента
             count_client_ships = 0
 
             for row_server in range(len(list_grid)):
                 for cell_server in range(len(list_grid[row_server])):
+                    # 5 - по клетке уже стреляли
+                    # 0 - кораблей просто нет
+                    # 7 - уже потопленный корабль
                     if list_grid[row_server][cell_server] != 0 and list_grid[row_server][cell_server] != 5 and list_grid[row_server][cell_server] != 7:
                         count_server_ships += 1
 
@@ -187,13 +196,21 @@ def start_server(list_grid):
                         count_client_ships += 1
 
             if count_server_ships == 0 and count_client_ships > 0:
+                # список для хранения кто выиграл
                 list_check_win[0] = "win_client"
                 
             elif count_client_ships == 0 and count_server_ships > 0:
+                # список для хранения кто выиграл
                 list_check_win[0] = "win_server"
 
             # список который сохраняет данные по поводу времени
             check_time[0] += 1
+
+            # turn[0] - список для хранения очереди 
+            # check_time[0] - список который сохраняет данные по поводу времени
+            # 'server_matrix' - матрица пользователя который играет за сервер
+            # "new_for_client" - матрица в которой хранится матрица уже с нашими выстрелами(выстрелами сервера)
+            # "check_end_game" - список который хранит данные о побидители игры
             game_information = {
                 'turn': turn[0],
                 'time': check_time[0],
@@ -229,13 +246,12 @@ def start_server(list_grid):
                     turn[0] = "server_turn"
         
             check_repeat[0] += 1
-            print(list_grid)
+            
 
             if list_check_win[0] != None:
                 break
 
-
-                
+       
         except TimeoutError:
                 print("Слишком долгое ожидание")
                 continue

@@ -60,7 +60,6 @@ class InputText:
             elif not self.rect.collidepoint(pos):
                 self.active = False
 
-
         if self.base_text == "nickname":
             self.max_length = 10
         else:

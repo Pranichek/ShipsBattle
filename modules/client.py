@@ -142,7 +142,7 @@ def connect_user(list_grid):
                 client_socket.settimeout(3)
                 # Отримуємо дані від клієнта
                 data_connect = client_socket.recv(1024).decode()
-                if data_connect.strip():  # Перевірка, чи є дані
+                if data_connect.strip():  
                     data_in_dict = json.loads(data_connect)
                 else:
                     print("Почему то данных нет , и рядок пустой")
@@ -178,16 +178,12 @@ def connect_user(list_grid):
                 time.sleep(1)
                 client_socket.settimeout(3)
                 data_turn = client_socket.recv(1024).decode()
-                normal_data = json.loads(data_turn)
+                server_data = json.loads(data_turn)
                
-               
-                check_time[0] = normal_data['time']
+                
+                check_time[0] = server_data['time']
 
-
-                # if normal_data["check_end_game"] != None:
-                #     break
-
-
+                # list_check_need_sen - список который хранит флаг , по которому мы понимаем надо менять очередь или нет
                 if list_check_need_send[0] == "no":
                     client_dict = {
                         "turn": "server_turn",
@@ -229,41 +225,31 @@ def connect_user(list_grid):
 
 
 
-
-
-
                 if check_repeat[0] == 0:
                     # сохраняем матрицу сервера
-                    enemy_matrix[0] = normal_data["server_matrix"]
-                turn[0] = normal_data['turn']
-
-
+                    enemy_matrix[0] = server_data["server_matrix"]
+                turn[0] = server_data['turn']
 
 
                 # обновляем матрицу клиента
                 if check_repeat[0] >= 1:
-                    list_grid = normal_data["new_for_client"]
-
-
-
+                    list_grid = server_data["new_for_client"]
 
                 print(list_grid , "client_matrix")
                 check_repeat[0] += 1
 
 
-                if normal_data["check_end_game"] != None:
-                    list_check_win[0] = normal_data["check_end_game"]
+                if server_data["check_end_game"] != None:
+                    list_check_win[0] = server_data["check_end_game"]
                     print("end")
                     break
 
-
- 
             except TimeoutError:
                 print("Час очікування відповіді сервера вичерпано")
                 continue
             except json.JSONDecodeError:
                 print("Помилка декодування даних")
-                if normal_data["check_end_game"] != None:
+                if server_data["check_end_game"] != None:
                     break
                 else:
                     continue
