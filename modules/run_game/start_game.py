@@ -643,7 +643,7 @@ def finish_window():
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 1000
+                player_nick.x_cor = 990
                 player_nick.y_cor = 470
                 player_nick.draw_font()
                 player_points.text = str(dict_save_information["player_points"])
@@ -679,7 +679,7 @@ def finish_window():
 
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 1000
+                enemy_nick.x_cor = 990
                 enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
 
@@ -695,7 +695,7 @@ def finish_window():
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 1000
+                player_nick.x_cor = 990
                 player_nick.y_cor = 470
                 player_nick.draw_font()
                 player_points.text = str(dict_save_information["player_points"])
@@ -731,7 +731,7 @@ def finish_window():
 
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 1000
+                enemy_nick.x_cor = 990
                 enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
 
