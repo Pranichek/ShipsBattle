@@ -175,6 +175,25 @@ def start_server(list_grid):
     while True:
         try:
             time.sleep(1)
+            count_server_ships = 0
+            count_client_ships = 0
+
+            for row_server in range(len(list_grid)):
+                for cell_server in range(len(list_grid[row_server])):
+                    if list_grid[row_server][cell_server] != 0 and list_grid[row_server][cell_server] != 5 and list_grid[row_server][cell_server] != 7:
+                        count_server_ships += 1
+
+            for row_client in range(len(enemy_matrix[0])):
+                for cell_client in range(len(enemy_matrix[0][row_client])):
+                    if enemy_matrix[0][row_client][cell_client] != 0 and enemy_matrix[0][row_client][cell_client] != 5 and enemy_matrix[0][row_client][cell_client] != 7:
+                        count_client_ships += 1
+
+            if count_server_ships == 0 and count_client_ships > 0:
+                list_check_win[0] = "win_client"
+                
+            elif count_client_ships == 0 and count_server_ships > 0:
+                list_check_win[0] = "win_server"
+
             # список который сохраняет данные по поводу времени
             check_time[0] += 1
             game_information = {
@@ -214,44 +233,20 @@ def start_server(list_grid):
             check_repeat[0] += 1
             print(list_grid)
 
-            count_server_ships = 0
-            count_client_ships = 0
+            if list_check_win[0] != None:
+                break
 
-            for row_server in range(len(list_grid)):
-                for cell_server in range(len(list_grid[row_server])):
-                    if list_grid[row_server][cell_server] != 0 and list_grid[row_server][cell_server] != 5 and list_grid[row_server][cell_server] != 7:
-                        count_server_ships += 1
-
-            for row_client in range(len(enemy_matrix[0])):
-                for cell_client in range(len(enemy_matrix[0][row_client])):
-                    if enemy_matrix[0][row_client][cell_client] != 0 and enemy_matrix[0][row_client][cell_client] != 5 and enemy_matrix[0][row_client][cell_client] != 7:
-                        count_client_ships += 1
-
-            print(count_server_ships)
-            print(count_client_ships)
-            print(enemy_matrix[0])
-            if count_server_ships == 0 and count_client_ships > 0:
-                list_check_win[0] = "win_client"
-                
-            elif count_client_ships == 0 and count_server_ships > 0:
-                list_check_win[0] = "win_server"
 
                 
         except TimeoutError:
                 print("Слишком долгое ожидание")
                 continue
         except json.JSONDecodeError:
-            # if list_check_win[0] != None:
-            #     break
-            # else:
             print("Не получилось декодировать данные/")
             continue
         except Exception as error:
             print(f"Тупая ошибка: {error}")
-            if list_check_win[0] != None:
-                break
-            else:
-                continue
+            continue
 
         
         

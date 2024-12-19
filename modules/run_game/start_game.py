@@ -152,7 +152,7 @@ clock_image = DrawImage(width = 206 , height = 57 , x_cor = 544 , y_cor = 20 , f
 # Зображення для фрейми де показують виграв чи програв користувач
 win_background = DrawImage(width = 431 , height = 255 , x_cor = 822 , y_cor = 392 , folder_name = "backgrounds" , image_name = "victory_bg.png")
 defeat_background = DrawImage(width = 431 , height = 255 , x_cor = 37 , y_cor = 392 , folder_name = "backgrounds" , image_name = "defeat_bg.png")
-end_game_image  = DrawImage(width = 606 , height = 78 , x_cor = 337 , y_cor = 80 , folder_name = "decorations" , image_name = "end_game.png")
+end_game_image  = DrawImage(width = 606 , height = 131 , x_cor = 337 , y_cor = 80 , folder_name = "decorations" , image_name = "end_game.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -498,16 +498,15 @@ def fight_window():
             player_face.load_image()
             enemy_face.load_image()
 
-        if list_check_win[0] != None:
-            apply_fade_effect(screen = main_screen)
-            run_game = False
-            change_scene(scene = finish_window())
-            check_press_button[0] = None
+        # if list_check_win[0] != None:
+        #     apply_fade_effect(screen = main_screen)
+        #     run_game = False
+        #     change_scene(scene = finish_window())
+        #     check_press_button[0] = None
 
 
         x_mouse , y_mouse = pygame.mouse.get_pos()
-        # if type(check_time[0]) != float:
-        #     print("Chane picture")
+  
         clock_image.image_name = f'{check_time[0]}.png'
         clock_image.load_image()
         module_screen_server.FPS.tick(60)       
@@ -613,12 +612,19 @@ def fight_window():
                                                 enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
 
+        
+        if list_check_win[0] != None:
+            apply_fade_effect(screen = main_screen)
+            run_game = False
+            change_scene(scene = finish_window())
+            check_press_button[0] = None
+
         pygame.display.flip()
 
 
 def finish_window():
     pygame.display.set_caption("Finish Window")
-    run_game = False
+    run_game = True
 
     while run_game:
         module_screen_server.FPS.tick(60)
@@ -629,115 +635,120 @@ def finish_window():
         win_background.draw_image(screen = main_screen)
         defeat_background.draw_image(screen = main_screen)
 
+
         if list_player_role[0] == "player_client":
             if list_check_win[0] == "win_client":
-                win_lose_text.text = dict_save_information["player_nick"] + "won"
+                win_lose_text.text = dict_save_information["player_nick"] + " won"
                 win_lose_text.draw_font()
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 968
-                player_nick.y_cor = 447
+                player_nick.x_cor = 1000
+                player_nick.y_cor = 470
                 player_nick.draw_font()
                 player_points.text = str(dict_save_information["player_points"])
                 player_points.size = 52
-                player_points.x_cor = 987
+                player_points.x_cor = 1020
                 player_points.y_cor = 531
                 player_points.draw_font()
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 163
-                enemy_nick.y_cor = 447
+                enemy_nick.x_cor = 180
+                enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
                 enemy_points.text = str(dict_save_information["enemy_points"])
                 enemy_points.size = 52
-                enemy_points.x_cor = 208
+                enemy_points.x_cor = 220
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
             else:
-                win_lose_text.text = dict_save_information["enemy_nick"] + "won"
+                win_lose_text.text = dict_save_information["enemy_nick"] + " won"
                 win_lose_text.draw_font()
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 163
-                player_nick.y_cor = 447
+                player_nick.x_cor = 180
+                player_nick.y_cor = 470
                 player_nick.draw_font()
 
                 player_points.text = str(dict_save_information["player_points"])
                 player_points.size = 52
-                player_points.x_cor = 208
+                player_points.x_cor = 220
                 player_points.y_cor = 531
                 player_points.draw_font()
 
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 968
-                enemy_nick.y_cor = 447
+                enemy_nick.x_cor = 1000
+                enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
 
                 enemy_points.text = str(dict_save_information["enemy_points"])
                 enemy_points.size = 52
-                enemy_points.x_cor = 987
+                enemy_points.x_cor = 1020
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
-                win_lose_text.text = dict_save_information["player_nick"] + "won"
+                win_lose_text.text = dict_save_information["player_nick"] + " won"
                 win_lose_text.draw_font()
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 968
-                player_nick.y_cor = 447
+                player_nick.x_cor = 1000
+                player_nick.y_cor = 470
                 player_nick.draw_font()
                 player_points.text = str(dict_save_information["player_points"])
                 player_points.size = 52
-                player_points.x_cor = 987
+                player_points.x_cor = 1020
                 player_points.y_cor = 531
                 player_points.draw_font()
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 163
-                enemy_nick.y_cor = 447
+                enemy_nick.x_cor = 180
+                enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
                 enemy_points.text = str(dict_save_information["enemy_points"])
                 enemy_points.size = 52
-                enemy_points.x_cor = 208
+                enemy_points.x_cor = 220
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
             else:
-                win_lose_text.text = dict_save_information["enemy_nick"] + "won"
+                win_lose_text.text = dict_save_information["enemy_nick"] + " won"
                 win_lose_text.draw_font()
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 163
-                player_nick.y_cor = 447
+                player_nick.x_cor = 180
+                player_nick.y_cor = 470
                 player_nick.draw_font()
 
                 player_points.text = str(dict_save_information["player_points"])
                 player_points.size = 52
-                player_points.x_cor = 208
+                player_points.x_cor = 220
                 player_points.y_cor = 531
                 player_points.draw_font()
 
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 968
-                enemy_nick.y_cor = 447
+                enemy_nick.x_cor = 1000
+                enemy_nick.y_cor = 470
                 enemy_nick.draw_font()
 
                 enemy_points.text = str(dict_save_information["enemy_points"])
                 enemy_points.size = 52
-                enemy_points.x_cor = 987
+                enemy_points.x_cor = 1020
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
 
-            for event in pygame.event.get():
+        for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run_game = False  
                     change_scene(None)
+
+        pygame.display.flip()
+
+            
                 
 
 
