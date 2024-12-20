@@ -111,24 +111,26 @@ def apply_fade_effect(screen, fade_speed=3, max_fade_alpha=76):
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
-create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height= 80 , action= button_action)
+create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height = 80 , action = button_action)
 #кнопка кторая перекидывает на фрейм по присоеденению к игре(серверу)
-join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_hover_path= "join_button_hover.png" , width= 346 , height= 80 , action= button_action)
+join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_hover_path= "join_button_hover.png" , width= 346 , height = 80 , action = button_action)
 #кнопка которая возвращает назад к главному окну
-back_to_menu = Button(x= 33 , y = 41 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 158 , height= 41 , action= button_action)
+back_to_menu = Button(x= 33 , y = 41 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 158 , height = 41 , action = button_action)
 #кнопка которая запускает сервер(игру)
-start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width= 575 , height= 80 , action= start_server)
+start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width = 575 , height = 80 , action= start_server)
 #кнопка которая подключается к игре
-join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "joint_to_game_hover.png" , width= 575 , height= 80 , action= connect_to_server)
+join_game_button = Button(x= 352 , y = 642,image_path= "join_to_game.png" , image_hover_path= "joint_to_game_hover.png" , width= 575 , height = 80 , action = connect_to_server)
 #кнопка коли розставив кораблі та підлючаєшься до бою
-ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height= 61 , action= connect_to_fight)
+ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , image_hover_path= "start_battle_hover.png" , width= 408 , height = 61 , action = connect_to_fight)
 #кнопка яка будеть розставляти кораблі у ранломному положені
-random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height= 48 , action= random_places_ships)
+random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height = 48 , action = random_places_ships)
 # кнопка для добавления звука
-button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width= 74, height= 71, action= music_up)
-button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width= 74, height= 71, action= music_lower)
+button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width = 74, height = 71, action = music_up)
+button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width = 74, height= 71, action = music_lower)
 #кнопка возвращения на сервер
-back_to_server = Button(x= 39 , y = 56 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 158 , height= 41 , action= button_action)
+back_to_server = Button(x= 39 , y = 56 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width = 158 , height = 41 , action= button_action)
+# Restart game
+restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_hover_path= "restart_game_hover.png" , width = 408, height = 61 , action= test)
 
 
 #images decoration
@@ -145,14 +147,18 @@ fight_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 , folder_
 frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 # Зображення аватрів гравців
-player_face = DrawImage(width = 195 , height = 122  ,x_cor = 1065 , y_cor = 64 , folder_name = "decorations" , image_name = "active_player.png")
-enemy_face = DrawImage(width = 195 , height = 122  ,x_cor = 20 , y_cor = 64 , folder_name = "decorations" , image_name = "not_active_enemy.png")
+player_face = DrawImage(width = 154 , height = 123 ,x_cor = 1104 , y_cor = 79 , folder_name = "decorations" , image_name = "active_player.png")
+enemy_face = DrawImage(width = 154 , height = 123  ,x_cor = 20 , y_cor = 79 , folder_name = "decorations" , image_name = "not_active_enemy.png")
 # Зображення яке показує скуільки залишилось часу
 clock_image = DrawImage(width = 206 , height = 57 , x_cor = 544 , y_cor = 20 , folder_name = "animation_clock" , image_name = "0.png")
 # Зображення для фрейми де показують виграв чи програв користувач
-win_background = DrawImage(width = 431 , height = 255 , x_cor = 822 , y_cor = 392 , folder_name = "backgrounds" , image_name = "victory_bg.png")
-defeat_background = DrawImage(width = 431 , height = 255 , x_cor = 37 , y_cor = 392 , folder_name = "backgrounds" , image_name = "defeat_bg.png")
+win_background = DrawImage(width = 315 , height = 199 , x_cor = 97 , y_cor = 416 , folder_name = "backgrounds" , image_name = "result_game_bg.png")
+defeat_background = DrawImage(width = 315 , height = 199 , x_cor = 860 , y_cor = 416 , folder_name = "backgrounds" , image_name = "result_game_bg.png")
 end_game_image  = DrawImage(width = 606 , height = 131 , x_cor = 337 , y_cor = 80 , folder_name = "decorations" , image_name = "end_game.png")
+# картинка для того что бы под текстом кто выиграл проиграл была тень
+shadow_text = DrawImage(width = 816 , height = 150 , x_cor = 233 , y_cor = 255 , folder_name = "decorations" , image_name = "shadow_text.png")
+new_year_cap = DrawImage(width = 133 , height = 133 , x_cor = 331 , y_cor = 75 , folder_name = "decorations" , image_name = "new_year_cap.png")
+
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -169,7 +175,7 @@ can_attack = DrawImage(width = 191 , height = 53 , x_cor = 820 , y_cor = 118 , f
 # Фон який вказує що користувач зараз не може ходити
 can_not_attack = DrawImage(width = 191 , height = 53 , x_cor = 311 , y_cor = 118 , folder_name = "backgrounds" , image_name = "not_active.png")
 # Finish background
-finish_bg = DrawImage(width = 1280 , height = 832 , x_cor = 0 , y_cor = 0 , folder_name = "backgrounds" , image_name = "end_background.png")
+finish_bg = DrawImage(width = 1280 , height = 832 , x_cor = 0 , y_cor = 0 , folder_name = "backgrounds" , image_name = "win_game_bg.png")
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
@@ -619,19 +625,41 @@ def fight_window():
 
         pygame.display.flip()
 
+
 # спсиок для того чтобы для игрока добавлились/отнимались очки только один раз
 check_points = [0]
-
 def finish_window():
     pygame.display.set_caption("Finish Window")
     run_game = True
-
+    check_points[0] = 0
     while run_game:
         check_points[0] += 1
         module_screen_server.FPS.tick(60)
-        finish_bg.draw_image(screen = main_screen)
+        if list_player_role[0] == "player_client":
+            if list_check_win[0] == "win_client":
+                finish_bg.image_name = "win_game_bg.png"
+                finish_bg.load_image()
+                finish_bg.draw_image(screen = main_screen)
+            else:
+                finish_bg.image_name = "lose_game_bg.png"
+                finish_bg.load_image()
+                finish_bg.draw_image(screen = main_screen)
+
+        elif list_player_role[0] == "server_player":
+            if list_check_win[0] == "win_server":
+                finish_bg.image_name = "win_game_bg.png"
+                finish_bg.load_image()
+                finish_bg.draw_image(screen = main_screen)
+            else:
+                finish_bg.image_name = "lose_game_bg.png"
+                finish_bg.load_image()
+                finish_bg.draw_image(screen = main_screen)
 
         end_game_image.draw_image(screen = main_screen)
+
+        new_year_cap.draw_image(screen = main_screen)
+
+        shadow_text.draw_image(screen = main_screen)
 
         win_background.draw_image(screen = main_screen)
         defeat_background.draw_image(screen = main_screen)
@@ -644,25 +672,25 @@ def finish_window():
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 990
-                player_nick.y_cor = 470
+                player_nick.x_cor = 970
+                player_nick.y_cor = 450
                 player_nick.draw_font()
-                player_points.text = str(dict_save_information["player_points"] + 100) 
+                player_points.text = str(dict_save_information["player_points"] + 100)
                 player_points.size = 52
-                player_points.x_cor = 1020
+                player_points.x_cor = 980
                 player_points.y_cor = 531
                 player_points.draw_font()
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 180
-                enemy_nick.y_cor = 470
+                enemy_nick.x_cor = 200
+                enemy_nick.y_cor = 450
                 enemy_nick.draw_font()
                 if dict_save_information["enemy_points"] == 0:
                     enemy_points.text = str(dict_save_information["enemy_points"])
                 else:
                     enemy_points.text = str(dict_save_information["enemy_points"] - 50)
                 enemy_points.size = 52
-                enemy_points.x_cor = 220
+                enemy_points.x_cor = 240
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
 
@@ -672,13 +700,13 @@ def finish_window():
                     write_json(filename = "data_base.json" , object_dict = list_users)
 
             else:
-                win_lose_text.text = dict_save_information["enemy_nick"] + " won"
+                win_lose_text.text = dict_save_information["player_nick"] + " Lost"
                 win_lose_text.draw_font()
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 180
-                player_nick.y_cor = 470
+                player_nick.x_cor = 200
+                player_nick.y_cor = 450
                 player_nick.draw_font()
                 if dict_save_information["player_points"] == 0:
                     player_points.text = str(dict_save_information["player_points"])
@@ -691,13 +719,13 @@ def finish_window():
 
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 990
-                enemy_nick.y_cor = 470
+                enemy_nick.x_cor = 970
+                enemy_nick.y_cor = 450
                 enemy_nick.draw_font()
 
                 enemy_points.text = str(dict_save_information["enemy_points"] + 100)
                 enemy_points.size = 52
-                enemy_points.x_cor = 1020
+                enemy_points.x_cor = 980
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
 
@@ -719,25 +747,25 @@ def finish_window():
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 990
-                player_nick.y_cor = 470
+                player_nick.x_cor = 970
+                player_nick.y_cor = 450
                 player_nick.draw_font()
                 player_points.text = str(dict_save_information["player_points"] + 100)
                 player_points.size = 52
-                player_points.x_cor = 1020
+                player_points.x_cor = 980
                 player_points.y_cor = 531
                 player_points.draw_font()
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 180
-                enemy_nick.y_cor = 470
+                enemy_nick.x_cor = 200
+                enemy_nick.y_cor = 450
                 enemy_nick.draw_font()
                 if dict_save_information["enemy_points"] == 0:
                     enemy_points.text = str(dict_save_information["enemy_points"])
                 else:
                     enemy_points.text = str(dict_save_information["enemy_points"] - 50)
                 enemy_points.size = 52
-                enemy_points.x_cor = 220
+                enemy_points.x_cor = 240
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
 
@@ -746,13 +774,13 @@ def finish_window():
                     list_users[nickname]["points"] += 100
                     write_json(filename = "data_base.json" , object_dict = list_users)
             else:
-                win_lose_text.text = dict_save_information["enemy_nick"] + " won"
+                win_lose_text.text = dict_save_information["player_nick"] + " Lost"
                 win_lose_text.draw_font()
 
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
-                player_nick.x_cor = 180
-                player_nick.y_cor = 470
+                player_nick.x_cor = 200
+                player_nick.y_cor = 450
                 player_nick.draw_font()
                 if dict_save_information["player_points"] == 0:
                     player_points.text = str(dict_save_information["player_points"])
@@ -765,13 +793,13 @@ def finish_window():
 
                 enemy_nick.text = dict_save_information["enemy_nick"]
                 enemy_nick.size = 52
-                enemy_nick.x_cor = 990
-                enemy_nick.y_cor = 470
+                enemy_nick.x_cor = 970
+                enemy_nick.y_cor = 450
                 enemy_nick.draw_font()
 
                 enemy_points.text = str(dict_save_information["enemy_points"] + 100)
                 enemy_points.size = 52
-                enemy_points.x_cor = 1020
+                enemy_points.x_cor = 980
                 enemy_points.y_cor = 531
                 enemy_points.draw_font()
 
@@ -784,6 +812,8 @@ def finish_window():
                     if data_points > 0:
                         list_users[nickname]["points"] -= 50
                         write_json(filename = "data_base.json" , object_dict = list_users)
+
+        restart_game.draw(surface = main_screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
