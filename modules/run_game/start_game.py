@@ -157,7 +157,7 @@ defeat_background = DrawImage(width = 315 , height = 199 , x_cor = 860 , y_cor =
 end_game_image  = DrawImage(width = 606 , height = 131 , x_cor = 337 , y_cor = 80 , folder_name = "decorations" , image_name = "end_game.png")
 # картинка для того что бы под текстом кто выиграл проиграл была тень
 shadow_text = DrawImage(width = 816 , height = 150 , x_cor = 233 , y_cor = 255 , folder_name = "decorations" , image_name = "shadow_text.png")
-new_year_cap = DrawImage(width = 133 , height = 133 , x_cor = 331 , y_cor = 75 , folder_name = "decorations" , image_name = "new_year_cap.png")
+new_year_cap = DrawImage(width = 133 , height = 133 , x_cor = 331 , y_cor = 80 , folder_name = "decorations" , image_name = "new_year_cap.png")
 
 
 #backgrounds
