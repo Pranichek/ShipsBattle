@@ -302,8 +302,12 @@ def join_game_window():
     run_game = True
     #основний цикл роботи вікна користувача
     while run_game:
-        data = read_json(name_file = "utility.json")
-        status_server = data["status"]
+        try:
+            data = read_json(name_file = "utility.json")
+            status_server = data["status"]
+        except:
+            status_server = "wait"
+            continue
         module_screen_server.FPS.tick(60)
         input_data_bg.draw_image(screen= main_screen)
 
