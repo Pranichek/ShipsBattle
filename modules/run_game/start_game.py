@@ -591,6 +591,8 @@ def fight_window():
                                                 check_time[0] = 0
                                                 list_check_need_send[0] = "yes"
                                                 turn[0] = "client_turn" 
+                                            else:
+                                                turn[0] = "client_turn"
                                                                           
                                             
                 elif list_player_role[0] == "server_player":
@@ -620,6 +622,8 @@ def fight_window():
                                             elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
                                                 enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
+                                            else:
+                                                turn[0] = "server_turn"
 
         if list_check_win[0] != None:
             apply_fade_effect(screen = main_screen)
