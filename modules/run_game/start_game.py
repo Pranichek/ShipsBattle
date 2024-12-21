@@ -107,7 +107,28 @@ def apply_fade_effect(screen, fade_speed=3, max_fade_alpha=76):
         pygame.display.flip()
         pygame.time.Clock().tick(60)
     
+def draw_repeat_button(screen, repeat_turn):
+    
+    button_width, button_height = 200, 50
+    button_x, button_y = 300, 600  
+    button_color = (0, 255, 0) if repeat_turn[0] else (255, 0, 0)  
 
+    pygame.draw.rect(screen, button_color, pygame.Rect(button_x, button_y, button_width, button_height))
+    
+    font = pygame.font.Font(None, 36)
+    text = font.render("Повторный ход", True, (255, 255, 255))
+    text_rect = text.get_rect(center=(button_x + button_width / 2, button_y + button_height / 2))
+    screen.blit(text, text_rect)
+
+def check_repeat_button_click(x_mouse, y_mouse, repeat_turn):
+    
+    button_x, button_y = 300, 600  
+    button_width, button_height = 200, 50
+
+    if button_x <= x_mouse <= button_x + button_width and button_y <= y_mouse <= button_y + button_height:
+        if repeat_turn[0]:  # Если повторный ход возможен
+            return True
+    return False
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
@@ -470,6 +491,8 @@ def fight_window():
     pygame.display.set_caption("Battle Screen")
     run_game = True
 
+    
+
     enemy_grid.X_SCREEN = 67
     enemy_grid.Y_SCREEN = 257
     enemy_grid.generate_grid(width_cell=55, height_cell=55)
@@ -478,6 +501,7 @@ def fight_window():
     grid_player.Y_SCREEN = 257
     grid_player.generate_grid(width_cell=55, height_cell=55)
 
+    repeat_turn = [False]  # Список для управления повторными ходами
 
     for num , ship  in enumerate(list_ships):
         grid_x = list_ships[num].col
@@ -494,6 +518,8 @@ def fight_window():
     grid_image.y_cor = 211
     grid_image.load_image()
     
+    
+
     while run_game:
         module_screen_server.FPS.tick(60)
         if list_player_role[0] == "server_player" and turn[0] == "server_turn":
@@ -527,7 +553,7 @@ def fight_window():
         player_face.draw_image(screen = main_screen)
         enemy_face.draw_image(screen = main_screen)
 
-        
+        draw_repeat_button(main_screen, repeat_turn)
 
         player_nick.text = dict_save_information["player_nick"]
         player_nick.draw_font()
@@ -558,7 +584,13 @@ def fight_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-            
+
+
+            if check_repeat_button_click(x_mouse, y_mouse, repeat_turn):
+                print("Повторный ход")
+                repeat_turn[0] = True
+
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if list_player_role[0] == "player_client":
                     if turn[0] == "client_turn":
