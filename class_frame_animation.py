@@ -9,13 +9,13 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.frame_paths = frame_paths
         
         
-        # Загружаем пути к изображениям
+        
         while self.number < self.frame_paths[1]:
             self.frame.append(f"{self.frame_paths[0]}\\{self.number}.png")
             self.number += 1
         
 
-        # Загружаем изображения и изменяем их размер, если указан размер
+        
         self.frames = [
             pygame.transform.scale(
                 pygame.image.load(path).convert_alpha(),
