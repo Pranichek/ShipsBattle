@@ -1,5 +1,5 @@
 #імпортуємо усі потрібні модулі
-import pygame
+import pygame , random
 import modules.screens.screen as module_screen_server
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
@@ -13,6 +13,7 @@ from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win
 from ..client import list_check_need_send 
 from ..shop import shop_item
+from ..classes.animation import rocket_animation , cross_animation , animation_boom
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -26,6 +27,8 @@ check_client_connected = [False]
 list_current_scene = [None]
 #список для того щоб головна музика починала грати лише один раз і не приривалася
 once_play_music = [0]
+# список для трясіння екрану
+screen_shake = [0]
 
 
 
@@ -207,41 +210,48 @@ def main_window():
         create_game_frame.draw(surface= main_screen)
         button_upp.draw(surface= main_screen)
         button_lower.draw(surface= main_screen)
-
-        shop_and_tasks.draw(surface = main_screen)
+        
+        #---------
+        # shop_and_tasks.draw(surface = main_screen)
         
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
 
-        for item in shop_item:
-            item.draw(screen = main_screen)
-            item.move()
-           
+        # rocket_animation.animation(count_image = 7 , main_screen = main_screen)
+        # cross_animation.animation(count_image = 13 , main_screen = main_screen)
+        # animation_boom.animation(count_image = 8 , main_screen = main_screen)
 
+        #-------------
+        # for item in shop_item:
+        #     item.draw(screen = main_screen)
+        #     item.move()
+           
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-            if list_check_shop[0] == True:
-                for items in shop_item:
-                    items.ACTIVE = True
-                list_check_shop[0] = False
+            #----------
+            # if list_check_shop[0] == True:
+            #     for items in shop_item:
+            #         items.ACTIVE = True
+            #     list_check_shop[0] = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click(event = event)
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
-                shop_and_tasks.check_click(event = event)
-                for button in shop_item:
-                    try:
-                        button.check_click(event = event)
-                    except:
-                        continue
-
-                if mouse_y > 416 and shop_item[0].TURN == "Up":
-                    for items in shop_item:
-                        items.ACTIVE = True  
+                # shop_and_tasks.check_click(event = event)
+                # #----------
+                # for button in shop_item:
+                #     try:
+                #         button.check_click(event = event)
+                #     except:
+                #         continue
+                # #----------------------------------------------------------------
+                # if mouse_y > 416 and shop_item[0].TURN == "Up":
+                #     for items in shop_item:
+                #         items.ACTIVE = True  
 
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
@@ -524,9 +534,19 @@ def fight_window():
     grid_image.x_cor = 659
     grid_image.y_cor = 211
     grid_image.load_image()
-    
+
     while run_game:
         module_screen_server.FPS.tick(60)
+        x_mouse , y_mouse = pygame.mouse.get_pos()
+        render_offset = [0, 0]
+
+        if screen_shake[0] > 0:
+            render_offset[0] = random.randint(-4, 4)
+            render_offset[1] = random.randint(-4, 4)
+            screen_shake[0] -= 1  # Уменьшаем значение screen_shake до 0
+        else:
+            render_offset = [0, 0] 
+        
         if list_player_role[0] == "server_player" and turn[0] == "server_turn":
             player_face.image_name = "active_player.png"
             enemy_face.image_name = "not_active_enemy.png"
@@ -542,14 +562,10 @@ def fight_window():
             enemy_face.image_name = "active_enemy.png"
             player_face.load_image()
             enemy_face.load_image()
-
-
-        x_mouse , y_mouse = pygame.mouse.get_pos()
   
         clock_image.image_name = f'{check_time[0]}.png'
         clock_image.load_image()
-
-        module_screen_server.FPS.tick(60)       
+     
         fight_bg.draw_image(screen = main_screen)
 
         frame_nick_player.draw_image(screen = main_screen)
@@ -561,18 +577,23 @@ def fight_window():
         
 
         player_nick.text = dict_save_information["player_nick"]
-        player_nick.draw_font()
         enemy_nick.text = dict_save_information["enemy_nick"]
-        enemy_nick.draw_font()
         player_points.text = str(dict_save_information["player_points"])
-        player_points.draw_font()
         enemy_points.text = str(dict_save_information["enemy_points"])
+        player_nick.update_text()
+        enemy_nick.update_text()
+        player_points.update_text()
+        enemy_points.update_text()
+        player_nick.draw_font()
+        enemy_nick.draw_font()
+        player_points.draw_font()
         enemy_points.draw_font()
 
         grid_image.draw_image(screen = main_screen)
         grid_image_for_enemy.draw_image(screen = main_screen)
 
         clock_image.draw_image(screen = main_screen)
+        
 
         for cell in list_object_map:
             cell.draw(screen=main_screen)
@@ -583,14 +604,37 @@ def fight_window():
         for num , ship  in enumerate(list_ships):
             list_ships[num].draw_sheep(screen = main_screen)
 
-        
+        # кнопка для открытия магазина
+        shop_and_tasks.draw(surface = main_screen)
+
+        for item in shop_item:
+            item.draw(screen = main_screen)
+            item.move()
+
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
             
+            if list_check_shop[0] == True:
+                for items in shop_item:
+                    items.ACTIVE = True
+                list_check_shop[0] = False
+
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                shop_and_tasks.check_click(event = event)
+                for button in shop_item:
+                    try:
+                        button.check_click(event = event)
+                    except:
+                        continue
+        
+                if y_mouse > 416 and shop_item[0].TURN == "Up":
+                    for items in shop_item:
+                        items.ACTIVE = True  
+
                 if list_player_role[0] == "player_client":
                     if turn[0] == "client_turn":
                         if x_mouse >= 67 and x_mouse <= 67 + 550:
@@ -608,7 +652,6 @@ def fight_window():
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
                                             if enemy_matrix[0][row][col] == 0:
-                                                print("Промах")
                                                 enemy_matrix[0][row][col] = 5
                                                 list_check_need_send[0] = "yes"  # Готуємо дані для відправки
                                                 turn[0] = "server_turn"  # Передаємо хід серверу
@@ -618,13 +661,11 @@ def fight_window():
                                                 print("Уже стреляли в эту клетку")
                                                 
                                             elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
-                                                print("Попало")
+                                                screen_shake[0] = 31
                                                 enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
                                                 list_check_need_send[0] = "yes"
-                                                turn[0] = "client_turn" 
-        
-                                                                          
+                                                turn[0] = "client_turn"                                           
                                             
                 elif list_player_role[0] == "server_player":
                     if turn[0] == "server_turn":
@@ -651,6 +692,7 @@ def fight_window():
                                                 print("Уже стреляли в эту клетку")
                     
                                             elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
+                                                screen_shake[0] = 31
                                                 enemy_matrix[0][row][col] = 7
                                                 check_time[0] = 0
 
@@ -659,6 +701,11 @@ def fight_window():
             run_game = False
             change_scene(scene = finish_window())
             check_press_button[0] = None
+
+        if screen_shake[0] > 1:
+            screen_shake[0] -= 1
+
+        main_screen.blit(pygame.transform.scale(main_screen, (1280 , 832)), render_offset)
 
         pygame.display.flip()
 
