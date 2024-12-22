@@ -12,6 +12,7 @@ from .clinent_connect import connect_to_server , list_check_connection , fail_co
 from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win
 from ..client import list_check_need_send 
+from ..shop import shop_item
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -108,6 +109,12 @@ def apply_fade_effect(screen, fade_speed=3, max_fade_alpha=76):
         pygame.time.Clock().tick(60)
     
 
+list_check_shop = [None]
+
+def show_shop():
+    if shop_item[0].TURN == "Down": 
+        list_check_shop[0] = True
+
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
@@ -131,7 +138,8 @@ button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hov
 back_to_server = Button(x= 39 , y = 56 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width = 158 , height = 41 , action= button_action)
 # Restart game
 restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_hover_path= "restart_game_hover.png" , width = 408, height = 61 , action= test)
-
+# кнопка котороя показывает магазинчик и задания
+shop_and_tasks = Button(x= 1240 , y = 4,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
 
 #images decoration
 cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
@@ -192,26 +200,49 @@ def main_window():
 
     while run_game:
         module_screen_server.FPS.tick(60)
+        mouse_x , mouse_y = pygame.mouse.get_pos()
         main_bg.draw_image(screen= main_screen)
 
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
         button_upp.draw(surface= main_screen)
         button_lower.draw(surface= main_screen)
+
+        shop_and_tasks.draw(surface = main_screen)
         
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
+
+        for item in shop_item:
+            item.draw(screen = main_screen)
+            item.move()
+           
 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
+            if list_check_shop[0] == True:
+                for items in shop_item:
+                    items.ACTIVE = True
+                list_check_shop[0] = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click(event = event)
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
+                shop_and_tasks.check_click(event = event)
+                for button in shop_item:
+                    try:
+                        button.check_click(event = event)
+                    except:
+                        continue
+
+                if mouse_y > 416 and shop_item[0].TURN == "Up":
+                    for items in shop_item:
+                        items.ACTIVE = True  
+
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
                 check_press_button[0] = None 
@@ -582,6 +613,7 @@ def fight_window():
                                                 list_check_need_send[0] = "yes"  # Готуємо дані для відправки
                                                 turn[0] = "server_turn"  # Передаємо хід серверу
 
+
                                             elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
                                                 print("Уже стреляли в эту клетку")
                                                 
@@ -591,6 +623,7 @@ def fight_window():
                                                 check_time[0] = 0
                                                 list_check_need_send[0] = "yes"
                                                 turn[0] = "client_turn" 
+        
                                                                           
                                             
                 elif list_player_role[0] == "server_player":
