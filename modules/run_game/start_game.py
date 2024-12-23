@@ -503,14 +503,18 @@ def ships_position_window():
         pygame.display.flip()
 
 
-
+# функція для бою між гравцями
 def fight_window():
+    # зупиняємо музику яка грала перед боєм
     music_load_waiting.stop()
-    # music_load_main.play()
+    # вмикаємо музику для бою
     fight_music.play()
+    # задаємо назву вікну
     pygame.display.set_caption("Battle Screen")
+    # створюємо змінну для нескінченого циклу гри
     run_game = True
 
+    # створюємо дві сітки для гри(нашу та ворога) , ці сітки просто як звичайний малюнок
     enemy_grid.X_SCREEN = 67
     enemy_grid.Y_SCREEN = 257
     enemy_grid.generate_grid(width_cell=55, height_cell=55)
@@ -519,7 +523,7 @@ def fight_window():
     grid_player.Y_SCREEN = 257
     grid_player.generate_grid(width_cell=55, height_cell=55)
 
-
+    # оновлюємо координати кораблів , та їхній розмір , щоб можна було відмалювати на сітці
     for num , ship  in enumerate(list_ships):
         grid_x = list_ships[num].col
         grid_y = list_ships[num].row
@@ -529,6 +533,7 @@ def fight_window():
         list_ships[num].HEIGHT = 55
         list_ships[num].load_image()
 
+    # Завантажуємо картинку для сітки , по якій можемо ореєнутватися куди бити(тобто A1 , B9 і тд)
     grid_image.width = 597
     grid_image.height = 597
     grid_image.x_cor = 659
@@ -536,17 +541,25 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        # ставимо фпс на значення 60
         module_screen_server.FPS.tick(60)
+        # отримцємо координати курсору
         x_mouse , y_mouse = pygame.mouse.get_pos()
+        # створюємо спсиок , завдяки якому будемо трясти екран при ударі
         render_offset = [0, 0]
 
         if screen_shake[0] > 0:
+            # записуємо рандомні числа у список render_offset , щоб за ними трясти екран
             render_offset[0] = random.randint(-4, 4)
             render_offset[1] = random.randint(-4, 4)
             screen_shake[0] -= 1  # Уменьшаем значение screen_shake до 0
         else:
+            # якщо не треба трясти екран , то обнуляємо значення
             render_offset = [0, 0] 
         
+        # робимо умови щоб відмальовувати картинки чиї зараз хід
+        # тобто якщо роль гравця(гравець може бути сервером або клієнтом) співпадає із чергою , то відмальовуємо зображення 
+        # яке вказуємо що можемо зараз ходити , якщо ні , то малюємо зображення про заборону ходу
         if list_player_role[0] == "server_player" and turn[0] == "server_turn":
             player_face.image_name = "active_player.png"
             enemy_face.image_name = "not_active_enemy.png"
@@ -562,20 +575,25 @@ def fight_window():
             enemy_face.image_name = "active_enemy.png"
             player_face.load_image()
             enemy_face.load_image()
-  
-        clock_image.image_name = f'{check_time[0]}.png'
-        clock_image.load_image()
-     
+
+        # відмальовуємо фон для фрейма бою
         fight_bg.draw_image(screen = main_screen)
 
+        # завантажуємо , та відмальовуємо зображення годинників(скільки часу пройшло)
+        clock_image.image_name = f'{check_time[0]}.png'
+        clock_image.load_image()
+        clock_image.draw_image(screen = main_screen)
+
+        # відмальовуємо рамки де будуть находитися ніки гравців
         frame_nick_player.draw_image(screen = main_screen)
         second_frame_nick_player.draw_image(screen = main_screen)
 
+        # відмальовуємо зображення які вказують чиї зараз ход
         player_face.draw_image(screen = main_screen)
         enemy_face.draw_image(screen = main_screen)
 
         
-
+        # оновлюємо дані про ник та очки , та відмольовуємо їх
         player_nick.text = dict_save_information["player_nick"]
         enemy_nick.text = dict_save_information["enemy_nick"]
         player_points.text = str(dict_save_information["player_points"])
@@ -589,56 +607,60 @@ def fight_window():
         player_points.draw_font()
         enemy_points.draw_font()
 
+        # відмальовуємо зображення сітки , по якій можемо ореєнтуватися куди бити(тобто A1 , B9 � тд)
         grid_image.draw_image(screen = main_screen)
         grid_image_for_enemy.draw_image(screen = main_screen)
 
-        clock_image.draw_image(screen = main_screen)
-        
-
+        # малюємо клітинки сітки(просто пусті клітини) гравців
         for cell in list_object_map:
             cell.draw(screen=main_screen)
-
         for empty_cell in list_object_map_enemy:
             empty_cell.draw(screen=main_screen)
 
+        # відмалбовуємо кораблі які ми роставляли , але у змнешаному вигялді , та у іншому місці(сітці яка також зменшилась у розмірі)
         for num , ship  in enumerate(list_ships):
             list_ships[num].draw_sheep(screen = main_screen)
 
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = main_screen)
 
+        # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop_item:
             item.draw(screen = main_screen)
             item.move()
-
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-            
+            # перевіряємо чи натиснули на кнопку показу магазину 
             if list_check_shop[0] == True:
+                # якщо так , то говоримо щоб усі елементи рухались униз(щоб гравець зміг їх побачити)
                 for items in shop_item:
                     items.ACTIVE = True
                 list_check_shop[0] = False
 
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 shop_and_tasks.check_click(event = event)
+                # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop_item:
                     try:
                         button.check_click(event = event)
                     except:
                         continue
-        
+                # перевіряємо чи натиснули за зоною магазина , і якщо так то закриваємо його
                 if y_mouse > 416 and shop_item[0].TURN == "Up":
                     for items in shop_item:
                         items.ACTIVE = True  
 
+                # нижче умови для атаки 
+                # перевіряємо за яку роль грає гравець
                 if list_player_role[0] == "player_client":
                     if turn[0] == "client_turn":
+                        # перевіряємо щоб гравець натискав на сітку ворога
                         if x_mouse >= 67 and x_mouse <= 67 + 550:
                             if y_mouse >= 257 and y_mouse <= 257 + 550:
+                                # шукаємо клітинку на яку натиснув гравець
                                 for cell in list_object_map_enemy: 
                                     if cell.x <= x_mouse and x_mouse < cell.x + 55:
                                         if cell.y <= y_mouse and y_mouse < cell.y + 55:
@@ -651,26 +673,41 @@ def fight_window():
                                             #Колонку кораблика вычисляем по такому принципу
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
+
+                                            # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
+                                            # 5 - значить , що гравець зробив постріл , але схибив його
                                             if enemy_matrix[0][row][col] == 0:
                                                 enemy_matrix[0][row][col] = 5
+                                                # оскільки ці умови , якщо гравець це клієнт
+                                                # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
                                                 list_check_need_send[0] = "yes"  # Готуємо дані для відправки
                                                 turn[0] = "server_turn"  # Передаємо хід серверу
-
-
+                                            # робимо умову для випадку коли по клітичнці вже били
                                             elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
                                                 print("Уже стреляли в эту клетку")
-                                                
-                                            elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
-                                                screen_shake[0] = 31
-                                                enemy_matrix[0][row][col] = 7
-                                                check_time[0] = 0
-                                                list_check_need_send[0] = "yes"
-                                                turn[0] = "client_turn"                                           
                                             
+                                            # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
+                                            # 7 - значить , що гравець зробив постріл і попав по кораблю
+                                            elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
+                                                # записуємо у зміну число , щоб почало трясти екран
+                                                screen_shake[0] = 31
+                                                # у матрицю ворога записуємо 7
+                                                enemy_matrix[0][row][col] = 7
+                                                # обнуляємо час ходу
+                                                check_time[0] = 0
+                                                # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                list_check_need_send[0] = "yes"
+                                                turn[0] = "client_turn"        
+
+ 
+                                                                       
+                # перевіряємо за яку роль грає гравець                    
                 elif list_player_role[0] == "server_player":
                     if turn[0] == "server_turn":
+                        # перевіряємо щоб гравець натискав на сітку ворога
                         if x_mouse >= 67 and x_mouse <= 67 + 550:
                             if y_mouse >= 257 and y_mouse <= 257 + 550:
+                                # шукаємо клітинку на яку натиснув гравець
                                 for cell in list_object_map_enemy: 
                                     if cell.x <= x_mouse and x_mouse < cell.x + 55:
                                         if cell.y <= y_mouse and y_mouse < cell.y + 55:
@@ -683,43 +720,65 @@ def fight_window():
                                             #Колонку кораблика вычисляем по такому принципу
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
+
+                                            # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
+                                            # 5 - значить , що гравець зробив постріл , але схибив його
                                             if enemy_matrix[0][row][col] == 0:
+                                                # записуємо у матрицю ворога 5
                                                 enemy_matrix[0][row][col] = 5
+                                                # обнуляємо час для ходу
                                                 check_time[0] = 0
+                                                # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
                                                 turn[0] = "client_turn"
 
+                                            # робимо умову для випадку коли по клітичнці вже били
                                             elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
                                                 print("Уже стреляли в эту клетку")
-                    
-                                            elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
-                                                screen_shake[0] = 31
-                                                enemy_matrix[0][row][col] = 7
-                                                check_time[0] = 0
 
-        if list_check_win[0] != None:
+                                            # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
+                                            # 7 - значить , що гравець зробив постріл і попав по кораблю
+                                            elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
+                                                # записуємо у зміну число , щоб почало трясти екран
+                                                screen_shake[0] = 31
+                                                # у матрицю ворога записуємо 7
+                                                enemy_matrix[0][row][col] = 7
+                                                # обнуляємо час для ходу
+                                                check_time[0] = 0
+        # Перевіряємо чи не пустий список який зберігає чи хтось виграв
+        if list_check_win[0] != None:   
+            # якщо вже їтось виграв , то робимо ефект затемнення
             apply_fade_effect(screen = main_screen)
+            # зупиняємо цикл гри
             run_game = False
+            # змінюємо фрейм бою , на фрейм показу результатів
             change_scene(scene = finish_window())
             check_press_button[0] = None
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1
 
+        # відмальовуємо екран із координатами що збергаються у списку render_offset , щоб якщо гравець потрапив по карблю , то був ефект трясіння
         main_screen.blit(pygame.transform.scale(main_screen, (1280 , 832)), render_offset)
-
+        # оновлюємо екран
         pygame.display.flip()
 
 
-# спсиок для того чтобы для игрока добавлились/отнимались очки только один раз
+# лист для того чтобы для игрока добавлились/отнимались очки только один раз
 check_points = [0]
 def finish_window():
+    #установка заголовка та початкові налаштування
     pygame.display.set_caption("Finish Window")
     run_game = True
     check_points[0] = 0
+    # створюємо основний цикл малювання вікна
     while run_game:
         check_points[0] += 1
+        #обмежує частоту кадрів до 60
         module_screen_server.FPS.tick(60)
+        # перевірка ролі гравця та результату гри
+        #якщо гравець є клієнтом
         if list_player_role[0] == "player_client":
+            # перевіряється, чи виграв він (win_client), і залежно від цього завантажується фон
             if list_check_win[0] == "win_client":
                 finish_bg.image_name = "win_game_bg.png"
                 finish_bg.load_image()
@@ -728,7 +787,7 @@ def finish_window():
                 finish_bg.image_name = "lose_game_bg.png"
                 finish_bg.load_image()
                 finish_bg.draw_image(screen = main_screen)
-
+        # якщо гравець є сервером (server_player), аналогічно перевіряється перемога (win_server) чи поразка, і вибирається відповідний фон
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
                 finish_bg.image_name = "win_game_bg.png"
@@ -739,21 +798,23 @@ def finish_window():
                 finish_bg.load_image()
                 finish_bg.draw_image(screen = main_screen)
 
+        # виводимо текст про завершення гри
         end_game_image.draw_image(screen = main_screen)
-
+        # малюємо декорації
         new_year_cap.draw_image(screen = main_screen)
-
         shadow_text.draw_image(screen = main_screen)
-
+        # відобраємо фони
         win_background.draw_image(screen = main_screen)
         defeat_background.draw_image(screen = main_screen)
 
-
+        # відображення тексту та оновлення балів
         if list_player_role[0] == "player_client":
+            #якщо клієнт виграв, відображається повідомлення про перемогу, бали гравця збільшуються на 100
             if list_check_win[0] == "win_client":
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
                 win_lose_text.draw_font()
 
+                # відмальовка ників та балів
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
                 player_nick.x_cor = 970
@@ -782,11 +843,12 @@ def finish_window():
                 if check_points[0] == 1:
                     list_users[nickname]["points"] += 100
                     write_json(filename = "data_base.json" , object_dict = list_users)
-
+            # якщо клієнт програв, його бали зменшуються на 50 (якщо вони більше 0)
             else:
                 win_lose_text.text = dict_save_information["player_nick"] + " Lost"
                 win_lose_text.draw_font()
 
+                # відмальовка ників та балів
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
                 player_nick.x_cor = 200
@@ -823,12 +885,12 @@ def finish_window():
                         list_users[nickname]["points"] -= 50
                         write_json(filename = "data_base.json" , object_dict = list_users)
          
-
+        # аналогічно клієнту, але логіка перевірки пов'язана з win_server та lose_server
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
                 win_lose_text.draw_font()
-
+                # відмальовка ників та балів
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
                 player_nick.x_cor = 970
@@ -860,7 +922,7 @@ def finish_window():
             else:
                 win_lose_text.text = dict_save_information["player_nick"] + " Lost"
                 win_lose_text.draw_font()
-
+                # відмальовка ників та балів
                 player_nick.text = dict_save_information["player_nick"]
                 player_nick.size = 52
                 player_nick.x_cor = 200
@@ -896,7 +958,7 @@ def finish_window():
                     if data_points > 0:
                         list_users[nickname]["points"] -= 50
                         write_json(filename = "data_base.json" , object_dict = list_users)
-
+        # відмальвока кнопки рестарту гри
         restart_game.draw(surface = main_screen)
 
         for event in pygame.event.get():

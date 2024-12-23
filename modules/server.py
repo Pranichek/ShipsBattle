@@ -182,6 +182,7 @@ def start_server(list_grid):
             # счетчик кораблей клиента
             count_client_ships = 0
 
+            # делаем перебор матриц сервера и клиента, чтобы проверять ввыиграл уже кто то или нет
             for row_server in range(len(list_grid)):
                 for cell_server in range(len(list_grid[row_server])):
                     # 5 - по клетке уже стреляли
@@ -192,13 +193,17 @@ def start_server(list_grid):
 
             for row_client in range(len(enemy_matrix[0])):
                 for cell_client in range(len(enemy_matrix[0][row_client])):
+                    # 5 - по клетке уже стреляли
+                    # 0 - кораблей просто нет
+                    # 7 - уже потопленный корабль
                     if enemy_matrix[0][row_client][cell_client] != 0 and enemy_matrix[0][row_client][cell_client] != 5 and enemy_matrix[0][row_client][cell_client] != 7:
                         count_client_ships += 1
 
+            # если кораблей сервера не осталовь , то выиграл клиент
             if count_server_ships == 0 and count_client_ships > 0:
                 # список для хранения кто выиграл
                 list_check_win[0] = "win_client"
-                
+            # если кораблей клиента не осталось , то выиграл сервер
             elif count_client_ships == 0 and count_server_ships > 0:
                 # список для хранения кто выиграл
                 list_check_win[0] = "win_server"
@@ -219,25 +224,30 @@ def start_server(list_grid):
                 "check_end_game": list_check_win[0]
             }
 
+            # отправляем даныне на сервер , и делаем их джейсон строкой
             client_socket.send(json.dumps(game_information).encode())
+            # settimeout(3) - ставит ожидания 3 секунды , и если за это время никакие данные от клиента не прийдут , то выдает ошибку
             client_socket.settimeout(3)
             client_data = client_socket.recv(1024).decode()
             ready_clinet_data = json.loads(client_data)
 
             if check_repeat[0] == 0:
                 enemy_matrix[0] = ready_clinet_data["client_matrix"]
-            # обновляем матрицу сервера
+            # обновляем матрицу сервера(ready_clinet_data["new_for_server"] - матрица в которой хранится пострелы клиента)
             if check_repeat[0] >= 1:
                 list_grid = list(ready_clinet_data["new_for_server"])
 
+            # проверяем стрелял ли клиент или нет
             if ready_clinet_data["need"] == "no":
+                # если нет , то ничего не делаем
                 print("nothing")
+            # если клиент стерлял , записываем чья сейчас очерель(это зависит от того попал ли клиент или нет)
             elif ready_clinet_data["need"] == "yes":
                 print("зашло сюда")
                 turn[0] = ready_clinet_data["turn"]
                 check_time[0] = 0
-                # print(turn[0])
-            
+              
+            # если прошло 30 сек , и никто не походил , то меняем очередь
             if check_time[0] >= 29:
                 check_time[0] = 0
                 if turn[0] == "server_turn":
@@ -247,7 +257,8 @@ def start_server(list_grid):
         
             check_repeat[0] += 1
             
-
+            # если кто то уже выиграл , то остонавливаем цикл игры
+            # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
             if list_check_win[0] != None:
                 break
 

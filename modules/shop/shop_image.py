@@ -3,7 +3,9 @@ import os
 
 pygame.init()
 
+# клас для відображення зображень у магазині
 class Image_Shop:
+    # конструктор (__init__) зображеннь у магазині
     def __init__(self, x_cor: int , y_cor: int , width: int , height: int, folder_name: str , image_name: str , target_y: int):
         self.FOLDER_NAME = folder_name
         self.IMAGE_NAME = image_name
@@ -19,24 +21,28 @@ class Image_Shop:
         self.TARGET_Y = target_y
         self.visible = 0  
 
+    # Відображає зображення на екрані, враховуючи поточну прозорість (visible)
     def draw(self, screen: pygame.Surface):
         self.IMAGE.set_alpha(self.visible)
         screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
 
+    # Плавно змінює прозорість зображення:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
         if self.visible < 255:
             self.visible += 5  
             if self.visible >= 255:
                 self.visible = 255
-         
-
+     
+    # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
         if self.visible > 0:
             self.visible -= 5  
             if self.visible <= 0:
                 self.visible = 0
        
-
+    # Зображення може плавно переміщатися вниз (до цільової позиції) і назад
+    #Використовується прапорець turn, щоб визначити напрямок руху
+    # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
     def move(self):
         if self.ACTIVE:
             if self.TURN == "Down":
@@ -61,7 +67,7 @@ class Image_Shop:
 
 
 
-
+# стовюємо об'єтки зображень від цього класу
 shop_bg = Image_Shop(
     x_cor = 0 ,
     y_cor = -416 ,
@@ -211,7 +217,8 @@ task_four = Image_Shop(
     target_y = 293
 )
 
-shop_item = []
 
+shop_item = []
+# додаємо зображення до цього списку , щоб за допомогою циклу відмальовувати їх
 shop_item.extend([shop_bg , items_bg , tasks_bg , deer_img , ten_coins , twenty_five_coins , fifty_coins , eghty_coins , hundred_fifty_coins , two_hundred_coins , jar_coins ,task_one ,task_two ,task_three , task_four])
 

@@ -2,7 +2,10 @@ import pygame
 import os
 from .shop_image import shop_item
 
+
+#класс для кнопки в магазині
 class Button_Shop:
+    #створюємо конструктор(__init__) кнопки
     def __init__(self, x, y, image_name, image_hover_name, height,width,  target_y: int ,action=None):
         self.X_COR = x
         self.IMAGE_NAME = image_name
@@ -22,38 +25,40 @@ class Button_Shop:
         self.TARGET_Y = target_y
         self.SPEED = 4
 
+    # створюємо метод кнопки , який буде перевиряти чи натиснута кнопка , якщо так , то виконуємо дії яка прив'язана до кнопки
     def check_click(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  
             mouse = pygame.mouse.get_pos()
             if self.RECT.collidepoint(mouse):
                 if self.ACTION:
                     self.ACTION()
-
+    
+    # Відображає кнопку на екрані , та змінюємо прозорість (visible) залежно від стану
     def draw(self, screen: pygame.Surface):
         self.IMAGE.set_alpha(self.VISIBLE)
         screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
-
         mouse_pos = pygame.mouse.get_pos()
         if self.TURN == "Down":
             if self.RECT.collidepoint(mouse_pos):
                 screen.blit(self.IMAGE_HOVER , (self.X_COR, self.Y_COR))
             else:
                 screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
-
+    # Плавно змінює прозорість кнопки:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
         if self.VISIBLE < 255:
             self.VISIBLE += 5  
             if self.VISIBLE >= 255:
                 self.VISIBLE = 255
-         
-
+    # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
         if self.VISIBLE > 0:
             self.VISIBLE -= 5  
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
        
-
+    # Кнопка може плавно переміщатися вниз (до цільової позиції) і назад
+    #Використовується прапорець turn, щоб визначити напрямок руху
+    # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
     def move(self):
         if self.ACTIVE:
             if self.TURN == "Down":
@@ -82,8 +87,9 @@ class Button_Shop:
 
 
 def test():
-    print("alya") 
+    print("Hello world!") 
 
+# створюємо елементи від цього класу
 button_extra_turn = Button_Shop(
     x = 600 ,
     y = -(98 + (422 - (263 + 98))),
@@ -150,4 +156,5 @@ button_bigger_attack = Button_Shop(
     action = test
 )
 
+# додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
 shop_item.extend([button_extra_turn , button_random_hits , button_restores_cell , button_barrier_for_ship , button_show_part_of_ship , button_bigger_attack])

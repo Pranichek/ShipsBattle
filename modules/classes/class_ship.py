@@ -256,6 +256,7 @@ class Ship:
                     # Пересчитываем номер клетки где стоит корабль для старых координат
                     self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
 
+
                     print(list_grid)
                     print("------------------------------------------------------------------------------------------------")
                     for cell in list_object_map: 

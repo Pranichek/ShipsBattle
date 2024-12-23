@@ -172,19 +172,24 @@ def connect_user(list_grid):
         dict_save_information["player_points"] = points_for_server
         dict_save_information["enemy_points"] = data_in_list["points"]
 
-
+        # створюємо цикл для бою(щоб робити обмін даними , до потрібного моменту)
         while True:
             try:
+                # робимо зупинку на одну секунду , що сервер і клієент встигали обмінюватися данними
                 time.sleep(1)
+                # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
                 client_socket.settimeout(3)
+                # отримуємо від серверу усі дані , що він відправив
                 data_turn = client_socket.recv(1024).decode()
+                # робимо із json строки , у словарь за домогою json.loads()
                 server_data = json.loads(data_turn)
-               
                 
+                # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
                 check_time[0] = server_data['time']
 
-                # list_check_need_sen - список который хранит флаг , по которому мы понимаем надо менять очередь или нет
+                # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
                 if list_check_need_send[0] == "no":
+                    # якщо не не атакував , то відправляємо дані , але ті які на ход ніяк не влияють(нам потрбіно завжди щось відправляти на севре , щоб не бцло помилки)
                     client_dict = {
                         "turn": "server_turn",
                         "time": 0 ,
@@ -193,9 +198,11 @@ def connect_user(list_grid):
                         "new_for_server" : enemy_matrix[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
+                # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
                 elif list_check_need_send[0] == "yes":
                     print(1)
                     print(turn[0])
+                    # якщо клієент зробив постріл , але схибив його , то змінюємо чергу за допмогою "turn": "server_turn"
                     if turn[0] == "server_turn":
                         print(2)
                         client_dict = {
@@ -205,10 +212,12 @@ def connect_user(list_grid):
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matrix[0]
                         }
+                        # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
                         check_time[0] = 0
                         continue
+                    # якщо клієнт зробив постріл і потрапив по кораблю , то не змінюємо чергу , а просто обнуляємо час , оскільки клієнт потрпив
                     if turn[0] == "client_turn":
                         print(3)
                         client_dict = {
@@ -228,17 +237,19 @@ def connect_user(list_grid):
                 if check_repeat[0] == 0:
                     # сохраняем матрицу сервера
                     enemy_matrix[0] = server_data["server_matrix"]
+                
+                # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
                 turn[0] = server_data['turn']
 
 
-                # обновляем матрицу клиента
+                # обновляем матрицу клиента , на матрицу с пострелами сервера
                 if check_repeat[0] >= 1:
                     list_grid = server_data["new_for_client"]
 
-                print(list_grid , "client_matrix")
                 check_repeat[0] += 1
 
-
+                # если кто то уже выиграл , то остонавливаем цикл игры
+                # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
                 if server_data["check_end_game"] != None:
                     list_check_win[0] = server_data["check_end_game"]
                     print("end")
