@@ -180,7 +180,7 @@ To join the game, you need:
 
 * **socket** - making server and client connections
 * **os** - searching absolute path
-* **io** - working with bytes
+
 
 <a name="scheme"><h1>Scheme of the project</h1></a>
 

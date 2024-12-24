@@ -1,36 +1,35 @@
 import pygame
 import os
 
-#створюємо клас , для зручного та швидкого додавання картинки на екран
 class DrawImage:
-        #Створюємо метод конструктор класу ,з параметрами зображення: розміри, координати, папка де зберігається зображення та назва зображення.
-        def __init__(self,width:int , height:int , x_cor:int , y_cor:str , folder_name:str , image_name:str):
-              #задаємо значения властивостям класу
-              self.width = width
-              self.height = height
-              self.x_cor = x_cor
-              self.y_cor = y_cor
-              self.folder_name = folder_name
-              self.image_name = image_name
-              #створюємо властивість для збереження загруженого зображення
-              self.image = None
-              #викликаємо метод завантаження зображення
-              self.load_image()
-        #створюємо метод для завантаження зображення з файлової системи
-        def load_image(self):
-            #__file__ - хранит путь именно в нашем проекте , в файле котором мы его создали
-            #/.. - выход из текущего пути на один шаг назад
-            image_path = os.path.abspath(__file__ + f"/../../../images/{self.folder_name}/{self.image_name}")
-            #завантажуємо зображення по вказаному шляху
-            load_image = pygame.image.load(image_path)
-            #змінюємо зображення яке отримали у 25 рядку, по потрібному розміру
-            transformed_image = pygame.transform.scale(load_image, (self.width,self.height))
-            # Зберігаємо трансформоване зображення у властивість self.image, щоб його можна було використовувати далі.
-            self.image = transformed_image
-        #Метод draw_image відповідає за відображення зображення на екрані
-        def draw_image(self, screen:pygame.Surface):
-              #blit — метод(функція), що дозволяє відображати зображення на вказаній поверхні(екрані)
-              # Ми передаємо об'єкт зображення (self.image) та координати, на яких воно з'явиться
-              screen.blit(self.image, (self.x_cor, self.y_cor))
+    def __init__(self, width: int, height: int, x_cor: int, y_cor: int, folder_name: str, image_name: str):
+        self.width = width
+        self.height = height
+        self.x_cor = x_cor
+        self.y_cor = y_cor
+        self.folder_name = folder_name
+        self.image_name = image_name
+        self.image = None
+        self.visible = True  # Видима картинка спочатку
+        self.rect = None
+        self.load_image()
 
-  
+    def load_image(self):
+        image_path = os.path.abspath(__file__ + f"/../../../media/{self.folder_name}/{self.image_name}")
+        load_image = pygame.image.load(image_path)
+        transformed_image = pygame.transform.scale(load_image, (self.width, self.height))
+        self.image = transformed_image
+        self.rect = self.image.get_rect(topleft=(self.x_cor, self.y_cor))
+
+    def draw_image(self, screen: pygame.Surface):
+        # Відображаємо тільки якщо картинка видима
+        if self.visible:
+            screen.blit(self.image, (self.x_cor, self.y_cor))
+
+    def check_touch(self):
+        # Отримуємо позицію миші
+        mouse_pos = pygame.mouse.get_pos()
+        # Якщо мишка наводиться на картинку, робимо її невидимою
+        if self.rect.collidepoint(mouse_pos):
+            # False -  значить шо змінюємо стан на невидимий
+            self.visible = False  
