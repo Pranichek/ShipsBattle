@@ -505,9 +505,11 @@ def fight_window():
         module_screen_server.FPS.tick(60)
         
         if music == 1:
-            time_sound.play2(0)  
+            time_sound.play2(-1)  
             music = 0
         else:
+            if time_sound.get_busy() == False:
+                time_sound.play2(-1)
             print("уже играла музыка")
         # time_sound.play2(loops= 0, maxtime=60000)       
         fight_bg.draw_image(screen = main_screen)
