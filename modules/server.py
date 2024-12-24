@@ -49,7 +49,7 @@ write_json(filename= "status_connect_game.json" , object_dict =  dict_status_gam
 
 
 #створємо функцію для запуску серверу
-def start_server(list_grid):
+def start_server():
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
@@ -235,7 +235,9 @@ def start_server(list_grid):
                 enemy_matrix[0] = ready_clinet_data["client_matrix"]
             # обновляем матрицу сервера(ready_clinet_data["new_for_server"] - матрица в которой хранится пострелы клиента)
             if check_repeat[0] >= 1:
-                list_grid = list(ready_clinet_data["new_for_server"])
+                for rowe in range(len(ready_clinet_data["new_for_server"])):
+                        for celle in range(len(ready_clinet_data["new_for_server"][rowe])):
+                            list_grid[rowe][celle] = ready_clinet_data["new_for_server"][rowe][celle]
 
             # проверяем стрелял ли клиент или нет
             if ready_clinet_data["need"] == "no":
@@ -281,4 +283,4 @@ def start_server(list_grid):
         
             
 #створюємо зміну потока, для запуску серверу
-server_thread = threading.Thread(target = start_server,args=(list_grid,), daemon=True)
+server_thread = threading.Thread(target = start_server, daemon=True)

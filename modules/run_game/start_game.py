@@ -13,7 +13,7 @@ from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win
 from ..client import list_check_need_send 
 from ..shop import shop_item
-from ..classes.animation import rocket_animation , cross_animation , animation_boom
+from ..classes.animation import rocket_animation , animation_boom , Animation
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -113,10 +113,15 @@ def apply_fade_effect(screen, fade_speed=3, max_fade_alpha=76):
     
 
 list_check_shop = [None]
-
 def show_shop():
     if shop_item[0].TURN == "Down": 
         list_check_shop[0] = True
+
+
+flag_upgrade = [False]
+def upgrade_flag():
+    flag_upgrade[0] = True
+
 
 
 #buttons
@@ -143,6 +148,9 @@ back_to_server = Button(x= 39 , y = 56 ,image_path= "back_button.png" , image_ho
 restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_hover_path= "restart_game_hover.png" , width = 408, height = 61 , action= test)
 # кнопка котороя показывает магазинчик и задания
 shop_and_tasks = Button(x= 1240 , y = 4,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
+# 
+upgrade_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = upgrade_flag)
+
 
 #images decoration
 cold_image = DrawImage(width= 152 , height= 68 , x_cor= 207 , y_cor= 716 , folder_name= "decorations" , image_name= "ice.png")
@@ -210,6 +218,10 @@ def main_window():
         create_game_frame.draw(surface= main_screen)
         button_upp.draw(surface= main_screen)
         button_lower.draw(surface= main_screen)
+
+        # animation_boom.animation(main_screen = main_screen , count_image = 7)
+        # cross_animation.animation(main_screen = main_screen , count_image = 13)
+        # rocket_animation.animation(main_screen = main_screen , count_image = 7)
         
         #---------
         # shop_and_tasks.draw(surface = main_screen)
@@ -217,42 +229,18 @@ def main_window():
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
 
-        # rocket_animation.animation(count_image = 7 , main_screen = main_screen)
-        # cross_animation.animation(count_image = 13 , main_screen = main_screen)
-        # animation_boom.animation(count_image = 8 , main_screen = main_screen)
 
-        #-------------
-        # for item in shop_item:
-        #     item.draw(screen = main_screen)
-        #     item.move()
-           
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-            #----------
-            # if list_check_shop[0] == True:
-            #     for items in shop_item:
-            #         items.ACTIVE = True
-            #     list_check_shop[0] = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click(event = event)
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
-                # shop_and_tasks.check_click(event = event)
-                # #----------
-                # for button in shop_item:
-                #     try:
-                #         button.check_click(event = event)
-                #     except:
-                #         continue
-                # #----------------------------------------------------------------
-                # if mouse_y > 416 and shop_item[0].TURN == "Up":
-                #     for items in shop_item:
-                #         items.ACTIVE = True  
-
+ 
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
                 check_press_button[0] = None 
@@ -270,6 +258,8 @@ def main_window():
                                 print("Create window")
                                 change_scene(create_game_window())
         pygame.display.flip()
+
+
 
 def create_game_window():
     #викликаємо функцію для запуску серверу
@@ -503,8 +493,17 @@ def ships_position_window():
         pygame.display.flip()
 
 
+y = ""
+
+yy = ""
+
+list_cross = []
+
+x_core = [0]
+y_core = [0]
 # функція для бою між гравцями
 def fight_window():
+    global y , yy
     # зупиняємо музику яка грала перед боєм
     music_load_waiting.stop()
     # вмикаємо музику для бою
@@ -611,6 +610,8 @@ def fight_window():
         grid_image.draw_image(screen = main_screen)
         grid_image_for_enemy.draw_image(screen = main_screen)
 
+        upgrade_button.draw(surface = main_screen)
+
         # малюємо клітинки сітки(просто пусті клітини) гравців
         for cell in list_object_map:
             cell.draw(screen=main_screen)
@@ -633,6 +634,7 @@ def fight_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
+
             # перевіряємо чи натиснули на кнопку показу магазину 
             if list_check_shop[0] == True:
                 # якщо так , то говоримо щоб усі елементи рухались униз(щоб гравець зміг їх побачити)
@@ -642,12 +644,14 @@ def fight_window():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 shop_and_tasks.check_click(event = event)
+                upgrade_button.check_click(event = event)
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop_item:
                     try:
                         button.check_click(event = event)
                     except:
                         continue
+
                 # перевіряємо чи натиснули за зоною магазина , і якщо так то закриваємо його
                 if y_mouse > 416 and shop_item[0].TURN == "Up":
                     for items in shop_item:
@@ -664,6 +668,7 @@ def fight_window():
                                 for cell in list_object_map_enemy: 
                                     if cell.x <= x_mouse and x_mouse < cell.x + 55:
                                         if cell.y <= y_mouse and y_mouse < cell.y + 55:
+
                                             # Узнаем номер клетки где стоит кораблик
                                             number_cell = list_object_map_enemy.index(cell)
                                             # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
@@ -674,30 +679,50 @@ def fight_window():
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
 
-                                            # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
-                                            # 5 - значить , що гравець зробив постріл , але схибив його
-                                            if enemy_matrix[0][row][col] == 0:
-                                                enemy_matrix[0][row][col] = 5
-                                                # оскільки ці умови , якщо гравець це клієнт
-                                                # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
-                                                list_check_need_send[0] = "yes"  # Готуємо дані для відправки
-                                                turn[0] = "server_turn"  # Передаємо хід серверу
-                                            # робимо умову для випадку коли по клітичнці вже били
-                                            elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
-                                                print("Уже стреляли в эту клетку")
-                                            
-                                            # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
-                                            # 7 - значить , що гравець зробив постріл і попав по кораблю
-                                            elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
-                                                # записуємо у зміну число , щоб почало трясти екран
-                                                screen_shake[0] = 31
-                                                # у матрицю ворога записуємо 7
-                                                enemy_matrix[0][row][col] = 7
-                                                # обнуляємо час ходу
-                                                check_time[0] = 0
-                                                # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                list_check_need_send[0] = "yes"
-                                                turn[0] = "client_turn"        
+                                            if flag_upgrade[0] == True:
+                                                try:
+                                                    print("---------------------------------------------------------------- ")   
+                                                    for index_col in range(0, 3): enemy_matrix[0][row - 1][(col - 1)+ index_col] = 5
+                                                    for index_col in range(0, 3):
+                                                        enemy_matrix[0][row][(col -1) + index_col] = 5
+                                                    for index_col in range(0, 3):
+                                                        enemy_matrix[0][row + 1][(col -1) + index_col] = 5
+
+                                                    check_time[0] = 0
+                                                    # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                    list_check_need_send[0] = "yes"
+                                                    turn[0] = "client_turn"        
+                                                    print("Всё гуд")   
+                                                    flag_upgrade[0] = False
+                                                except Exception as matrix_error:
+                                                    print(f"Ошибка матрицы : {matrix_error}")
+                                                    continue
+
+                                            else:
+                                                # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
+                                                # 5 - значить , що гравець зробив постріл , але схибив його
+                                                if enemy_matrix[0][row][col] == 0:
+                                                    enemy_matrix[0][row][col] = 5
+                                                    # оскільки ці умови , якщо гравець це клієнт
+                                                    # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
+                                                    list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+                                                    turn[0] = "server_turn"  # Передаємо хід серверу
+                                                # робимо умову для випадку коли по клітичнці вже били
+                                                elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
+                                                    print("Уже стреляли в эту клетку")
+                                                
+                                                # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
+                                                # 7 - значить , що гравець зробив постріл і попав по кораблю
+                                                elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
+                                                    # записуємо у зміну число , щоб почало трясти екран
+                                                    screen_shake[0] = 31
+                                                    # у матрицю ворога записуємо 7
+                                                    enemy_matrix[0][row][col] = 7
+                                                    # обнуляємо час ходу
+                                                    check_time[0] = 0
+                                                    # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                    list_check_need_send[0] = "yes"
+                                                    turn[0] = "client_turn"        
 
  
                                                                        
@@ -738,7 +763,12 @@ def fight_window():
                                             # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
                                             # 7 - значить , що гравець зробив постріл і попав по кораблю
                                             elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
-                                                # записуємо у зміну число , щоб почало трясти екран
+                                                y = "y"
+                                                x_core[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                y_core[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+                                                # rocket_animation.X_COR = cell.x
+                                                # rocket_animation.Y_COR = cell.y
+                                                # if rocket_animation.animation(main_screen = main_screen , count_image = 7):
                                                 screen_shake[0] = 31
                                                 # у матрицю ворога записуємо 7
                                                 enemy_matrix[0][row][col] = 7
@@ -756,6 +786,36 @@ def fight_window():
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1
+
+        if y == "y":
+            rocket_animation.X_COR = x_core[0] - 231
+            rocket_animation.Y_COR = y_core[0] - 23
+            if rocket_animation.animation(main_screen = main_screen , count_image = 7):
+                animation_boom.X_COR = x_core[0] - 23
+                animation_boom.Y_COR = y_core[0] - 23
+                if animation_boom.animation(main_screen = main_screen , count_image = 7):
+                    cross_animation = Animation(
+                        image_name = "0.png" , 
+                        width = 55 , 
+                        height = 55 , 
+                        x_cor = x_core[0], 
+                        y_cor = y_core[0], 
+                        need_clear = False , 
+                        name_folder = "animation_cross"
+                    )
+                    list_cross.append(cross_animation)
+                    rocket_animation.clear_animation()
+                    animation_boom.clear_animation()
+                    print("--------------------------------")
+                    y = ""
+                    yy = "dd"
+
+        if yy == "dd":
+            for cross in list_cross:
+                cross.animation(main_screen = main_screen , count_image = 13)
+
+                                
+        
 
         # відмальовуємо екран із координатами що збергаються у списку render_offset , щоб якщо гравець потрапив по карблю , то був ефект трясіння
         main_screen.blit(pygame.transform.scale(main_screen, (1280 , 832)), render_offset)

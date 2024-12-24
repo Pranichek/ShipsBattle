@@ -37,7 +37,7 @@ class Animation():
         self.IMAGE = self.LIST_IMAGES[self.COUNT_IMAGES]
         self.draw(screen=main_screen)
 
-        if self.COUNT_MAIN_LOOP >= 4:
+        if self.COUNT_MAIN_LOOP >= 5:
             if self.COUNT_IMAGES < count_image - 1:  # Проверяем, не конец ли анимации
                 self.COUNT_IMAGES += 1
             else:
@@ -50,6 +50,12 @@ class Animation():
     def draw(self, screen: pygame.Surface):
         screen.blit(self.IMAGE, (self.X_COR, self.Y_COR))
 
+    def clear_animation(self):
+        self.LIST_IMAGES = []
+        self.COUNT_IMAGES = 0
+        self.COUNT_MAIN_LOOP = 0
+        self.IS_ANIMATION_DONE = False
+
 rocket_animation = Animation(
     image_name = "0.png" , 
     width = 311 , 
@@ -60,22 +66,12 @@ rocket_animation = Animation(
     name_folder = "animation_rocket"
 )
 
-cross_animation = Animation(
-    image_name = "0.png" , 
-    width = 100 , 
-    height = 100 , 
-    x_cor = 311 , 
-    y_cor = 311 , 
-    need_clear = False , 
-    name_folder = "animation_cross"
-)
-
 animation_boom = Animation(
     image_name = "0.png" , 
     width = 100 , 
     height = 100 , 
     x_cor = 500 , 
     y_cor = 500 , 
-    need_clear = False , 
+    need_clear = True , 
     name_folder = "animation_boom"
 )
