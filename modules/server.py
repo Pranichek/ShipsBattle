@@ -235,9 +235,9 @@ def start_server():
                 enemy_matrix[0] = ready_clinet_data["client_matrix"]
             # обновляем матрицу сервера(ready_clinet_data["new_for_server"] - матрица в которой хранится пострелы клиента)
             if check_repeat[0] >= 1:
-                for rowe in range(len(ready_clinet_data["new_for_server"])):
-                        for celle in range(len(ready_clinet_data["new_for_server"][rowe])):
-                            list_grid[rowe][celle] = ready_clinet_data["new_for_server"][rowe][celle]
+                for row in range(len(ready_clinet_data["new_for_server"])):
+                        for cell in range(len(ready_clinet_data["new_for_server"][row])):
+                            list_grid[row][cell] = ready_clinet_data["new_for_server"][row][cell]
 
             # проверяем стрелял ли клиент или нет
             if ready_clinet_data["need"] == "no":

@@ -6,7 +6,7 @@ from .shop_image import shop_item
 #класс для кнопки в магазині
 class Button_Shop:
     #створюємо конструктор(__init__) кнопки
-    def __init__(self, x, y, image_name, image_hover_name, height,width,  target_y: int ,action=None):
+    def __init__(self, x, y, image_name, image_hover_name, height,width,  target_y: int ,action = None):
         self.X_COR = x
         self.IMAGE_NAME = image_name
         self.IMAGE_HOVER_NAME = image_hover_name

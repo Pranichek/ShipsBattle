@@ -18,7 +18,7 @@ class Animation():
         self.NAME_FOLDER = name_folder
 
     def load_images(self):
-        path = os.path.abspath(__file__ + f"/../boom_animation/{self.IMAGE_NAME}")
+        path = os.path.abspath(__file__ + f"{self.IMAGE_NAME}")
         image = pygame.image.load(path)
         transformed_image = pygame.transform.scale(image, (self.WIDTH, self.HEIGHT))
         self.IMAGE = transformed_image

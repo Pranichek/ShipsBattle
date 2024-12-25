@@ -23,7 +23,6 @@ class Font_Shop:
         self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
         # Рендер текста
         text_surface = self.font.render(self.TEXT, True, "white")
-        width , height = text_surface.get_size()
         # Масштабирование текста до заданных размеров
         self.text_surface = pygame.transform.scale(text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
         self.text_surface = self.text_surface.convert_alpha()

@@ -219,6 +219,7 @@ task_four = Image_Shop(
 
 
 shop_item = []
+
 # додаємо зображення до цього списку , щоб за допомогою циклу відмальовувати їх
 shop_item.extend([shop_bg , items_bg , tasks_bg , deer_img , ten_coins , twenty_five_coins , fifty_coins , eghty_coins , hundred_fifty_coins , two_hundred_coins , jar_coins ,task_one ,task_two ,task_three , task_four])
 
