@@ -14,7 +14,7 @@ from ..server import list_check_ready_to_fight , dict_save_information , check_t
 from ..client import list_check_need_send 
 from ..shop import shop_item
 from ..classes.animation import rocket_animation , animation_boom , Animation
-
+from ..shop import button_extra_turn
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
 
@@ -504,6 +504,8 @@ y_core = [0]
 # функція для бою між гравцями
 def fight_window():
     global y , yy
+    can_retry = False
+    retry_button = pygame.Rect(100, 750, 200, 50)
     # зупиняємо музику яка грала перед боєм
     music_load_waiting.stop()
     # вмикаємо музику для бою
@@ -655,7 +657,12 @@ def fight_window():
                 # перевіряємо чи натиснули за зоною магазина , і якщо так то закриваємо його
                 if y_mouse > 416 and shop_item[0].TURN == "Up":
                     for items in shop_item:
-                        items.ACTIVE = True  
+                        items.ACTIVE = True 
+
+                if retry_button.collidepoint(x_mouse, y_mouse) and can_retry:
+                    can_retry = False  # Сбрасываем флаг
+                    turn[0] = "client_turn" if list_player_role[0] == "player_client" else "server_turn"
+                    print("Игрок может повторить атаку")
 
                 # нижче умови для атаки 
                 # перевіряємо за яку роль грає гравець
@@ -697,7 +704,7 @@ def fight_window():
                                                 except Exception as matrix_error:
                                                     print(f"Ошибка матрицы : {matrix_error}")
                                                     continue
-
+                                                   
                                             else:
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                 # 5 - значить , що гравець зробив постріл , але схибив його
@@ -723,7 +730,9 @@ def fight_window():
                                                     # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
                                                     list_check_need_send[0] = "yes"
                                                     turn[0] = "client_turn"        
-
+                                                    
+                                            if list_player_role[0] == "player_client" and turn[0] == "server_turn":
+                                                can_retry = True    
  
                                                                        
                 # перевіряємо за яку роль грає гравець                    
@@ -756,6 +765,9 @@ def fight_window():
                                                 # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
                                                 turn[0] = "client_turn"
 
+                                            if list_player_role[0] == "server_player" and turn[0] == "client_turn":
+                                                can_retry = True
+
                                             # робимо умову для випадку коли по клітичнці вже били
                                             elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
                                                 print("Уже стреляли в эту клетку")
@@ -774,6 +786,16 @@ def fight_window():
                                                 enemy_matrix[0][row][col] = 7
                                                 # обнуляємо час для ходу
                                                 check_time[0] = 0
+                                            
+                                            if list_player_role[0] == "server_player" and turn[0] == "client_turn":
+                                                can_retry = True
+
+            if can_retry:
+                pygame.draw.rect(main_screen, (0, 255, 0), retry_button)  # Рисуем кнопку зеленым цветом
+                font = pygame.font.Font(None, 36)
+                text = font.render("Повторный выстрел", True, (0, 0, 0))
+                main_screen.blit(text, (retry_button.x + 10, retry_button.y + 10))
+                
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
         if list_check_win[0] != None:   
             # якщо вже їтось виграв , то робимо ефект затемнення

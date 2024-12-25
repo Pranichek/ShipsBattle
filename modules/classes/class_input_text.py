@@ -21,7 +21,7 @@ class InputText:
         self.active = False
         self.name_image = name_image
         self.font = None
-        self.max_length = 13
+        self.max_length = 14
         self.rect = pygame.Rect(self.x_cor, self.y_cor, self.width, self.height)
         self.load_image()
         self.load_font(font_name)
@@ -63,7 +63,7 @@ class InputText:
         if self.base_text == "nickname":
             self.max_length = 10
         else:
-            self.max_length = 13
+            self.max_length = 14
 
         if event.type == pygame.KEYDOWN and self.active == True:
             # Если поле активно, обрабатываем ввод текста
