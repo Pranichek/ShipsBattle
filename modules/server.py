@@ -1,14 +1,11 @@
-import socket
+import socket , json , time , threading
 from .screens import list_grid
-#підключаємо модуль для роботи із потоками
-import threading
 # Импортируем классы
 from .classes.class_input_text import input_port , input_ip_adress, input_nick
 # Импортируем функцию записи в json файлы
-from .json_functions.write_json import write_json , list_server_status , list_users
-from .json_functions.json_read import read_json
-import json
-import time
+from .json_functions import write_json , list_server_status , list_users , read_json
+# from .shop import kept_all_ships_laive_for_five_turns , first_kill_four_decker , first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task
+import modules.shop as shop
 
 # список для того чтобы мы получили матрицу соперника только один раз
 check_repeat = [0]
@@ -221,7 +218,8 @@ def start_server():
                 'time': check_time[0],
                 'server_matrix': list_grid,
                 "new_for_client": enemy_matrix[0],
-                "check_end_game": list_check_win[0]
+                "check_end_game": list_check_win[0],
+                "first_kill_3decker_ship":shop.enemy_ships_3decker[0]
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -242,7 +240,7 @@ def start_server():
             # проверяем стрелял ли клиент или нет
             if ready_clinet_data["need"] == "no":
                 # если нет , то ничего не делаем
-                print("nothing")
+                pass
             # если клиент стерлял , записываем чья сейчас очерель(это зависит от того попал ли клиент или нет)
             elif ready_clinet_data["need"] == "yes":
                 print("зашло сюда")
@@ -258,6 +256,19 @@ def start_server():
                     turn[0] = "server_turn"
         
             check_repeat[0] += 1
+
+            if turn[0] == "client_turn" and check_time[0] == 1:
+                if shop.second_task.TEXT == shop.list_second_task[1]:
+                    shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+
+            # первым убить четрыех палбный кораблик
+            if shop.third_task.TEXT == shop.list_third_task[0]:
+                shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
+
+            if shop.second_task.TEXT == shop.list_second_task[-1]:
+                if ready_clinet_data["first_kill_3decker_ship"] != "kill three-decker ship":
+                    shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
+
             
             # если кто то уже выиграл , то остонавливаем цикл игры
             # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл

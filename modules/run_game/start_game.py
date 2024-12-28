@@ -12,7 +12,8 @@ from .clinent_connect import connect_to_server , list_check_connection , fail_co
 from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win
 from ..client import list_check_need_send 
-from ..shop import shop_item
+# from ..shop import shop_item , money_list , your_balance , two_hits_in_a_row ,complete_three_tasks ,kill_three_double_decker_in_a_row , two_hits_in_row ,four_hits_in_row , kill_one_three_decker_ship , kill_four_single_ships_in_a_row , first_shot_is_kill , kill_two_ships_in_a_row  , kill_two_three_decker_in_a_row , first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task , kill_two_three_decker_in_a_row , kill_three_ships_in_a_row
+import modules.shop as shop
 from ..classes.animation import rocket_animation , animation_boom , Animation
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -114,7 +115,7 @@ def apply_fade_effect(screen, fade_speed=3, max_fade_alpha=76):
 
 list_check_shop = [None]
 def show_shop():
-    if shop_item[0].TURN == "Down": 
+    if shop.shop_item[0].TURN == "Down": 
         list_check_shop[0] = True
 
 
@@ -513,6 +514,32 @@ y_hit_the_ship = [0]
 # спсиок где хранятся крестки которые ресуюются если враг попал по кораблю игрока
 list_cross_player = []
 
+# для двух попаданий подряд
+check_money_two_hits_in_row = [0]
+# для четрыех попаданий подряд
+check_money_four_hits_in_row = [0]
+# для убийства одного трехабловбного корабля
+check_kill_one_3deck = [0]
+# для того когда убил два корабля подряд
+check_money_two_kill_in_a_row = [0]
+# для того когда убил два трехпалубных кораблей подряд
+check_2_kills_3deck_in_row = [0]
+# для того когда убил первым четырех палубный корабль
+check_kill_first_four_deck = [0]
+# для того когда убил два трехапалобных корабля подряд
+check_two_3decker_ship_in_row = [0]
+# для того чтобы убить четыре однопалубных кораблей подряд
+check_kill_four_1decker_in_row = [0]
+# для того чтобы когда убил корабль с первой попытки
+check_kill_in_first_shot = [0]
+# для того когда соперник не попал по твои кораблям 7 раз
+check_kept_alive_for_5_turns = [0]
+# для того чтобы убить три корабля подряд
+check_kill_three_ships_in_row = [0]
+# сделать первые три задания
+check_completed_three_tasks = [0]
+
+    
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -533,6 +560,7 @@ def fight_window():
     grid_player.Y_SCREEN = 257
     grid_player.generate_grid(width_cell=55, height_cell=55)
 
+
     # оновлюємо координати кораблів , та їхній розмір , щоб можна було відмалювати на сітці
     for num , ship  in enumerate(list_ships):
         grid_x = list_ships[num].col
@@ -551,6 +579,92 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        if True in shop.two_hits_in_a_row:
+            if check_money_two_hits_in_row[0] != 30:
+                check_money_two_hits_in_row[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if True in shop.four_hits_in_a_row:
+            if check_money_four_hits_in_row[0] != 30:
+                check_money_four_hits_in_row[0] += 1 
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if shop.kill_three_deckcer_ship[0] == 777:
+            if check_kill_one_3deck[0]!= 30:
+                check_kill_one_3deck[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if shop.kill_count[0] == "Kill two ships":
+            if check_money_two_kill_in_a_row[0] != 50:
+                check_money_two_kill_in_a_row[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if "Kill two three decker in a row" in shop.count_three_ships:
+            if check_2_kills_3deck_in_row[0] != 80:
+                check_2_kills_3deck_in_row[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+        
+        if shop.enemy_ships[0] == "kill four-decker ship":
+            if check_kill_first_four_deck[0] != 80:
+                check_kill_first_four_deck[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if "You kill two three decker in row" in shop.count_two_3decker_ship:
+            if check_two_3decker_ship_in_row[0] != 80:
+                check_two_3decker_ship_in_row[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if "Kill four single ships in a row" in shop.single_ships:
+            if check_kill_four_1decker_in_row[0] != 80:
+                check_kill_four_1decker_in_row[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if "You are kill ship in one shot" in shop.count_shot:
+            if check_kill_in_first_shot[0] != 100:
+                check_kill_in_first_shot[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if True in shop.count_turns:
+            if check_kept_alive_for_5_turns[0] != 50:
+                check_kept_alive_for_5_turns[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if "You killes three ships in row" == shop.count_kill_three[0]:
+            if check_kill_three_ships_in_row[0] != 100:
+                check_kill_three_ships_in_row[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if shop.check_completed_tasks[0] == "Completed three firsts tasks":
+            if check_completed_three_tasks[0]!= 100:
+                check_completed_three_tasks[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+
+    
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(60)
         # отримцємо координати курсору
@@ -602,6 +716,11 @@ def fight_window():
         player_face.draw_image(screen = main_screen)
         enemy_face.draw_image(screen = main_screen)
 
+    
+        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+            shop.complete_three_tasks()
+
+
         
         # оновлюємо дані про ник та очки , та відмольовуємо їх
         player_nick.text = dict_save_information["player_nick"]
@@ -634,7 +753,6 @@ def fight_window():
             list_ships[num].draw_sheep(screen = main_screen)
 
         for cross_animation in list_cross_player:
-            print(len(list_cross_player))
             cross_animation.animation(main_screen = main_screen , count_image = 13)
 
         # кнопка для открытия магазина
@@ -667,12 +785,12 @@ def fight_window():
 
         if check_cross_animation[0] == "starts_cross_animation":
             for cross in list_cross:
-                print(len(list_cross))
+                # print(len(list_cross))
                 cross.animation(main_screen = main_screen , count_image = 13)
         #----------------------------------------------------------------
 
         # відмаловуємо усі елементи які знаходяться у магазині 
-        for item in shop_item:
+        for item in shop.shop_item:
             item.draw(screen = main_screen)
             item.move()
 
@@ -724,7 +842,7 @@ def fight_window():
             if list_check_shop[0] == True:
                 # якщо так , то говоримо щоб усі елементи рухались униз(щоб гравець зміг їх побачити)
                 # якщо items.ACTIVE дорівнює True , то це значить що магазин знаходиться у стані руху
-                for items in shop_item:
+                for items in shop.shop_item:
                     items.ACTIVE = True
                 # обнуляємо флаг кнопки на False , щоб гра не думала що ми постійно тиснемо на кнопку відкриття магазину
                 list_check_shop[0] = False
@@ -733,15 +851,15 @@ def fight_window():
                 shop_and_tasks.check_click(event = event)
                 upgrade_button.check_click(event = event)
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
-                for button in shop_item:
+                for button in shop.shop_item:
                     try:
                         button.check_click(event = event)
                     except:
                         continue
 
                 # перевіряємо чи натиснули за зоною магазина , і якщо так то закриваємо його
-                if y_mouse > 416 and shop_item[0].TURN == "Up":
-                    for items in shop_item:
+                if y_mouse > 416 and shop.shop_item[0].TURN == "Up":
+                    for items in shop.shop_item:
                         items.ACTIVE = True  
 
                 # нижче умови для атаки 
@@ -766,12 +884,36 @@ def fight_window():
                                             col = int(str_col[-1])
                                             # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                             # 5 - значить , що гравець зробив постріл , але схибив його
+                                            if shop.third_task.TEXT == shop.list_third_task[1]:
+                                                shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
+                                            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                                                shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
+                                            if shop.second_task.TEXT == shop.list_second_task[-1]:
+                                                shop.kill_two_ships_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.third_task.TEXT == shop.list_third_task[-2]:
+                                                shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                shop.kill_three_ships_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.first_task.TEXT == shop.list_first_task[2]:
+                                                shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
+                                            if shop.first_task.TEXT == shop.list_first_task[-1]:
+                                                shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+
                                             if enemy_matrix[0][row][col] == 0:
                                                 enemy_matrix[0][row][col] = 5
                                                 # оскільки ці умови , якщо гравець це клієнт
                                                 # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
                                                 list_check_need_send[0] = "yes"  # Готуємо дані для відправки
                                                 turn[0] = "server_turn"  # Передаємо хід серверу
+                                                if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                    shop.two_hits_in_row(number_cell = 5)
+                                                if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                    shop.four_hits_in_row(number_cell = 5)
+
                                             # робимо умову для випадку коли по клітичнці вже били
                                             elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
                                                 print("Уже стреляли в эту клетку")
@@ -790,7 +932,13 @@ def fight_window():
                                                 check_time[0] = 0
                                                 # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
                                                 list_check_need_send[0] = "yes"
-                                                turn[0] = "client_turn"        
+                                                turn[0] = "client_turn"     
+                                                if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                    shop.two_hits_in_row(number_cell = 7)
+                                                if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                    shop.four_hits_in_row(number_cell = 7)
+
+                            
 
  
                                                                        
@@ -813,6 +961,25 @@ def fight_window():
                                             #Колонку кораблика вычисляем по такому принципу
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
+                                            if shop.third_task.TEXT == shop.list_third_task[1]:
+                                                shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
+                                            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                                                shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
+                                            if shop.second_task.TEXT == shop.list_second_task[-1]:
+                                                shop.kill_two_ships_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.third_task.TEXT == shop.list_third_task[-2]:
+                                                shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                shop.kill_three_ships_in_a_row(cell = enemy_matrix[0][row][col])
+                                            if shop.first_task.TEXT == shop.list_first_task[2]:
+                                                shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
+                                            if shop.first_task.TEXT == shop.list_first_task[-1]:
+                                                shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+
 
                                             # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                             # 5 - значить , що гравець зробив постріл , але схибив його
@@ -823,6 +990,14 @@ def fight_window():
                                                 check_time[0] = 0
                                                 # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
                                                 turn[0] = "client_turn"
+                                                if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                    shop.two_hits_in_row(number_cell = 5)
+                                                if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                    shop.four_hits_in_row(number_cell = 5)
+                                                # if first_task.TEXT == list_first_task[0]:
+                                                #     two_hits_in_row(number_cell = 5)
+                                                # if first_task.TEXT == list_first_task[1]:
+                                                #     four_hits_in_row(number_cell = 5)
 
                                             # робимо умову для випадку коли по клітичнці вже били
                                             elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
@@ -839,6 +1014,18 @@ def fight_window():
                                                 enemy_matrix[0][row][col] = 7
                                                 # обнуляємо час для ходу
                                                 check_time[0] = 0
+                                                if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                    shop.two_hits_in_row(number_cell = 7)
+                                                if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                    shop.four_hits_in_row(number_cell = 7)
+                                                # if first_task.TEXT == list_first_task[0]:
+                                                #     two_hits_in_row(number_cell = 7)
+                                                # if first_task.TEXT == list_first_task[1]:
+                                                #     four_hits_in_row(number_cell = 7)
+
+                                                
+
+                                            
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
         if list_check_win[0] != None:   
             # якщо вже їтось виграв , то робимо ефект затемнення
@@ -902,6 +1089,8 @@ def finish_window():
         # відобраємо фони
         win_background.draw_image(screen = main_screen)
         defeat_background.draw_image(screen = main_screen)
+
+        win_lose_text.draw_font()
 
         # відображення тексту та оновлення балів
         if list_player_role[0] == "player_client":
@@ -985,6 +1174,7 @@ def finish_window():
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
+                print(dict_save_information["player_nick"] + " won" , "adcfdfccfd")
                 win_lose_text.draw_font()
                 # відмальовка ників та балів
                 player_nick.text = dict_save_information["player_nick"]

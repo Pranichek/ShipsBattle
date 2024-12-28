@@ -8,7 +8,8 @@ from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
 from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win
 from .screens import list_grid
-
+# from .shop import kept_all_ships_laive_for_five_turns , first_kill_four_decker ,first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task
+import modules.shop as shop
 
 list_check_need_send = ["no"]
 
@@ -187,6 +188,14 @@ def connect_user(list_grid):
                 # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
                 check_time[0] = server_data['time']
 
+                if turn[0] == "client_turn" and check_time[0] == 2:
+                    if shop.second_task.TEXT == shop.list_second_task[1]:
+                        shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+
+                if shop.second_task.TEXT == shop.list_second_task[-1]:
+                    if server_data["first_kill_3decker_ship"] != "kill three-decker ship":
+                        shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
+
                 # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
                 if list_check_need_send[0] == "no":
                     # якщо не не атакував , то відправляємо дані , але ті які на ход ніяк не влияють(нам потрбіно завжди щось відправляти на севре , щоб не бцло помилки)
@@ -195,12 +204,13 @@ def connect_user(list_grid):
                         "time": 0 ,
                         "need" : "no",
                         'client_matrix':list_grid,
-                        "new_for_server" : enemy_matrix[0]
+                        "new_for_server" : enemy_matrix[0] ,
+                        "first_kill_3decker_ship":shop.enemy_ships_3decker[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
                 elif list_check_need_send[0] == "yes":
-                    print(1)
+                    # print(1)
                     print(turn[0])
                     # якщо клієент зробив постріл , але схибив його , то змінюємо чергу за допмогою "turn": "server_turn"
                     if turn[0] == "server_turn":
@@ -210,7 +220,8 @@ def connect_user(list_grid):
                             "time": 0 ,
                             "need" : "yes",
                             'client_matrix':list_grid,
-                            "new_for_server" : enemy_matrix[0]
+                            "new_for_server" : enemy_matrix[0],
+                            "first_kill_3decker_ship":shop.enemy_ships_3decker[0]
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -219,13 +230,14 @@ def connect_user(list_grid):
                         continue
                     # якщо клієнт зробив постріл і потрапив по кораблю , то не змінюємо чергу , а просто обнуляємо час , оскільки клієнт потрпив
                     if turn[0] == "client_turn":
-                        print(3)
+                        # print(3)
                         client_dict = {
                             "turn": "client_turn",
                             "time": 0 ,
                             "need" : "yes",
                             'client_matrix':list_grid,
-                            "new_for_server" : enemy_matrix[0]
+                            "new_for_server" : enemy_matrix[0],
+                            "first_kill_3decker_ship":shop.enemy_ships_3decker[0]
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -249,6 +261,9 @@ def connect_user(list_grid):
                             list_grid[row][cell] = server_data["new_for_client"][row][cell]
 
                 check_repeat[0] += 1
+
+                if shop.third_task.TEXT == shop.list_third_task[0]:
+                    shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
 
                 # если кто то уже выиграл , то остонавливаем цикл игры
                 # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл

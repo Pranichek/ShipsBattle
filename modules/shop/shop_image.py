@@ -1,6 +1,8 @@
 import pygame
 import os
 
+
+
 pygame.init()
 
 # клас для відображення зображень у магазині
@@ -15,7 +17,7 @@ class Image_Shop:
         self.HEIGHT = height
         self.PATH = os.path.abspath(__file__ + f"/../../../media/{self.FOLDER_NAME}/{self.IMAGE_NAME}")
         self.IMAGE = pygame.transform.scale(pygame.image.load(self.PATH), (self.WIDTH, self.HEIGHT)).convert_alpha()
-        self.SPEED = 4
+        self.SPEED = 5
         self.ACTIVE = False 
         self.TURN = "Down"
         self.TARGET_Y = target_y
