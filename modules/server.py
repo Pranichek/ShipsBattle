@@ -218,8 +218,8 @@ def start_server():
                 'time': check_time[0],
                 'server_matrix': list_grid,
                 "new_for_client": enemy_matrix[0],
-                "check_end_game": list_check_win[0],
-                "first_kill_3decker_ship":shop.enemy_ships_3decker[0]
+                "check_end_game": list_check_win[0] ,
+                "first_kill_3deck": shop.enemy_ships_3decker[0]
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -254,8 +254,6 @@ def start_server():
                     turn[0] = "client_turn"
                 elif turn[0] == "client_turn":
                     turn[0] = "server_turn"
-        
-            check_repeat[0] += 1
 
             if turn[0] == "client_turn" and check_time[0] == 1:
                 if shop.second_task.TEXT == shop.list_second_task[1]:
@@ -266,8 +264,10 @@ def start_server():
                 shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
 
             if shop.second_task.TEXT == shop.list_second_task[-1]:
-                if ready_clinet_data["first_kill_3decker_ship"] != "kill three-decker ship":
+                if ready_clinet_data["first_kill_3deck"] != "kill three-decker ship":
                     shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
+        
+            check_repeat[0] += 1
 
             
             # если кто то уже выиграл , то остонавливаем цикл игры
@@ -282,9 +282,9 @@ def start_server():
         except json.JSONDecodeError:
             print("Не получилось декодировать данные/")
             continue
-        except Exception as error:
-            print(f"Тупая ошибка: {error}")
-            continue
+        # except Exception as error:
+        #     print(f"Тупая ошибка: {error}")
+        #     continue
 
         
         

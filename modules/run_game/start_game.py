@@ -538,8 +538,12 @@ check_kept_alive_for_5_turns = [0]
 check_kill_three_ships_in_row = [0]
 # сделать первые три задания
 check_completed_three_tasks = [0]
-
-    
+# три попадания подряд
+check_money_three_hits_in_row = [0]
+# первый убил трехпалубный 
+check_first_kill_three_3dec = [0]
+# 8 попаданий подряд
+check_money_eight_hits_in_row = [0]
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -593,7 +597,7 @@ def fight_window():
                 shop.your_balance.TEXT = str(shop.money_list[0])
                 shop.your_balance.update_text()
 
-        if shop.kill_three_deckcer_ship[0] == 777:
+        if shop.kill_three_deckcer_ship[0] == "kill three deck ship":
             if check_kill_one_3deck[0]!= 30:
                 check_kill_one_3deck[0] += 1
                 shop.money_list[0] += 1
@@ -642,7 +646,7 @@ def fight_window():
                 shop.your_balance.TEXT = str(shop.money_list[0])
                 shop.your_balance.update_text()
 
-        if True in shop.count_turns:
+        if True in shop.save_sevens:
             if check_kept_alive_for_5_turns[0] != 50:
                 check_kept_alive_for_5_turns[0] += 1
                 shop.money_list[0] += 1
@@ -659,6 +663,27 @@ def fight_window():
         if shop.check_completed_tasks[0] == "Completed three firsts tasks":
             if check_completed_three_tasks[0]!= 100:
                 check_completed_three_tasks[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if True in shop.three_hits_in_a_row:
+            if check_money_three_hits_in_row[0] != 30:
+                check_money_three_hits_in_row[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if "kill three-decker ship" == shop.enemy_ships_3decker[0]:
+            if check_first_kill_three_3dec[0]!= 50:
+                check_first_kill_three_3dec[0] += 1
+                shop.money_list[0] += 1
+                shop.your_balance.TEXT = str(shop.money_list[0])
+                shop.your_balance.update_text()
+
+        if True in shop.egight_hits_in_a_row:
+            if check_money_eight_hits_in_row[0] != 100:
+                check_money_eight_hits_in_row[0] += 1
                 shop.money_list[0] += 1
                 shop.your_balance.TEXT = str(shop.money_list[0])
                 shop.your_balance.update_text()
@@ -716,8 +741,8 @@ def fight_window():
         player_face.draw_image(screen = main_screen)
         enemy_face.draw_image(screen = main_screen)
 
-    
-        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+        # выполнить первые три задания
+        if shop.fourth_task.TEXT == shop.list_fourth_task[2]:
             shop.complete_three_tasks()
 
 
@@ -888,7 +913,7 @@ def fight_window():
                                                 shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
                                             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                 shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                                            if shop.second_task.TEXT == shop.list_second_task[-1]:
+                                            if shop.second_task.TEXT == shop.list_second_task[2]:
                                                 shop.kill_two_ships_in_a_row(cell = enemy_matrix[0][row][col])
                                             if shop.third_task.TEXT == shop.list_third_task[-1]:
                                                 shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
@@ -902,6 +927,7 @@ def fight_window():
                                                 shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
                                             if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                 shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+                                            
 
                                             if enemy_matrix[0][row][col] == 0:
                                                 enemy_matrix[0][row][col] = 5
@@ -913,6 +939,8 @@ def fight_window():
                                                     shop.two_hits_in_row(number_cell = 5)
                                                 if shop.first_task.TEXT == shop.list_first_task[1]:
                                                     shop.four_hits_in_row(number_cell = 5)
+                                                if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                    shop.eight_hits_in_row(number_cell = 5)
 
                                             # робимо умову для випадку коли по клітичнці вже били
                                             elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
@@ -937,6 +965,8 @@ def fight_window():
                                                     shop.two_hits_in_row(number_cell = 7)
                                                 if shop.first_task.TEXT == shop.list_first_task[1]:
                                                     shop.four_hits_in_row(number_cell = 7)
+                                                if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                    shop.eight_hits_in_row(number_cell = 7)
 
                             
 
@@ -961,11 +991,14 @@ def fight_window():
                                             #Колонку кораблика вычисляем по такому принципу
                                             # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                             col = int(str_col[-1])
+
+                                            print(row , col , "fdvkmdfvdmkvf")
+                                            print(enemy_matrix[0][row][col] , "ahahhah")
                                             if shop.third_task.TEXT == shop.list_third_task[1]:
                                                 shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
                                             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                 shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                                            if shop.second_task.TEXT == shop.list_second_task[-1]:
+                                            if shop.second_task.TEXT == shop.list_second_task[2]:
                                                 shop.kill_two_ships_in_a_row(cell = enemy_matrix[0][row][col])
                                             if shop.third_task.TEXT == shop.list_third_task[-1]:
                                                 shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
@@ -994,6 +1027,8 @@ def fight_window():
                                                     shop.two_hits_in_row(number_cell = 5)
                                                 if shop.first_task.TEXT == shop.list_first_task[1]:
                                                     shop.four_hits_in_row(number_cell = 5)
+                                                if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                    shop.eight_hits_in_row(number_cell = 5)
                                                 # if first_task.TEXT == list_first_task[0]:
                                                 #     two_hits_in_row(number_cell = 5)
                                                 # if first_task.TEXT == list_first_task[1]:
@@ -1018,6 +1053,8 @@ def fight_window():
                                                     shop.two_hits_in_row(number_cell = 7)
                                                 if shop.first_task.TEXT == shop.list_first_task[1]:
                                                     shop.four_hits_in_row(number_cell = 7)
+                                                if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                    shop.eight_hits_in_row(number_cell = 7)
                                                 # if first_task.TEXT == list_first_task[0]:
                                                 #     two_hits_in_row(number_cell = 7)
                                                 # if first_task.TEXT == list_first_task[1]:

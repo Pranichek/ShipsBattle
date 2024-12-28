@@ -109,7 +109,8 @@ list_third_task = [
 list_fourth_task = [
     "The first step is murder" , 
     "Kill three ships in a row" , 
-    "Completed the first three tasks"
+    "Completed the first three tasks" ,
+    "8 hits in a row"
     ]
 
 
@@ -173,10 +174,28 @@ def four_hits_in_row(number_cell: int):
         print("Four hits in a row")
         four_hits_in_a_row.append(True)
 
+#4 8 hits in a row
+egight_hits_in_a_row = []
+def eight_hits_in_row(number_cell: int):
+    count_ships = 0
+    egight_hits_in_a_row.append(number_cell)
+
+    for cell in egight_hits_in_a_row:
+        if cell!= 5:
+            count_ships += 1
+        else:
+            egight_hits_in_a_row.clear()
+            return False
+    if count_ships > 7 and True not in egight_hits_in_a_row:
+        check_completed_tasks[0] += 1
+        print("Eight hits in a row")
+        egight_hits_in_a_row.append(True)
+
+
 # 1  убить один трехапалубный корабль
 kill_three_deckcer_ship = [0]
 def kill_one_three_decker_ship(grid):
-    if kill_three_deckcer_ship[0] != 777:
+    if kill_three_deckcer_ship[0] != "kill three deck ship":
         kill_three_deckcer_ship[0] = 0
 
         for row in range(len(grid)):
@@ -187,7 +206,7 @@ def kill_one_three_decker_ship(grid):
         print(kill_three_deckcer_ship[0])
 
         if kill_three_deckcer_ship[0] <= 4:
-            kill_three_deckcer_ship[0] = 777
+            kill_three_deckcer_ship[0] = "kill three deck ship"
             # money_list[0] += 30
             # your_balance.TEXT = str(money_list[0])
             # your_balance.update_text()
@@ -314,12 +333,13 @@ def first_kill_three_decker(grid , enemy_grid):
             if grid[row][cell] == 3:
                 our_ships_3decker[0] += 1
             if enemy_grid[0][row][cell] == 3:
-                enemy_ships_3decker[0] += 1
-
-    if our_ships_3decker[0] >= enemy_ships_3decker[0] and enemy_ships_3decker[0] <= 3 and enemy_ships_3decker[0] != "kill three-decker ship":
-        enemy_ships_3decker[0] = "kill three-decker ship"
-        check_completed_tasks[0] += 1
-        print("Ты первый убил двухпалубный палубный кораблик")
+                if enemy_ships_3decker[0] != "kill three-decker ship":
+                    enemy_ships_3decker[0] += 1
+    if enemy_ships_3decker[0] != "kill three-decker ship":
+        if our_ships_3decker[0] >= enemy_ships_3decker[0] and enemy_ships_3decker[0] <= 3 and enemy_ships_3decker[0] != "kill three-decker ship":
+            enemy_ships_3decker[0] = "kill three-decker ship"
+            check_completed_tasks[0] += 1
+            print("Ты первый убил 3хпалубный палубный кораблик")
 
 
 #3 Kill 3 double-decker ships in a row
@@ -407,12 +427,9 @@ def kept_all_ships_alive_for_five_turns(grid: object):
     
 
     if count_turns[0] >= 5 and True not in count_turns:
-        print("У тебя целы корабли 7 раундов")
-        # money_list[0] += 50
-        # your_balance.TEXT = str(money_list[0])
-        # your_balance.update_text()
+        print("У тебя целы корабли 5 раундов")
         check_completed_tasks[0] += 1
-        count_turns.append(True)
+        save_sevens.append(True)
 
 
 # kill three ships in a row
@@ -497,7 +514,7 @@ second_task = Font_Shop(
     y_cor = -(25 + (422 - (192 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = list_second_task[-1],
+    text = random.choice(list_second_task),
     target_y = 192 , 
     max_width = 220 ,
     max_height = 28 ,
@@ -534,11 +551,11 @@ fourth_task = Font_Shop(
 
 your_balance = Font_Shop(
     x_cor = 475 ,
-    y_cor = - (96 + (422 - (180 + 96))),
+    y_cor = - (96 + (422 - (190 + 96))),
     size = 96 ,
     name_font = "Jersey15.ttf",
     text = str(money_list[0]),
-    target_y = 185 ,
+    target_y = 190 ,
     max_width = 62 ,
     max_height = 105 , 
     text_color = "Yellow"
