@@ -11,11 +11,11 @@ class Font:
         self.x_cor = x_cor
         self.y_cor = y_cor
         self.font = pygame.font.Font(self.path_to_font, self.size)
-        self.text_surface = self.font.render(self.text, True, "white")
+        self.text_surface = self.font.render(self.text, False, "white")
     def draw_font(self):
         self.screen.blit(self.text_surface, (self.x_cor , self.y_cor))
     def update_text(self):
-        self.text_surface = self.font.render(self.text, True, "white")
+        self.text_surface = self.font.render(self.text, False, "white")
 
 
 

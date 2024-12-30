@@ -37,7 +37,7 @@ class Animation():
         self.IMAGE = self.LIST_IMAGES[self.COUNT_IMAGES]
         self.draw(screen=main_screen)
 
-        if self.COUNT_MAIN_LOOP >= 4:
+        if self.COUNT_MAIN_LOOP >= 3:
             if self.COUNT_IMAGES < count_image - 1:  # Проверяем, не конец ли анимации
                 self.COUNT_IMAGES += 1
             else:

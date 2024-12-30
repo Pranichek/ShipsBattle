@@ -23,7 +23,7 @@ class Button_Shop:
         self.TURN = "Down"
         self.VISIBLE = 0
         self.TARGET_Y = target_y
-        self.SPEED = 5
+        self.SPEED = 7
 
     # створюємо метод кнопки , який буде перевиряти чи натиснута кнопка , якщо так , то виконуємо дії яка прив'язана до кнопки
     def check_click(self, event):

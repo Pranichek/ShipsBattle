@@ -544,6 +544,17 @@ check_money_three_hits_in_row = [0]
 check_first_kill_three_3dec = [0]
 # 8 попаданий подряд
 check_money_eight_hits_in_row = [0]
+
+
+list_direction = [""]
+roww = [0]
+coll = [0]
+count_len = [1]
+
+list_animation_miss = []
+
+check_number_cell = []
+check_kill = [False]
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -583,6 +594,7 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        # print(list_grid)
         if True in shop.two_hits_in_a_row:
             if check_money_two_hits_in_row[0] != 30:
                 check_money_two_hits_in_row[0] += 1
@@ -765,8 +777,6 @@ def fight_window():
         grid_image.draw_image(screen = main_screen)
         grid_image_for_enemy.draw_image(screen = main_screen)
 
-        upgrade_button.draw(surface = main_screen)
-
         # малюємо клітинки сітки(просто пусті клітини) гравців
         for cell in list_object_map:
             cell.draw(screen=main_screen)
@@ -784,6 +794,258 @@ def fight_window():
         shop_and_tasks.draw(surface = main_screen)
 
         #----------------------------------------------------------------
+        # анимация зачеркивания клеточек вокруг убитого корабля
+        for rowee in range(len(list_grid)):
+            for cellee in range(len(list_grid[rowee])):
+                if list_grid[rowee][cellee] == 7:
+                    roww[0] = rowee
+                    coll[0] = cellee
+                    str_cel = str(cellee)
+
+                    check_kill[0] = False
+
+                    list_direction[0] = ""
+                    count_len[0] = 1
+                    
+                    num_cell = (rowee * 10) + int(str_cel[-1])
+
+                    x = list_object_map[num_cell].x
+                    y = list_object_map[num_cell].y
+
+                    for ship in list_ships:
+                        if ship.X_COR == x and ship.Y_COR == y:
+                            count_len[0] = ship.LENGHT
+                            list_direction[0] = ship.ORIENTATION_SHIP
+                            break
+                    
+                    if num_cell not in check_number_cell:
+                        if count_len[0] == 1 and list_direction[0] != "":
+                            print("убили корабль" , count_len[0])
+                            check_kill[0] = True
+                            check_number_cell.append(num_cell)
+
+                        elif list_direction[0] == "horizontal" and check_kill[0] != True:
+                            for len_ship in range(1 , count_len[0]):
+                                if list_grid[rowee][cellee + len_ship] == 7:
+                                    pass
+                                elif list_grid[rowee][cellee + len_ship]!= 7:
+                                    break
+                                if len_ship == count_len[0] - 1:
+                                    print("убили корабль" , count_len[0])
+                                    check_kill[0] = True
+                                    check_number_cell.append(num_cell)
+                        elif list_direction[0] == "vertical" and check_kill[0] != True:
+                            for len_ship in range(1 , count_len[0]):
+                                if list_grid[rowee + len_ship][cellee] == 7:
+                                    pass
+                                elif list_grid[rowee + len_ship][cellee]!= 7:
+                                    break
+                                if len_ship == count_len[0] - 1:
+                                    print("убили корабль" , count_len[0])
+                                    check_kill[0] = True
+                                    check_number_cell.append(num_cell)
+
+                    if list_direction[0] == "vertical" and check_kill[0] == True:
+                        for anim_miss in range(0, count_len[0] + 2):
+                            rowka = roww[0] - 1 + anim_miss
+                            cellka = coll[0] - 1 
+                            if rowka == -1 or cellka == -1:
+                                continue
+                            else:
+                                if rowka <= 9 and cellka <= 9:
+                                    cltka = (rowka * 10) + cellka
+                                    x_anim_miss = list_object_map[cltka].x
+                                    y_anim_miss = list_object_map[cltka].y
+
+                                    animation_miss = Animation(
+                                        x_cor = x_anim_miss,
+                                        y_cor = y_anim_miss,
+                                        image_name="0.png",
+                                        width = 55,
+                                        height = 55,
+                                        need_clear = False,
+                                        name_folder = "animation_miss"
+                                    )
+                                    # print(5)
+                                    existss = False
+                                    for anim_miss in list_animation_miss:
+                                        if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                            existss = True
+                                    if not existss:
+                                        list_animation_miss.append(animation_miss)
+
+                        for anim_miss in range(0, count_len[0] + 2):
+                            rowka = roww[0] - 1 + anim_miss
+                            cellka = coll[0] 
+                            if rowka == -1 or cellka == -1:
+                                continue
+                            else:
+                                if rowka <= 9 and cellka <= 9:
+                                    cltka = (rowka * 10) + cellka
+                                    x_anim_miss = list_object_map[cltka].x
+                                    y_anim_miss = list_object_map[cltka].y
+
+                                    animation_miss = Animation(
+                                        x_cor = x_anim_miss,
+                                        y_cor = y_anim_miss,
+                                        image_name="0.png",
+                                        width = 55,
+                                        height = 55,
+                                        need_clear = False,
+                                        name_folder = "animation_miss"
+                                    )
+                                    # print(5)
+                                    existss = False
+                                    if list_grid[rowka][cellka] == 7:
+                                        existss = True
+                                    for anim_miss in list_animation_miss:
+                                        if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                            existss = True
+                                    if not existss:
+                                        list_animation_miss.append(animation_miss)
+                        for anim_miss in range(0, count_len[0] + 2):
+                            rowka = roww[0] - 1 + anim_miss
+                            cellka = coll[0] + 1 
+                            if rowka == -1 or cellka == -1:
+                                continue
+                            else:
+                                if rowka <= 9 and cellka <= 9:
+                                    cltka = (rowka * 10) + cellka
+                                    x_anim_miss = list_object_map[cltka].x
+                                    y_anim_miss = list_object_map[cltka].y
+
+                                    animation_miss = Animation(
+                                        x_cor = x_anim_miss,
+                                        y_cor = y_anim_miss,
+                                        image_name="0.png",
+                                        width = 55,
+                                        height = 55,
+                                        need_clear = False,
+                                        name_folder = "animation_miss"
+                                    )
+                                    # print(5)
+                                    existss = False
+                                    for anim_miss in list_animation_miss:
+                                        if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                            existss = True
+                                    if not existss:
+                                        list_animation_miss.append(animation_miss)
+
+                        
+
+
+                    if list_direction[0] == "horizontal" and check_kill[0] == True:
+                        for anim_miss in range(0, count_len[0] + 2):
+                            rowka = roww[0] - 1
+                            cellka = coll[0] - 1 + anim_miss
+                            if rowka == -1 or cellka == -1:
+                                continue
+                            else:
+                                if rowka <= 9 and cellka <= 9:
+                                    cltka = (rowka * 10) + cellka
+                                    x_anim_miss = list_object_map[cltka].x
+                                    y_anim_miss = list_object_map[cltka].y
+
+                                    animation_miss = Animation(
+                                        x_cor = x_anim_miss,
+                                        y_cor = y_anim_miss,
+                                        image_name="0.png",
+                                        width = 55,
+                                        height = 55,
+                                        need_clear = False,
+                                        name_folder = "animation_miss"
+                                    )
+                                    # print(5)
+                                    existss = False
+                                    for anim_miss in list_animation_miss:
+                                        if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                            existss = True
+                                    if not existss:
+                                        list_animation_miss.append(animation_miss)
+
+                        for anim_miss in range(0 , count_len[0] + 2):
+                            rowka = roww[0] 
+                            cellka = coll[0] - 1 + anim_miss
+                            if rowka == -1 or cellka == - 1:
+                                continue
+                            else:
+                                if rowka <= 9 and cellka <= 9:
+                                    cltka = (rowka * 10) + cellka
+                                    
+                                    x_anim_miss = list_object_map[cltka].x
+                                    y_anim_miss = list_object_map[cltka].y
+
+                                    animation_miss = Animation(
+                                        x_cor = x_anim_miss,
+                                        y_cor = y_anim_miss,
+                                        image_name="0.png",
+                                        width = 55,
+                                        height = 55,
+                                        need_clear = False,
+                                        name_folder = "animation_miss"
+                                    )
+                                    # print(7)
+                                    existss = False
+
+                                    if list_grid[rowka][cellka] == 7:
+                                        existss = True
+                                    for anim_miss in list_animation_miss:
+                                        if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                            existss = True
+                                    if not existss:
+                                        list_animation_miss.append(animation_miss)
+
+                        for anim_miss in range(0 , count_len[0] + 2):
+                            rowka = roww[0] + 1
+                            cellka = coll[0] - 1 + anim_miss
+                            if rowka == -1 or cellka == - 1:
+                                continue
+                            else:
+                                if rowka <= 9 and cellka <= 9:
+                                    cltka = (rowka * 10) + cellka
+                                    
+                                    x_anim_miss = list_object_map[cltka].x
+                                    y_anim_miss = list_object_map[cltka].y
+
+                                    animation_miss = Animation(
+                                        x_cor = x_anim_miss,
+                                        y_cor = y_anim_miss,
+                                        image_name="0.png",
+                                        width = 55,
+                                        height = 55,
+                                        need_clear = False,
+                                        name_folder = "animation_miss"
+                                    )
+                                    # print(7)
+                                    existss = False
+
+                                    if list_grid[rowka][cellka] == 7:
+                                        existss = True
+                                    for anim_miss in list_animation_miss:
+                                        if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                            existss = True
+                                    if not existss:
+                                        list_animation_miss.append(animation_miss)
+
+
+
+ 
+        
+
+
+        # Отображение анимации
+        for anim_miss in list_animation_miss:
+            # print(len(list_animation_miss))
+            anim_miss.animation(main_screen=main_screen, count_image=29)
+        # #----------------------------------------------------------------
+
+        # #****************************************************************
+        # отрисовка крестиков если игрок попал по кораблю
+        if check_cross_animation[0] == "starts_cross_animation":
+            for cross in list_cross:
+                # print(len(list_cross))
+                cross.animation(main_screen = main_screen , count_image = 13)
+
         if check_animation_rocket[0] == "start_animation":
             rocket_animation.X_COR = x_hit_the_ship[0] - 231
             rocket_animation.Y_COR = y_hit_the_ship[0] - 23
@@ -807,11 +1069,6 @@ def fight_window():
                     print("--------------------------------")
                     check_animation_rocket[0] = ""
                     check_cross_animation[0] = "starts_cross_animation"
-
-        if check_cross_animation[0] == "starts_cross_animation":
-            for cross in list_cross:
-                # print(len(list_cross))
-                cross.animation(main_screen = main_screen , count_image = 13)
         #----------------------------------------------------------------
 
         # відмаловуємо усі елементи які знаходяться у магазині 
