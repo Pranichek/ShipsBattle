@@ -6,7 +6,7 @@ import time
 from .classes.class_input_text import input_port, input_ip_adress, input_nick
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win
+from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates
 from .screens import list_grid
 # from .shop import kept_all_ships_laive_for_five_turns , first_kill_four_decker ,first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task
 import modules.shop as shop
@@ -42,7 +42,7 @@ event_connect_to_server.set()
 
 
 #створюємо функцію підключення користувача до серверу
-def connect_user(list_grid):
+def connect_user():
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
@@ -173,17 +173,28 @@ def connect_user(list_grid):
         dict_save_information["player_points"] = points_for_server
         dict_save_information["enemy_points"] = data_in_list["points"]
 
-        # створюємо цикл для бою(щоб робити обмін даними , до потрібного моменту)
+       # створюємо цикл для бою(щоб робити обмін даними , до потрібного моменту)
         while True:
             try:
                 # робимо зупинку на одну секунду , що сервер і клієент встигали обмінюватися данними
                 time.sleep(1)
                 # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
                 client_socket.settimeout(3)
-                # отримуємо від серверу усі дані , що він відправив
-                data_turn = client_socket.recv(1024).decode()
-                # робимо із json строки , у словарь за домогою json.loads()
+
+                # Отримання всіх даних
+                data_turn = recv_all(client_socket).decode()
+
+                # Розбір JSON
                 server_data = json.loads(data_turn)
+                # # отримуємо від серверу усі дані , що він відправив
+                # data_turn = client_socket.recv(1024).decode()
+                # # робимо із json строки , у словарь за домогою json.loads()
+                # server_data = json.loads(data_turn)
+
+                for coord_miss in server_data["misses_coordinate"]:
+                    if coord_miss not in enemy_animation_miss_coord:
+                        enemy_animation_miss_coord.append(coord_miss)
+
                 
                 # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
                 check_time[0] = server_data['time']
@@ -201,7 +212,8 @@ def connect_user(list_grid):
                         "need" : "no",
                         'client_matrix':list_grid,
                         "new_for_server" : enemy_matrix[0],
-                        "first_kill_3deck": shop.enemy_ships_3decker[0]
+                        "first_kill_3deck": shop.enemy_ships_3decker[0], 
+                        "misses_coordinate": save_miss_coordinates
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -217,7 +229,8 @@ def connect_user(list_grid):
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matrix[0],
-                            "first_kill_3deck": shop.enemy_ships_3decker[0]
+                            "first_kill_3deck": shop.enemy_ships_3decker[0],
+                            "misses_coordinate": save_miss_coordinates
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -233,7 +246,8 @@ def connect_user(list_grid):
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matrix[0],
-                            "first_kill_3deck": shop.enemy_ships_3decker[0]
+                            "first_kill_3deck": shop.enemy_ships_3decker[0],
+                            "misses_coordinate": save_miss_coordinates
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -289,4 +303,4 @@ def connect_user(list_grid):
 
 
         #створюємо зміну потока, із функцією підключення коритсувача до серверу
-thread_connect = threading.Thread(target = connect_user,args= (list_grid,) ,daemon=True)
+thread_connect = threading.Thread(target = connect_user ,daemon=True)

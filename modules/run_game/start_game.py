@@ -10,7 +10,7 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , save_miss_coordinates , enemy_animation_miss_coord
 from ..client import list_check_need_send 
 # from ..shop import shop_item , money_list , your_balance , two_hits_in_a_row ,complete_three_tasks ,kill_three_double_decker_in_a_row , two_hits_in_row ,four_hits_in_row , kill_one_three_decker_ship , kill_four_single_ships_in_a_row , first_shot_is_kill , kill_two_ships_in_a_row  , kill_two_three_decker_in_a_row , first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task , kill_two_three_decker_in_a_row , kill_three_ships_in_a_row
 import modules.shop as shop
@@ -553,8 +553,13 @@ count_len = [1]
 
 list_animation_miss = []
 
+
+
 check_number_cell = []
 check_kill = [False]
+
+
+our_miss_anim = []
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -594,7 +599,7 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
-        # print(list_grid)
+        print(list_grid)
         if True in shop.two_hits_in_a_row:
             if check_money_two_hits_in_row[0] != 30:
                 check_money_two_hits_in_row[0] += 1
@@ -873,6 +878,7 @@ def fight_window():
                                             existss = True
                                     if not existss:
                                         list_animation_miss.append(animation_miss)
+                                        save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
 
                         for anim_miss in range(0, count_len[0] + 2):
                             rowka = roww[0] - 1 + anim_miss
@@ -903,6 +909,7 @@ def fight_window():
                                             existss = True
                                     if not existss:
                                         list_animation_miss.append(animation_miss)
+                                        save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
                         for anim_miss in range(0, count_len[0] + 2):
                             rowka = roww[0] - 1 + anim_miss
                             cellka = coll[0] + 1 
@@ -930,9 +937,7 @@ def fight_window():
                                             existss = True
                                     if not existss:
                                         list_animation_miss.append(animation_miss)
-
-                        
-
+                                        save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
 
                     if list_direction[0] == "horizontal" and check_kill[0] == True:
                         for anim_miss in range(0, count_len[0] + 2):
@@ -962,6 +967,7 @@ def fight_window():
                                             existss = True
                                     if not existss:
                                         list_animation_miss.append(animation_miss)
+                                        save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
 
                         for anim_miss in range(0 , count_len[0] + 2):
                             rowka = roww[0] 
@@ -994,6 +1000,7 @@ def fight_window():
                                             existss = True
                                     if not existss:
                                         list_animation_miss.append(animation_miss)
+                                        save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
 
                         for anim_miss in range(0 , count_len[0] + 2):
                             rowka = roww[0] + 1
@@ -1026,17 +1033,12 @@ def fight_window():
                                             existss = True
                                     if not existss:
                                         list_animation_miss.append(animation_miss)
-
-
-
- 
-        
-
-
+                                        save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
         # Отображение анимации
         for anim_miss in list_animation_miss:
             # print(len(list_animation_miss))
             anim_miss.animation(main_screen=main_screen, count_image=29)
+
         # #----------------------------------------------------------------
 
         # #****************************************************************
@@ -1075,6 +1077,37 @@ def fight_window():
         for item in shop.shop_item:
             item.draw(screen = main_screen)
             item.move()
+
+
+
+         # отрисовка зачеркнутых клеточек , если игрок убил полностью корабль
+        # print(enemy_animation_miss_coord)
+
+        for our_kill_ship_anim_miss in enemy_animation_miss_coord:
+            #631
+            animation_miss = Animation(
+                            x_cor = our_kill_ship_anim_miss[0] - 637,
+                            y_cor = our_kill_ship_anim_miss[1],
+                            image_name="0.png",
+                            width = 55,
+                            height = 55,
+                            need_clear = False,
+                            name_folder = "animation_miss"
+                        )
+            if len(enemy_animation_miss_coord) > 0:
+                exit = False
+                for anim_miss in our_miss_anim:
+                    if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                        exit= True
+                if not exit:
+                    our_miss_anim.append(animation_miss)
+                    enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
+
+        for anim_miss in our_miss_anim:
+            print(len(our_miss_anim))
+            # anim_miss.X_COR -= 628
+            anim_miss.animation(main_screen=main_screen, count_image=29)
+
 
 
         # эти циклы для проверки , попал ли соперник по нашем кораблям

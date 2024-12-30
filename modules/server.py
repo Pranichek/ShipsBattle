@@ -7,6 +7,17 @@ from .json_functions import write_json , list_server_status , list_users , read_
 # from .shop import kept_all_ships_laive_for_five_turns , first_kill_four_decker , first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task
 import modules.shop as shop
 
+
+# функция для болной загрузки данных
+def recv_all(sock, buffer_size=1024):
+    data = b""
+    while True:
+        part = sock.recv(buffer_size)
+        data += part
+        if len(part) < buffer_size:  # Якщо менше buffer_size, це остання частина
+            break
+    return data
+
 # список для того чтобы мы получили матрицу соперника только один раз
 check_repeat = [0]
 
@@ -23,6 +34,12 @@ enemy_matrix = ["yes"]
 # список куда сохраняем кто выиграл
 list_check_win = [None]
 
+#сохранаяем координаты где должна  варга отображаться анимация зачеркивания клеточек
+save_miss_coordinates = []
+
+
+# сохраняем где отрисовываем анимацию зачеркания когда мы убили корабль
+enemy_animation_miss_coord = []
 
 # словарь для зберігання інформаці про гравців
 dict_save_information = {
@@ -219,15 +236,26 @@ def start_server():
                 'server_matrix': list_grid,
                 "new_for_client": enemy_matrix[0],
                 "check_end_game": list_check_win[0] ,
-                "first_kill_3deck": shop.enemy_ships_3decker[0]
+                "first_kill_3deck": shop.enemy_ships_3decker[0],
+                "misses_coordinate": save_miss_coordinates
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
             client_socket.send(json.dumps(game_information).encode())
             # settimeout(3) - ставит ожидания 3 секунды , и если за это время никакие данные от клиента не прийдут , то выдает ошибку
             client_socket.settimeout(3)
-            client_data = client_socket.recv(1024).decode()
+            # client_data = client_socket.recv(1024).decode()
+            # ready_clinet_data = json.loads(client_data)
+
+            # Отримання всіх даних
+            client_data = recv_all(client_socket).decode()
+            # Розбір JSON
             ready_clinet_data = json.loads(client_data)
+
+            for coord_miss in ready_clinet_data["misses_coordinate"]:
+                if coord_miss not in enemy_animation_miss_coord:
+                    enemy_animation_miss_coord.append(coord_miss)
+
 
             if check_repeat[0] == 0:
                 enemy_matrix[0] = ready_clinet_data["client_matrix"]
