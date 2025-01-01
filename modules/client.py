@@ -1,14 +1,9 @@
-import socket
-import threading
-import json
-import pygame
-import time
-from .classes.class_input_text import input_port, input_ip_adress, input_nick
+import socket ,threading , json , pygame , time
+from .classes import input_port, input_ip_adress, input_nick , Animation
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates
+from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim
 from .screens import list_grid
-# from .shop import kept_all_ships_laive_for_five_turns , first_kill_four_decker ,first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task
 import modules.shop as shop
 
 list_check_need_send = ["no"]
@@ -176,6 +171,24 @@ def connect_user():
        # створюємо цикл для бою(щоб робити обмін даними , до потрібного моменту)
         while True:
             try:
+                for our_kill_ship_anim_miss in enemy_animation_miss_coord:
+                    animation_miss = Animation(
+                                    x_cor = our_kill_ship_anim_miss[0] - 637,
+                                    y_cor = our_kill_ship_anim_miss[1],
+                                    image_name="0.png",
+                                    width = 55,
+                                    height = 55,
+                                    need_clear = False,
+                                    name_folder = "animation_miss"
+                                )
+                    if len(enemy_animation_miss_coord) > 0:
+                        exit = False
+                        for anim_miss in our_miss_anim:
+                            if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                exit= True
+                        if not exit:
+                            our_miss_anim.append(animation_miss)
+                            enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
                 # робимо зупинку на одну секунду , що сервер і клієент встигали обмінюватися данними
                 time.sleep(1)
                 # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку

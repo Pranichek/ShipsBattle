@@ -14,7 +14,7 @@ class Font_Shop:
         self.TARGET_Y = target_y
         self.MAX_WIDTH = max_width
         self.MAX_HEIGHT = max_height
-        self.SPEED = 7
+        self.SPEED = 10
         self.VISIBLE = 0
         self.TURN = "Down"
         self.ACTIVE = False
@@ -53,14 +53,14 @@ class Font_Shop:
                         self.TURN = "Up"
 
             elif self.TURN == "Up":
-                if self.Y_COR > -(self.SIZE + (422 - (self.TARGET_Y + self.SIZE))):
+                if self.Y_COR > -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE))):
                     self.Y_COR -= self.SPEED
                     self.fade_out()
-                    if self.Y_COR <= -(self.SIZE + (422 - (self.TARGET_Y + self.SIZE))):
-                        self.Y_COR = -(self.SIZE + (422 - (self.TARGET_Y + self.SIZE)))
+                    if self.Y_COR <= -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE))):
+                        self.Y_COR = -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE)))
                         self.TURN = "Down"
 
-        if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.SIZE + (422 - (self.TARGET_Y + self.SIZE))):
+        if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE))):
             self.ACTIVE = False
 
     def update_text(self):
@@ -130,8 +130,8 @@ def two_hits_in_row(number_cell: int):
             two_hits_in_a_row.clear()
             return False
     if count_ships > 1 and True not in two_hits_in_a_row:
-        # your_balance.TEXT = str(money_list[0])
-        # your_balance.update_text()
+        # player_balance.TEXT = str(money_list[0])
+        # player_balance.update_text()
         check_completed_tasks[0] += 1
         print("Two hits in a row")
         two_hits_in_a_row.append(True)
@@ -168,8 +168,8 @@ def four_hits_in_row(number_cell: int):
             return False
     if count_ships > 3 and True not in four_hits_in_a_row:
         # money_list[0] += 30
-        # your_balance.TEXT = str(money_list[0])
-        # your_balance.update_text()
+        # player_balance.TEXT = str(money_list[0])
+        # player_balance.update_text()
         check_completed_tasks[0] += 1
         print("Four hits in a row")
         four_hits_in_a_row.append(True)
@@ -208,8 +208,8 @@ def kill_one_three_decker_ship(grid):
         if kill_three_deckcer_ship[0] <= 4:
             kill_three_deckcer_ship[0] = "kill three deck ship"
             # money_list[0] += 30
-            # your_balance.TEXT = str(money_list[0])
-            # your_balance.update_text()
+            # player_balance.TEXT = str(money_list[0])
+            # player_balance.update_text()
             check_completed_tasks[0] += 1
             print("Ты убил один трехбалубный кораблик")
 
@@ -258,8 +258,8 @@ def kill_two_ships_in_a_row(cell):
 
         if kill_count[0] >= 2:
             # money_list[0] += 50
-            # your_balance.TEXT = str(money_list[0])
-            # your_balance.update_text()
+            # player_balance.TEXT = str(money_list[0])
+            # player_balance.update_text()
             kill_count[0] = "Kill two ships"
             check_completed_tasks[0] += 1
             print("Ты убил два корабля подряд")
@@ -294,8 +294,8 @@ def kill_two_three_decker_in_a_row(cell):
     
     if count_three == 6:
         # money_list[0] += 80
-        # your_balance.TEXT = str(money_list[0])
-        # your_balance.update_text()
+        # player_balance.TEXT = str(money_list[0])
+        # player_balance.update_text()
         check_completed_tasks[0] += 1
         count_three_ships.append("Kill two three decker in a row")
         print("Ты убил два трехпалубных кораблей подряд")
@@ -372,8 +372,8 @@ def kill_three_double_decker_in_a_row(cell):
         if two == 6:
             count_two_3decker_ship.append("You kill two three decker in row")
             # money_list[0] += 80
-            # your_balance.TEXT = str(money_list[0])
-            # your_balance.update_text()
+            # player_balance.TEXT = str(money_list[0])
+            # player_balance.update_text()
             check_completed_tasks[0] += 1
             print("Ты убил три двухпалубных кораблей подряд")
 
@@ -394,8 +394,8 @@ def kill_four_single_ships_in_a_row(cell):
     if count_ship[0] == 4 and "Kill four single ships in a row" not in single_ships:
         single_ships.append("Kill four single ships in a row")
         # money_list[0] += 80
-        # your_balance.TEXT = str(money_list[0])
-        # your_balance.update_text()
+        # player_balance.TEXT = str(money_list[0])
+        # player_balance.update_text()
         check_completed_tasks[0] += 1
         print("You are kill four single ships in a row")
 
@@ -407,8 +407,8 @@ def first_shot_is_kill(cell):
     if cell == 1 and count_shot[0] == 1:
         count_shot.append("You are kill ship in one shot")
         # money_list[0] += 100
-        # your_balance.TEXT = str(money_list[0])
-        # your_balance.update_text()
+        # player_balance.TEXT = str(money_list[0])
+        # player_balance.update_text()
         check_completed_tasks[0] += 1
         print("You are first shot is kill")
 
@@ -476,8 +476,8 @@ def kill_three_ships_in_a_row(cell):
 
         if count_kill_three[0] >= 2:
             # money_list[0] += 100
-            # your_balance.TEXT = str(money_list[0])
-            # your_balance.update_text()
+            # player_balance.TEXT = str(money_list[0])
+            # player_balance.update_text()
             count_kill_three[0] = "You killes three ships in row"
             check_completed_tasks[0] += 1
             print("Ты убил три корабля подряд")
@@ -489,15 +489,15 @@ def complete_three_tasks():
     if check_completed_tasks[0] != "Completed three firsts tasks":
         if check_completed_tasks[0] == 3:
             # money_list[0] += 100
-            # your_balance.TEXT = str(money_list[0])
-            # your_balance.update_text()
+            # player_balance.TEXT = str(money_list[0])
+            # player_balance.update_text()
             check_completed_tasks[0] = "Completed three firsts tasks"
             print("Ты выполнил все три завдання")
 
 # створюємо текст із рандомним першим завданням
 first_task = Font_Shop(
     x_cor = 52 ,
-    y_cor = -(45 + (422 - (136 + 45))),
+    y_cor = -(45 + (832 - (136 + 45))),
     size = 45 ,
     name_font = "Jersey15.ttf",
     text = random.choice(list_first_task),
@@ -511,7 +511,7 @@ first_task = Font_Shop(
 # створюємо текст iз рандомним другим завданням
 second_task = Font_Shop(
     x_cor = 52 ,
-    y_cor = -(25 + (422 - (192 + 25))),
+    y_cor = -(25 + (832 - (192 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
     text = random.choice(list_second_task),
@@ -525,7 +525,7 @@ second_task = Font_Shop(
 # створюємо текст iз рандомним третьим завданням
 third_task = Font_Shop(
     x_cor = 52 ,
-    y_cor = -(25 + (422 - (244 + 25))),
+    y_cor = -(25 + (832 - (244 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
     text = random.choice(list_third_task),
@@ -539,7 +539,7 @@ third_task = Font_Shop(
 # створюємо текст iз рандомним четвертим завданням
 fourth_task = Font_Shop(
     x_cor = 52 ,
-    y_cor = - (25 + (422 - (298 + 25))),
+    y_cor = - (25 + (832 - (298 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
     text = random.choice(list_fourth_task),
@@ -549,9 +549,9 @@ fourth_task = Font_Shop(
     text_color = "White"
 )
 
-your_balance = Font_Shop(
+player_balance = Font_Shop(
     x_cor = 475 ,
-    y_cor = - (96 + (422 - (190 + 96))),
+    y_cor = - (96 + (832 - (190 + 96))),
     size = 96 ,
     name_font = "Jersey15.ttf",
     text = str(money_list[0]),
@@ -561,7 +561,9 @@ your_balance = Font_Shop(
     text_color = "Yellow"
 )
 
+
+
 # додаємо тексти до списку shop_item для відображення їх за допомогою циклу
-shop_item.extend([first_task , second_task , third_task , fourth_task , your_balance])
+shop_item.extend([first_task , second_task , third_task , fourth_task , player_balance])
 
     
