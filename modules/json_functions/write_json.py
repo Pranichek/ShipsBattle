@@ -20,7 +20,7 @@ with open(file = os.path.abspath(__file__ + "/../../../static/json/data_base.jso
 
 
 #функція для збереження даних  із словаря list_users у потрібний файл, у нашому випадку filename = "data_base.json"
-def write_json(filename:str, object_dict: object):
+def write_json(filename:str, object_dict: object) -> dict:
     #Формуємо абсолютний шлях до файлу, який знаходиться в папці static
     path_to_file = os.path.abspath(__file__ + f"/../../../static/json/{filename}")
     #Відкриваємо файл у режимі запису ("w"), щоб зберегти в нього дані

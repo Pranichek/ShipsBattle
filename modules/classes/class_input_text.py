@@ -60,7 +60,6 @@ class InputText:
             elif not self.rect.collidepoint(pos):
                 self.active = False
 
-
         if self.base_text == "nickname":
             self.max_length = 10
         else:
@@ -75,7 +74,7 @@ class InputText:
 
     def draw_text(self):
          # Очистити базовий текст тільки при активаці
-        text_surface = self.font.render(self.user_text, True, "white")
+        text_surface = self.font.render(self.user_text, False, "white")
         self.screen_name.blit(self.image, (self.x_cor, self.y_cor))
         if self.user_text == "port":
             self.screen_name.blit(text_surface, (self.x_cor + 125, self.y_cor + 13))
