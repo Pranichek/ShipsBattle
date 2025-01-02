@@ -11,19 +11,20 @@ import modules.shop as shop
 our_miss_anim = []
 
 # функция для болной загрузки данных
-def recv_all(sock, buffer_size=1024):
+def recv_all(socket, buffer_size = 1024):
     data = b""
     while True:
-        part = sock.recv(buffer_size)
+        part = socket.recv(buffer_size)
         data += part
         if len(part) < buffer_size:  # Якщо менше buffer_size, це остання частина
             break
     return data
 
+# список для того чтобы от времени отнималась ровно одна секунда
+check_ten_times = []
 # список для того чтобы мы получили матрицу соперника только один раз
 check_repeat = [0]
-
-# список для проверки перезода на фрейм боя
+# список для проверки перехода на фрейм боя
 list_check_ready_to_fight = [None]
 # лист очереди
 turn = ["server_turn"]
@@ -35,14 +36,12 @@ list_player_role = [""]
 enemy_matrix = ["yes"]
 # список куда сохраняем кто выиграл
 list_check_win = [None]
-
-#сохранаяем координаты где должна  варга отображаться анимация зачеркивания клеточек
+#сохранаяем координаты где должнны отображаться анимация зачеркивания клеточек,  когда враг убил У НАС КОРАБЛЬ
 save_miss_coordinates = []
-
-
 # сохраняем где отрисовываем анимацию зачеркания когда мы убили корабль
 enemy_animation_miss_coord = []
-
+# список где сохраняем баланс врага
+enemy_balance = [0]
 # словарь для зберігання інформаці про гравців
 dict_save_information = {
     "player_nick": "",
@@ -210,7 +209,10 @@ def start_server():
                     if not exit:
                         our_miss_anim.append(animation_miss)
                         enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
-            time.sleep(1)
+            # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
+            time.sleep(0.1)
+            check_ten_times.append(1)
+
             # счетчик кораблей сервера
             count_server_ships = 0
             # счетчик кораблей клиента
@@ -243,7 +245,9 @@ def start_server():
                 list_check_win[0] = "win_server"
 
             # список который сохраняет данные по поводу времени
-            check_time[0] += 1
+            if check_ten_times.count(1) >= 10:
+                check_ten_times.clear()
+                check_time[0] += 1
 
             # turn[0] - список для хранения очереди 
             # check_time[0] - список который сохраняет данные по поводу времени
@@ -257,7 +261,8 @@ def start_server():
                 "new_for_client": enemy_matrix[0],
                 "check_end_game": list_check_win[0] ,
                 "first_kill_3deck": shop.enemy_ships_3decker[0],
-                "misses_coordinate": save_miss_coordinates
+                "misses_coordinate": save_miss_coordinates,
+                "money_balance":shop.money_list[0]
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -271,6 +276,8 @@ def start_server():
             client_data = recv_all(client_socket).decode()
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
+
+            enemy_balance[0] = ready_clinet_data["money_balance"]
 
             for coord_miss in ready_clinet_data["misses_coordinate"]:
                 if coord_miss not in enemy_animation_miss_coord:
@@ -315,7 +322,8 @@ def start_server():
             if shop.second_task.TEXT == shop.list_second_task[-1]:
                 if ready_clinet_data["first_kill_3deck"] != "kill three-decker ship":
                     shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
-        
+
+            
             check_repeat[0] += 1
 
             

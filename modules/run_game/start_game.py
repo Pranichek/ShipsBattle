@@ -11,7 +11,7 @@ from ..classes.class_click import music_click
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance
 from ..client import list_check_need_send 
 from ..classes.animation import rocket_animation , animation_boom , Animation
 from ..attack_functions import ship_border
@@ -50,6 +50,15 @@ player_balance_in_jar = Font(
     size = 36,
     name_font = "Jersey15.ttf",
     text = str(shop.money_list[0]),
+    text_color = "Yellow",
+    screen = main_screen
+)
+enemy_balance_in_jar = Font(
+    x_cor = 125 ,
+    y_cor = 45 ,
+    size = 36 ,
+    name_font = "Jersey15.ttf",
+    text = str(enemy_balance[0]),
     text_color = "Yellow",
     screen = main_screen
 )
@@ -781,6 +790,7 @@ def fight_window():
         # відмальовуємо фон для фрейма бою
         fight_bg.draw_image(screen = main_screen)
 
+        # отрисовка всех элементов для визуального отображения монеток , медалек , и оружия
         shadow_data_user.draw_image(screen = main_screen)
 
         user_weapon.draw_image(screen = main_screen)
@@ -789,6 +799,10 @@ def fight_window():
         enemy_jar.draw_image(screen = main_screen)
 
         player_balance_in_jar.draw_font()
+        enemy_balance_in_jar.text = str(enemy_balance[0])
+        enemy_balance_in_jar.update_text()
+        enemy_balance_in_jar.draw_font()
+
 
         # завантажуємо , та відмальовуємо зображення годинників(скільки часу пройшло)
         clock_image.image_name = f'{check_time[0]}.png'
