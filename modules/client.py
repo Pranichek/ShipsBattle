@@ -245,6 +245,9 @@ def connect_user(list_grid):
                 # обновляем матрицу клиента , на матрицу с пострелами сервера
                 if check_repeat[0] >= 1:
                     list_grid = server_data["new_for_client"]
+                    for rowe in range(len(server_data["new_for_client"])):
+                        for celle in range(len(server_data["new_for_client"][rowe])):
+                            list_grid[rowe][celle] = server_data["new_for_client"][rowe][celle]
 
                 check_repeat[0] += 1
 

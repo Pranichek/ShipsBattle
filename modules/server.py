@@ -67,9 +67,6 @@ def start_server():
         server_socket.bind((ip_address, port))
         #Ставимо сервер у режим очікування підключень
         server_socket.listen()
-        print("connecting")
-        print(ip_address , "ip address")
-        print(port, "port")
 
         #записуємо в словарь статус очікування підключення до серверу
         #передаем в словарь файл статус ожидания
@@ -97,7 +94,7 @@ def start_server():
         response_data = client_socket.recv(1024).decode()
         #перетворюємо json сктроку , у словник
         data_in_list = json.loads(response_data)
-        print(data_in_list, "from client")
+
 
         #якщо нікнейма суперника ще немає у словарі то записуємо його нік у джейосн файл
         if data_in_list["nick"] not in list_users:
@@ -148,8 +145,6 @@ def start_server():
                 else:
                     print("Почему то данных нет , и рядок пустой")
         
-                print(status_from_file)
-                print(data_in_dict["status"])
 
                 # Перевірка завершення
                 if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
@@ -242,10 +237,10 @@ def start_server():
             # проверяем стрелял ли клиент или нет
             if ready_clinet_data["need"] == "no":
                 # если нет , то ничего не делаем
-                print("nothing")
+                # print("nothing")
+                pass
             # если клиент стерлял , записываем чья сейчас очерель(это зависит от того попал ли клиент или нет)
             elif ready_clinet_data["need"] == "yes":
-                print("зашло сюда")
                 turn[0] = ready_clinet_data["turn"]
                 check_time[0] = 0
               

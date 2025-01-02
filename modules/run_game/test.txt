@@ -1,0 +1,257 @@
+Для внутренних ячеек 
+for index_col in range(0, 3):
+#                                                         if 0 < enemy_matrix[0][row][(limit[0] + col - 1) + index_col] < 5:
+#                                                             enemy_matrix[0][row - 1][col - index_col + 1] = 7
+#                                                             print("=======================================")
+#                                                             count_7[0] += 1
+#                                                             limit[0] = 0
+#                                                         else:
+#                                                             enemy_matrix[0][row - 1][col - index_col + 1] = 5
+
+                                                    
+#                                                     for index_col in range(0, 3):
+#                                                         if 0 < enemy_matrix[0][row][(col -1) + index_col] < 5:
+#                                                             enemy_matrix[0][row][col - index_col + 1] = 7
+#                                                             print("=======================================")
+#                                                             count_7[0] += 1  
+#                                                         else:
+#                                                             enemy_matrix[0][row][col - index_col + 1] = 5
+
+#                                                     for index_col in range(0, 3):
+#                                                         if 0 < enemy_matrix[0][row + 1][(col - 1) + index_col] < 5:
+#                                                             enemy_matrix[0][row + 1][col - index_col + 1] = 7
+#                                                             print("=======================================")
+#                                                             count_7[0] += 1
+#                                                         else:
+#                                                             enemy_matrix[0][row + 1][col - index_col + 1] = 5
+
+
+
+*****************************************************************************************************************************************************************************************
+ для левого вверхнего угла
+for index_col in range(0, 3):
+                                                        
+                                                        if 0 < enemy_matrix[0][row][(limit[0] + col - 1) + index_col] < 5:
+                                                            enemy_matrix[0][row][col + index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row][col + index_col] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row][(col -1) + index_col] < 5:
+                                                            enemy_matrix[0][row + 1][col + index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1  
+                                                        else:
+                                                            enemy_matrix[0][row + 1][col + index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row + 1][(col - 1) + index_col] < 5:
+                                                            enemy_matrix[0][row + 2][col  + index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                        else:
+                                                            enemy_matrix[0][row + 2][col + index_col] = 5
+*****************************************************************************************************************************************************************************************
+для левого нижнего угла
+for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row][(limit[0] + col - 1) + index_col] < 5:
+                                                            enemy_matrix[0][row][col + index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row][col + index_col] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row][(col -1) + index_col] < 5:
+                                                            enemy_matrix[0][row - 1][col + index_col] = 7
+                                                            print("****************************************************************")
+                                                            count_7[0] += 1  
+                                                        else:
+                                                            enemy_matrix[0][row - 1][col + index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row][(col - 1) + index_col] < 5:
+                                                            enemy_matrix[0][row - 2][col  + index_col] = 7
+                                                            print("///////////////")
+                                                            count_7[0] += 1
+                                                        else:
+                                                            enemy_matrix[0][row - 2][col + index_col] = 5
+
+
+*****************************************************************************************************************************************************************************************
+Для левой стороны 
+for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row - 1][col + index_col] < 5:
+                                                            enemy_matrix[0][row - 1][col + index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row - 1][col + index_col] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row][col + index_col] < 5:
+                                                            enemy_matrix[0][row][col + index_col] = 7
+                                                            print("****************************************************************")
+                                                            count_7[0] += 1  
+                                                        else:
+                                                            enemy_matrix[0][row][col + index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row + 1][col + index_col] < 5:
+                                                            enemy_matrix[0][row + 1][col  + index_col] = 7
+                                                            print("///////////////")
+                                                            count_7[0] += 1
+                                                        else:
+                                                            enemy_matrix[0][row + 1][col + index_col] = 5
+
+
+*****************************************************************************************************************************************************************************************
+Для правого вверхнего угла
+for index_col in range(0, 3):
+                                                        
+                                                        if 0 <  enemy_matrix[0][row ][col - index_col] < 5:
+                                                            enemy_matrix[0][row][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row][col - index_col] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 <  enemy_matrix[0][row + 1][col - index_col] < 5:
+                                                            enemy_matrix[0][row + 1][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1  
+                                                        else:
+                                                            enemy_matrix[0][row + 1][col - index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 <  enemy_matrix[0][row +2 ][col - index_col] < 5:
+                                                            enemy_matrix[0][row + 2][col  - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                        else:
+                                                            enemy_matrix[0][row + 2][col - index_col] = 5
+*****************************************************************************************************************************************************************************************
+Для правого нижнего угла
+for index_col in range(0, 3):
+                                                        
+                                                        if 0 <  enemy_matrix[0][row ][col - index_col] < 5:
+                                                            enemy_matrix[0][row][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row][col - index_col] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 <  enemy_matrix[0][row - 1][col - index_col] < 5:
+                                                            enemy_matrix[0][row - 1][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1  
+                                                        else:
+                                                            enemy_matrix[0][row - 1][col - index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 <  enemy_matrix[0][row - 2][col - index_col] < 5:
+                                                            enemy_matrix[0][row - 2][col  - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                        else:
+                                                            enemy_matrix[0][row - 2][col - index_col] = 5
+*****************************************************************************************************************************************************************************************
+Для нижней стенки 
+for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row - 1][col - 1 + index_col] < 5:
+                                                            enemy_matrix[0][row - 1][col - index_col + 1] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row - 1][col - index_col + 1] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row][col - 1 + index_col] < 5:
+                                                            enemy_matrix[0][row][col - index_col + 1] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row][col - index_col + 1] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row - 2][col - 1 + index_col] < 5:
+                                                            enemy_matrix[0][row - 2][col - index_col + 1] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row - 2][col - index_col + 1] = 5
+*****************************************************************************************************************************************************************************************
+Для верхней стенки 
+for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row][col - 1 + index_col] < 5:
+                                                            enemy_matrix[0][row][col - 1 + index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row][col - 1 + index_col] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row + 1][col - 1 + index_col] < 5:
+                                                            enemy_matrix[0][row + 1][col - index_col + 1] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row + 1][col - 1 + index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 < enemy_matrix[0][row + 2][col - 1 + index_col] < 5:
+                                                            enemy_matrix[0][row + 2][col - 1 + index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row + 2][col - 1 + index_col] = 5
+*****************************************************************************************************************************************************************************************
+
+for index_col in range(0, 3):
+                                                        
+                                                        if 0 <  enemy_matrix[0][row - 1][col - index_col] < 5:
+                                                            enemy_matrix[0][row - 1][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row - 1][col - index_col] = 5
+
+                                                    
+                                                    for index_col in range(0, 3):
+                                                        if 0 <  enemy_matrix[0][row][col - index_col] < 5:
+                                                            enemy_matrix[0][row][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1  
+                                                        else:
+                                                            enemy_matrix[0][row][col - index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 <  enemy_matrix[0][row + 1][col - index_col] < 5:
+                                                            enemy_matrix[0][row + 1][col  - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                        else:
+                                                            enemy_matrix[0][row + 1][col - index_col] = 5

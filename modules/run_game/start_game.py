@@ -14,7 +14,7 @@ from ..server import list_check_ready_to_fight , dict_save_information , check_t
 from ..client import list_check_need_send 
 from ..shop import shop_item
 from ..classes.animation import rocket_animation , animation_boom , Animation
-
+import time
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
 
@@ -501,6 +501,11 @@ list_cross = []
 
 x_core = [0]
 y_core = [0]
+
+
+limit = [2]
+
+count_7 = [0]
 # функція для бою між гравцями
 def fight_window():
     global y , yy
@@ -540,6 +545,7 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        print(f"ЭТО МАТРИЦА СЕРВЕРА {enemy_matrix[0]}")
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(60)
         # отримцємо координати курсору
@@ -681,24 +687,56 @@ def fight_window():
 
                                             if flag_upgrade[0] == True:
                                                 try:
-                                                    print("---------------------------------------------------------------- ")   
-                                                    for index_col in range(0, 3): enemy_matrix[0][row - 1][(col - 1)+ index_col] = 5
                                                     for index_col in range(0, 3):
-                                                        enemy_matrix[0][row][(col -1) + index_col] = 5
+                                                        
+                                                        if 0 <  enemy_matrix[0][row - 1][col - index_col] < 5:
+                                                            enemy_matrix[0][row - 1][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                            limit[0] = 0
+                                                        else:
+                                                            enemy_matrix[0][row - 1][col - index_col] = 5
+
+                                                    
                                                     for index_col in range(0, 3):
-                                                        enemy_matrix[0][row + 1][(col -1) + index_col] = 5
+                                                        if 0 <  enemy_matrix[0][row][col - index_col] < 5:
+                                                            enemy_matrix[0][row][col - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1  
+                                                        else:
+                                                            enemy_matrix[0][row][col - index_col] = 5
+
+                                                    for index_col in range(0, 3):
+                                                        if 0 <  enemy_matrix[0][row + 1][col - index_col] < 5:
+                                                            enemy_matrix[0][row + 1][col  - index_col] = 7
+                                                            print("=======================================")
+                                                            count_7[0] += 1
+                                                        else:
+                                                            enemy_matrix[0][row + 1][col - index_col] = 5
+
+
+                                                    if count_7[0] > 0:
+                                                        turn[0] = "client_turn"
+                                                    else:
+                                                        turn[0] = "server_turn"
 
                                                     check_time[0] = 0
                                                     # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                    list_check_need_send[0] = "yes"
-                                                    turn[0] = "client_turn"        
-                                                    print("Всё гуд")   
+                                                    list_check_need_send[0] = "yes"         
                                                     flag_upgrade[0] = False
-                                                except Exception as matrix_error:
-                                                    print(f"Ошибка матрицы : {matrix_error}")
-                                                    continue
 
+                                                    count_7[0] = 0
+                                                 
+                                                    
+                                                except Exception as matrix_error:
+                                                    print(f"Ошибка матрицы : {matrix_error}........................................................................")
+                                                    continue  
+                                                
                                             else:
+                                                check_time[0] = 0
+                                                # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                list_check_need_send[0] = "yes"         
+                                                flag_upgrade[0] = False
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                 # 5 - значить , що гравець зробив постріл , але схибив його
                                                 if enemy_matrix[0][row][col] == 0:
@@ -1027,19 +1065,3 @@ def finish_window():
                 change_scene(None)
 
         pygame.display.flip()
-
-            
-                
-
-
-
-            
-
-
-
-
-
-
-
-
-
