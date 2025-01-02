@@ -749,6 +749,7 @@ def fight_window():
         # створюємо спсиок , завдяки якому будемо трясти екран при ударі
         render_offset = [0, 0]
 
+
         if screen_shake[0] > 0:
             # записуємо рандомні числа у список render_offset , щоб за ними трясти екран
             render_offset[0] = random.randint(-4, 4)
@@ -982,7 +983,7 @@ def fight_window():
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                 # 5 - значить , що гравець зробив постріл , але схибив його
                                                 if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
+                                                    shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row][col]) 
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                     shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
                                                 if shop.second_task.TEXT == shop.list_second_task[2]:
@@ -999,6 +1000,8 @@ def fight_window():
                                                     shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+
+                                            
                                                 
 
                                                 if enemy_matrix[0][row][col] == 0:
@@ -1079,6 +1082,7 @@ def fight_window():
                                                     shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+
 
 
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5

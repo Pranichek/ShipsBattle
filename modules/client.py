@@ -286,6 +286,7 @@ def connect_user():
                 if shop.third_task.TEXT == shop.list_third_task[0]:
                     shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
 
+
                 if shop.second_task.TEXT == shop.list_second_task[-1]:
                     if server_data["first_kill_3deck"] != "kill three-decker ship":
                         shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
