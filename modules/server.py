@@ -254,6 +254,10 @@ def start_server():
             # 'server_matrix' - матрица пользователя который играет за сервер
             # "new_for_client" - матрица в которой хранится матрица уже с нашими выстрелами(выстрелами сервера)
             # "check_end_game" - список который хранит данные о побидители игры
+            #"first_kill_3deck" - список в котоором хранится сколько у игрока осталось трехпалубныъ кораблей , и за счет того понимаем кто первый убил трех палубный кораблик
+            #"misses_coordinate" - координаты где должнна отображаться анимация зачеркивания клеточек,  когда враг убил У НАС КОРАБЛЬ
+            # ""money_balance"" - баланс игрока
+            # "check_ten_times" - счетчик чтобы каждые десять циклов отнималась одна секунда для хода игрока(так как у нас tim.sleep(0.1 секунда)) , значит 10 повторений одна секунда
             game_information = {
                 'turn': turn[0],
                 'time': check_time[0],
@@ -262,7 +266,8 @@ def start_server():
                 "check_end_game": list_check_win[0] ,
                 "first_kill_3deck": shop.enemy_ships_3decker[0],
                 "misses_coordinate": save_miss_coordinates,
-                "money_balance":shop.money_list[0]
+                "money_balance":shop.money_list[0],
+                "check_ten_times":check_ten_times.count(1)
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -309,16 +314,17 @@ def start_server():
                 elif turn[0] == "client_turn":
                     turn[0] = "server_turn"
 
-            if turn[0] == "client_turn" and check_time[0] == 1:
+            if turn[0] == "client_turn" and check_time[0] == 1 and check_ten_times.count(1) == 1:
+                print(111)
                 if shop.second_task.TEXT == shop.list_second_task[1]:
                     shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+                
 
             # первым убить четрыех палбный кораблик
             if shop.third_task.TEXT == shop.list_third_task[0]:
                 shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
 
             
-
             if shop.second_task.TEXT == shop.list_second_task[-1]:
                 if ready_clinet_data["first_kill_3deck"] != "kill three-decker ship":
                     shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
@@ -339,9 +345,9 @@ def start_server():
         except json.JSONDecodeError:
             print("Не получилось декодировать данные/")
             continue
-        # except Exception as error:
-        #     print(f"Тупая ошибка: {error}")
-        #     continue
+        except Exception as error:
+            print(f"Тупая ошибка: {error}")
+            continue
 
         
         
