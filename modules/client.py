@@ -2,9 +2,10 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim
+from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates
 from .screens import list_grid
 import modules.shop as shop
+import modules.achievement as achievement
 
 list_check_need_send = ["no"]
 
@@ -201,7 +202,12 @@ def connect_user():
 
                 enemy_balance[0] = server_data["money_balance"]
 
-            
+                # для медалей
+                for medal in server_data["medals_coordinates"]:
+                    if medal not in save_medals_coordinates:
+                        save_medals_coordinates.append(medal)
+
+                # для зачерканных клеточек
                 for coord_miss in server_data["misses_coordinate"]:
                     if coord_miss not in enemy_animation_miss_coord:
                         enemy_animation_miss_coord.append(coord_miss)
@@ -225,7 +231,8 @@ def connect_user():
                         "new_for_server" : enemy_matrix[0],
                         "first_kill_3deck": shop.enemy_ships_3decker[0], 
                         "misses_coordinate": save_miss_coordinates,
-                        "money_balance":shop.money_list[0]
+                        "money_balance":shop.money_list[0],
+                        "medals_coordinates":achievement.list_save_coords_achiv
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -243,7 +250,8 @@ def connect_user():
                             "new_for_server" : enemy_matrix[0],
                             "first_kill_3deck": shop.enemy_ships_3decker[0],
                             "misses_coordinate": save_miss_coordinates,
-                            "money_balance":shop.money_list[0]
+                            "money_balance":shop.money_list[0],
+                            "medals_coordinates":achievement.list_save_coords_achiv
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -261,7 +269,8 @@ def connect_user():
                             "new_for_server" : enemy_matrix[0],
                             "first_kill_3deck": shop.enemy_ships_3decker[0],
                             "misses_coordinate": save_miss_coordinates,
-                            "money_balance":shop.money_list[0]
+                            "money_balance":shop.money_list[0],
+                            "medals_coordinates":achievement.list_save_coords_achiv
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -291,6 +300,8 @@ def connect_user():
                 if shop.second_task.TEXT == shop.list_second_task[-1]:
                     if server_data["first_kill_3deck"] != "kill three-decker ship":
                         shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
+
+                achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
 
                 check_repeat[0] += 1
 

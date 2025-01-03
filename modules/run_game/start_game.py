@@ -1,19 +1,21 @@
 #імпортуємо усі потрібні модулі
 import pygame , random
-import modules.screens.screen as module_screen_server
 import modules.shop as shop
+import modules.achievement as achievement
+import modules.screens.screen as module_screen_server
+from ..classes.achive_window import first_four_decker_achivment
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
+from ..classes.animation import rocket_animation , animation_boom , Animation
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
-from ..json_functions import read_json , write_json , list_users
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
 from ..classes.class_click import music_click
+from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates
 from ..client import list_check_need_send 
-from ..classes.animation import rocket_animation , animation_boom , Animation
 from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money
 
 #ініціалізуємо pygame щоб можна було із ним працювати
@@ -43,27 +45,6 @@ player_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_sav
 enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["enemy_points"]) , screen = main_screen , x_cor = 270 , y_cor = 126, text_color = "White")
 # Текста для фрейму де показують переміг ти чи програв№
 win_lose_text = Font(size = 96 , name_font= "Goldman_Bold.ttf" , text = "" , screen = main_screen , x_cor = 383 , y_cor = 248, text_color = "White")
-
-# player_balance_in_jar = Font(
-#     x_cor = 1219 ,
-#     y_cor = 45 ,
-#     size = 36,
-#     name_font = "Jersey15.ttf",
-#     text = str(shop.money_list[0]),
-#     text_color = "Yellow",
-#     screen = main_screen
-# )
-# enemy_balance_in_jar = Font(
-#     x_cor = 125 ,
-#     y_cor = 45 ,
-#     size = 36 ,
-#     name_font = "Jersey15.ttf",
-#     text = str(enemy_balance[0]),
-#     text_color = "Yellow",
-#     screen = main_screen
-# )
-
-
 
 def test():
     print(1)
@@ -143,6 +124,7 @@ def upgrade_flag():
 
 
 
+
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
 create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height = 80 , action = button_action)
@@ -169,6 +151,7 @@ restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_ho
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
 # 
 upgrade_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = upgrade_flag)
+
 
 
 #images decoration
@@ -203,7 +186,16 @@ player_jar = DrawImage(x_cor = 1190 , y_cor = 18 , width = 90 , height = 76 , fo
 enemy_jar = DrawImage(x_cor = 102 , y_cor = 18 , width = 90 , height = 76 , folder_name = "decorations" , image_name = "jar_balance.png")
 # место где будет отображаться какое спец оружие купил пользователь
 user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 , folder_name = "backgrounds" , image_name = "user_weapon.png")
-
+# enemy_medals 
+four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "four_decker_sniper_medal.png")
+auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
+destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
+first_shot_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_shot_medal_medal.png")
+lone_hunter_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
+master_of_disguise_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguise.png")
+prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
+pioneer_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
+strategist_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -248,6 +240,7 @@ def main_window():
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
 
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -257,6 +250,7 @@ def main_window():
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
+
  
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
@@ -311,15 +305,15 @@ def create_game_window():
 
         #если запустили сервер но к нему еще никто не подлючился перекидываем на окно ожидания игрока
         if status_server == "wait":
-                    check_press_button[0] = None 
-                    run_game = False
-                    apply_fade_effect(screen = main_screen)
-                    change_scene(waiting_window())
+            check_press_button[0] = None 
+            run_game = False
+            apply_fade_effect(screen = main_screen)
+            change_scene(waiting_window())
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                change_scene(None)
+                list_current_scene[0] = None
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)
@@ -529,37 +523,6 @@ y_hit_the_ship = [0]
 # спсиок где хранятся крестки которые ресуюются если враг попал по кораблю игрока
 list_cross_player = []
 
-# # для двух попаданий подряд
-# check_money_two_hits_in_row = [0]
-# # для четрыех попаданий подряд
-# check_money_four_hits_in_row = [0]
-# # для убийства одного трехабловбного корабля
-# check_kill_one_3deck = [0]
-# # для того когда убил два корабля подряд
-# check_money_two_kill_in_a_row = [0]
-# # для того когда убил два трехпалубных кораблей подряд
-# check_2_kills_3deck_in_row = [0]
-# # для того когда убил первым четырех палубный корабль
-# check_kill_first_four_deck = [0]
-# # для того когда убил два трехапалобных корабля подряд
-# check_two_3decker_ship_in_row = [0]
-# # для того чтобы убить четыре однопалубных кораблей подряд
-# check_kill_four_1decker_in_row = [0]
-# # для того чтобы когда убил корабль с первой попытки
-# check_kill_in_first_shot = [0]
-# # для того когда соперник не попал по твои кораблям 7 раз
-# check_kept_alive_for_5_turns = [0]
-# # для того чтобы убить три корабля подряд
-# check_kill_three_ships_in_row = [0]
-# # сделать первые три задания
-# check_completed_three_tasks = [0]
-# # три попадания подряд
-# check_money_three_hits_in_row = [0]
-# # первый убил трехпалубный 
-# check_first_kill_three_3dec = [0]
-# # 8 попаданий подряд
-# check_money_eight_hits_in_row = [0]
-
 
 # функція для бою між гравцями
 def fight_window():
@@ -600,6 +563,10 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        for i in range(0 , len(save_medals_coordinates)):
+            if save_medals_coordinates[i][0] == 1:
+                four_decker_enemy_medal.y_cor = save_medals_coordinates[i][2]
+
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
         # функция которая красиво добавляет монетки
@@ -708,8 +675,6 @@ def fight_window():
 
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = main_screen)
-
-
         #----------------------------------------------------------------
         # анимация зачеркивания клеточек вокруг убитого корабля
         ship_border()
@@ -797,6 +762,12 @@ def fight_window():
             item.draw(screen = main_screen)
             item.move()
         
+        # відмаловуємо усі елементи які знаходяться у завданнях
+        achievement.medal_four_decker.draw_image(screen = main_screen)
+
+        first_four_decker_achivment.draw(screen = main_screen)
+        first_four_decker_achivment.move()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -867,9 +838,7 @@ def fight_window():
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
-                                            
-                                                
-
+                        
                                                 if enemy_matrix[0][row][col] == 0:
                                                     enemy_matrix[0][row][col] = 5
                                                     # оскільки ці умови , якщо гравець це клієнт

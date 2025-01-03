@@ -2,12 +2,18 @@ from ..screens import list_grid , list_object_map , main_screen
 from ..classes  import list_ships , Animation
 from ..server import save_miss_coordinates
 
+# координаты где отрисовываются зачеркиванные клеточки
 miss_row = [0]
 miss_col = [0]
+# направление поворота корабля
 list_direction = [""]
+# список клеток которые уже проверялись
 check_number_cell = []
+# флаг убитого корабля
 check_kill = [False]
+# длина корабля
 count_len = [1]
+# список в котором сохраняем все обьекты зачерканных клеточек
 list_animation_miss = []
 
 def ship_border():
@@ -19,7 +25,6 @@ def ship_border():
                 str_cel = str(cellee)
 
                 check_kill[0] = False
-
                 list_direction[0] = ""
                 count_len[0] = 1
                 
@@ -50,6 +55,7 @@ def ship_border():
                                 print("убили корабль" , count_len[0])
                                 check_kill[0] = True
                                 check_number_cell.append(num_cell)
+                                
                     elif list_direction[0] == "vertical" and check_kill[0] != True:
                         for len_ship in range(1 , count_len[0]):
                             if list_grid[rowee + len_ship][cellee] == 7:

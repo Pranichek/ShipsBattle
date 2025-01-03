@@ -129,9 +129,8 @@ def two_hits_in_row(number_cell: int):
         else:
             two_hits_in_a_row.clear()
             return False
+        
     if count_ships > 1 and "True" not in two_hits_in_a_row:
-        # player_balance.TEXT = str(money_list[0])
-        # player_balance.update_text()
         check_completed_tasks[0] += 1
         print("Two hits in a row")
         two_hits_in_a_row.append("True")
@@ -166,7 +165,7 @@ def four_hits_in_row(number_cell: int):
         else:
             four_hits_in_a_row.clear()
             return False
-    if count_ships > 3 and "True"not in four_hits_in_a_row:
+    if count_ships > 3 and "True" not in four_hits_in_a_row:
         check_completed_tasks[0] += 1
         print("Four hits in a row")
         four_hits_in_a_row.append("True")
@@ -198,7 +197,7 @@ def kill_one_three_decker_ship(grid):
         for row in range(len(grid)):
             for cell in range(len(grid[row])):
                 if grid[row][cell] == 3:
-                        kill_three_deckcer_ship[0] += 1  
+                    kill_three_deckcer_ship[0] += 1  
 
         print(kill_three_deckcer_ship[0])
 
@@ -214,6 +213,7 @@ kill_count = [0]
 def kill_two_ships_in_a_row(cell):
     if kill_count[0] != "Kill two ships":
         ship_hits.append(cell)
+
         for hit in ship_hits:
             if hit == 0:
                 ship_hits.clear()
@@ -234,16 +234,19 @@ def kill_two_ships_in_a_row(cell):
                 if on == 1:
                     ship_hits.remove(on)
             kill_count[0] += 1
+
         elif two_count >= 2:
             for tw in ship_hits:
                 if tw == 2:
                     ship_hits.remove(tw)
             kill_count[0] += 1
+
         elif three_count >= 3:
             for th in ship_hits:
                 if th == 3:
                     ship_hits.remove(th)
             kill_count[0] += 1
+
         elif four_count >= 4:
             kill_count[0] += 1
             for fr in ship_hits:
@@ -283,20 +286,20 @@ def kill_two_three_decker_in_a_row(cell):
         count_three = 0
         return False
     
-    if count_three == 6:
+    if count_three == 6 and "Kill two three decker in a row" not in count_three_ships:
         check_completed_tasks[0] += 1
         count_three_ships.append("Kill two three decker in a row")
         print("Ты убил два трехпалубных кораблей подряд")
 
 
-
-#3 первым убить четыреъ палубный корабль
+#3 первым убить четыреx палубный корабль
 our_ships = [0]
 enemy_ships = [0]
 def first_kill_four_decker(grid , enemy_grid):
     our_ships[0] = 0
     if enemy_ships[0] != "kill four-decker ship":
         enemy_ships[0] = 0
+
     for row in range(len(grid)):
         for cell in range(len(grid[row])):
             if grid[row][cell] == 4:
@@ -357,7 +360,7 @@ def kill_three_double_decker_in_a_row(cell):
             two = 0
             return False
         
-        if two == 6:
+        if two == 6 and "You kill two three decker in row" not in count_two_3decker_ship:
             count_two_3decker_ship.append("You kill two three decker in row")
             check_completed_tasks[0] += 1
             print("Ты убил три двухпалубных кораблей подряд")
@@ -415,8 +418,9 @@ count_kill_three = [0]
 def kill_three_ships_in_a_row(cell):
     if count_kill_three[0] != "You killes three ships in row":
         count_ships_three.append(cell)
-        for i in count_ships_three:
-            if i == 0:
+
+        for ship in count_ships_three:
+            if ship == 0:
                 count_ships_three.clear()
                 count_kill_three[0] = 0
                 once = 0
@@ -451,7 +455,7 @@ def kill_three_ships_in_a_row(cell):
                 if fr == 4:
                     count_ships_three.remove(fr)
 
-        if count_kill_three[0] >= 2:
+        if count_kill_three[0] >= 3:
             count_kill_three[0] = "You killes three ships in row"
             check_completed_tasks[0] += 1
             print("Ты убил три корабля подряд")
@@ -464,6 +468,7 @@ def complete_three_tasks():
         if check_completed_tasks[0] == 3:
             check_completed_tasks[0] = "Completed three firsts tasks"
             print("Ты выполнил все три завдання")
+
 
 # створюємо текст із рандомним першим завданням
 first_task = Font_Shop(
@@ -478,7 +483,6 @@ first_task = Font_Shop(
     text_color = "White"
 )
 
-
 # створюємо текст iз рандомним другим завданням
 second_task = Font_Shop(
     x_cor = 52 ,
@@ -490,7 +494,6 @@ second_task = Font_Shop(
     max_width = 220 ,
     max_height = 28 ,
     text_color = "White"
-
 )
 
 # створюємо текст iз рандомним третьим завданням
@@ -505,7 +508,6 @@ third_task = Font_Shop(
     max_height = 28 , 
     text_color = "White"
 )
-
 
 # створюємо текст iз рандомним четвертим завданням
 fourth_task = Font_Shop(

@@ -12,4 +12,5 @@ class Sound:
          self.SOUND.play(loops=0, maxtime=0, fade_ms=0)
          
 
-music_click = Sound(name_sound="button_pressed.mp3")
+music_click = Sound(name_sound = "button_pressed.mp3")
+music_achieve = Sound(name_sound = "get_achievement.mp3")

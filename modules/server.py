@@ -4,8 +4,8 @@ from .screens import list_grid
 from .classes import input_port , input_ip_adress, input_nick , Animation
 # Импортируем функцию записи в json файлы
 from .json_functions import write_json , list_server_status , list_users , read_json
-# from .shop import kept_all_ships_laive_for_five_turns , first_kill_four_decker , first_task , second_task , third_task , fourth_task , list_first_task , list_second_task , list_third_task , list_fourth_task
 import modules.shop as shop
+import modules.achievement as achievement
 
 # чтобы у на ототбражались зачеркнутые клеточки вокргу корабля
 our_miss_anim = []
@@ -42,6 +42,9 @@ save_miss_coordinates = []
 enemy_animation_miss_coord = []
 # список где сохраняем баланс врага
 enemy_balance = [0]
+# сохраняем координаты вражеских медалей
+save_medals_coordinates = []
+
 # словарь для зберігання інформаці про гравців
 dict_save_information = {
     "player_nick": "",
@@ -267,7 +270,8 @@ def start_server():
                 "first_kill_3deck": shop.enemy_ships_3decker[0],
                 "misses_coordinate": save_miss_coordinates,
                 "money_balance":shop.money_list[0],
-                "check_ten_times":check_ten_times.count(1)
+                "check_ten_times":check_ten_times.count(1),
+                "medals_coordinates":achievement.list_save_coords_achiv
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -283,6 +287,10 @@ def start_server():
             ready_clinet_data = json.loads(client_data)
 
             enemy_balance[0] = ready_clinet_data["money_balance"]
+
+            for medal in ready_clinet_data["medals_coordinates"]:
+                if medal not in save_medals_coordinates:
+                    save_medals_coordinates.append(medal)
 
             for coord_miss in ready_clinet_data["misses_coordinate"]:
                 if coord_miss not in enemy_animation_miss_coord:
@@ -329,7 +337,8 @@ def start_server():
                 if ready_clinet_data["first_kill_3deck"] != "kill three-decker ship":
                     shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
 
-            
+            achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
+
             check_repeat[0] += 1
 
             
