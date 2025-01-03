@@ -323,7 +323,6 @@ def start_server():
                     turn[0] = "server_turn"
 
             if turn[0] == "client_turn" and check_time[0] == 1 and check_ten_times.count(1) == 1:
-                print(111)
                 if shop.second_task.TEXT == shop.list_second_task[1]:
                     shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
                 

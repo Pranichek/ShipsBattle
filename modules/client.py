@@ -215,7 +215,7 @@ def connect_user():
                 # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
                 check_time[0] = server_data['time']
 
-                if turn[0] == "client_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
+                if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
                     if shop.second_task.TEXT == shop.list_second_task[1]:
                         shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
 
