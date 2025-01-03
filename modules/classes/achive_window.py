@@ -121,3 +121,5 @@ class Acievement:
 
     
 first_four_decker_achivment = Acievement(achievement_image_name = "four_decker_sniper")
+
+ten_shoot_in_row_achievement = Acievement(achievement_image_name = "perfect_shooter")
