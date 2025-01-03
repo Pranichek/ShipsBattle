@@ -929,6 +929,7 @@ def fight_window():
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
+                                                # ачивки
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
 
 
