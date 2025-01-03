@@ -187,10 +187,10 @@ enemy_jar = DrawImage(x_cor = 102 , y_cor = 18 , width = 90 , height = 76 , fold
 # место где будет отображаться какое спец оружие купил пользователь
 user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 , folder_name = "backgrounds" , image_name = "user_weapon.png")
 # enemy_medals 
-four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "four_decker_sniper_medal.png")
+four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_four_decker.png")
 auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
 destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
-first_shot_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_shot_medal_medal.png")
+first_shot_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_shot_medal.png")
 lone_hunter_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
 master_of_disguise_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguise.png")
 prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
@@ -767,6 +767,10 @@ def fight_window():
 
         first_four_decker_achivment.draw(screen = main_screen)
         first_four_decker_achivment.move()
+
+        #enemy_medals
+        four_decker_enemy_medal.draw_image(screen = main_screen)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
