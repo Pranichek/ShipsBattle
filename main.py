@@ -12,4 +12,4 @@ pygame.quit()
 sys.exit()
 
   
-
+print(1)
