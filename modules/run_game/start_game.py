@@ -687,32 +687,19 @@ def fight_window():
 
                                             if flag_upgrade[0] == True:
                                                 try:
-                                                    for index_col in range(0, 3):
-                                                        
-                                                        if 0 <  enemy_matrix[0][row - 1][col - index_col] < 5:
-                                                            enemy_matrix[0][row - 1][col - index_col] = 7
-                                                            print("=======================================")
-                                                            count_7[0] += 1
-                                                            limit[0] = 0
-                                                        else:
-                                                            enemy_matrix[0][row - 1][col - index_col] = 5
+                                                    for row_offset in range(-1, 2):
+                                                        for index_col in range(0, 3):
+                                                            current_row = row + row_offset
 
-                                                    
-                                                    for index_col in range(0, 3):
-                                                        if 0 <  enemy_matrix[0][row][col - index_col] < 5:
-                                                            enemy_matrix[0][row][col - index_col] = 7
-                                                            print("=======================================")
-                                                            count_7[0] += 1  
-                                                        else:
-                                                            enemy_matrix[0][row][col - index_col] = 5
+                                                            if 0 < enemy_matrix[0][current_row][col - index_col] < 5:
+                                                                enemy_matrix[0][current_row][col - index_col] = 7
+                                                                print("=======================================")
+                                                                count_7[0] += 1
+                                                                limit[0] = 0
+                                                            else:
+                                                                enemy_matrix[0][current_row][col - index_col] = 5
 
-                                                    for index_col in range(0, 3):
-                                                        if 0 <  enemy_matrix[0][row + 1][col - index_col] < 5:
-                                                            enemy_matrix[0][row + 1][col  - index_col] = 7
-                                                            print("=======================================")
-                                                            count_7[0] += 1
-                                                        else:
-                                                            enemy_matrix[0][row + 1][col - index_col] = 5
+
 
 
                                                     if count_7[0] > 0:
