@@ -190,6 +190,11 @@ def connect_user():
                         if not exit:
                             our_miss_anim.append(animation_miss)
                             enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
+
+                # win game without losing a ship
+                achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
+
+
                 # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
                 time.sleep(0.1)
                 # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
@@ -219,6 +224,8 @@ def connect_user():
                     if shop.second_task.TEXT == shop.list_second_task[1]:
                         shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
 
+                if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
+                    achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
 
                 # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
                 if list_check_need_send[0] == "no":

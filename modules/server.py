@@ -237,6 +237,9 @@ def start_server():
                     if enemy_matrix[0][row_client][cell_client] != 0 and enemy_matrix[0][row_client][cell_client] != 5 and enemy_matrix[0][row_client][cell_client] != 7:
                         count_client_ships += 1
 
+            # win game without losing a ship
+            achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
+
             # если кораблей сервера не осталовь , то выиграл клиент
             if count_server_ships == 0 and count_client_ships > 0:
                 # список для хранения кто выиграл
@@ -260,6 +263,7 @@ def start_server():
             #"misses_coordinate" - координаты где должнна отображаться анимация зачеркивания клеточек,  когда враг убил У НАС КОРАБЛЬ
             # ""money_balance"" - баланс игрока
             # "check_ten_times" - счетчик чтобы каждые десять циклов отнималась одна секунда для хода игрока(так как у нас tim.sleep(0.1 секунда)) , значит 10 повторений одна секунда
+            # "medals_coordinates" - координаты медалей которые нужно отобразить на экране(для врага) , я как игрок получил медаль , и у врага должно это отобразится
             game_information = {
                 'turn': turn[0],
                 'time': check_time[0],
@@ -324,6 +328,9 @@ def start_server():
             if turn[0] == "client_turn" and check_time[0] == 1 and check_ten_times.count(1) == 1:
                 if shop.second_task.TEXT == shop.list_second_task[1]:
                     shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+
+            if turn[0] == "client_turn" and check_time[0] == 1 and check_ten_times.count(1) == 1:
+                achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
                 
 
             # первым убить четрыех палбный кораблик
