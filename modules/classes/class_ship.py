@@ -33,7 +33,6 @@ class Ship:
         self.col = 0
         # флаг для проверки столкновения с кораблями(коллизиями)
         self.check_collision = None
-
         self.check_after_random = None
     
     # Метод загрузки картинок кораблей

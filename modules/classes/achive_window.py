@@ -93,7 +93,7 @@ class Acievement:
                     if self.HEIGHT > 265:
                         self.HEIGHT -= 0.5
                     if self.X_COR < self.X_MAX + 20:  # Рух вправо
-                        self.X_COR += 1
+                        self.X_COR += 0.1
                     if self.WIDTH <= 337 and self.HEIGHT <= 265:
                         self.DIRECTION = "Less"
                         self.COUNT_MOVE += 1
@@ -103,7 +103,7 @@ class Acievement:
                     if self.HEIGHT < self.MAX_HEIGHT:
                         self.HEIGHT += 0.5
                     if self.X_COR > self.X_MAX:  # Рух вліво
-                        self.X_COR -= 1
+                        self.X_COR -= 0.1
                     if self.WIDTH >= self.MAX_WIDTH and self.HEIGHT >= self.MAX_HEIGHT:
                         self.DIRECTION = "More"
                     self.COUNT_MOVE += 1

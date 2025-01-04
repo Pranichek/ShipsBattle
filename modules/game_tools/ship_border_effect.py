@@ -20,6 +20,7 @@ def ship_border():
     for rowee in range(len(list_grid)):
         for cellee in range(len(list_grid[rowee])):
             if list_grid[rowee][cellee] == 7:
+                
                 miss_row[0] = rowee
                 miss_col[0] = cellee
                 str_cel = str(cellee)

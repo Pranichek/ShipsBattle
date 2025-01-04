@@ -240,7 +240,6 @@ def main_window():
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
 
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -703,9 +702,11 @@ def fight_window():
                 # print(len(list_cross))
                 cross.animation(main_screen = main_screen , count_image = 13)
 
+
         if check_animation_rocket[0] == "start_animation":
             rocket_animation.X_COR = x_hit_the_ship[0] - 231
             rocket_animation.Y_COR = y_hit_the_ship[0] - 23
+            # проверка на окончание анимация полета ракеті 
             if rocket_animation.animation(main_screen = main_screen , count_image = 7):
                 animation_boom.X_COR = x_hit_the_ship[0] - 23
                 animation_boom.Y_COR = y_hit_the_ship[0] - 23
