@@ -124,7 +124,7 @@ def two_hits_in_row(number_cell: int):
     two_hits_in_a_row.append(number_cell)
 
     for cell in two_hits_in_a_row:
-        if cell != 5:
+        if cell != 5 and cell != 0:
             count_ships += 1
         else:
             two_hits_in_a_row.clear()
@@ -142,7 +142,7 @@ def three_hits_in_row(cell: int):
     three_hits_in_a_row.append(cell)
 
     for cell in three_hits_in_a_row:
-        if cell!= 5:
+        if cell!= 5 and cell != 0:
             count_ships += 1
         else:
             three_hits_in_a_row.clear()
@@ -160,7 +160,7 @@ def four_hits_in_row(number_cell: int):
     four_hits_in_a_row.append(number_cell)
 
     for cell in four_hits_in_a_row:
-        if cell!= 5:
+        if cell!= 5 and cell != 0:
             count_ships += 1
         else:
             four_hits_in_a_row.clear()
@@ -177,7 +177,7 @@ def eight_hits_in_row(number_cell: int):
     egight_hits_in_a_row.append(number_cell)
 
     for cell in egight_hits_in_a_row:
-        if cell!= 5:
+        if cell!= 5 and cell != 0:
             count_ships += 1
         else:
             egight_hits_in_a_row.clear()

@@ -564,7 +564,6 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
-        print(list_grid)
         for medal in range(0 , len(save_medals_coordinates)):
             if save_medals_coordinates[medal][0] == 1:
                 four_decker_enemy_medal.y_cor = save_medals_coordinates[medal][2]
