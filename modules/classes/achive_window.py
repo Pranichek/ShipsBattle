@@ -130,3 +130,5 @@ first_shoot_achievement = Acievement(achievement_image_name = "first_shot")
 
 master_of_disguist_achievement = Acievement(achievement_image_name = "master_of_disguise")
 
+piooner_achievement = Acievement(achievement_image_name = "pioneer")
+

@@ -225,6 +225,7 @@ def connect_user():
                         shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
 
                 if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
+                    print(133)
                     achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
 
                 # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
