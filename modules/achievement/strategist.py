@@ -35,7 +35,7 @@ def strategist(grid: list, enemy_grid: list):
 
 
 strategist_medal = DrawImage(
-    x_cor = 796 ,
+    x_cor = 760 ,
     y_cor = -50,
     width = 50,
     height = 50,

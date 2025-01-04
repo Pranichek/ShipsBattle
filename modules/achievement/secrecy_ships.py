@@ -18,7 +18,7 @@ def kept_all_ships_alive_for_ten_turns(grid: object):
         list_save_coords_achiv.append((6 , medal_secrecy_ships.x_cor , medal_secrecy_ships.y_cor))
 
 medal_secrecy_ships = DrawImage(
-    x_cor = 870 ,
+    x_cor = 810 ,
     y_cor = -50,
     width = 50,
     height = 50,
