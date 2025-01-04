@@ -1,4 +1,4 @@
-from ..classes import DrawImage , first_shoot_achievement
+from ..classes import DrawImage , first_shoot_achievement 
 from .four_decker_sniper import list_save_coords_achiv 
 
 count_shot = [0]

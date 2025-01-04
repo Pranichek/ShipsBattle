@@ -3,7 +3,7 @@ import pygame , random
 import modules.shop as shop
 import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
-from ..classes.achive_window import first_four_decker_achivment , ten_shoot_in_row_achievement , first_shoot_achievement , strategist_achievement , master_of_disguist_achievement , piooner_achievement , lone_hunter_achievement
+from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.animation import rocket_animation , animation_boom , Animation
@@ -522,6 +522,8 @@ y_hit_the_ship = [0]
 # спсиок где хранятся крестки которые ресуюются если враг попал по кораблю игрока
 list_cross_player = []
 
+check_achiv = [False]
+index_achiv = [100]
 
 # функція для бою між гравцями
 def fight_window():
@@ -562,21 +564,22 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
-        for i in range(0 , len(save_medals_coordinates)):
-            if save_medals_coordinates[i][0] == 1:
-                four_decker_enemy_medal.y_cor = save_medals_coordinates[i][2]
-            elif save_medals_coordinates[i][0] == 2:
-                enemy_prefect_shooter_medal.y_cor = save_medals_coordinates[i][2]
-            elif save_medals_coordinates[i][0] == 3:
-                strategist_enemy_medal.y_cor = save_medals_coordinates[i][2]
-            elif save_medals_coordinates[i][0] == 4:
-                first_shot_enemy_medal.y_cor = save_medals_coordinates[i][2]
-            elif save_medals_coordinates[i][0] == 6:
-                master_of_disguise_enemy_medal.y_cor = save_medals_coordinates[i][2]
-            elif save_medals_coordinates[i][0] == 7:
-                lone_hunter_enemy_medal.y_cor = save_medals_coordinates[i][2]
-            elif save_medals_coordinates[i][0] == 8:
-                pioneer_enemy_medal.y_cor = save_medals_coordinates[i][2]
+        print(list_grid)
+        for medal in range(0 , len(save_medals_coordinates)):
+            if save_medals_coordinates[medal][0] == 1:
+                four_decker_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 2:
+                enemy_prefect_shooter_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 3:
+                strategist_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 4:
+                first_shot_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 6:
+                master_of_disguise_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 7:
+                lone_hunter_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 8:
+                pioneer_enemy_medal.y_cor = save_medals_coordinates[medal][2]
 
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
@@ -785,22 +788,22 @@ def fight_window():
         #piooner
         achievement.medal_fisr_kill_any_ship.draw_image(screen = main_screen)
 
-        first_four_decker_achivment.draw(screen = main_screen)
-        first_four_decker_achivment.move()
-        ten_shoot_in_row_achievement.draw(screen = main_screen)
-        ten_shoot_in_row_achievement.move()
-        first_shoot_achievement.draw(screen = main_screen)
-        first_shoot_achievement.move()
-        strategist_achievement.draw(screen = main_screen)
-        strategist_achievement.move()
-        master_of_disguist_achievement.draw(screen = main_screen)
-        master_of_disguist_achievement.move()
-        piooner_achievement.draw(screen = main_screen)
-        piooner_achievement.move()
-        lone_hunter_achievement.draw(screen = main_screen)
-        lone_hunter_achievement.move()
+        
+        for achiv in list_achieves:
+            if achiv.ACTIVE == True and check_achiv[0] == False:
+                index_achiv[0] = list_achieves.index(achiv)
+                check_achiv[0] = True
 
+        if index_achiv[0] != 100:
+            list_achieves[index_achiv[0]].draw(screen = main_screen)
+            list_achieves[index_achiv[0]].move()
 
+        if index_achiv[0] != 100:
+            if list_achieves[index_achiv[0]].VISIBLE == 0:
+                check_achiv[0] = False
+                index_achiv[0] = 100
+    
+        
         #enemy_medals
         four_decker_enemy_medal.draw_image(screen = main_screen)
         enemy_prefect_shooter_medal.draw_image(screen = main_screen)

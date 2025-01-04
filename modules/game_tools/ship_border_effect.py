@@ -2,9 +2,10 @@ from ..screens import list_grid , list_object_map , main_screen
 from ..classes  import list_ships , Animation
 from ..server import save_miss_coordinates
 
-# координаты где отрисовываются зачеркиванные клеточки
+# номер рядка и клеточки в этом рядке где отрисовываются зачеркиванные клеточки
 miss_row = [0]
 miss_col = [0]
+
 # направление поворота корабля
 list_direction = [""]
 # список клеток которые уже проверялись
@@ -20,7 +21,6 @@ def ship_border():
     for rowee in range(len(list_grid)):
         for cellee in range(len(list_grid[rowee])):
             if list_grid[rowee][cellee] == 7:
-                
                 miss_row[0] = rowee
                 miss_col[0] = cellee
                 str_cel = str(cellee)

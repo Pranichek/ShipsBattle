@@ -1,4 +1,4 @@
-from ..classes import DrawImage , strategist_achievement
+from ..classes import DrawImage , strategist_achievement 
 from .four_decker_sniper import list_save_coords_achiv
 
 count_player_ships = [0]

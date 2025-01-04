@@ -1,5 +1,6 @@
-from ..classes import DrawImage , ten_shoot_in_row_achievement
+from ..classes import DrawImage , ten_shoot_in_row_achievement 
 from .four_decker_sniper import list_save_coords_achiv
+
 
 
 shoots = []

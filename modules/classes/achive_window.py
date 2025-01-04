@@ -2,7 +2,7 @@ import pygame , os
 from ..classes import music_achieve
 pygame.init()
 
-
+list_achieves = []
 class Acievement:
     def __init__(self , achievement_image_name: str):
         self.IMAGE_NAME = achievement_image_name
@@ -42,7 +42,6 @@ class Acievement:
         self.Y_COR = 319
         self.MAX_WIDTH = 354
         self.MAX_HEIGHT = 281
-        self.ACTIVE = False 
         self.CHECK_END_ANIM = False
         self.DIRECTION = None
         self.VISIBLE = 0 
@@ -53,7 +52,7 @@ class Acievement:
         if self.ACTIVE == True:
             if self.COUNT_REPEAT == 0:
                 music_achieve.play2(loops = 1)
-            if self.COUNT_MOVE >= 155: 
+            if self.COUNT_MOVE >= 50: 
                     # Перевіряємо кількість повторів
                     # Повертаємо вікно до початкової позиції
                     if self.X_COR < 640:
@@ -69,6 +68,7 @@ class Acievement:
                     self.fade_out()
                     if self.X_COR >= 540:
                         self.reset()
+                        self.ACTIVE = False 
                     return False
 
             if not self.CHECK_END_ANIM:
@@ -89,9 +89,9 @@ class Acievement:
                 # Горизонтальний рух (вправо/вліво)
                 if self.DIRECTION == "More":
                     if self.WIDTH > 337:
-                        self.WIDTH -= 0.5
+                        self.WIDTH -= 0.7
                     if self.HEIGHT > 265:
-                        self.HEIGHT -= 0.5
+                        self.HEIGHT -= 0.7
                     if self.X_COR < self.X_MAX + 20:  # Рух вправо
                         self.X_COR += 0.1
                     if self.WIDTH <= 337 and self.HEIGHT <= 265:
@@ -99,9 +99,9 @@ class Acievement:
                         self.COUNT_MOVE += 1
                 elif self.DIRECTION == "Less":
                     if self.WIDTH < self.MAX_WIDTH:
-                        self.WIDTH += 0.5
+                        self.WIDTH += 0.7
                     if self.HEIGHT < self.MAX_HEIGHT:
-                        self.HEIGHT += 0.5
+                        self.HEIGHT += 0.7
                     if self.X_COR > self.X_MAX:  # Рух вліво
                         self.X_COR -= 0.1
                     if self.WIDTH >= self.MAX_WIDTH and self.HEIGHT >= self.MAX_HEIGHT:
@@ -111,10 +111,7 @@ class Acievement:
                     self.DIRECTION = "More"
             self.COUNT_REPEAT += 1
             self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha() 
-            
                     
-
-
     def draw(self , screen: pygame.Surface):
         self.BORDER_IMAGE.set_alpha(self.VISIBLE)
         screen.blit(self.BORDER_IMAGE , (self.X_COR, self.Y_COR))
@@ -133,4 +130,7 @@ master_of_disguist_achievement = Acievement(achievement_image_name = "master_of_
 piooner_achievement = Acievement(achievement_image_name = "pioneer")
 
 lone_hunter_achievement = Acievement(achievement_image_name = "lone_hunter")
+
+list_achieves.extend([first_four_decker_achivment , ten_shoot_in_row_achievement , strategist_achievement , first_shoot_achievement , master_of_disguist_achievement , piooner_achievement ,lone_hunter_achievement])
+
 
