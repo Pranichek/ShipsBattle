@@ -1,5 +1,5 @@
 #імпортуємо усі потрібні модулі
-import pygame , random
+import pygame , random 
 import modules.screens.screen as module_screen_server
 import modules.shop as shop
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
@@ -14,7 +14,7 @@ from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance
 from ..client import list_check_need_send 
 from ..classes.animation import rocket_animation , animation_boom , Animation
-from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money
+from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money,Missile_200
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -230,10 +230,10 @@ def main_window():
     pygame.display.set_caption("BattleShips")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
-    if once_play_music[0] < 1:
+    if once_play_music[0] < 0:
         music_load_main.play()
 
-    once_play_music[0] += 1
+    once_play_music[0] += 0
 
     while run_game:
         module_screen_server.FPS.tick(120)
@@ -749,6 +749,7 @@ def fight_window():
                     print("--------------------------------")
                     check_animation_rocket[0] = ""
                     check_cross_animation[0] = "starts_cross_animation"
+                    
         #----------------------------------------------------------------
 
 
@@ -868,46 +869,80 @@ def fight_window():
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
                                             
-                                                
+                                                #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                                                flagbimb200 ="yes"
+                                                if flagbimb200 =="yes" :
+                                                    
+                                                    kord  =Missile_200(row,col,enemy_matrix)
+                                                    #если false flag  то бан клетка и если NOne значит нету корабликов 
+                                                    if kord != "false" and kord!= None :
+                                                        lenkord = len(kord)
+                                                        for i in range(lenkord):
+                                                            # знаходим номер клетки 
+                                                            kletka= kord[i][0]*10 + kord[i][1]
+                                                            print (f"kletka",kletka)
+                                                            print (f"col row ",col,row,i )
 
-                                                if enemy_matrix[0][row][col] == 0:
-                                                    enemy_matrix[0][row][col] = 5
-                                                    # оскільки ці умови , якщо гравець це клієнт
-                                                    # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
-                                                    list_check_need_send[0] = "yes"  # Готуємо дані для відправки
-                                                    turn[0] = "server_turn"  # Передаємо хід серверу
-                                                    if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                        shop.two_hits_in_row(number_cell = 5)
-                                                    if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                        shop.four_hits_in_row(number_cell = 5)
-                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                        shop.eight_hits_in_row(number_cell = 5)
+                                                            # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         
+                                                            x_y = enemy_grid.cell_number_to_coordinates(kletka)
+                                                            print ("шиталово 0",x_y)
+                                                            check_animation_rocket[0] = "start_animation"  
+                                                            x_hit_the_ship[0] = x_y[0]
+                                                            y_hit_the_ship[0] = x_y[1]
+                                                            print (x_hit_the_ship[0],y_hit_the_ship[0])
+                                                            
+                                                            # у матрицю ворога записуємо 7
+                                                            enemy_matrix[0][kord[i][0]][kord[i][1]] = 7
+                                                            # обнуляємо час ходу
+                                                            check_time[0] = 0
+                                                            # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                            list_check_need_send[0] = "yes"
+                                                            turn[0] = "client_turn"  
+                                                            
 
-                                                # робимо умову для випадку коли по клітичнці вже били
-                                                elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
-                                                    print("Уже стреляли в эту клетку")
-                                                
-                                                # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
-                                                # 7 - значить , що гравець зробив постріл і попав по кораблю
-                                                elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col]:
-                                                    # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
-                                                    check_animation_rocket[0] = "start_animation"
-                                                    # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
-                                                    x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
-                                                    y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-                                                    # у матрицю ворога записуємо 7
-                                                    enemy_matrix[0][row][col] = 7
-                                                    # обнуляємо час ходу
-                                                    check_time[0] = 0
-                                                    # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                    list_check_need_send[0] = "yes"
-                                                    turn[0] = "client_turn"     
-                                                    if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                        shop.two_hits_in_row(number_cell = 7)
-                                                    if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                        shop.four_hits_in_row(number_cell = 7)
-                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                        shop.eight_hits_in_row(number_cell = 7)                                     
+
+                                                if flagbimb200 =="no":
+                                            
+                                                #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$* 
+
+                                                    if enemy_matrix[0][row][col] == 0:
+                                                        enemy_matrix[0][row][col] = 5
+                                                        # оскільки ці умови , якщо гравець це клієнт
+                                                        # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
+                                                        list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+                                                        turn[0] = "server_turn"  # Передаємо хід серверу
+                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                            shop.two_hits_in_row(number_cell = 5)
+                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                            shop.four_hits_in_row(number_cell = 5)
+                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                            shop.eight_hits_in_row(number_cell = 5)
+
+                                                    # робимо умову для випадку коли по клітичнці вже били
+                                                    elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
+                                                        print("Уже стреляли в эту клетку")
+                                                    
+                                                    # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
+                                                    # 7 - значить , що гравець зробив постріл і попав по кораблю
+                                                    elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col]:
+                                                        # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
+                                                        check_animation_rocket[0] = "start_animation"
+                                                        # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+                                                        # у матрицю ворога записуємо 7
+                                                        enemy_matrix[0][row][col] = 7
+                                                        # обнуляємо час ходу
+                                                        check_time[0] = 0
+                                                        # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                        list_check_need_send[0] = "yes"
+                                                        turn[0] = "client_turn"     
+                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                            shop.two_hits_in_row(number_cell = 7)
+                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                            shop.four_hits_in_row(number_cell = 7)
+                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                            shop.eight_hits_in_row(number_cell = 7)                                     
                     # перевіряємо за яку роль грає гравець                    
                     elif list_player_role[0] == "server_player":
                         if turn[0] == "server_turn":
