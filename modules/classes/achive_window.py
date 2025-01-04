@@ -132,3 +132,5 @@ master_of_disguist_achievement = Acievement(achievement_image_name = "master_of_
 
 piooner_achievement = Acievement(achievement_image_name = "pioneer")
 
+lone_hunter_achievement = Acievement(achievement_image_name = "lone_hunter")
+

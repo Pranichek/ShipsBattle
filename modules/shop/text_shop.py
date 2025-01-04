@@ -369,17 +369,31 @@ def kill_three_double_decker_in_a_row(cell):
 # kill four single ships in a row
 single_ships = []
 def kill_four_single_ships_in_a_row(cell):
-    count_ship = [0]
     single_ships.append(cell)
-    for single_ship in single_ships:
-        if single_ship == 1:
-            count_ship[0] += 1
-        else:
-            count_ship[0] = 0
-            single_ships.clear()
-            return False
+    one = single_ships.count(1)
+
+    if single_ships.count(0) > 0 and one >= 0:
+        single_ships.clear()
+        one = 0
+        return False
         
-    if count_ship[0] == 4 and "Kill four single ships in a row" not in single_ships:
+    if single_ships.count(2) >= 2 and one >= 0:
+        single_ships.clear()
+        one = 0
+        return False
+    
+    if single_ships.count(3) >= 3 and one >= 0:
+        single_ships.clear()
+        one = 0
+        return False
+    
+    if single_ships.count(4) >= 4 and one >= 0:
+        single_ships.clear()
+        one = 0
+        return False
+
+
+    if one == 4 and "Kill four single ships in a row" not in single_ships:
         single_ships.append("Kill four single ships in a row")
         check_completed_tasks[0] += 1
         print("You are kill four single ships in a row")
