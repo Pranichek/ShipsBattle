@@ -3,7 +3,7 @@ import pygame , random
 import modules.shop as shop
 import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
-from ..classes.achive_window import first_four_decker_achivment , ten_shoot_in_row_achievement 
+from ..classes.achive_window import first_four_decker_achivment , ten_shoot_in_row_achievement , first_shoot_achievement
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.animation import rocket_animation , animation_boom , Animation
@@ -190,7 +190,7 @@ user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 
 four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_four_decker.png")
 auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
 destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
-first_shot_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_shot_medal.png")
+first_shot_enemy_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_shot_medal.png")
 lone_hunter_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
 master_of_disguise_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguise.png")
 enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
@@ -568,6 +568,8 @@ def fight_window():
                 four_decker_enemy_medal.y_cor = save_medals_coordinates[i][2]
             elif save_medals_coordinates[i][0] == 2:
                 enemy_prefect_shooter_medal.y_cor = save_medals_coordinates[i][2]
+            elif save_medals_coordinates[i][0] == 4:
+                first_shot_enemy_medal.y_cor = save_medals_coordinates[i][2]
 
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
@@ -767,11 +769,15 @@ def fight_window():
         # відмаловуємо усі елементи які знаходяться у завданнях
         achievement.medal_four_decker.draw_image(screen = main_screen)
         achievement.medal_ten_shoot_in_row.draw_image(screen = main_screen)
+        achievement.medal_first_shoot.draw_image(screen = main_screen)
 
         first_four_decker_achivment.draw(screen = main_screen)
         first_four_decker_achivment.move()
         ten_shoot_in_row_achievement.draw(screen = main_screen)
         ten_shoot_in_row_achievement.move()
+        first_shoot_achievement.draw(screen = main_screen)
+        first_shoot_achievement.move()
+
 
         #enemy_medals
         four_decker_enemy_medal.draw_image(screen = main_screen)
@@ -847,7 +853,9 @@ def fight_window():
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
+                                                # ачивки
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
+                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
 
                         
                                                 if enemy_matrix[0][row][col] == 0:
@@ -931,6 +939,7 @@ def fight_window():
 
                                                 # ачивки
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
+                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
 
 
 
