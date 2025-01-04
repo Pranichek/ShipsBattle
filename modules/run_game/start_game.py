@@ -875,11 +875,10 @@ def fight_window():
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
                                                 # ачивки
+                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
-                                                achievement.piooner(cell = enemy_matrix[0][row][col] , enemy_grid = enemy_matrix)
-
-                        
+                                                
                                                 if enemy_matrix[0][row][col] == 0:
                                                     enemy_matrix[0][row][col] = 5
                                                     # оскільки ці умови , якщо гравець це клієнт
@@ -917,7 +916,8 @@ def fight_window():
                                                     if shop.first_task.TEXT == shop.list_first_task[1]:
                                                         shop.four_hits_in_row(number_cell = 7)
                                                     if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                        shop.eight_hits_in_row(number_cell = 7)                                     
+                                                        shop.eight_hits_in_row(number_cell = 7)  
+
                     # перевіряємо за яку роль грає гравець                    
                     elif list_player_role[0] == "server_player":
                         if turn[0] == "server_turn":
@@ -960,11 +960,10 @@ def fight_window():
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
                                                 # ачивки
+                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
-                                                achievement.piooner(cell = enemy_matrix[0][row][col] , enemy_grid = enemy_matrix) 
-
-
+                                                
 
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                 # 5 - значить , що гравець зробив постріл , але схибив його
