@@ -220,7 +220,6 @@ def start_server():
             count_server_ships = 0
             # счетчик кораблей клиента
             count_client_ships = 0
-
             # делаем перебор матриц сервера и клиента, чтобы проверять ввыиграл уже кто то или нет
             for row_server in range(len(list_grid)):
                 for cell_server in range(len(list_grid[row_server])):

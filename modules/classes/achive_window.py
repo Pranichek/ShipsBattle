@@ -124,4 +124,7 @@ first_four_decker_achivment = Acievement(achievement_image_name = "four_decker_s
 
 ten_shoot_in_row_achievement = Acievement(achievement_image_name = "perfect_shooter")
 
-first_shoot_achievement = Acievement(achievement_image_name = "first_shot.png")
+strategist_achievement = Acievement(achievement_image_name = "strategist")
+
+first_shoot_achievement = Acievement(achievement_image_name = "first_shot")
+

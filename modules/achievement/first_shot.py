@@ -14,7 +14,7 @@ def first_shot(cell: int):
                 shoots.append("True")
                 first_shoot_achievement.ACTIVE = True
                 medal_first_shoot.y_cor = 24
-                list_save_coords_achiv((4 , medal_first_shoot.x_cor , medal_first_shoot.y_cor))
+                list_save_coords_achiv.append((4 , medal_first_shoot.x_cor , medal_first_shoot.y_cor))
 
 
 medal_first_shoot = DrawImage(

@@ -3,7 +3,7 @@ import pygame , random
 import modules.shop as shop
 import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
-from ..classes.achive_window import first_four_decker_achivment , ten_shoot_in_row_achievement , first_shoot_achievement
+from ..classes.achive_window import first_four_decker_achivment , ten_shoot_in_row_achievement , first_shoot_achievement , strategist_achievement
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
 from ..classes.animation import rocket_animation , animation_boom , Animation
@@ -195,7 +195,7 @@ lone_hunter_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 
 master_of_disguise_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguise.png")
 enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
 pioneer_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
-strategist_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
+strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -568,6 +568,8 @@ def fight_window():
                 four_decker_enemy_medal.y_cor = save_medals_coordinates[i][2]
             elif save_medals_coordinates[i][0] == 2:
                 enemy_prefect_shooter_medal.y_cor = save_medals_coordinates[i][2]
+            elif save_medals_coordinates[i][0] == 3:
+                strategist_enemy_medal.y_cor = save_medals_coordinates[i][2]
             elif save_medals_coordinates[i][0] == 4:
                 first_shot_enemy_medal.y_cor = save_medals_coordinates[i][2]
 
@@ -770,6 +772,7 @@ def fight_window():
         achievement.medal_four_decker.draw_image(screen = main_screen)
         achievement.medal_ten_shoot_in_row.draw_image(screen = main_screen)
         achievement.medal_first_shoot.draw_image(screen = main_screen)
+        achievement.strategist_medal.draw_image(screen = main_screen)
 
         first_four_decker_achivment.draw(screen = main_screen)
         first_four_decker_achivment.move()
@@ -777,11 +780,16 @@ def fight_window():
         ten_shoot_in_row_achievement.move()
         first_shoot_achievement.draw(screen = main_screen)
         first_shoot_achievement.move()
+        strategist_achievement.draw(screen = main_screen)
+        strategist_achievement.move()
+
 
 
         #enemy_medals
         four_decker_enemy_medal.draw_image(screen = main_screen)
         enemy_prefect_shooter_medal.draw_image(screen = main_screen)
+        first_shot_enemy_medal.draw_image(screen = main_screen)
+        strategist_enemy_medal.draw_image(screen = main_screen)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -856,6 +864,7 @@ def fight_window():
                                                 # ачивки
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
+                                                achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
 
                         
                                                 if enemy_matrix[0][row][col] == 0:
@@ -940,6 +949,7 @@ def fight_window():
                                                 # ачивки
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
+                                                achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
 
 
 
@@ -985,14 +995,15 @@ def fight_window():
                                                 
                                             
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
-        if list_check_win[0] != None:   
-            # якщо вже їтось виграв , то робимо ефект затемнення
-            apply_fade_effect(screen = main_screen)
-            # зупиняємо цикл гри
-            run_game = False
-            # змінюємо фрейм бою , на фрейм показу результатів
-            change_scene(scene = finish_window())
-            check_press_button[0] = None
+        if strategist_achievement.ACTIVE != True:
+            if list_check_win[0] != None:   
+                # якщо вже їтось виграв , то робимо ефект затемнення
+                apply_fade_effect(screen = main_screen)
+                # зупиняємо цикл гри
+                run_game = False
+                # змінюємо фрейм бою , на фрейм показу результатів
+                change_scene(scene = finish_window())
+                check_press_button[0] = None
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1
