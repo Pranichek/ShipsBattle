@@ -7,15 +7,6 @@ def piooner(cell: int , grid: list):
     if count_kill_achiv[0] != "You killes three ships in row":
         count_ships_achiv.append(cell)
 
-        for ship in count_ships_achiv:
-            if ship == 0:
-                count_ships_achiv.clear()
-                count_kill_achiv[0] = 0
-                once = 0
-                twice = 0
-                thirde = 0
-                four = 0
-                return False
         
         player_once = 0
         player_twice = 0
@@ -59,8 +50,7 @@ def piooner(cell: int , grid: list):
                 if fr == 4:
                     count_ships_achiv.remove(fr)
 
-        if count_kill_achiv[0] >= 1:
-            print("jajaajjajajajajajajjajj")
+        if count_kill_achiv[0] >= 1 and player_once >= 4 and player_twice >= 5 and player_thirde >= 4 and player_four >= 1:
             count_kill_achiv[0] = "You killes three ships in row"
             piooner_achievement.ACTIVE = True
             medal_fisr_kill_any_ship.y_cor = 24
