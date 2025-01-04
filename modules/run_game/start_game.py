@@ -772,11 +772,15 @@ def fight_window():
                     if not exists:
                         list_cross_player.append(cross_animation)
 
-        # відмаловуємо усі елементи які знаходяться у магазині 
-        for item in shop.shop_item:
-            item.draw(screen = main_screen)
-            item.move()
-        
+        #enemy_medals
+        four_decker_enemy_medal.draw_image(screen = main_screen)
+        enemy_prefect_shooter_medal.draw_image(screen = main_screen)
+        first_shot_enemy_medal.draw_image(screen = main_screen)
+        strategist_enemy_medal.draw_image(screen = main_screen)
+        master_of_disguise_enemy_medal.draw_image(screen = main_screen)
+        pioneer_enemy_medal.draw_image(screen = main_screen)
+        lone_hunter_enemy_medal.draw_image(screen = main_screen)
+
         # відмаловуємо усі елементи які знаходяться у завданнях
         achievement.medal_four_decker.draw_image(screen = main_screen)
         achievement.medal_ten_shoot_in_row.draw_image(screen = main_screen)
@@ -786,6 +790,13 @@ def fight_window():
         achievement.medal_lone_hunter.draw_image(screen = main_screen)
         #piooner
         achievement.medal_fisr_kill_any_ship.draw_image(screen = main_screen)
+
+        # відмаловуємо усі елементи які знаходяться у магазині 
+        for item in shop.shop_item:
+            item.draw(screen = main_screen)
+            item.move()
+        
+        
 
         
         for achiv in list_achieves:
@@ -803,14 +814,7 @@ def fight_window():
                 index_achiv[0] = 100
     
         
-        #enemy_medals
-        four_decker_enemy_medal.draw_image(screen = main_screen)
-        enemy_prefect_shooter_medal.draw_image(screen = main_screen)
-        first_shot_enemy_medal.draw_image(screen = main_screen)
-        strategist_enemy_medal.draw_image(screen = main_screen)
-        master_of_disguise_enemy_medal.draw_image(screen = main_screen)
-        pioneer_enemy_medal.draw_image(screen = main_screen)
-        lone_hunter_enemy_medal.draw_image(screen = main_screen)
+        
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
