@@ -123,7 +123,7 @@ ten_shoot_in_row_achievement = Acievement(achievement_image_name = "perfect_shoo
 
 strategist_achievement = Acievement(achievement_image_name = "strategist")
 
-first_shoot_achievement = Acievement(achievement_image_name = "first_shot")
+first_hit_achievement = Acievement(achievement_image_name = "first_hit")
 
 master_of_disguist_achievement = Acievement(achievement_image_name = "master_of_disguise")
 
@@ -131,6 +131,8 @@ piooner_achievement = Acievement(achievement_image_name = "pioneer")
 
 lone_hunter_achievement = Acievement(achievement_image_name = "lone_hunter")
 
-list_achieves.extend([first_four_decker_achivment , ten_shoot_in_row_achievement , strategist_achievement , first_shoot_achievement , master_of_disguist_achievement , piooner_achievement ,lone_hunter_achievement])
+opening_the_battle_achievement = Acievement(achievement_image_name = "opening_the_battle")
+
+list_achieves.extend([first_four_decker_achivment , ten_shoot_in_row_achievement , strategist_achievement , first_hit_achievement , master_of_disguist_achievement , piooner_achievement ,lone_hunter_achievement , opening_the_battle_achievement])
 
 

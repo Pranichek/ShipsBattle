@@ -190,12 +190,13 @@ user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 
 four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_four_decker.png")
 auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
 destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
-first_shot_enemy_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_shot_medal.png")
+first_hit_enemy_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_hit_medal.png")
 lone_hunter_enemy_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
 master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguist_medal.png")
 enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
 pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
 strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
+openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -572,13 +573,15 @@ def fight_window():
             elif save_medals_coordinates[medal][0] == 3:
                 strategist_enemy_medal.y_cor = save_medals_coordinates[medal][2]
             elif save_medals_coordinates[medal][0] == 4:
-                first_shot_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                first_hit_enemy_medal.y_cor = save_medals_coordinates[medal][2]
             elif save_medals_coordinates[medal][0] == 6:
                 master_of_disguise_enemy_medal.y_cor = save_medals_coordinates[medal][2]
             elif save_medals_coordinates[medal][0] == 7:
                 lone_hunter_enemy_medal.y_cor = save_medals_coordinates[medal][2]
             elif save_medals_coordinates[medal][0] == 8:
                 pioneer_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 10:
+                openin_the_batte_enemy_medal.y_cor = save_medals_coordinates[medal][2]
 
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
@@ -775,44 +778,43 @@ def fight_window():
         #enemy_medals
         four_decker_enemy_medal.draw_image(screen = main_screen)
         enemy_prefect_shooter_medal.draw_image(screen = main_screen)
-        first_shot_enemy_medal.draw_image(screen = main_screen)
+        first_hit_enemy_medal.draw_image(screen = main_screen)
         strategist_enemy_medal.draw_image(screen = main_screen)
         master_of_disguise_enemy_medal.draw_image(screen = main_screen)
         pioneer_enemy_medal.draw_image(screen = main_screen)
         lone_hunter_enemy_medal.draw_image(screen = main_screen)
+        openin_the_batte_enemy_medal.draw_image(screen = main_screen)
 
-        # відмаловуємо усі елементи які знаходяться у завданнях
+        # отрисовка наших медалей игрока
         achievement.medal_four_decker.draw_image(screen = main_screen)
         achievement.medal_ten_shoot_in_row.draw_image(screen = main_screen)
-        achievement.medal_first_shoot.draw_image(screen = main_screen)
+        achievement.medal_hit_shoot.draw_image(screen = main_screen)
         achievement.strategist_medal.draw_image(screen = main_screen)
         achievement.medal_secrecy_ships.draw_image(screen = main_screen)
         achievement.medal_lone_hunter.draw_image(screen = main_screen)
         #piooner
         achievement.medal_fisr_kill_any_ship.draw_image(screen = main_screen)
+        achievement.medal_opening_battle.draw_image(screen = main_screen)
 
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
             item.draw(screen = main_screen)
             item.move()
-        
-        
 
-        
+        #----------------------------------------------------------------
+        # конструкция которая показывает окошки с выполнеными ачивками по очереди , а не одновременно
         for achiv in list_achieves:
             if achiv.ACTIVE == True and check_achiv[0] == False:
                 index_achiv[0] = list_achieves.index(achiv)
                 check_achiv[0] = True
-
         if index_achiv[0] != 100:
             list_achieves[index_achiv[0]].draw(screen = main_screen)
             list_achieves[index_achiv[0]].move()
-
         if index_achiv[0] != 100:
             if list_achieves[index_achiv[0]].VISIBLE == 0:
                 check_achiv[0] = False
                 index_achiv[0] = 100
-    
+        #----------------------------------------------------------------
         
         
         

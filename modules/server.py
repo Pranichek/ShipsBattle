@@ -343,6 +343,7 @@ def start_server():
                     shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
 
             achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
+            achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
 
             check_repeat[0] += 1
 
