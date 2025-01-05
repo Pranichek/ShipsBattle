@@ -911,12 +911,6 @@ def fight_window():
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
                                                 achievement.lone_hunter(cell = enemy_matrix[0][row][col])
 
-                                                # ачивки
-                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
-                                                achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
-                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
-                                                achievement.lone_hunter(cell = enemy_matrix[0][row][col])
-
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                 # 5 - значить , що гравець зробив постріл , але схибив його
                                                 if enemy_matrix[0][row][col] == 0:
