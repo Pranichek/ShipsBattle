@@ -6,7 +6,7 @@ from .classes import input_port , input_ip_adress, input_nick , Animation
 from .json_functions import write_json , list_server_status , list_users , read_json
 import modules.shop as shop
 import modules.achievement as achievement
-import asyncio
+
 
 # чтобы у на ототбражались зачеркнутые клеточки вокргу корабля
 our_miss_anim = []
@@ -45,7 +45,6 @@ enemy_animation_miss_coord = []
 enemy_balance = [0]
 # сохраняем координаты вражеских медалей
 save_medals_coordinates = []
-
 # список в котором храним какие корабли убили у игрока
 player_died_ships = []
 # список в коотором храним какие корабли убил игрок у врага
@@ -199,7 +198,7 @@ def start_server():
 
     # бесконечный цикл для боя
     while True:
-        # try:
+        try:
             for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                 animation_miss = Animation(
                                 x_cor = our_kill_ship_anim_miss[0] - 637,
@@ -219,7 +218,7 @@ def start_server():
                         our_miss_anim.append(animation_miss)
                         enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
             # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
-            time.sleep(0.1)
+            time.sleep(0.2)
             check_ten_times.append(1)
 
             # счетчик кораблей сервера
@@ -256,7 +255,7 @@ def start_server():
                 list_check_win[0] = "win_server"
 
             # список который сохраняет данные по поводу времени
-            if check_ten_times.count(1) >= 10:
+            if check_ten_times.count(1) >= 5:
                 check_ten_times.clear()
                 check_time[0] += 1
 
@@ -276,12 +275,11 @@ def start_server():
                 'time': check_time[0],
                 'server_matrix': list_grid,
                 "new_for_client": enemy_matrix[0],
-                "check_end_game": list_check_win[0] ,
-                "first_kill_3deck": shop.enemy_ships_3decker[0],
+                "check_end_game": list_check_win[0],
                 "misses_coordinate": save_miss_coordinates,
                 "money_balance":shop.money_list[0],
                 "check_ten_times":check_ten_times.count(1),
-                "medals_coordinates":achievement.list_save_coords_achiv ,
+                "medals_coordinates":achievement.list_save_coords_achiv,
                 "player_died_ships":player_died_ships
             }
 
@@ -290,7 +288,12 @@ def start_server():
             # settimeout(3) - ставит ожидания 3 секунды , и если за это время никакие данные от клиента не прийдут , то выдает ошибку
             client_socket.settimeout(3)
             # Отримання всіх даних
-            client_data = recv_all(client_socket).decode()
+            try:
+                client_data = recv_all(client_socket).decode()
+            except TimeoutError:
+                print("Клиент не ответил вовремя. Пропускитть надо")
+                continue
+            
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
 
@@ -342,15 +345,6 @@ def start_server():
                 achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
                 
 
-            # первым убить четрыех палбный кораблик
-            if shop.third_task.TEXT == shop.list_third_task[0]:
-                shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
-
-            
-            if shop.second_task.TEXT == shop.list_second_task[-1]:
-                if ready_clinet_data["first_kill_3deck"] != "kill three-decker ship":
-                    shop.first_kill_three_decker()
-
             achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
             achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
 
@@ -361,15 +355,15 @@ def start_server():
             # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
             if list_check_win[0] != None:
                 break
-        # except TimeoutError:
-        #         print("Слишком долгое ожидание")
-        #         continue
-        # except json.JSONDecodeError:
-        #     print("Не получилось декодировать данные/")
-        #     continue
-        # except Exception as error:
-        #     print(f"Тупая ошибка: {error}")
-        #     continue
+        except TimeoutError:
+                print("Слишком долгое ожидание")
+                continue
+        except json.JSONDecodeError:
+            print("Не получилось декодировать данные/")
+            continue
+        except Exception as error:
+            print(f"Тупая ошибка: {error}")
+            continue
 
         
         

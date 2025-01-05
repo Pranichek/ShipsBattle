@@ -1,6 +1,7 @@
 import pygame , os , random 
 from .shop_image import shop_item
 from ..server import enemy_died_ships , player_died_ships
+
 #класс для тексту в магазині
 class Font_Shop:
     # конструктор (__init__) тексту в магазині
@@ -121,55 +122,58 @@ money_list = [0]
 #1
 two_hits_in_a_row = []
 def two_hits_in_row(number_cell: int):
-    count_ships = 0
-    two_hits_in_a_row.append(number_cell)
+    if "True" not in two_hits_in_a_row:
+        count_ships = 0
+        two_hits_in_a_row.append(number_cell)
 
-    for cell in two_hits_in_a_row:
-        if cell != 5 and cell != 0:
-            count_ships += 1
-        else:
-            two_hits_in_a_row.clear()
-            return False
-        
-    if count_ships > 1 and "True" not in two_hits_in_a_row:
-        check_completed_tasks[0] += 1
-        print("Two hits in a row")
-        two_hits_in_a_row.append("True")
+        for cell in two_hits_in_a_row:
+            if cell != 5 and cell != 0:
+                count_ships += 1
+            else:
+                two_hits_in_a_row.clear()
+                return False
+            
+        if count_ships > 1 and "True" not in two_hits_in_a_row:
+            check_completed_tasks[0] += 1
+            print("Two hits in a row")
+            two_hits_in_a_row.append("True")
 
 # 1 three hits in a row
 three_hits_in_a_row = []
 def three_hits_in_row(cell: int):
-    count_ships = 0
-    three_hits_in_a_row.append(cell)
+    if "True" not in three_hits_in_a_row:
+        count_ships = 0
+        three_hits_in_a_row.append(cell)
 
-    for cell in three_hits_in_a_row:
-        if cell!= 5 and cell != 0:
-            count_ships += 1
-        else:
-            three_hits_in_a_row.clear()
-            return False
-    if count_ships > 2 and "True" not in three_hits_in_a_row:
-        check_completed_tasks[0] += 1
-        print("Three hits in a row")
-        three_hits_in_a_row.append("True")
+        for cell in three_hits_in_a_row:
+            if cell!= 5 and cell != 0:
+                count_ships += 1
+            else:
+                three_hits_in_a_row.clear()
+                return False
+        if count_ships > 2 and "True" not in three_hits_in_a_row:
+            check_completed_tasks[0] += 1
+            print("Three hits in a row")
+            three_hits_in_a_row.append("True")
 
 
 #1
 four_hits_in_a_row = []
 def four_hits_in_row(number_cell: int):
-    count_ships = 0
-    four_hits_in_a_row.append(number_cell)
+    if "True" not in four_hits_in_a_row:
+        count_ships = 0
+        four_hits_in_a_row.append(number_cell)
 
-    for cell in four_hits_in_a_row:
-        if cell!= 5 and cell != 0:
-            count_ships += 1
-        else:
-            four_hits_in_a_row.clear()
-            return False
-    if count_ships > 3 and "True" not in four_hits_in_a_row:
-        check_completed_tasks[0] += 1
-        print("Four hits in a row")
-        four_hits_in_a_row.append("True")
+        for cell in four_hits_in_a_row:
+            if cell!= 5 and cell != 0:
+                count_ships += 1
+            else:
+                four_hits_in_a_row.clear()
+                return False
+        if count_ships > 3 and "True" not in four_hits_in_a_row:
+            check_completed_tasks[0] += 1
+            print("Four hits in a row")
+            four_hits_in_a_row.append("True")
 
 #4 8 hits in a row
 egight_hits_in_a_row = []
@@ -373,24 +377,22 @@ def kill_two_three_decker_in_a_row():
 
 
 #3 первым убить четыреx палубный корабль
-our_ships = [0]
-enemy_ships = [0]
-def first_kill_four_decker(grid , enemy_grid):
-    our_ships[0] = 0
-    if enemy_ships[0] != "kill four-decker ship":
-        enemy_ships[0] = 0
+our_ships_4decker = [0]
+enemy_ships_4decker = [0]
+def first_kill_four_decker():
+    our_ships_4decker[0] = 0
+    if enemy_ships_4decker[0] != "kill four-decker ship":
+        enemy_ships_4decker[0] = 0
 
-    for row in range(len(grid)):
-        for cell in range(len(grid[row])):
-            if grid[row][cell] == 4:
-                our_ships[0] += 1
-            if enemy_grid[0][row][cell] == 4:
-                enemy_ships[0] += 1
+    our_ships_4decker[0] = 1 - player_died_ships.count(4)
+    enemy_ships_4decker[0] = 1 - enemy_died_ships[0].count(4)
 
-    if our_ships[0] >= 1 and enemy_ships[0] == 0 and enemy_ships[0] != "kill four-decker ship":
-        enemy_ships[0] = "kill four-decker ship"
-        check_completed_tasks[0] += 1
-        print("Ты убил четыреx палубный кораблик")
+
+    if enemy_ships_4decker[0] != "kill four-decker ship":
+        if our_ships_4decker[0] > enemy_ships_4decker[0] and enemy_ships_4decker[0] == 0 and enemy_ships_4decker[0]!= "kill four-decker ship":
+            enemy_ships_4decker[0] = "kill four-decker ship"
+            check_completed_tasks[0] += 1
+            print("Ты первым убил четырехпалубный корабль")
 
 #2 The first to kill a 2 deck ship
 our_ships_3decker = [0]
@@ -406,7 +408,7 @@ def first_kill_three_decker():
         if our_ships_3decker[0] >= enemy_ships_3decker[0] and enemy_ships_3decker[0] == 1 and enemy_ships_3decker[0] != "kill three-decker ship":
             enemy_ships_3decker[0] = "kill three-decker ship"
             check_completed_tasks[0] += 1
-            # print("Ты первый убил 3хпалубный палубный кораблик")
+        
 
 
 
@@ -500,7 +502,7 @@ third_task = Font_Shop(
     y_cor = -(25 + (832 - (244 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = random.choice(list_third_task),
+    text = list_third_task[0],
     target_y = 244 ,
     max_width = 180 ,
     max_height = 28 , 

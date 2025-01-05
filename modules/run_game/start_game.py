@@ -14,7 +14,7 @@ from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import enemy_died_ships , list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates , player_died_ships , enemy_died_ships 
 from ..client import list_check_need_send 
 from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money
 
@@ -196,7 +196,7 @@ master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 5
 enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
 pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
 strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
-openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 50 , height = 75 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
+openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 40 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -565,6 +565,8 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        achievement.player_died_ships_for_achiv[0] = player_died_ships
+        achievement.enemy_dies_ships_for_ahiv[0] = enemy_died_ships[0]
         for medal in range(0 , len(save_medals_coordinates)):
             if save_medals_coordinates[medal][0] == 1:
                 four_decker_enemy_medal.y_cor = save_medals_coordinates[medal][2]
@@ -825,6 +827,15 @@ def fight_window():
         if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
             shop.kill_three_ships_in_a_row()
 
+        # первым убить четрыех палбный кораблик
+        if shop.third_task.TEXT == shop.list_third_task[0]:
+            shop.first_kill_four_decker()
+        # первым убить трех палубный корабль
+        if shop.second_task.TEXT == shop.list_second_task[-1]:
+            shop.first_kill_three_decker()
+
+        achievement.piooner() 
+
 
 
         
@@ -898,7 +909,7 @@ def fight_window():
                                                     shop.ship_hits_three.append(enemy_matrix[0][row][col])
 
                                                 # ачивки
-                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
+                                                # achievement.piooner() 
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
                                                 achievement.lone_hunter(cell = enemy_matrix[0][row][col])
@@ -983,7 +994,7 @@ def fight_window():
                                                     shop.ship_hits_three.append(enemy_matrix[0][row][col])
 
                                                 # ачивки
-                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
+                                                # achievement.piooner() 
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
                                                 achievement.lone_hunter(cell = enemy_matrix[0][row][col])

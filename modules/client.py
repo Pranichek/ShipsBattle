@@ -6,7 +6,7 @@ from .server import enemy_balance , list_check_ready_to_fight , dict_save_inform
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
-import asyncio
+
 
 list_check_need_send = ["no"]
 
@@ -197,17 +197,20 @@ def connect_user():
 
 
                 # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
-                time.sleep(0.1)
+                time.sleep(0.2)
                 # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
                 client_socket.settimeout(10)
 
                 # Отримання всіх даних від серверу
-                data_turn = recv_all(client_socket).decode()
+                try:
+                    data_turn = recv_all(client_socket).decode()
+                except socket.timeout:
+                    print("Слишком долгое ожидание от сервера")
+                    continue
                 # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
                 server_data = json.loads(data_turn)
 
                 enemy_balance[0] = server_data["money_balance"]
-                # для медалей
                 
                 # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
                 check_time[0] = server_data['time']
@@ -217,7 +220,6 @@ def connect_user():
                         shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
 
                 if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
-                    print(133)
                     achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
 
                 # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
@@ -229,7 +231,6 @@ def connect_user():
                         "need" : "no",
                         'client_matrix':list_grid,
                         "new_for_server" : enemy_matrix[0],
-                        "first_kill_3deck": shop.enemy_ships_3decker[0], 
                         "misses_coordinate": save_miss_coordinates,
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
@@ -249,7 +250,6 @@ def connect_user():
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matrix[0],
-                            "first_kill_3deck": shop.enemy_ships_3decker[0],
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
@@ -269,7 +269,6 @@ def connect_user():
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matrix[0],
-                            "first_kill_3deck": shop.enemy_ships_3decker[0],
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
@@ -306,13 +305,6 @@ def connect_user():
                         for cell in range(len(server_data["new_for_client"][row])):
                             list_grid[row][cell] = server_data["new_for_client"][row][cell]
 
-                if shop.third_task.TEXT == shop.list_third_task[0]:
-                    shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
-
-
-                if shop.second_task.TEXT == shop.list_second_task[-1]:
-                    if server_data["first_kill_3deck"] != "kill three-decker ship":
-                        shop.first_kill_three_decker()
 
                 achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
                 achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)

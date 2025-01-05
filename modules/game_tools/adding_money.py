@@ -106,7 +106,7 @@ def add_money():
             player_balance_in_jar.text = str(shop.money_list[0])
             player_balance_in_jar.update_text()
     
-    if shop.enemy_ships[0] == "kill four-decker ship":
+    if shop.enemy_ships_4decker[0] == "kill four-decker ship":
         if check_kill_first_four_deck[0] != 80:
             check_kill_first_four_deck[0] += 1
             shop.money_list[0] += 1

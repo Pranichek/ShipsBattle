@@ -23,8 +23,8 @@ def opening_the_battle(grid: list , enemy_grid: list):
 medal_opening_battle = DrawImage(
     x_cor = 931,
     y_cor = -80 ,
-    width = 50 ,
-    height = 75,
+    width = 40 ,
+    height = 65,
     folder_name = "achievement",
     image_name = "medal_opening_the_battle.png"
 
