@@ -45,6 +45,11 @@ enemy_balance = [0]
 # сохраняем координаты вражеских медалей
 save_medals_coordinates = []
 
+# список в котором храним какие корабли убили у игрока
+player_died_ships = []
+# список в коотором храним какие корабли убил игрок у врага
+enemy_died_ships = []
+
 # словарь для зберігання інформаці про гравців
 dict_save_information = {
     "player_nick": "",
@@ -264,6 +269,7 @@ def start_server():
             # ""money_balance"" - баланс игрока
             # "check_ten_times" - счетчик чтобы каждые десять циклов отнималась одна секунда для хода игрока(так как у нас tim.sleep(0.1 секунда)) , значит 10 повторений одна секунда
             # "medals_coordinates" - координаты медалей которые нужно отобразить на экране(для врага) , я как игрок получил медаль , и у врага должно это отобразится
+            # "plyer_died_ships" - корабли которые убмлм у игрока 
             game_information = {
                 'turn': turn[0],
                 'time': check_time[0],
@@ -274,16 +280,14 @@ def start_server():
                 "misses_coordinate": save_miss_coordinates,
                 "money_balance":shop.money_list[0],
                 "check_ten_times":check_ten_times.count(1),
-                "medals_coordinates":achievement.list_save_coords_achiv
+                "medals_coordinates":achievement.list_save_coords_achiv ,
+                "plyer_died_ships":player_died_ships
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
             client_socket.send(json.dumps(game_information).encode())
             # settimeout(3) - ставит ожидания 3 секунды , и если за это время никакие данные от клиента не прийдут , то выдает ошибку
             client_socket.settimeout(3)
-            # client_data = client_socket.recv(1024).decode()
-            # ready_clinet_data = json.loads(client_data)
-
             # Отримання всіх даних
             client_data = recv_all(client_socket).decode()
             # Розбір JSON
@@ -291,10 +295,17 @@ def start_server():
 
             enemy_balance[0] = ready_clinet_data["money_balance"]
 
+            # какие корабли убил игрок
+            for ship in ready_clinet_data["plyer_died_ships"]:
+                if ship not in enemy_died_ships:
+                    enemy_died_ships.append(ship)
+
+            # координаты медалей враг
             for medal in ready_clinet_data["medals_coordinates"]:
                 if medal not in save_medals_coordinates:
                     save_medals_coordinates.append(medal)
-
+                    
+            # координаты где должны находится зачеркнутые клеточки , если игрок убмл корабль
             for coord_miss in ready_clinet_data["misses_coordinate"]:
                 if coord_miss not in enemy_animation_miss_coord:
                     enemy_animation_miss_coord.append(coord_miss)
@@ -352,8 +363,6 @@ def start_server():
             # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
             if list_check_win[0] != None:
                 break
-
-       
         except TimeoutError:
                 print("Слишком долгое ожидание")
                 continue

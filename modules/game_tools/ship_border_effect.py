@@ -1,6 +1,6 @@
 from ..screens import list_grid , list_object_map , main_screen
 from ..classes  import list_ships , Animation
-from ..server import save_miss_coordinates
+from ..server import save_miss_coordinates , player_died_ships
 
 # номер рядка и клеточки в этом рядке где отрисовываются зачеркиванные клеточки
 miss_row = [0]
@@ -56,6 +56,8 @@ def ship_border():
                                 print("убили корабль" , count_len[0])
                                 check_kill[0] = True
                                 check_number_cell.append(num_cell)
+                                player_died_ships.append(count_len[0])
+
                                 
                     elif list_direction[0] == "vertical" and check_kill[0] != True:
                         for len_ship in range(1 , count_len[0]):
@@ -67,6 +69,7 @@ def ship_border():
                                 print("убили корабль" , count_len[0])
                                 check_kill[0] = True
                                 check_number_cell.append(num_cell)
+                                player_died_ships.append(count_len[0])
 
                 if list_direction[0] == "vertical" and check_kill[0] == True:
                     for anim_miss in range(0, count_len[0] + 2):

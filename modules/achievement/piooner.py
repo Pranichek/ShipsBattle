@@ -3,10 +3,9 @@ from .four_decker_sniper import list_save_coords_achiv
 
 count_ships_achiv = []
 count_kill_achiv = [0]
-def piooner(cell: int , grid: list):
+def piooner(cell: int , grid: list):#
     if count_kill_achiv[0] != "You killes three ships in row":
         count_ships_achiv.append(cell)
-
         
         player_once = 0
         player_twice = 0

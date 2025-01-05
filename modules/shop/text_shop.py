@@ -1,5 +1,6 @@
-import pygame , os , random , time
+import pygame , os , random 
 from .shop_image import shop_item
+from ..server import enemy_died_ships
 #класс для тексту в магазині
 class Font_Shop:
     # конструктор (__init__) тексту в магазині
@@ -91,24 +92,24 @@ class Font_Shop:
 list_first_task = [
     "2 hits in a row" , 
     "4 hits in a row" ,
-    "Kill one three-decker ship" , 
+    "Kill one three-decker ship", #
     "3 hits in a row" ,
     ]
 list_second_task = [
     "Buy one bonus from the store" , 
     "Survive 5 turns without losing a ship" , 
-    "Kill two ships in a row" , 
-    "The first to kill a 3 deck ship" 
+    "Kill two ships in a row" , #
+    "The first to kill a 3 deck ship" #
     ]
 list_third_task = [
     "The first to kill a 4 deck ship"  , 
     "Kill 4 single-deck ships in a row", 
-    "Kill 3 double-decker ships in a row" , 
-    "kill two three-decker ships in a row"
+    "Kill 3 double-decker ships in a row", #
+    "kill two three-decker ships in a row" #
     ]
 list_fourth_task = [
     "The first step is murder" , 
-    "Kill three ships in a row" , 
+    "Kill three ships in a row" , #
     "Completed the first three tasks" ,
     "8 hits in a row"
     ]
@@ -192,16 +193,11 @@ def eight_hits_in_row(number_cell: int):
 kill_three_deckcer_ship = [0]
 def kill_one_three_decker_ship(grid):
     if kill_three_deckcer_ship[0] != "kill three deck ship":
-        kill_three_deckcer_ship[0] = 0
-
-        for row in range(len(grid)):
-            for cell in range(len(grid[row])):
-                if grid[row][cell] == 3:
-                    kill_three_deckcer_ship[0] += 1  
-
-        print(kill_three_deckcer_ship[0])
-
-        if kill_three_deckcer_ship[0] <= 3:
+        for ship in enemy_died_ships:
+            if ship == 3:
+                kill_three_deckcer_ship[0] += 1
+                
+        if kill_three_deckcer_ship[0] >= 1:
             kill_three_deckcer_ship[0] = "kill three deck ship"
             check_completed_tasks[0] += 1
             print("Ты убил один трехбалубный кораблик")
@@ -490,7 +486,7 @@ first_task = Font_Shop(
     y_cor = -(45 + (832 - (136 + 45))),
     size = 45 ,
     name_font = "Jersey15.ttf",
-    text = random.choice(list_first_task),
+    text = list_first_task[2],
     target_y = 136 , 
     max_width = 161 ,
     max_height = 31 ,
@@ -503,7 +499,7 @@ second_task = Font_Shop(
     y_cor = -(25 + (832 - (192 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = random.choice(list_second_task),
+    text = list_second_task[-1],
     target_y = 192 , 
     max_width = 220 ,
     max_height = 28 ,

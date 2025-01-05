@@ -2,7 +2,7 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates
+from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
@@ -207,6 +207,10 @@ def connect_user():
 
                 enemy_balance[0] = server_data["money_balance"]
 
+                # какие корабли убил игрок
+                for ship in server_data["plyer_died_ships"]:
+                    if ship not in enemy_died_ships:
+                        enemy_died_ships.append(ship)
                 # для медалей
                 for medal in server_data["medals_coordinates"]:
                     if medal not in save_medals_coordinates:
@@ -240,7 +244,8 @@ def connect_user():
                         "first_kill_3deck": shop.enemy_ships_3decker[0], 
                         "misses_coordinate": save_miss_coordinates,
                         "money_balance":shop.money_list[0],
-                        "medals_coordinates":achievement.list_save_coords_achiv
+                        "medals_coordinates":achievement.list_save_coords_achiv,
+                        "plyer_died_ships":player_died_ships
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -259,7 +264,8 @@ def connect_user():
                             "first_kill_3deck": shop.enemy_ships_3decker[0],
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
-                            "medals_coordinates":achievement.list_save_coords_achiv
+                            "medals_coordinates":achievement.list_save_coords_achiv,
+                            "plyer_died_ships":player_died_ships
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -278,13 +284,13 @@ def connect_user():
                             "first_kill_3deck": shop.enemy_ships_3decker[0],
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
-                            "medals_coordinates":achievement.list_save_coords_achiv
+                            "medals_coordinates":achievement.list_save_coords_achiv,
+                            "plyer_died_ships":player_died_ships
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
                         check_time[0] = 0
                         continue
-
 
 
                 if check_repeat[0] == 0:

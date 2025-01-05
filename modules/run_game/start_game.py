@@ -196,7 +196,7 @@ master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 5
 enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
 pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
 strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
-openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
+openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 50 , height = 75 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
