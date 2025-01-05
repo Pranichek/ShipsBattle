@@ -45,6 +45,7 @@ def ship_border():
                         print("убили корабль" , count_len[0])
                         check_kill[0] = True
                         check_number_cell.append(num_cell)
+                        player_died_ships.append(count_len[0])
 
                     elif list_direction[0] == "horizontal" and check_kill[0] != True:
                         for len_ship in range(1 , count_len[0]):

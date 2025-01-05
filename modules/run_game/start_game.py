@@ -14,7 +14,7 @@ from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates
+from ..server import enemy_died_ships , list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates
 from ..client import list_check_need_send 
 from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money
 
@@ -816,6 +816,23 @@ def fight_window():
                 index_achiv[0] = 100
         #----------------------------------------------------------------
         
+        if shop.first_task.TEXT == shop.list_first_task[2]:
+            shop.kill_one_three_decker_ship()
+
+        if shop.second_task.TEXT == shop.list_second_task[2]:
+            shop.kill_two_ships_in_a_row()
+
+        if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+            shop.kill_three_ships_in_a_row(cell = enemy_matrix[0][row][col])
+
+        if shop.third_task.TEXT == shop.list_third_task[-2]:
+            shop.count_three_ships.append(enemy_matrix[0][row][col])
+
+        if shop.third_task.TEXT == shop.list_third_task[2]:
+            shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
+
+        if shop.third_task.TEXT == shop.list_third_task[1]:
+            shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
         
         
         for event in pygame.event.get():
@@ -867,33 +884,41 @@ def fight_window():
                                                 #Колонку кораблика вычисляем по такому принципу
                                                 # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                 col = int(str_col[-1])
-                                                # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
-                                                # 5 - значить , що гравець зробив постріл , але схибив його
+                                                
                                                 if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row][col]) 
+                                                    shop.single_ships.append(enemy_matrix[0][row ][col])
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                     shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                                                if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                    shop.kill_two_ships_in_a_row(cell = enemy_matrix[0][row][col])
                                                 if shop.third_task.TEXT == shop.list_third_task[-1]:
                                                     shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
                                                 if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                    shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
                                                     shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
                                                 if shop.third_task.TEXT == shop.list_third_task[-2]:
-                                                    shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
-                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                    shop.kill_three_ships_in_a_row(cell = enemy_matrix[0][row][col])
-                                                if shop.first_task.TEXT == shop.list_first_task[2]:
-                                                    shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
+                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
+
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+
+                                                if shop.second_task.TEXT == shop.list_second_task[2]:
+                                                    shop.ship_hits.append(enemy_matrix[0][row][col])
+                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                    shop.ship_hits_three.append(enemy_matrix[0][row][col])
 
                                                 # ачивки
                                                 achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
                                                 achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                 achievement.first_shot(cell = enemy_matrix[0][row][col])
                                                 achievement.lone_hunter(cell = enemy_matrix[0][row][col])
-                                                
+
+                                                # ачивки
+                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
+                                                achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
+                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
+                                                achievement.lone_hunter(cell = enemy_matrix[0][row][col])
+
+                                                # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
+                                                # 5 - значить , що гравець зробив постріл , але схибив його
                                                 if enemy_matrix[0][row][col] == 0:
                                                     enemy_matrix[0][row][col] = 5
                                                     # оскільки ці умови , якщо гравець це клієнт
@@ -953,26 +978,25 @@ def fight_window():
                                                 # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                 col = int(str_col[-1])
 
-                                                print(row , col , "fdvkmdfvdmkvf")
-                                                print(enemy_matrix[0][row][col] , "ahahhah")
                                                 if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
+                                                    shop.single_ships.append(enemy_matrix[0][row ][col])
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                     shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                                                if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                    shop.kill_two_ships_in_a_row(cell = enemy_matrix[0][row][col])
                                                 if shop.third_task.TEXT == shop.list_third_task[-1]:
                                                     shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
                                                 if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                    shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
                                                     shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
                                                 if shop.third_task.TEXT == shop.list_third_task[-2]:
-                                                    shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
-                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                    shop.kill_three_ships_in_a_row(cell = enemy_matrix[0][row][col])
-                                                if shop.first_task.TEXT == shop.list_first_task[2]:
-                                                    shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
+                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
+
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+
+                                                if shop.second_task.TEXT == shop.list_second_task[2]:
+                                                    shop.ship_hits.append(enemy_matrix[0][row][col])
+                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                    shop.ship_hits_three.append(enemy_matrix[0][row][col])
 
                                                 # ачивки
                                                 achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
@@ -1019,6 +1043,8 @@ def fight_window():
                                                         shop.four_hits_in_row(number_cell = 7)
                                                     if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                                                         shop.eight_hits_in_row(number_cell = 7)
+
+
 
                                                 
                                             

@@ -6,6 +6,7 @@ from .server import enemy_balance , list_check_ready_to_fight , dict_save_inform
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
+import asyncio
 
 list_check_need_send = ["no"]
 
@@ -198,7 +199,7 @@ def connect_user():
                 # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
                 time.sleep(0.1)
                 # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
-                client_socket.settimeout(3)
+                client_socket.settimeout(10)
 
                 # Отримання всіх даних від серверу
                 data_turn = recv_all(client_socket).decode()
@@ -206,20 +207,7 @@ def connect_user():
                 server_data = json.loads(data_turn)
 
                 enemy_balance[0] = server_data["money_balance"]
-
-                # какие корабли убил игрок
-                for ship in server_data["plyer_died_ships"]:
-                    if ship not in enemy_died_ships:
-                        enemy_died_ships.append(ship)
                 # для медалей
-                for medal in server_data["medals_coordinates"]:
-                    if medal not in save_medals_coordinates:
-                        save_medals_coordinates.append(medal)
-
-                # для зачерканных клеточек
-                for coord_miss in server_data["misses_coordinate"]:
-                    if coord_miss not in enemy_animation_miss_coord:
-                        enemy_animation_miss_coord.append(coord_miss)
                 
                 # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
                 check_time[0] = server_data['time']
@@ -245,7 +233,7 @@ def connect_user():
                         "misses_coordinate": save_miss_coordinates,
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
-                        "plyer_died_ships":player_died_ships
+                        "player_died_ships":player_died_ships
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -265,7 +253,7 @@ def connect_user():
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
-                            "plyer_died_ships":player_died_ships
+                            "player_died_ships":player_died_ships
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -285,7 +273,7 @@ def connect_user():
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
-                            "plyer_died_ships":player_died_ships
+                            "player_died_ships":player_died_ships
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -300,6 +288,17 @@ def connect_user():
                 # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
                 turn[0] = server_data['turn']
 
+                enemy_died_ships[0] = server_data["player_died_ships"]
+
+                for medal in server_data["medals_coordinates"]:
+                    if medal not in save_medals_coordinates:
+                        save_medals_coordinates.append(medal)
+
+                # для зачерканных клеточек
+                for coord_miss in server_data["misses_coordinate"]:
+                    if coord_miss not in enemy_animation_miss_coord:
+                        enemy_animation_miss_coord.append(coord_miss)
+
 
                 # обновляем матрицу клиента , на матрицу с пострелами сервера
                 if check_repeat[0] >= 1:
@@ -313,7 +312,7 @@ def connect_user():
 
                 if shop.second_task.TEXT == shop.list_second_task[-1]:
                     if server_data["first_kill_3deck"] != "kill three-decker ship":
-                        shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
+                        shop.first_kill_three_decker()
 
                 achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
                 achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
@@ -339,8 +338,6 @@ def connect_user():
             except Exception as e:
                 print(f"Несподівана помилка: {e}")
                 continue
-
-
 
 
         #створюємо зміну потока, із функцією підключення коритсувача до серверу

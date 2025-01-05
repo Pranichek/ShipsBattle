@@ -167,7 +167,7 @@ def add_money():
             player_balance_in_jar.text = str(shop.money_list[0])
             player_balance_in_jar.update_text()
 
-    if shop.check_completed_tasks[0] == "Completed three firsts tasks":
+    if shop.check_completed_tasks[0] == 999:
         if check_completed_three_tasks[0]!= 100:
             check_completed_three_tasks[0] += 1
             shop.money_list[0] += 1

@@ -1,6 +1,6 @@
 import pygame , os , random 
 from .shop_image import shop_item
-from ..server import enemy_died_ships
+from ..server import enemy_died_ships , player_died_ships
 #класс для тексту в магазині
 class Font_Shop:
     # конструктор (__init__) тексту в магазині
@@ -92,25 +92,25 @@ class Font_Shop:
 list_first_task = [
     "2 hits in a row" , 
     "4 hits in a row" ,
-    "Kill one three-decker ship", #
-    "3 hits in a row" ,
+    "Kill one three-decker ship", 
+    "3 hits in a row",
     ]
 list_second_task = [
     "Buy one bonus from the store" , 
     "Survive 5 turns without losing a ship" , 
-    "Kill two ships in a row" , #
-    "The first to kill a 3 deck ship" #
+    "Kill two ships in a row" , 
+    "The first to kill a 3 deck ship" 
     ]
 list_third_task = [
-    "The first to kill a 4 deck ship"  , 
-    "Kill 4 single-deck ships in a row", 
+    "The first to kill a 4 deck ship", 
+    "Kill 4 single-deck ships in a row", #
     "Kill 3 double-decker ships in a row", #
     "kill two three-decker ships in a row" #
     ]
 list_fourth_task = [
     "The first step is murder" , 
-    "Kill three ships in a row" , #
-    "Completed the first three tasks" ,
+    "Kill three ships in a row" , 
+    "Completed the first three tasks" ,#
     "8 hits in a row"
     ]
 
@@ -191,12 +191,11 @@ def eight_hits_in_row(number_cell: int):
 
 # 1  убить один трехапалубный корабль
 kill_three_deckcer_ship = [0]
-def kill_one_three_decker_ship(grid):
+def kill_one_three_decker_ship():
     if kill_three_deckcer_ship[0] != "kill three deck ship":
-        for ship in enemy_died_ships:
-            if ship == 3:
-                kill_three_deckcer_ship[0] += 1
-                
+        if 3 in enemy_died_ships[0]:
+            kill_three_deckcer_ship[0] += 1
+
         if kill_three_deckcer_ship[0] >= 1:
             kill_three_deckcer_ship[0] = "kill three deck ship"
             check_completed_tasks[0] += 1
@@ -206,86 +205,139 @@ def kill_one_three_decker_ship(grid):
 # kill two ships in a row
 ship_hits = []
 kill_count = [0]
-def kill_two_ships_in_a_row(cell):
-    if kill_count[0] != "Kill two ships":
-        ship_hits.append(cell)
+count_zero = [0]
+def kill_two_ships_in_a_row():
+    if enemy_died_ships[0] != "yes":
+        if kill_count[0] != "Kill two ships":
+            kill_count[0] = len(enemy_died_ships[0]) - count_zero[0] 
 
-        for hit in ship_hits:
-            if hit == 0:
+            if 0 in ship_hits or 5 in ship_hits:
+                count_zero[0] += 1
                 ship_hits.clear()
                 kill_count[0] = 0
-                one_count = 0
-                two_count = 0
-                three_count = 0
-                four_count = 0
                 return False
+
+            if kill_count[0] >= 2:
+                kill_count[0] = "Kill two ships"
+                check_completed_tasks[0] += 1
+                print("Ты убил два корабля подряд")
+
+#3 Kill 3 double-decker ships in a row
+count_two_3decker_ship = []
+check_killed_for_double_ships = []
+start_index_two = [0]
+def kill_three_double_decker_in_a_row(cell):
+    # count_two_3decker_ship.append(cell)
+    two = count_two_3decker_ship.count(2)
+    check_killed_for_double_ships.clear()
+    start_index_two[0] += 1
+    check_killed_for_double_ships.extend(enemy_died_ships[0][start_index_two[0]:])
+    if two > 0:
+        if "You kill two three decker in row" not in count_two_3decker_ship:
+            if count_two_3decker_ship.count(0) > 0 and two >= 0:
+                    count_two_3decker_ship.clear()
+                    two = 0
+                    return False
+            
+            if count_two_3decker_ship.count(1) >= 1 and two >= 0 and 1 in check_killed_for_double_ships:
+                count_two_3decker_ship.clear()
+                two = 0
+                return False
+            
+            if count_two_3decker_ship.count(3) >= 3 and two >= 0 and 3 in check_killed_for_double_ships:
+                count_two_3decker_ship.clear()
+                two = 0
+                return False
+            
+            if count_two_3decker_ship.count(4) >= 4 and two >= 0 and 4 in check_killed_for_double_ships:
+                count_two_3decker_ship.clear()
+                two = 0
+                return False
+            
+            if two == 6 and "You kill two three decker in row" not in count_two_3decker_ship:
+                count_two_3decker_ship.append("You kill two three decker in row")
+                check_completed_tasks[0] += 1
+                print("Ты убил три двухпалубных кораблей подряд")
+    else:
+        count_two_3decker_ship.clear()
+
+# kill four single ships in a row
+single_ships = []
+check_killed_for_single_ships = []
+start_index_single = [0]
+def kill_four_single_ships_in_a_row(cell):
+    one = single_ships.count(1)
+    check_killed_for_single_ships.clear()
+    start_index_single[0] += 1
+    check_killed_for_single_ships.extend(enemy_died_ships[0][start_index_single[0]:])
+    if one > 0:
+        if single_ships.count(0) > 0 and one >= 0:
+            single_ships.clear()
+            one = 0
+            return False
+            
+        if single_ships.count(2) >= 2 and one >= 0 and 2 in check_killed_for_single_ships:
+            single_ships.clear()
+            one = 0
+            return False
         
-        one_count = ship_hits.count(1)
-        two_count = ship_hits.count(2)
-        three_count = ship_hits.count(3)
-        four_count = ship_hits.count(4)
+        if single_ships.count(3) >= 3 and one >= 0 and 3 in check_killed_for_single_ships:
+            single_ships.clear()
+            one = 0
+            return False
+        
+        if single_ships.count(4) >= 4 and one >= 0 and 4 in check_killed_for_single_ships:
+            single_ships.clear()
+            one = 0
+            return False
 
-        if one_count >= 1:
-            for on in ship_hits:
-                if on == 1:
-                    ship_hits.remove(on)
-            kill_count[0] += 1
-
-        elif two_count >= 2:
-            for tw in ship_hits:
-                if tw == 2:
-                    ship_hits.remove(tw)
-            kill_count[0] += 1
-
-        elif three_count >= 3:
-            for th in ship_hits:
-                if th == 3:
-                    ship_hits.remove(th)
-            kill_count[0] += 1
-
-        elif four_count >= 4:
-            kill_count[0] += 1
-            for fr in ship_hits:
-                if fr == 4:
-                    ship_hits.remove(fr)
-
-        if kill_count[0] >= 2:
-            kill_count[0] = "Kill two ships"
+        if one == 4 and "Kill four single ships in a row" not in single_ships:
+            single_ships.append("Kill four single ships in a row")
             check_completed_tasks[0] += 1
-            print("Ты убил два корабля подряд")
-
+            print("You are kill four single ships in a row")
+    else:
+        single_ships.clear()
 
 
 #3 kill two three-decker ships in a row
 count_three_ships = []
+check_killed_for_three_ships = []
+start_index = [0]
 def kill_two_three_decker_in_a_row(cell):
-    count_three_ships.append(cell)
+    # count_three_ships.append(cell)
     count_three = count_three_ships.count(3)
-
-    if count_three_ships.count(0) > 0 and count_three >= 0:
+    check_killed_for_three_ships.clear()
+    start_index[0] += 1
+    check_killed_for_three_ships.extend(enemy_died_ships[0][start_index[0]:])
+    if count_three > 0:
+        print(check_killed_for_three_ships)
+        if count_three_ships.count(0) > 0 and count_three >= 0:
+                count_three_ships.clear()
+                count_three = 0
+                return False
+        
+        if count_three_ships.count(1) >= 1 and count_three >= 0 and 1 in check_killed_for_three_ships:
             count_three_ships.clear()
             count_three = 0
             return False
-    
-    if count_three_ships.count(1) >= 1 and count_three >= 0:
+        
+        if count_three_ships.count(2) >= 2 and count_three >= 0 and 2 in check_killed_for_three_ships:
+            count_three_ships.clear()
+            count_three = 0
+            return False
+        
+        if count_three_ships.count(4) >= 4 and count_three >= 0 and 4 in check_killed_for_three_ships: 
+            count_three_ships.clear()
+            count_three = 0
+            return False
+        
+        if count_three == 6 and "Kill two three decker in a row" not in count_three_ships:
+            check_completed_tasks[0] += 1
+            count_three_ships.append("Kill two three decker in a row")
+            print("Ты убил два трехпалубных кораблей подряд")
+
+    else:
         count_three_ships.clear()
-        count_three = 0
-        return False
-    
-    if count_three_ships.count(2) >= 2 and count_three >= 0:
-        count_three_ships.clear()
-        count_three = 0
-        return False
-    
-    if count_three_ships.count(4) >= 4 and count_three >= 0:
-        count_three_ships.clear()
-        count_three = 0
-        return False
-    
-    if count_three == 6 and "Kill two three decker in a row" not in count_three_ships:
-        check_completed_tasks[0] += 1
-        count_three_ships.append("Kill two three decker in a row")
-        print("Ты убил два трехпалубных кораблей подряд")
 
 
 #3 первым убить четыреx палубный корабль
@@ -311,88 +363,19 @@ def first_kill_four_decker(grid , enemy_grid):
 #2 The first to kill a 2 deck ship
 our_ships_3decker = [0]
 enemy_ships_3decker = [0]
-def first_kill_three_decker(grid , enemy_grid):
+def first_kill_three_decker():
     our_ships_3decker[0] = 0
     if enemy_ships_3decker[0] != "kill three-decker ship":
         enemy_ships_3decker[0] = 0
-    for row in range(len(grid)):
-        for cell in range(len(grid[row])):
-            if grid[row][cell] == 3:
-                our_ships_3decker[0] += 1
-            if enemy_grid[0][row][cell] == 3:
-                if enemy_ships_3decker[0] != "kill three-decker ship":
-                    enemy_ships_3decker[0] += 1
+
+    our_ships_3decker[0] = 2 - player_died_ships.count(3)
+    enemy_ships_3decker[0] = 2 - enemy_died_ships[0].count(3)
     if enemy_ships_3decker[0] != "kill three-decker ship":
-        if our_ships_3decker[0] >= enemy_ships_3decker[0] and enemy_ships_3decker[0] <= 3 and enemy_ships_3decker[0] != "kill three-decker ship":
+        if our_ships_3decker[0] >= enemy_ships_3decker[0] and enemy_ships_3decker[0] == 1 and enemy_ships_3decker[0] != "kill three-decker ship":
             enemy_ships_3decker[0] = "kill three-decker ship"
             check_completed_tasks[0] += 1
-            print("Ты первый убил 3хпалубный палубный кораблик")
+            # print("Ты первый убил 3хпалубный палубный кораблик")
 
-
-#3 Kill 3 double-decker ships in a row
-count_two_3decker_ship = []
-def kill_three_double_decker_in_a_row(cell):
-    count_two_3decker_ship.append(cell)
-    two = count_two_3decker_ship.count(2)
-    if "You kill two three decker in row" not in count_two_3decker_ship:
-
-        if count_two_3decker_ship.count(0) > 0 and two >= 0:
-                count_two_3decker_ship.clear()
-                two = 0
-                return False
-        
-        if count_two_3decker_ship.count(1) >= 1 and two >= 0:
-            count_two_3decker_ship.clear()
-            two = 0
-            return False
-        
-        if count_two_3decker_ship.count(3) >= 3 and two >= 0:
-            count_two_3decker_ship.clear()
-            two = 0
-            return False
-        
-        if count_two_3decker_ship.count(4) >= 4 and two >= 0:
-            count_two_3decker_ship.clear()
-            two = 0
-            return False
-        
-        if two == 6 and "You kill two three decker in row" not in count_two_3decker_ship:
-            count_two_3decker_ship.append("You kill two three decker in row")
-            check_completed_tasks[0] += 1
-            print("Ты убил три двухпалубных кораблей подряд")
-
-
-# kill four single ships in a row
-single_ships = []
-def kill_four_single_ships_in_a_row(cell):
-    single_ships.append(cell)
-    one = single_ships.count(1)
-
-    if single_ships.count(0) > 0 and one >= 0:
-        single_ships.clear()
-        one = 0
-        return False
-        
-    if single_ships.count(2) >= 2 and one >= 0:
-        single_ships.clear()
-        one = 0
-        return False
-    
-    if single_ships.count(3) >= 3 and one >= 0:
-        single_ships.clear()
-        one = 0
-        return False
-    
-    if single_ships.count(4) >= 4 and one >= 0:
-        single_ships.clear()
-        one = 0
-        return False
-
-
-    if one == 4 and "Kill four single ships in a row" not in single_ships:
-        single_ships.append("Kill four single ships in a row")
-        check_completed_tasks[0] += 1
-        print("You are kill four single ships in a row")
 
 
 # первый удар убийство
@@ -422,61 +405,34 @@ def kept_all_ships_alive_for_five_turns(grid: object):
         count_turns.append("True")
 
 
+
 # kill three ships in a row
-count_ships_three = [0]
+ship_hits_three = []
+count_zero_thrible = [0]
 count_kill_three = [0]
 def kill_three_ships_in_a_row(cell):
-    if count_kill_three[0] != "You killes three ships in row":
-        count_ships_three.append(cell)
+    if enemy_died_ships[0] != "yes":
+        if count_kill_three[0] != "You killes three ships in row":
+            count_kill_three[0] = len(enemy_died_ships[0]) - count_zero_thrible[0]
 
-        for ship in count_ships_three:
-            if ship == 0:
-                count_ships_three.clear()
+            if 0 in ship_hits_three or 5 in ship_hits_three:
+                count_zero_thrible[0] += 1
+                ship_hits_three.clear()
                 count_kill_three[0] = 0
-                once = 0
-                twice = 0
-                thirde = 0
-                four = 0
                 return False
-        
-        once = count_ships_three.count(1)
-        twice = count_ships_three.count(2)
-        thirde = count_ships_three.count(3)
-        four = count_ships_three.count(4)
-
-        if once >= 1:
-            for on in count_ships_three:
-                if on == 1:
-                    count_ships_three.remove(on)
-            count_kill_three[0] += 1
-        elif twice >= 2:
-            for tw in count_ships_three:
-                if tw == 2:
-                    count_ships_three.remove(tw)
-            count_kill_three[0] += 1
-        elif thirde >= 3:
-            for th in count_ships_three:
-                if th == 3:
-                    count_ships_three.remove(th)
-            count_kill_three[0] += 1
-        elif four >= 4:
-            count_kill_three[0] += 1
-            for fr in count_ships_three:
-                if fr == 4:
-                    count_ships_three.remove(fr)
-
-        if count_kill_three[0] >= 3:
-            count_kill_three[0] = "You killes three ships in row"
-            check_completed_tasks[0] += 1
-            print("Ты убил три корабля подряд")
+             
+            if count_kill_three[0] >= 3:
+                count_kill_three[0] = "You killes three ships in row"
+                check_completed_tasks[0] += 1
+                print("Ты убил три корабля подряд")
 
 
 
 check_completed_tasks = [0]
 def complete_three_tasks():
-    if check_completed_tasks[0] != "Completed three firsts tasks":
+    if check_completed_tasks[0] != 999:
         if check_completed_tasks[0] == 3:
-            check_completed_tasks[0] = "Completed three firsts tasks"
+            check_completed_tasks[0] = 999
             print("Ты выполнил все три завдання")
 
 
@@ -486,7 +442,7 @@ first_task = Font_Shop(
     y_cor = -(45 + (832 - (136 + 45))),
     size = 45 ,
     name_font = "Jersey15.ttf",
-    text = list_first_task[2],
+    text = random.choice(list_first_task),
     target_y = 136 , 
     max_width = 161 ,
     max_height = 31 ,
@@ -499,7 +455,7 @@ second_task = Font_Shop(
     y_cor = -(25 + (832 - (192 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = list_second_task[-1],
+    text = random.choice(list_second_task),
     target_y = 192 , 
     max_width = 220 ,
     max_height = 28 ,
