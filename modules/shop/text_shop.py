@@ -380,19 +380,19 @@ def kill_two_three_decker_in_a_row():
 our_ships_4decker = [0]
 enemy_ships_4decker = [0]
 def first_kill_four_decker():
-    our_ships_4decker[0] = 0
     if enemy_ships_4decker[0] != "kill four-decker ship":
+        our_ships_4decker[0] = 0
         enemy_ships_4decker[0] = 0
 
-    our_ships_4decker[0] = 1 - player_died_ships.count(4)
-    enemy_ships_4decker[0] = 1 - enemy_died_ships[0].count(4)
+        our_ships_4decker[0] = 1 - player_died_ships.count(4)
+        enemy_ships_4decker[0] = 1 - enemy_died_ships[0].count(4)
 
 
-    if enemy_ships_4decker[0] != "kill four-decker ship":
-        if our_ships_4decker[0] > enemy_ships_4decker[0] and enemy_ships_4decker[0] == 0 and enemy_ships_4decker[0]!= "kill four-decker ship":
-            enemy_ships_4decker[0] = "kill four-decker ship"
-            check_completed_tasks[0] += 1
-            print("Ты первым убил четырехпалубный корабль")
+        if enemy_ships_4decker[0] != "kill four-decker ship":
+            if our_ships_4decker[0] > enemy_ships_4decker[0] and enemy_ships_4decker[0] == 0 and enemy_ships_4decker[0]!= "kill four-decker ship":
+                enemy_ships_4decker[0] = "kill four-decker ship"
+                check_completed_tasks[0] += 1
+                print("Ты первым убил четырехпалубный корабль")
 
 #2 The first to kill a 2 deck ship
 our_ships_3decker = [0]

@@ -243,7 +243,7 @@ def start_server():
                         count_client_ships += 1
 
             # win game without losing a ship
-            achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
+            # achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
 
             # если кораблей сервера не осталовь , то выиграл клиент
             if count_server_ships == 0 and count_client_ships > 0:
@@ -345,7 +345,7 @@ def start_server():
                 achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
                 
 
-            achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
+    
             achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
 
             check_repeat[0] += 1

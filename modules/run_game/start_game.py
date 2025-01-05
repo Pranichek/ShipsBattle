@@ -835,11 +835,13 @@ def fight_window():
             shop.first_kill_three_decker()
 
         achievement.piooner() 
+        achievement.lone_hunter()
+        achievement.first_kill_four_decker_achivment()
+        achievement.strategist(player_died_ships = player_died_ships , role = list_player_role[0] , winner = list_check_win[0])
+    
 
 
 
-        
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -869,175 +871,179 @@ def fight_window():
                         items.ACTIVE = True  
 
                 if shop.shop_item[0].TURN != "Up":
-                    # нижче умови для атаки 
-                    # перевіряємо за яку роль грає гравець
-                    if list_player_role[0] == "player_client":
-                        if turn[0] == "client_turn":
-                            # перевіряємо щоб гравець натискав на сітку ворога
-                            if x_mouse >= 67 and x_mouse <= 67 + 550:
-                                if y_mouse >= 257 and y_mouse <= 257 + 550:
-                                    # шукаємо клітинку на яку натиснув гравець
-                                    for cell in list_object_map_enemy: 
-                                        if cell.x <= x_mouse and x_mouse < cell.x + 55:
-                                            if cell.y <= y_mouse and y_mouse < cell.y + 55:
-                                                # Узнаем номер клетки где стоит кораблик
-                                                number_cell = list_object_map_enemy.index(cell)
-                                                # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
-                                                str_col = str(number_cell) 
-                                                # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
-                                                row = number_cell // 10  
-                                                #Колонку кораблика вычисляем по такому принципу
-                                                # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
-                                                col = int(str_col[-1])
-                                                
-                                                if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    shop.single_ships.append(enemy_matrix[0][row ][col])
-                                                if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-                                                    shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                        
-                                                if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                    shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
+                    if check_animation_rocket[0] == "":
+                        # нижче умови для атаки 
+                        # перевіряємо за яку роль грає гравець
+                        if list_player_role[0] == "player_client":
+                            if turn[0] == "client_turn":
+                                # перевіряємо щоб гравець натискав на сітку ворога
+                                if x_mouse >= 67 and x_mouse <= 67 + 550:
+                                    if y_mouse >= 257 and y_mouse <= 257 + 550:
+                                        # шукаємо клітинку на яку натиснув гравець
+                                        for cell in list_object_map_enemy: 
+                                            if cell.x <= x_mouse and x_mouse < cell.x + 55:
+                                                if cell.y <= y_mouse and y_mouse < cell.y + 55:
+                                                    # Узнаем номер клетки где стоит кораблик
+                                                    number_cell = list_object_map_enemy.index(cell)
+                                                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                                    str_col = str(number_cell) 
+                                                    # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                                    row = number_cell // 10  
+                                                    #Колонку кораблика вычисляем по такому принципу
+                                                    # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                                    col = int(str_col[-1])
                                                     
-                                                if shop.first_task.TEXT == shop.list_first_task[-1]:
-                                                    shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+                                                    if shop.third_task.TEXT == shop.list_third_task[1]:
+                                                        shop.single_ships.append(enemy_matrix[0][row ][col])
+                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                                                        shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
+                            
+                                                    if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                        shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
+                                                        
+                                                    if shop.first_task.TEXT == shop.list_first_task[-1]:
+                                                        shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
-                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
-                                                if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                    shop.ship_hits.append(enemy_matrix[0][row][col])
-                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                    shop.ship_hits_three.append(enemy_matrix[0][row][col])
+                                                    if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                        shop.count_three_ships.append(enemy_matrix[0][row][col])
+                                                    if shop.second_task.TEXT == shop.list_second_task[2]:
+                                                        shop.ship_hits.append(enemy_matrix[0][row][col])
+                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                        shop.ship_hits_three.append(enemy_matrix[0][row][col])
 
-                                                # ачивки
-                                                # achievement.piooner() 
-                                                achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
-                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
-                                                achievement.lone_hunter(cell = enemy_matrix[0][row][col])
-
-                                                # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
-                                                # 5 - значить , що гравець зробив постріл , але схибив його
-                                                if enemy_matrix[0][row][col] == 0:
-                                                    enemy_matrix[0][row][col] = 5
-                                                    # оскільки ці умови , якщо гравець це клієнт
-                                                    # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
-                                                    list_check_need_send[0] = "yes"  # Готуємо дані для відправки
-                                                    turn[0] = "server_turn"  # Передаємо хід серверу
-                                                    if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                        shop.two_hits_in_row(number_cell = 5)
-                                                    if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                        shop.four_hits_in_row(number_cell = 5)
-                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                        shop.eight_hits_in_row(number_cell = 5)
-
-                                                # робимо умову для випадку коли по клітичнці вже били
-                                                elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
-                                                    print("Уже стреляли в эту клетку")
-                                                
-                                                # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
-                                                # 7 - значить , що гравець зробив постріл і попав по кораблю
-                                                elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col]:
-                                                    # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
-                                                    check_animation_rocket[0] = "start_animation"
-                                                    # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
-                                                    x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
-                                                    y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-                                                    # у матрицю ворога записуємо 7
-                                                    enemy_matrix[0][row][col] = 7
-                                                    # обнуляємо час ходу
-                                                    check_time[0] = 0
-                                                    # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                    list_check_need_send[0] = "yes"
-                                                    turn[0] = "client_turn"     
-                                                    if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                        shop.two_hits_in_row(number_cell = 7)
-                                                    if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                        shop.four_hits_in_row(number_cell = 7)
-                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                        shop.eight_hits_in_row(number_cell = 7)  
-
-                    # перевіряємо за яку роль грає гравець                    
-                    elif list_player_role[0] == "server_player":
-                        if turn[0] == "server_turn":
-                            # перевіряємо щоб гравець натискав на сітку ворога
-                            if x_mouse >= 67 and x_mouse <= 67 + 550:
-                                if y_mouse >= 257 and y_mouse <= 257 + 550:
-                                    # шукаємо клітинку на яку натиснув гравець
-                                    for cell in list_object_map_enemy: 
-                                        if cell.x <= x_mouse and x_mouse < cell.x + 55:
-                                            if cell.y <= y_mouse and y_mouse < cell.y + 55:
-                                                # Узнаем номер клетки где стоит кораблик
-                                                number_cell = list_object_map_enemy.index(cell)
-                                                # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
-                                                str_col = str(number_cell) 
-                                                # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
-                                                row = number_cell // 10  
-                                                #Колонку кораблика вычисляем по такому принципу
-                                                # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
-                                                col = int(str_col[-1])
-
-                                                if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    shop.single_ships.append(enemy_matrix[0][row ][col])
-                                                if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-                                                    shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                        
-                                                if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                    shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
+                                                    # ачивки
+                                                    # achievement.piooner() 
+                                                    achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
+                                                    achievement.first_shot(cell = enemy_matrix[0][row][col])
+                                                    achievement.single_ships_achiv.append(enemy_matrix[0][row][col])
+                                                    achievement.list_hits_achiv.append(enemy_matrix[0][row][col])
                                                     
-                                                if shop.first_task.TEXT == shop.list_first_task[-1]:
-                                                    shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+
+                                                    # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
+                                                    # 5 - значить , що гравець зробив постріл , але схибив його
+                                                    if enemy_matrix[0][row][col] == 0:
+                                                        enemy_matrix[0][row][col] = 5
+                                                        # оскільки ці умови , якщо гравець це клієнт
+                                                        # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
+                                                        list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+                                                        turn[0] = "server_turn"  # Передаємо хід серверу
+                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                            shop.two_hits_in_row(number_cell = 5)
+                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                            shop.four_hits_in_row(number_cell = 5)
+                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                            shop.eight_hits_in_row(number_cell = 5)
+
+                                                    # робимо умову для випадку коли по клітичнці вже били
+                                                    elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
+                                                        print("Уже стреляли в эту клетку")
                                                     
-                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
-                                                if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                    shop.ship_hits.append(enemy_matrix[0][row][col])
-                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                    shop.ship_hits_three.append(enemy_matrix[0][row][col])
+                                                    # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
+                                                    # 7 - значить , що гравець зробив постріл і попав по кораблю
+                                                    elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col]:
+                                                        # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
+                                                        check_animation_rocket[0] = "start_animation"
+                                                        # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+                                                        # у матрицю ворога записуємо 7
+                                                        enemy_matrix[0][row][col] = 7
+                                                        # обнуляємо час ходу
+                                                        check_time[0] = 0
+                                                        # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                        list_check_need_send[0] = "yes"
+                                                        turn[0] = "client_turn"     
+                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                            shop.two_hits_in_row(number_cell = 7)
+                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                            shop.four_hits_in_row(number_cell = 7)
+                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                            shop.eight_hits_in_row(number_cell = 7)  
 
-                                                # ачивки
-                                                # achievement.piooner() 
-                                                achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
-                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
-                                                achievement.lone_hunter(cell = enemy_matrix[0][row][col])
-                                                
+                        # перевіряємо за яку роль грає гравець                    
+                        elif list_player_role[0] == "server_player":
+                            if turn[0] == "server_turn":
+                                # перевіряємо щоб гравець натискав на сітку ворога
+                                if x_mouse >= 67 and x_mouse <= 67 + 550:
+                                    if y_mouse >= 257 and y_mouse <= 257 + 550:
+                                        # шукаємо клітинку на яку натиснув гравець
+                                        for cell in list_object_map_enemy: 
+                                            if cell.x <= x_mouse and x_mouse < cell.x + 55:
+                                                if cell.y <= y_mouse and y_mouse < cell.y + 55:
+                                                    # Узнаем номер клетки где стоит кораблик
+                                                    number_cell = list_object_map_enemy.index(cell)
+                                                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                                    str_col = str(number_cell) 
+                                                    # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                                    row = number_cell // 10  
+                                                    #Колонку кораблика вычисляем по такому принципу
+                                                    # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                                    col = int(str_col[-1])
 
-                                                # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
-                                                # 5 - значить , що гравець зробив постріл , але схибив його
-                                                if enemy_matrix[0][row][col] == 0:
-                                                    # записуємо у матрицю ворога 5
-                                                    enemy_matrix[0][row][col] = 5
-                                                    # обнуляємо час для ходу
-                                                    check_time[0] = 0
-                                                    # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
-                                                    turn[0] = "client_turn"
-                                                    if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                        shop.two_hits_in_row(number_cell = 5)
-                                                    if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                        shop.four_hits_in_row(number_cell = 5)
-                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                        shop.eight_hits_in_row(number_cell = 5)
+                                                    if shop.third_task.TEXT == shop.list_third_task[1]:
+                                                        shop.single_ships.append(enemy_matrix[0][row ][col])
+                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                                                        shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
+                            
+                                                    if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                        shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
+                                                        
+                                                    if shop.first_task.TEXT == shop.list_first_task[-1]:
+                                                        shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
+                                                        
+                                                    if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                        shop.count_three_ships.append(enemy_matrix[0][row][col])
+                                                    if shop.second_task.TEXT == shop.list_second_task[2]:
+                                                        shop.ship_hits.append(enemy_matrix[0][row][col])
+                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                        shop.ship_hits_three.append(enemy_matrix[0][row][col])
+
+                                                    # ачивки
+                                                    # achievement.piooner() 
+                                                    achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
+                                                    achievement.first_shot(cell = enemy_matrix[0][row][col])
+                                                    achievement.single_ships_achiv.append(enemy_matrix[0][row][col])
+                                                    achievement.list_hits_achiv.append(enemy_matrix[0][row][col])
+                                                    
+
+                                                    # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
+                                                    # 5 - значить , що гравець зробив постріл , але схибив його
+                                                    if enemy_matrix[0][row][col] == 0:
+                                                        # записуємо у матрицю ворога 5
+                                                        enemy_matrix[0][row][col] = 5
+                                                        # обнуляємо час для ходу
+                                                        check_time[0] = 0
+                                                        # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
+                                                        turn[0] = "client_turn"
+                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                            shop.two_hits_in_row(number_cell = 5)
+                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                            shop.four_hits_in_row(number_cell = 5)
+                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                            shop.eight_hits_in_row(number_cell = 5)
 
 
-                                                # робимо умову для випадку коли по клітичнці вже били
-                                                elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
-                                                    print("Уже стреляли в эту клетку")
-                                                # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
-                                                # 7 - значить , що гравець зробив постріл і попав по кораблю
-                                                elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
-                                                    # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
-                                                    check_animation_rocket[0] = "start_animation"
-                                                    # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
-                                                    x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
-                                                    y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-                                                    # у матрицю ворога записуємо 7
-                                                    enemy_matrix[0][row][col] = 7
-                                                    # обнуляємо час для ходу
-                                                    check_time[0] = 0
-                                                    if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                        shop.two_hits_in_row(number_cell = 7)
-                                                    if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                        shop.four_hits_in_row(number_cell = 7)
-                                                    if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                        shop.eight_hits_in_row(number_cell = 7)
+                                                    # робимо умову для випадку коли по клітичнці вже били
+                                                    elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
+                                                        print("Уже стреляли в эту клетку")
+                                                    # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
+                                                    # 7 - значить , що гравець зробив постріл і попав по кораблю
+                                                    elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
+                                                        # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
+                                                        check_animation_rocket[0] = "start_animation"
+                                                        # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+                                                        # у матрицю ворога записуємо 7
+                                                        enemy_matrix[0][row][col] = 7
+                                                        # обнуляємо час для ходу
+                                                        check_time[0] = 0
+                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                            shop.two_hits_in_row(number_cell = 7)
+                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                            shop.four_hits_in_row(number_cell = 7)
+                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                            shop.eight_hits_in_row(number_cell = 7)
 
 
         if shop.third_task.TEXT == shop.list_third_task[-1]:
@@ -1048,6 +1054,9 @@ def fight_window():
 
         if shop.third_task.TEXT == shop.list_third_task[2]:
             shop.kill_three_double_decker_in_a_row()
+
+        achievement.monster_of_perfictionists()
+
                                                 
                                             
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
