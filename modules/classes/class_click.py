@@ -15,5 +15,5 @@ class Sound:
         return pygame.mixer.get_busy()
          
 
-music_click = Sound(name_sound="button_pressed.mp3")
-time_sound = Sound(name_sound="tick2.mp3")
+music_click = Sound(name_sound = "button_pressed.mp3")
+music_achieve = Sound(name_sound = "get_achievement.mp3")

@@ -1,21 +1,22 @@
 #імпортуємо усі потрібні модулі
 import pygame , random
-import modules.screens.screen as module_screen_server
 import modules.shop as shop
+import modules.achievement as achievement
+import modules.screens.screen as module_screen_server
+from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
+from ..classes.animation import rocket_animation , animation_boom , Animation
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
-from ..json_functions import read_json , write_json , list_users
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
-from ..classes.class_click import music_click , time_sound
+from ..classes.class_click import music_click
+from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim
+from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates
 from ..client import list_check_need_send 
-from ..classes.animation import rocket_animation , animation_boom , Animation
-from ..attack_functions import ship_border
-from ..shop import *
+from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money
 
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -44,18 +45,6 @@ player_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_sav
 enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["enemy_points"]) , screen = main_screen , x_cor = 270 , y_cor = 126, text_color = "White")
 # Текста для фрейму де показують переміг ти чи програв№
 win_lose_text = Font(size = 96 , name_font= "Goldman_Bold.ttf" , text = "" , screen = main_screen , x_cor = 383 , y_cor = 248, text_color = "White")
-
-player_balance_in_jar = Font(
-    x_cor = 1219 ,
-    y_cor = 45 ,
-    size = 36,
-    name_font = "Jersey15.ttf",
-    text = str(shop.money_list[0]),
-    text_color = "Yellow",
-    screen = main_screen
-)
-
-
 
 def test():
     print(1)
@@ -135,6 +124,7 @@ def upgrade_flag():
 
 
 
+
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
 create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height = 80 , action = button_action)
@@ -161,6 +151,7 @@ restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_ho
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
 # 
 upgrade_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = upgrade_flag)
+
 
 
 #images decoration
@@ -195,16 +186,17 @@ player_jar = DrawImage(x_cor = 1190 , y_cor = 18 , width = 90 , height = 76 , fo
 enemy_jar = DrawImage(x_cor = 102 , y_cor = 18 , width = 90 , height = 76 , folder_name = "decorations" , image_name = "jar_balance.png")
 # место где будет отображаться какое спец оружие купил пользователь
 user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 , folder_name = "backgrounds" , image_name = "user_weapon.png")
-# image achiv
-four_deck_ach_enemy = DrawImage(x_cor = 221 , y_cor = 24 , width = 35 , height = 31 , folder_name = "achivment" , image_name = "four_decker.png")
-four_deck_ach_player = DrawImage(x_cor = 750 , y_cor = 24 , width = 35 , height = 31 , folder_name = "achivment" , image_name = "four_decker.png")
-singl_deck_enemy = DrawImage(x_cor = 846.47 , y_cor = 24 , width = 32 , height = 32 , folder_name = "achivment" , image_name = "singl_deck.png")
-singl_deck_player = DrawImage(x_cor = 317.47 , y_cor = 24 , width = 32 , height = 32 , folder_name = "achivment" , image_name = "singl_deck.png")
-first_kill_enemy = DrawImage(x_cor = 801.01 , y_cor = 24 , width = 34 , height = 34 , folder_name = "achivment" , image_name = "first_kill.png")
-first_kill_player = DrawImage(x_cor = 272.01 , y_cor = 24 , width = 34 , height = 34 , folder_name = "achivment" , image_name = "first_kill.png")
-save_player = DrawImage(x_cor = 869.76 , y_cor = 64 , width = 43 , height = 37 , folder_name = "achivment" , image_name = "save.png")
-save_enemy = DrawImage(x_cor = 869.76 , y_cor = 64 , width = 43 , height = 37 , folder_name = "achivment" , image_name = "save.png")
-
+# enemy_medals 
+four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_four_decker.png")
+auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
+destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
+first_hit_enemy_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_hit_medal.png")
+lone_hunter_enemy_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
+master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguist_medal.png")
+enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
+pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
+strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
+openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 50 , height = 75 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -258,6 +250,7 @@ def main_window():
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
+
  
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
@@ -312,15 +305,15 @@ def create_game_window():
 
         #если запустили сервер но к нему еще никто не подлючился перекидываем на окно ожидания игрока
         if status_server == "wait":
-                    check_press_button[0] = None 
-                    run_game = False
-                    apply_fade_effect(screen = main_screen)
-                    change_scene(waiting_window())
+            check_press_button[0] = None 
+            run_game = False
+            apply_fade_effect(screen = main_screen)
+            change_scene(waiting_window())
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                change_scene(None)
+                list_current_scene[0] = None
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)
@@ -532,37 +525,8 @@ y_hit_the_ship = [0]
 # спсиок где хранятся крестки которые ресуюются если враг попал по кораблю игрока
 list_cross_player = []
 
-# для двух попаданий подряд
-check_money_two_hits_in_row = [0]
-# для четрыех попаданий подряд
-check_money_four_hits_in_row = [0]
-# для убийства одного трехабловбного корабля
-check_kill_one_3deck = [0]
-# для того когда убил два корабля подряд
-check_money_two_kill_in_a_row = [0]
-# для того когда убил два трехпалубных кораблей подряд
-check_2_kills_3deck_in_row = [0]
-# для того когда убил первым четырех палубный корабль
-check_kill_first_four_deck = [0]
-# для того когда убил два трехапалобных корабля подряд
-check_two_3decker_ship_in_row = [0]
-# для того чтобы убить четыре однопалубных кораблей подряд
-check_kill_four_1decker_in_row = [0]
-# для того чтобы когда убил корабль с первой попытки
-check_kill_in_first_shot = [0]
-# для того когда соперник не попал по твои кораблям 7 раз
-check_kept_alive_for_5_turns = [0]
-# для того чтобы убить три корабля подряд
-check_kill_three_ships_in_row = [0]
-# сделать первые три задания
-check_completed_three_tasks = [0]
-# три попадания подряд
-check_money_three_hits_in_row = [0]
-# первый убил трехпалубный 
-check_first_kill_three_3dec = [0]
-# 8 попаданий подряд
-check_money_eight_hits_in_row = [0]
-
+check_achiv = [False]
+index_achiv = [100]
 
 # функція для бою між гравцями
 def fight_window():
@@ -603,163 +567,34 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        for medal in range(0 , len(save_medals_coordinates)):
+            if save_medals_coordinates[medal][0] == 1:
+                four_decker_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 2:
+                enemy_prefect_shooter_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 3:
+                strategist_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 4:
+                first_hit_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 6:
+                master_of_disguise_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 7:
+                lone_hunter_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 8:
+                pioneer_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 10:
+                openin_the_batte_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
-        # print(list_grid)
-        if True in shop.two_hits_in_a_row:
-            if check_money_two_hits_in_row[0] != 30:
-                check_money_two_hits_in_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-
-        if True in shop.four_hits_in_a_row:
-            if check_money_four_hits_in_row[0] != 30:
-                check_money_four_hits_in_row[0] += 1 
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if shop.kill_three_deckcer_ship[0] == "kill three deck ship":
-            if check_kill_one_3deck[0]!= 30:
-                check_kill_one_3deck[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if shop.kill_count[0] == "Kill two ships":
-            if check_money_two_kill_in_a_row[0] != 50:
-                check_money_two_kill_in_a_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if "Kill two three decker in a row" in shop.count_three_ships:
-            if check_2_kills_3deck_in_row[0] != 80:
-                check_2_kills_3deck_in_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-        
-        if shop.enemy_ships[0] == "kill four-decker ship":
-            if check_kill_first_four_deck[0] != 80:
-                check_kill_first_four_deck[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if "You kill two three decker in row" in shop.count_two_3decker_ship:
-            if check_two_3decker_ship_in_row[0] != 80:
-                check_two_3decker_ship_in_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if "Kill four single ships in a row" in shop.single_ships:
-            if check_kill_four_1decker_in_row[0] != 80:
-                check_kill_four_1decker_in_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if "You are kill ship in one shot" in shop.count_shot:
-            if check_kill_in_first_shot[0] != 100:
-                check_kill_in_first_shot[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if True in shop.save_sevens:
-            if check_kept_alive_for_5_turns[0] != 50:
-                check_kept_alive_for_5_turns[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if "You killes three ships in row" == shop.count_kill_three[0]:
-            if check_kill_three_ships_in_row[0] != 100:
-                check_kill_three_ships_in_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if shop.check_completed_tasks[0] == "Completed three firsts tasks":
-            if check_completed_three_tasks[0]!= 100:
-                check_completed_three_tasks[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if True in shop.three_hits_in_a_row:
-            if check_money_three_hits_in_row[0] != 30:
-                check_money_three_hits_in_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if "kill three-decker ship" == shop.enemy_ships_3decker[0]:
-            if check_first_kill_three_3dec[0]!= 50:
-                check_first_kill_three_3dec[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
-
-        if True in shop.egight_hits_in_a_row:
-            if check_money_eight_hits_in_row[0] != 100:
-                check_money_eight_hits_in_row[0] += 1
-                shop.money_list[0] += 1
-                shop.player_balance.TEXT = str(shop.money_list[0])
-                shop.player_balance.update_text()
-                player_balance_in_jar.x_cor = 1219
-                player_balance_in_jar.text = str(shop.money_list[0])
-                player_balance_in_jar.update_text()
+        # функция которая красиво добавляет монетки
+        add_money()
 
         # отримцємо координати курсору
         x_mouse , y_mouse = pygame.mouse.get_pos()
         # створюємо спсиок , завдяки якому будемо трясти екран при ударі
         render_offset = [0, 0]
+
 
         if screen_shake[0] > 0:
             # записуємо рандомні числа у список render_offset , щоб за ними трясти екран
@@ -792,6 +627,7 @@ def fight_window():
         # відмальовуємо фон для фрейма бою
         fight_bg.draw_image(screen = main_screen)
 
+        # отрисовка всех элементов для визуального отображения монеток , медалек , и оружия
         shadow_data_user.draw_image(screen = main_screen)
 
         user_weapon.draw_image(screen = main_screen)
@@ -800,6 +636,10 @@ def fight_window():
         enemy_jar.draw_image(screen = main_screen)
 
         player_balance_in_jar.draw_font()
+        enemy_balance_in_jar.text = str(enemy_balance[0])
+        enemy_balance_in_jar.update_text()
+        enemy_balance_in_jar.draw_font()
+
 
         # завантажуємо , та відмальовуємо зображення годинників(скільки часу пройшло)
         clock_image.image_name = f'{check_time[0]}.png'
@@ -882,8 +722,6 @@ def fight_window():
 
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = main_screen)
-
-
         #----------------------------------------------------------------
         # анимация зачеркивания клеточек вокруг убитого корабля
         ship_border()
@@ -900,9 +738,11 @@ def fight_window():
                 # print(len(list_cross))
                 cross.animation(main_screen = main_screen , count_image = 13)
 
+
         if check_animation_rocket[0] == "start_animation":
             rocket_animation.X_COR = x_hit_the_ship[0] - 231
             rocket_animation.Y_COR = y_hit_the_ship[0] - 23
+            # проверка на окончание анимация полета ракеті 
             if rocket_animation.animation(main_screen = main_screen , count_image = 7):
                 animation_boom.X_COR = x_hit_the_ship[0] - 23
                 animation_boom.Y_COR = y_hit_the_ship[0] - 23
@@ -966,10 +806,48 @@ def fight_window():
                     if not exists:
                         list_cross_player.append(cross_animation)
 
+        #enemy_medals
+        four_decker_enemy_medal.draw_image(screen = main_screen)
+        enemy_prefect_shooter_medal.draw_image(screen = main_screen)
+        first_hit_enemy_medal.draw_image(screen = main_screen)
+        strategist_enemy_medal.draw_image(screen = main_screen)
+        master_of_disguise_enemy_medal.draw_image(screen = main_screen)
+        pioneer_enemy_medal.draw_image(screen = main_screen)
+        lone_hunter_enemy_medal.draw_image(screen = main_screen)
+        openin_the_batte_enemy_medal.draw_image(screen = main_screen)
+
+        # отрисовка наших медалей игрока
+        achievement.medal_four_decker.draw_image(screen = main_screen)
+        achievement.medal_ten_shoot_in_row.draw_image(screen = main_screen)
+        achievement.medal_hit_shoot.draw_image(screen = main_screen)
+        achievement.strategist_medal.draw_image(screen = main_screen)
+        achievement.medal_secrecy_ships.draw_image(screen = main_screen)
+        achievement.medal_lone_hunter.draw_image(screen = main_screen)
+        #piooner
+        achievement.medal_fisr_kill_any_ship.draw_image(screen = main_screen)
+        achievement.medal_opening_battle.draw_image(screen = main_screen)
+
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
             item.draw(screen = main_screen)
             item.move()
+
+        #----------------------------------------------------------------
+        # конструкция которая показывает окошки с выполнеными ачивками по очереди , а не одновременно
+        for achiv in list_achieves:
+            if achiv.ACTIVE == True and check_achiv[0] == False:
+                index_achiv[0] = list_achieves.index(achiv)
+                check_achiv[0] = True
+        if index_achiv[0] != 100:
+            list_achieves[index_achiv[0]].draw(screen = main_screen)
+            list_achieves[index_achiv[0]].move()
+        if index_achiv[0] != 100:
+            if list_achieves[index_achiv[0]].VISIBLE == 0:
+                check_achiv[0] = False
+                index_achiv[0] = 100
+        #----------------------------------------------------------------
+        
+        
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -1025,8 +903,7 @@ def fight_window():
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                 # 5 - значить , що гравець зробив постріл , але схибив його
                                                 if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
-                                                    
+                                                    shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row][col]) 
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                     shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
                                                 if shop.second_task.TEXT == shop.list_second_task[2]:
@@ -1043,8 +920,13 @@ def fight_window():
                                                     shop.kill_one_three_decker_ship(grid = enemy_matrix[0])
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
-                                                
 
+                                                # ачивки
+                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
+                                                achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
+                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
+                                                achievement.lone_hunter(cell = enemy_matrix[0][row][col])
+                                                
                                                 if enemy_matrix[0][row][col] == 0:
                                                     enemy_matrix[0][row][col] = 5
                                                     # оскільки ці умови , якщо гравець це клієнт
@@ -1083,8 +965,7 @@ def fight_window():
                                                         shop.four_hits_in_row(number_cell = 7)
                                                     if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                                                         shop.eight_hits_in_row(number_cell = 7)  
-                                                        
-                                                                                       
+
                     # перевіряємо за яку роль грає гравець                    
                     elif list_player_role[0] == "server_player":
                         if turn[0] == "server_turn":
@@ -1129,6 +1010,12 @@ def fight_window():
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
+                                                # ачивки
+                                                achievement.piooner(cell = enemy_matrix[0][row][col] , grid = list_grid) 
+                                                achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
+                                                achievement.first_shot(cell = enemy_matrix[0][row][col])
+                                                achievement.lone_hunter(cell = enemy_matrix[0][row][col])
+                                                
 
                                                 # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                 # 5 - значить , що гравець зробив постріл , але схибив його
@@ -1172,14 +1059,15 @@ def fight_window():
                                                 
                                             
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
-        if list_check_win[0] != None:   
-            # якщо вже їтось виграв , то робимо ефект затемнення
-            apply_fade_effect(screen = main_screen)
-            # зупиняємо цикл гри
-            run_game = False
-            # змінюємо фрейм бою , на фрейм показу результатів
-            change_scene(scene = finish_window())
-            check_press_button[0] = None
+        if strategist_achievement.ACTIVE == False:
+            if list_check_win[0] != None:   
+                # якщо вже їтось виграв , то робимо ефект затемнення
+                apply_fade_effect(screen = main_screen)
+                # зупиняємо цикл гри
+                run_game = False
+                # змінюємо фрейм бою , на фрейм показу результатів
+                change_scene(scene = finish_window())
+                check_press_button[0] = None
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1
@@ -1319,7 +1207,6 @@ def finish_window():
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
-                print(dict_save_information["player_nick"] + " won" , "adcfdfccfd")
                 win_lose_text.draw_font()
                 # відмальовка ників та балів
                 player_nick.text = dict_save_information["player_nick"]
@@ -1398,19 +1285,3 @@ def finish_window():
                 change_scene(None)
 
         pygame.display.flip()
-
-            
-                
-
-
-
-            
-
-
-
-
-
-
-
-
-

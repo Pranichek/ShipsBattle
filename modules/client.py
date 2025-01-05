@@ -2,11 +2,10 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim
+from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships
 from .screens import list_grid
 import modules.shop as shop
-from .shop import first_kill_four_decker_achivment, kept_all_ships_alive_for_five_turns_achivment
-
+import modules.achievement as achievement
 
 list_check_need_send = ["no"]
 
@@ -192,33 +191,47 @@ def connect_user():
                         if not exit:
                             our_miss_anim.append(animation_miss)
                             enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
-                # робимо зупинку на одну секунду , що сервер і клієент встигали обмінюватися данними
-                time.sleep(1)
+
+                # win game without losing a ship
+                achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
+
+
+                # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
+                time.sleep(0.1)
                 # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
                 client_socket.settimeout(3)
 
-                # Отримання всіх даних
+                # Отримання всіх даних від серверу
                 data_turn = recv_all(client_socket).decode()
-
-                # Розбір JSON
+                # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
                 server_data = json.loads(data_turn)
-                # # отримуємо від серверу усі дані , що він відправив
-                # data_turn = client_socket.recv(1024).decode()
-                # # робимо із json строки , у словарь за домогою json.loads()
-                # server_data = json.loads(data_turn)
 
+                enemy_balance[0] = server_data["money_balance"]
+
+                # какие корабли убил игрок
+                for ship in server_data["plyer_died_ships"]:
+                    if ship not in enemy_died_ships:
+                        enemy_died_ships.append(ship)
+                # для медалей
+                for medal in server_data["medals_coordinates"]:
+                    if medal not in save_medals_coordinates:
+                        save_medals_coordinates.append(medal)
+
+                # для зачерканных клеточек
                 for coord_miss in server_data["misses_coordinate"]:
                     if coord_miss not in enemy_animation_miss_coord:
                         enemy_animation_miss_coord.append(coord_miss)
-
                 
                 # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
                 check_time[0] = server_data['time']
 
-                if turn[0] == "client_turn" and check_time[0] == 2:
+                if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
                     if shop.second_task.TEXT == shop.list_second_task[1]:
                         shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
-                    kept_all_ships_alive_for_five_turns_achivment(grid= list_grid)
+
+                if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
+                    print(133)
+                    achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
 
                 # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
                 if list_check_need_send[0] == "no":
@@ -230,7 +243,10 @@ def connect_user():
                         'client_matrix':list_grid,
                         "new_for_server" : enemy_matrix[0],
                         "first_kill_3deck": shop.enemy_ships_3decker[0], 
-                        "misses_coordinate": save_miss_coordinates
+                        "misses_coordinate": save_miss_coordinates,
+                        "money_balance":shop.money_list[0],
+                        "medals_coordinates":achievement.list_save_coords_achiv,
+                        "plyer_died_ships":player_died_ships
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -247,7 +263,10 @@ def connect_user():
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matrix[0],
                             "first_kill_3deck": shop.enemy_ships_3decker[0],
-                            "misses_coordinate": save_miss_coordinates
+                            "misses_coordinate": save_miss_coordinates,
+                            "money_balance":shop.money_list[0],
+                            "medals_coordinates":achievement.list_save_coords_achiv,
+                            "plyer_died_ships":player_died_ships
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -264,13 +283,15 @@ def connect_user():
                             'client_matrix':list_grid,
                             "new_for_server" : enemy_matrix[0],
                             "first_kill_3deck": shop.enemy_ships_3decker[0],
-                            "misses_coordinate": save_miss_coordinates
+                            "misses_coordinate": save_miss_coordinates,
+                            "money_balance":shop.money_list[0],
+                            "medals_coordinates":achievement.list_save_coords_achiv,
+                            "plyer_died_ships":player_died_ships
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
                         check_time[0] = 0
                         continue
-
 
 
                 if check_repeat[0] == 0:
@@ -290,13 +311,13 @@ def connect_user():
                 if shop.third_task.TEXT == shop.list_third_task[0]:
                     shop.first_kill_four_decker(grid = list_grid , enemy_grid = enemy_matrix)
 
-                first_kill_four_decker_achivment(grid= list_grid, enemy_grid= enemy_matrix)
-                
-                    
-                    
+
                 if shop.second_task.TEXT == shop.list_second_task[-1]:
                     if server_data["first_kill_3deck"] != "kill three-decker ship":
                         shop.first_kill_three_decker(grid = list_grid , enemy_grid = enemy_matrix)
+
+                achievement.first_kill_four_decker_achivment(grid = list_grid , enemy_grid = enemy_matrix)
+                achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
 
                 check_repeat[0] += 1
 
