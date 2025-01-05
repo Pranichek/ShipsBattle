@@ -823,16 +823,10 @@ def fight_window():
             shop.kill_two_ships_in_a_row()
 
         if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-            shop.kill_three_ships_in_a_row(cell = enemy_matrix[0][row][col])
+            shop.kill_three_ships_in_a_row()
 
-        if shop.third_task.TEXT == shop.list_third_task[-2]:
-            shop.count_three_ships.append(enemy_matrix[0][row][col])
 
-        if shop.third_task.TEXT == shop.list_third_task[2]:
-            shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
 
-        if shop.third_task.TEXT == shop.list_third_task[1]:
-            shop.kill_four_single_ships_in_a_row(cell = enemy_matrix[0][row ][col]) 
         
         
         for event in pygame.event.get():
@@ -889,17 +883,15 @@ def fight_window():
                                                     shop.single_ships.append(enemy_matrix[0][row ][col])
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                     shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                    shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                        
                                                 if shop.third_task.TEXT == shop.list_third_task[2]:
                                                     shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
-                                                    shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
-                                                if shop.third_task.TEXT == shop.list_third_task[-2]:
-                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
-
+                                                    
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
 
+                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
                                                 if shop.second_task.TEXT == shop.list_second_task[2]:
                                                     shop.ship_hits.append(enemy_matrix[0][row][col])
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
@@ -976,17 +968,15 @@ def fight_window():
                                                     shop.single_ships.append(enemy_matrix[0][row ][col])
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                     shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
-                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                    shop.kill_two_three_decker_in_a_row(cell = enemy_matrix[0][row][col])
+                        
                                                 if shop.third_task.TEXT == shop.list_third_task[2]:
                                                     shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
-                                                    shop.kill_three_double_decker_in_a_row(cell = enemy_matrix[0][row][col])
-                                                if shop.third_task.TEXT == shop.list_third_task[-2]:
-                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
-
+                                                    
                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                     shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
-
+                                                    
+                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                    shop.count_three_ships.append(enemy_matrix[0][row][col])
                                                 if shop.second_task.TEXT == shop.list_second_task[2]:
                                                     shop.ship_hits.append(enemy_matrix[0][row][col])
                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
@@ -1039,7 +1029,14 @@ def fight_window():
                                                         shop.eight_hits_in_row(number_cell = 7)
 
 
+        if shop.third_task.TEXT == shop.list_third_task[-1]:
+            shop.kill_two_three_decker_in_a_row()
 
+        if shop.third_task.TEXT == shop.list_third_task[1]:
+            shop.kill_four_single_ships_in_a_row() 
+
+        if shop.third_task.TEXT == shop.list_third_task[2]:
+            shop.kill_three_double_decker_in_a_row()
                                                 
                                             
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
