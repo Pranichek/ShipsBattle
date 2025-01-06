@@ -242,8 +242,7 @@ def start_server():
                     if enemy_matrix[0][row_client][cell_client] != 0 and enemy_matrix[0][row_client][cell_client] != 5 and enemy_matrix[0][row_client][cell_client] != 7:
                         count_client_ships += 1
 
-            # win game without losing a ship
-            # achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
+         
 
             # если кораблей сервера не осталовь , то выиграл клиент
             if count_server_ships == 0 and count_client_ships > 0:

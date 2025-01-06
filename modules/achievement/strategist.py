@@ -2,10 +2,10 @@ from ..classes import DrawImage , strategist_achievement
 from .four_decker_sniper import list_save_coords_achiv 
 
 check_end_game = [0]
-def strategist(player_died_ships: list, role: str, winner: str):
+def strategist(player_killed_ships: list, role: str, winner: str):
     if check_end_game[0] != 13:
-        if player_died_ships != "yes":
-            if len(player_died_ships) == 0:
+        if player_killed_ships != "yes":
+            if len(player_killed_ships) == 0:
                 if role == "server_player":
                     if winner == "win_server":
                         strategist_achievement.ACTIVE = True

@@ -197,6 +197,7 @@ enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 ,
 pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
 strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
 openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 40 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
+enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 50 , width = 50 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
 
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -584,6 +585,8 @@ def fight_window():
                 pioneer_enemy_medal.y_cor = save_medals_coordinates[medal][2]
             elif save_medals_coordinates[medal][0] == 10:
                 openin_the_batte_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 12:
+                enemy_medal_perfectionists.y_cor = save_medals_coordinates[medal][2]
 
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
@@ -786,6 +789,7 @@ def fight_window():
         pioneer_enemy_medal.draw_image(screen = main_screen)
         lone_hunter_enemy_medal.draw_image(screen = main_screen)
         openin_the_batte_enemy_medal.draw_image(screen = main_screen)
+        enemy_medal_perfectionists.draw_image(screen = main_screen)
 
         # отрисовка наших медалей игрока
         achievement.medal_four_decker.draw_image(screen = main_screen)
@@ -797,6 +801,7 @@ def fight_window():
         #piooner
         achievement.medal_fisr_kill_any_ship.draw_image(screen = main_screen)
         achievement.medal_opening_battle.draw_image(screen = main_screen)
+        achievement.medal_perfictionists.draw_image(screen = main_screen)
 
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
@@ -837,7 +842,7 @@ def fight_window():
         achievement.piooner() 
         achievement.lone_hunter()
         achievement.first_kill_four_decker_achivment()
-        achievement.strategist(player_died_ships = player_died_ships , role = list_player_role[0] , winner = list_check_win[0])
+        achievement.strategist(player_killed_ships = player_died_ships[0] , role = list_player_role[0] , winner = list_check_win[0])
     
 
 

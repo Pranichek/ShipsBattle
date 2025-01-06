@@ -13,9 +13,9 @@ def first_kill_four_decker_achivment():
         our_ships_4decker_achiv[0] = 0
         enemy_ships_4decker_achiv[0] = 0
         if enemy_dies_ships_for_ahiv[0] != "":
+
             our_ships_4decker_achiv[0] = 1 - player_died_ships_for_achiv[0].count(4)
             enemy_ships_4decker_achiv[0] = 1 - enemy_dies_ships_for_ahiv[0].count(4)
-
 
             if enemy_ships_4decker_achiv[0] != "kill four-decker ship":
                 if our_ships_4decker_achiv[0] > enemy_ships_4decker_achiv[0] and enemy_ships_4decker_achiv[0] == 0 and enemy_ships_4decker_achiv[0]!= "kill four-decker ship":

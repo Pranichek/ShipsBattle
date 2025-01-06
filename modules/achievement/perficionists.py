@@ -1,4 +1,4 @@
-from ..classes import DrawImage 
+from ..classes import DrawImage , perfictionists_achiement
 from .four_decker_sniper import list_save_coords_achiv 
 from .four_decker_sniper import enemy_dies_ships_for_ahiv
 
@@ -35,8 +35,17 @@ def monster_of_perfictionists():
                             print(indx_one , indx_two , indx_three , indx_four)
                             if indx_one < indx_two < indx_three < indx_four:
                                 if indx_four - indx_one == 3:
-                                    print(6)
-                                    print("Ты чертов перфикционист")
-                                    exit()
+                                    perfictionists_achiement.ACTIVE = True
+                                    medal_perfictionists.y_cor = 64
+                                    list_save_coords_achiv.append((12, medal_perfictionists.x_cor, medal_perfictionists.y_cor))
                         else:
                             list_hits_achiv.clear()
+
+medal_perfictionists = DrawImage(
+    x_cor = 970 ,
+    y_cor = -50,
+    width = 50,
+    height = 50,
+    folder_name = "achievement",
+    image_name = "medal_perfectionists.png"
+)
