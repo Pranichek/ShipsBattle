@@ -234,7 +234,8 @@ def connect_user():
                         "misses_coordinate": save_miss_coordinates,
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
-                        "player_died_ships":player_died_ships
+                        "player_died_ships":player_died_ships,
+                        "check_target_attack_achiv":achievement.check_target_attack[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -253,7 +254,8 @@ def connect_user():
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
-                            "player_died_ships":player_died_ships
+                            "player_died_ships":player_died_ships,
+                            "check_target_attack_achiv":achievement.check_target_attack[0]
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -272,7 +274,8 @@ def connect_user():
                             "misses_coordinate": save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
-                            "player_died_ships":player_died_ships
+                            "player_died_ships":player_died_ships,
+                            "check_target_attack_achiv":achievement.check_target_attack[0]
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -306,7 +309,7 @@ def connect_user():
                             list_grid[row][cell] = server_data["new_for_client"][row][cell]
 
 
-                # achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
+                achievement.show_target_attack_medal(flag = server_data["check_target_attack_achiv"])
 
                 check_repeat[0] += 1
 

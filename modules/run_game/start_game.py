@@ -196,9 +196,9 @@ master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 5
 enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
 pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
 strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
-openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 40 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
-enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 50 , width = 50 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
-
+openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 47 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
+enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 54 , width = 55 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
+target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 50 , folder_name = "achievement" , image_name = "target_attack_medal.png")
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
@@ -585,6 +585,8 @@ def fight_window():
                 pioneer_enemy_medal.y_cor = save_medals_coordinates[medal][2]
             elif save_medals_coordinates[medal][0] == 10:
                 openin_the_batte_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+            elif save_medals_coordinates[medal][0] == 11:
+                target_attack_enemy_medal.y_cor = save_medals_coordinates[medal][2]
             elif save_medals_coordinates[medal][0] == 12:
                 enemy_medal_perfectionists.y_cor = save_medals_coordinates[medal][2]
 
@@ -696,11 +698,14 @@ def fight_window():
 
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = main_screen)
+        
+        achievement.target_attack()
         #----------------------------------------------------------------
         # анимация зачеркивания клеточек вокруг убитого корабля
         ship_border()
         # #----------------------------------------------------------------
-
+       
+                        
         # отрисовка зачеркнутых клеточек , если игрок убил полностью корабль врага
         for anim_miss in our_miss_anim:
             anim_miss.animation(main_screen=main_screen, count_image=29)
@@ -802,6 +807,7 @@ def fight_window():
         achievement.medal_fisr_kill_any_ship.draw_image(screen = main_screen)
         achievement.medal_opening_battle.draw_image(screen = main_screen)
         achievement.medal_perfictionists.draw_image(screen = main_screen)
+        achievement.medal_target_attack.draw_image(screen = main_screen)
 
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
@@ -1061,6 +1067,7 @@ def fight_window():
 
         achievement.monster_of_perfictionists()
 
+        
                                                 
                                             
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв

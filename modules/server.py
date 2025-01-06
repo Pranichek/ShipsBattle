@@ -279,7 +279,8 @@ def start_server():
                 "money_balance":shop.money_list[0],
                 "check_ten_times":check_ten_times.count(1),
                 "medals_coordinates":achievement.list_save_coords_achiv,
-                "player_died_ships":player_died_ships
+                "player_died_ships":player_died_ships,
+                "check_target_attack_achiv":achievement.check_target_attack[0]
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -295,6 +296,8 @@ def start_server():
             
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
+
+            achievement.show_target_attack_medal(flag = ready_clinet_data["check_target_attack_achiv"])
 
             enemy_balance[0] = ready_clinet_data["money_balance"]
 

@@ -44,8 +44,8 @@ def monster_of_perfictionists():
 medal_perfictionists = DrawImage(
     x_cor = 970 ,
     y_cor = -50,
-    width = 50,
-    height = 50,
+    width = 55,
+    height = 54,
     folder_name = "achievement",
     image_name = "medal_perfectionists.png"
 )
