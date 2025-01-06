@@ -1,6 +1,6 @@
 from ..screens import list_grid , list_object_map , main_screen
 from ..classes  import list_ships , Animation
-from ..server import save_miss_coordinates , player_died_ships
+from ..server import save_miss_coordinates , player_died_ships , check_target_attack
 
 # номер рядка и клеточки в этом рядке где отрисовываются зачеркиванные клеточки
 miss_row = [0]
@@ -17,13 +17,24 @@ count_len = [1]
 # список в котором сохраняем все обьекты зачерканных клеточек
 list_animation_miss = []
 
+
+count_fives = [0]
+
 def ship_border():
     for rowee in range(len(list_grid)):
         for cellee in range(len(list_grid[rowee])):
             if list_grid[rowee][cellee] == 7:
+                if check_target_attack[0] != "Please" and check_kill[0] == True:
+                    check_target_attack[0] == "Enemy did the target_attack achiv"
+                    exit()
+
+                if check_target_attack[0] != "Enemy did the target_attack achiv":
+                    check_target_attack[0] = "None"
                 miss_row[0] = rowee
                 miss_col[0] = cellee
                 str_cel = str(cellee)
+
+                count_fives[0] = 0
 
                 check_kill[0] = False
                 list_direction[0] = ""
@@ -93,7 +104,10 @@ def ship_border():
                                     need_clear = False,
                                     name_folder = "animation_miss"
                                 )
-                        
+                                if check_target_attack[0] != "Enemy did the target_attack achiv":
+                                    if list_grid[rowka][cellka] == 5:
+                                        check_target_attack[0] = "Please"
+                                        count_fives[0] += 1
                                 existss = False
                                 for anim_miss in list_animation_miss:
                                     if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
@@ -123,6 +137,10 @@ def ship_border():
                                     name_folder = "animation_miss"
                                 )
                                 # print(5)
+                                if check_target_attack[0] != "Enemy did the target_attack achiv":
+                                    if list_grid[rowka][cellka] == 5:
+                                        check_target_attack[0] = "Please"
+                                        count_fives[0] += 1
                                 existss = False
                                 if list_grid[rowka][cellka] == 7:
                                     existss = True
@@ -152,6 +170,10 @@ def ship_border():
                                     need_clear = False,
                                     name_folder = "animation_miss"
                                 )
+                                if check_target_attack[0] != "Enemy did the target_attack achiv":
+                                    if list_grid[rowka][cellka] == 5:
+                                        check_target_attack[0] = "Please"
+                                        count_fives[0] += 1
                                 # print(5)
                                 existss = False
                                 for anim_miss in list_animation_miss:
@@ -182,6 +204,10 @@ def ship_border():
                                     need_clear = False,
                                     name_folder = "animation_miss"
                                 )
+                                if check_target_attack[0] != "Enemy did the target_attack achiv":
+                                    if list_grid[rowka][cellka] == 5:
+                                        check_target_attack[0] = "Please"
+                                        count_fives[0] += 1
                                 # print(5)
                                 existss = False
                                 for anim_miss in list_animation_miss:
@@ -212,6 +238,10 @@ def ship_border():
                                     need_clear = False,
                                     name_folder = "animation_miss"
                                 )
+                                if check_target_attack[0] != "Enemy did the target_attack achiv":
+                                    if list_grid[rowka][cellka] == 5:
+                                        check_target_attack[0] = "Please"
+                                        count_fives[0] += 1
                                 # print(7)
                                 existss = False
 
@@ -245,6 +275,10 @@ def ship_border():
                                     need_clear = False,
                                     name_folder = "animation_miss"
                                 )
+                                if check_target_attack[0] != "Enemy did the target_attack achiv":
+                                    if list_grid[rowka][cellka] == 5:
+                                        check_target_attack[0] = "Please"
+                                        count_fives[0] += 1
                                 # print(7)
                                 existss = False
 
@@ -256,6 +290,8 @@ def ship_border():
                                 if not existss:
                                     list_animation_miss.append(animation_miss)
                                     save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
+
+                print(count_fives[0] , "count_fives[0]")
     # Отображение анимации
     for anim_miss in list_animation_miss:
         # print(len(list_animation_miss))

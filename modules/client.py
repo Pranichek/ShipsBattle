@@ -2,7 +2,7 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count
+from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count , check_target_attack
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
@@ -241,7 +241,7 @@ def connect_user():
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
                         "player_died_ships":player_died_ships,
-                        "check_target_attack_achiv":achievement.check_target_attack[0]
+                        "check_target_attack_achiv":check_target_attack[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -261,7 +261,7 @@ def connect_user():
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
                             "player_died_ships":player_died_ships,
-                            "check_target_attack_achiv":achievement.check_target_attack[0]
+                            "check_target_attack_achiv":check_target_attack[0]
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -281,7 +281,7 @@ def connect_user():
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
                             "player_died_ships":player_died_ships,
-                            "check_target_attack_achiv":achievement.check_target_attack[0]
+                            "check_target_attack_achiv":check_target_attack[0]
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"

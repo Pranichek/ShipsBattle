@@ -50,6 +50,8 @@ save_medals_coordinates = []
 player_died_ships = []
 # список в коотором храним какие корабли убил игрок у врага
 enemy_died_ships = ["yes"]
+# список в котором храним флаг выполнил ли игрок ачивку с названием target_attack
+check_target_attack = ["None"]
 
 # словарь для зберігання інформаці про гравців
 dict_save_information = {
@@ -281,7 +283,7 @@ def start_server():
                 "check_ten_times":check_ten_times.count(1),
                 "medals_coordinates":achievement.list_save_coords_achiv,
                 "player_died_ships":player_died_ships,
-                "check_target_attack_achiv":achievement.check_target_attack[0]
+                "check_target_attack_achiv":check_target_attack[0]
             }
 
             # отправляем даныне на сервер , и делаем их джейсон строкой

@@ -16,8 +16,8 @@ from .clinent_connect import connect_to_server , list_check_connection , fail_co
 from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates , player_died_ships , enemy_died_ships 
 from ..client import list_check_need_send 
-from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money
-from .bomb import upgrade_attack
+from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money ,check_target_attack
+# from .bomb import upgrade_attack
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
 
@@ -527,6 +527,7 @@ list_cross_player = []
 check_achiv = [False]
 index_achiv = [100]
 
+
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -566,8 +567,10 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
+        print(list_grid)
         achievement.player_died_ships_for_achiv[0] = player_died_ships
         achievement.enemy_dies_ships_for_ahiv[0] = enemy_died_ships[0]
+
         for medal in range(0 , len(save_medals_coordinates)):
             if save_medals_coordinates[medal][0] == 1:
                 four_decker_enemy_medal.y_cor = save_medals_coordinates[medal][2]
@@ -594,6 +597,7 @@ def fight_window():
         module_screen_server.FPS.tick(120)
         # функция которая красиво добавляет монетки
         add_money()
+
 
         # отримцємо координати курсору
         x_mouse , y_mouse = pygame.mouse.get_pos()
@@ -908,16 +912,7 @@ def fight_window():
                                                     col = int(str_col[-1])
                                                     #************************************************************************************************
 
-                                                    #************************************************************************************************
-
-
-                                                    check_time[0] = 0
-                                                    # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                    list_check_need_send[0] = "yes"         
-                                                    # flag_upgrade[0] = False
-
-                                                    count_7[0] = 0
-                                                    
+                                                    #************************************************************************************************                                                    
                                                     if shop.third_task.TEXT == shop.list_third_task[1]:
                                                         shop.single_ships.append(enemy_matrix[0][row ][col])
                                                     if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
@@ -1004,46 +999,47 @@ def fight_window():
                                                     #Колонку кораблика вычисляем по такому принципу
                                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                     col = int(str_col[-1])
-                                                    count_7 = []
-                                                    if flag_upgrade[0] == True:
-                                                        try:
-                                                            if row == 0 and col == 0:
-                                                                upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7)
-                                                            elif 0 < row < 9 and col == 0:
-                                                                upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7)
-                                                            elif row == 9 and col == 0:
-                                                                upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7)
-                                                            elif row == 0 and col == 9:
-                                                                upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7)            
-                                                            elif row == 9 and col == 9:
-                                                                upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7)         
-                                                            elif row == 9 and 0 < col < 9:
-                                                                upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7)
-                                                            elif row == 0 and 0 < col < 9:
-                                                                upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7)
-                                                            elif 0 < row < 9 and col == 9:
-                                                                upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7)
-                                                            elif 1 <= row < 9 and 1 <= col < 9:
-                                                                upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7)
+                                                    # count_7 = []
+                                                    # if flag_upgrade[0] == True:
+                                                    #     try:
+                                                    #         if row == 0 and col == 0:
+                                                    #             upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7)
+                                                    #         elif 0 < row < 9 and col == 0:
+                                                    #             upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7)
+                                                    #         elif row == 9 and col == 0:
+                                                    #             upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7)
+                                                    #         elif row == 0 and col == 9:
+                                                    #             upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7)            
+                                                    #         elif row == 9 and col == 9:
+                                                    #             upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7)         
+                                                    #         elif row == 9 and 0 < col < 9:
+                                                    #             upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7)
+                                                    #         elif row == 0 and 0 < col < 9:
+                                                    #             upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7)
+                                                    #         elif 0 < row < 9 and col == 9:
+                                                    #             upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7)
+                                                    #         elif 1 <= row < 9 and 1 <= col < 9:
+                                                    #             upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7)
                                                             
-                                                            if count_7[0] > 0:
-                                                                turn[0] = "server_turn"
-                                                                check_time[0] = 0
-                                                            else:
-                                                                turn[0] = "client_turn"
-                                                                check_time[0] = 0
-                                                        except Exception as erorr:
-                                                            print(f"Ошибка связанная с матрицей : {erorr}")
+                                                    #         if count_7[0] > 0:
+                                                    #             turn[0] = "server_turn"
+                                                    #             check_time[0] = 0
+                                                    #         else:
+                                                    #             turn[0] = "client_turn"
+                                                    #             check_time[0] = 0
+                                                    #         count_7[0] = 0
+                                                    #     except Exception as erorr:
+                                                    #         print(f"Ошибка связанная с матрицей : {erorr}")
 
-
+                                                    # else:
 
                                                     if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                        shop.single_ships.append(enemy_matrix[0][row ][col])
+                                                        shop.single_ships.append(enemy_matrix[0][row][col])
                                                     if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                         shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
                             
                                                     if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                        shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
+                                                        shop.count_two_3decker_ship.append(enemy_matrix[0][row][col])
                                                         
                                                     if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                         shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
