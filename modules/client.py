@@ -193,7 +193,7 @@ def connect_user():
                             enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
 
                 # win game without losing a ship
-                achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
+                # achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
 
 
                 # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними

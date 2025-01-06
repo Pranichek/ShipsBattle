@@ -36,7 +36,7 @@ def monster_of_perfictionists():
                             if indx_one < indx_two < indx_three < indx_four:
                                 if indx_four - indx_one == 3:
                                     perfictionists_achiement.ACTIVE = True
-                                    medal_perfictionists.y_cor = 64
+                                    medal_perfictionists.y_cor = 74
                                     list_save_coords_achiv.append((12, medal_perfictionists.x_cor, medal_perfictionists.y_cor))
                         else:
                             list_hits_achiv.clear()

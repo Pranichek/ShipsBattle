@@ -842,7 +842,7 @@ def fight_window():
         achievement.piooner() 
         achievement.lone_hunter()
         achievement.first_kill_four_decker_achivment()
-        achievement.strategist(player_killed_ships = player_died_ships[0] , role = list_player_role[0] , winner = list_check_win[0])
+        achievement.strategist(player_killed_ships = player_died_ships , role = list_player_role[0] , winner = list_check_win[0])
     
 
 
@@ -917,7 +917,6 @@ def fight_window():
                                                         shop.ship_hits_three.append(enemy_matrix[0][row][col])
 
                                                     # ачивки
-                                                    # achievement.piooner() 
                                                     achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                     achievement.first_shot(cell = enemy_matrix[0][row][col])
                                                     achievement.single_ships_achiv.append(enemy_matrix[0][row][col])
@@ -1004,7 +1003,7 @@ def fight_window():
                                                         shop.ship_hits_three.append(enemy_matrix[0][row][col])
 
                                                     # ачивки
-                                                    # achievement.piooner() 
+                                                    
                                                     achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
                                                     achievement.first_shot(cell = enemy_matrix[0][row][col])
                                                     achievement.single_ships_achiv.append(enemy_matrix[0][row][col])

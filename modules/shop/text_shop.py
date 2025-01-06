@@ -197,13 +197,14 @@ def eight_hits_in_row(number_cell: int):
 kill_three_deckcer_ship = [0]
 def kill_one_three_decker_ship():
     if kill_three_deckcer_ship[0] != "kill three deck ship":
-        if 3 in enemy_died_ships[0]:
-            kill_three_deckcer_ship[0] += 1
+        if enemy_died_ships[0] != "yes":
+            if 3 in enemy_died_ships[0]:
+                kill_three_deckcer_ship[0] += 1
 
-        if kill_three_deckcer_ship[0] >= 1:
-            kill_three_deckcer_ship[0] = "kill three deck ship"
-            check_completed_tasks[0] += 1
-            print("Ты убил один трехбалубный кораблик")
+            if kill_three_deckcer_ship[0] >= 1:
+                kill_three_deckcer_ship[0] = "kill three deck ship"
+                check_completed_tasks[0] += 1
+                print("Ты убил один трехбалубный кораблик")
 
 
 # kill two ships in a row
