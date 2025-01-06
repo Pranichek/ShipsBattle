@@ -214,7 +214,7 @@ def start_server():
                                 name_folder = "animation_miss"
                             )
                 if len(enemy_animation_miss_coord) > 0:
-                    exit = False
+                    exit = False                    
                     for anim_miss in our_miss_anim:
                         if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
                             exit= True
@@ -300,6 +300,7 @@ def start_server():
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
 
+            # print(ready_clinet_data["check_target_attack_achiv"])
   
             if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
                 target_medal_count[0] += 1

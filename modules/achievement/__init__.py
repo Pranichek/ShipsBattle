@@ -7,5 +7,4 @@ from .piooner import *
 from .lone_hunter import *
 from .opening_the_battle import *
 from .perficionists import *
-from .targeted_attack import *
 from .check_target_attack_medal import *

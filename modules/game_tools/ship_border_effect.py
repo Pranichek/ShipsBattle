@@ -25,8 +25,9 @@ def ship_border():
         for cellee in range(len(list_grid[rowee])):
             if list_grid[rowee][cellee] == 7:
                 if check_target_attack[0] != "Please" and check_kill[0] == True:
-                    check_target_attack[0] == "Enemy did the target_attack achiv"
-                    exit()
+                    check_target_attack[0] = "Enemy did the target_attack achiv"
+                    print(check_target_attack[0] , "da")
+    
 
                 if check_target_attack[0] != "Enemy did the target_attack achiv":
                     check_target_attack[0] = "None"
@@ -291,7 +292,7 @@ def ship_border():
                                     list_animation_miss.append(animation_miss)
                                     save_miss_coordinates.append((x_anim_miss ,  y_anim_miss , rowka , cellka))
 
-                print(count_fives[0] , "count_fives[0]")
+
     # Отображение анимации
     for anim_miss in list_animation_miss:
         # print(len(list_animation_miss))

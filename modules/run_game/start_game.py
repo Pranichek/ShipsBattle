@@ -6,7 +6,7 @@ import modules.screens.screen as module_screen_server
 from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
-from ..classes.animation import rocket_animation , animation_boom , Animation
+from ..classes.animation import rocket_animation , animation_boom , Animation , miss_rocket_animation
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
 from ..classes.class_click import music_click
@@ -14,9 +14,9 @@ from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates , player_died_ships , enemy_died_ships 
+from ..server import list_check_ready_to_fight , dict_save_information ,check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates , player_died_ships , enemy_died_ships
 from ..client import list_check_need_send 
-from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money ,check_target_attack
+from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss 
 # from .bomb import upgrade_attack
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -508,6 +508,13 @@ def ships_position_window():
 x_enemy_cross = [0]
 y_enemy_cross = [0]
 
+#флаг который говорит надо ли запускать анимация промаха ракеты, если игрок уларил но промахнулся
+flag_miss_rocket_animation = [""]
+# флаг который говорит надо ли запускать анимацию зачеркивания клеточки , если игрок промахнулся по кораблю
+check_animation_miss_cell = [""]
+# лист в котором хранятся все обьяекты зачеркивания клеточки после промаха ракетой
+list_miss_cell = []
+
 # флаг который првоеряет надо ли запускать анимацию ракеты если игрок ударил
 check_animation_rocket = [""]
 # флаг когда надо проигрывать анимацию крестика если попали по кораблю
@@ -567,10 +574,10 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
-        print(list_grid)
+        # print(list_grid)
         achievement.player_died_ships_for_achiv[0] = player_died_ships
         achievement.enemy_dies_ships_for_ahiv[0] = enemy_died_ships[0]
-
+        # print(check_target_attack[0])
         for medal in range(0 , len(save_medals_coordinates)):
             if save_medals_coordinates[medal][0] == 1:
                 four_decker_enemy_medal.y_cor = save_medals_coordinates[medal][2]
@@ -711,11 +718,72 @@ def fight_window():
         # анимация зачеркивания клеточек вокруг убитого корабля
         ship_border()
         # #----------------------------------------------------------------
+
+        #----------------------------------------------------------------
+        #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока
+        for row in range(len(list_grid)):
+            for cell in range(len(list_grid[row])):
+                if list_grid[row][cell] == 5:
+                    cltka = (row * 10) + cell
+                                
+                    x_anim_miss = list_object_map[cltka].x
+                    y_anim_miss = list_object_map[cltka].y
+
+                    miss_cell_animation = Animation(
+                    image_name = "0.png", 
+                    width = 55, 
+                    height = 55, 
+                    x_cor = x_anim_miss, 
+                    y_cor = y_anim_miss, 
+                    need_clear = False , 
+                    name_folder = "animation_miss"
+                    )
+                    
+                    exists = False
+                    for misses_cells in list_animation_miss:
+                        if misses_cells.X_COR == miss_cell_animation.X_COR and misses_cells.Y_COR == miss_cell_animation.Y_COR:
+                            exists = True
+                            break
+                    if not exists:
+                        list_animation_miss.append(miss_cell_animation)
+        #----------------------------------------------------------------
        
-                        
+        #----------------------------------------------------------------
         # отрисовка зачеркнутых клеточек , если игрок убил полностью корабль врага
         for anim_miss in our_miss_anim:
             anim_miss.animation(main_screen=main_screen, count_image=29)
+        #----------------------------------------------------------------
+
+        #************************************************************************************************
+        # отрисовка промаха ракетой, и зарисовка клеточек(когда игрок атакует врага)
+        for djfk in our_miss_anim:
+            print(djfk.X_COR , djfk.Y_COR)
+
+        if flag_miss_rocket_animation[0] == "start_animation":
+            miss_rocket_animation.X_COR = x_hit_the_ship[0] - 231
+            miss_rocket_animation.Y_COR = y_hit_the_ship[0] - 23
+            if miss_rocket_animation.animation(main_screen = main_screen , count_image = 7):
+                miss_cell_animation = Animation(
+                    image_name = "0.png", 
+                    width = 55, 
+                    height = 55, 
+                    x_cor = x_hit_the_ship[0] + 1, 
+                    y_cor = y_hit_the_ship[0], 
+                    need_clear = False , 
+                    name_folder = "animation_miss"
+                )
+                existss = False
+                for misses_cells in our_miss_anim:
+                    print(misses_cells.X_COR)
+                    if misses_cells.X_COR == miss_cell_animation.X_COR and misses_cells.Y_COR == miss_cell_animation.Y_COR:
+                        existss = True
+                        break
+                if not existss:
+                    our_miss_anim.append(miss_cell_animation)
+                miss_rocket_animation.clear_animation()
+                flag_miss_rocket_animation[0] = ""
+        #************************************************************************************************
+                   
 
         # #****************************************************************
         # отрисовка крестиков если игрок попал по кораблю
@@ -889,7 +957,7 @@ def fight_window():
                         items.ACTIVE = True  
 
                 if shop.shop_item[0].TURN != "Up":
-                    if check_animation_rocket[0] == "":
+                    if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
                         # нижче умови для атаки 
                         # перевіряємо за яку роль грає гравець
                         if list_player_role[0] == "player_client":
@@ -919,7 +987,7 @@ def fight_window():
                                                         shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
                             
                                                     if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                        shop.count_two_3decker_ship.append(enemy_matrix[0][row ][col])
+                                                        shop.check_three_2decker_ship_in_row.append(enemy_matrix[0][row ][col])
                                                         
                                                     if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                         shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
@@ -942,6 +1010,10 @@ def fight_window():
                                                     # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                     # 5 - значить , що гравець зробив постріл , але схибив його
                                                     if enemy_matrix[0][row][col] == 0:
+                                                        flag_miss_rocket_animation[0] = "start_animation"
+                                                        # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
                                                         enemy_matrix[0][row][col] = 5
                                                         # оскільки ці умови , якщо гравець це клієнт
                                                         # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
@@ -1039,7 +1111,7 @@ def fight_window():
                                                         shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
                             
                                                     if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                        shop.count_two_3decker_ship.append(enemy_matrix[0][row][col])
+                                                        shop.check_three_2decker_ship_in_row.append(enemy_matrix[0][row][col])
                                                         
                                                     if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                         shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
@@ -1060,6 +1132,11 @@ def fight_window():
                                                     # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                     # 5 - значить , що гравець зробив постріл , але схибив його
                                                     if enemy_matrix[0][row][col] == 0:
+                                                        # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
+                                                        flag_miss_rocket_animation[0] = "start_animation"
+                                                        # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
                                                         # записуємо у матрицю ворога 5
                                                         enemy_matrix[0][row][col] = 5
                                                         # обнуляємо час для ходу

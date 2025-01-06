@@ -56,6 +56,16 @@ class Animation():
         self.COUNT_MAIN_LOOP = 0
         self.IS_ANIMATION_DONE = False
 
+miss_rocket_animation = Animation(
+    image_name = "0.png" , 
+    width = 311 , 
+    height = 100 , 
+    x_cor = 311 , 
+    y_cor = 311 , 
+    need_clear = True , 
+    name_folder = "animation_rocket"
+)
+
 rocket_animation = Animation(
     image_name = "0.png" , 
     width = 311 , 

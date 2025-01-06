@@ -36,8 +36,6 @@ check_money_two_kill_in_a_row = [0]
 check_2_kills_3deck_in_row = [0]
 # для того когда убил первым четырех палубный корабль
 check_kill_first_four_deck = [0]
-# для того когда убил два трехапалобных корабля подряд
-check_two_3decker_ship_in_row = [0]
 # для того чтобы убить четыре однопалубных кораблей подряд
 check_kill_four_1decker_in_row = [0]
 # для того чтобы когда убил корабль с первой попытки
@@ -54,8 +52,48 @@ check_money_three_hits_in_row = [0]
 check_first_kill_three_3dec = [0]
 # 8 попаданий подряд
 check_money_eight_hits_in_row = [0]
+# убить три двухпалубных кораблей подряд
+check_three_2decker_ship_in_row = [0]
 
 def add_money():
+    print(shop.check_completed_tasks[0] , "completed task")
+    # print("check_money_two_hits_in_row:", check_money_two_hits_in_row[0])
+
+    # print("check_money_four_hits_in_row:", check_money_four_hits_in_row[0])
+
+    # print("check_kill_one_3deck:", check_kill_one_3deck[0])
+
+
+    # print("check_money_two_kill_in_a_row:", check_money_two_kill_in_a_row[0])
+
+    # print("check_2_kills_3deck_in_row:", check_2_kills_3deck_in_row[0])
+
+
+    # print("check_kill_first_four_deck:", check_kill_first_four_deck[0])
+
+
+    # print("check_three_2decker_ship_in_row:", check_three_2decker_ship_in_row[0])
+
+    # print("check_kill_four_1decker_in_row:", check_kill_four_1decker_in_row[0])
+
+    # print("check_kill_in_first_shot:", check_kill_in_first_shot[0])
+
+
+    # print("check_kept_alive_for_5_turns:", check_kept_alive_for_5_turns[0])
+
+   
+    # print("check_kill_three_ships_in_row:", check_kill_three_ships_in_row[0])
+
+
+    # print("check_completed_three_tasks:", check_completed_three_tasks[0])
+
+
+    # print("check_money_three_hits_in_row:", check_money_three_hits_in_row[0])
+
+    # print("check_first_kill_three_3dec:", check_first_kill_three_3dec[0])
+
+    # print("check_money_eight_hits_in_row:", check_money_eight_hits_in_row[0])
+    
     if "True" in shop.two_hits_in_a_row:
         if check_money_two_hits_in_row[0] != 30:
             check_money_two_hits_in_row[0] += 1
@@ -96,9 +134,9 @@ def add_money():
             player_balance_in_jar.update_text()
             
 
-    if "Kill two three decker in a row" in shop.count_three_ships:
-        if check_2_kills_3deck_in_row[0] != 80:
-            check_2_kills_3deck_in_row[0] += 1
+    if "You kill three double decker in row" in shop.check_three_2decker_ship_in_row:
+        if check_three_2decker_ship_in_row[0] != 80:
+            check_three_2decker_ship_in_row[0] += 1
             shop.money_list[0] += 1
             shop.player_balance.TEXT = str(shop.money_list[0])
             shop.player_balance.update_text()
@@ -116,9 +154,9 @@ def add_money():
             player_balance_in_jar.text = str(shop.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "You kill two three decker in row" in shop.count_two_3decker_ship:
-        if check_two_3decker_ship_in_row[0] != 80:
-            check_two_3decker_ship_in_row[0] += 1
+    if "You kill two three decker in row" in shop.count_three_ships:
+        if check_2_kills_3deck_in_row[0] != 80:
+            check_2_kills_3deck_in_row[0] += 1
             shop.money_list[0] += 1
             shop.player_balance.TEXT = str(shop.money_list[0])
             shop.player_balance.update_text()
