@@ -385,7 +385,7 @@ def first_kill_four_decker():
         if type(enemy_died_ships[0]) != str:
             our_ships_4decker[0] = 0
             enemy_ships_4decker[0] = 0
-            print(type(enemy_died_ships[0]))
+
             our_ships_4decker[0] = 1 - player_died_ships.count(4)
             enemy_ships_4decker[0] = 1 - enemy_died_ships[0].count(4)
 

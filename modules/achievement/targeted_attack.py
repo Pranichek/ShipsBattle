@@ -40,10 +40,16 @@ def target_attack():
                             break
 
                     if num_cell not in check_number_cell_achiv:
-                        if ship_len[0] == 1 and list_direction_achiv[0] != "":
-                            print("убили корабль" , ship_len[0])
+                        if ship_len[0] == 1 and check_kill_achiv[0] != True:
+                            print("Убили однопалубный корабль")
                             check_kill_achiv[0] = True
                             check_number_cell_achiv.append(num_cell)
+                            check_target_attack[0] = "Enemy did the target_attack achiv"
+                            return
+
+                        if check_kill_achiv[0] == True:
+                            print("Корабль уже убит, пропускаем проверку")
+                            return
 
                         elif list_direction_achiv[0] == "horizontal" and check_kill_achiv[0] != True:
                             for len_ship in range(1 , ship_len[0]):
@@ -75,7 +81,7 @@ def target_attack():
                                 continue
                             else:
                                 if rowka <= 9 and cellka <= 9:
-                                    if list_grid[rowka][cellka] == 5 and check_target_attack[0] != False:
+                                    if list_grid[rowka][cellka] == 5:
                                         check_target_attack[0] = False
 
                         for anim_miss in range(0, ship_len[0] + 2):
@@ -87,7 +93,7 @@ def target_attack():
                                 if rowka <= 9 and cellka <= 9:
                                     if list_grid[rowka][cellka] == 7:
                                         continue
-                                    if list_grid[rowka][cellka] == 5 and check_target_attack[0] != False:
+                                    if list_grid[rowka][cellka] == 5:
                                         check_target_attack[0] = False
                                     
                         for anim_miss in range(0, ship_len[0] + 2):
@@ -97,7 +103,7 @@ def target_attack():
                                 continue
                             else:
                                 if rowka <= 9 and cellka <= 9:
-                                    if list_grid[rowka][cellka] == 5 and check_target_attack[0] != False:
+                                    if list_grid[rowka][cellka] == 5:
                                         check_target_attack[0] = False                         
                         if check_target_attack[0] == "None":
                             check_target_attack[0] = "Enemy did the target_attack achiv"   
@@ -110,7 +116,7 @@ def target_attack():
                                 continue
                             else:
                                 if rowka <= 9 and cellka <= 9:
-                                    if list_grid[rowka][cellka] == 5 and check_target_attack[0] != False:
+                                    if list_grid[rowka][cellka] == 5:
                                         check_target_attack[0] = False
 
                         for anim_miss in range(0 , ship_len[0] + 2):
@@ -122,7 +128,7 @@ def target_attack():
                                 if rowka <= 9 and cellka <= 9:
                                     if list_grid[rowka][cellka] == 7:
                                         continue
-                                    if list_grid[rowka][cellka] == 5 and check_target_attack[0] != False:
+                                    if list_grid[rowka][cellka] == 5:
                                         check_target_attack[0] = False
                                     
                         for anim_miss in range(0 , ship_len[0] + 2):
@@ -132,11 +138,12 @@ def target_attack():
                                 continue
                             else:
                                 if rowka <= 9 and cellka <= 9:
-                                    if list_grid[rowka][cellka] == 5 and check_target_attack[0] != False:
+                                    if list_grid[rowka][cellka] == 5:
                                         check_target_attack[0] = False
 
                         if check_target_attack[0] == "None":
                             check_target_attack[0] = "Enemy did the target_attack achiv"
+                    
                             
                                         
                                 

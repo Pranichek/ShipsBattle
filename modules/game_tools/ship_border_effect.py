@@ -93,7 +93,7 @@ def ship_border():
                                     need_clear = False,
                                     name_folder = "animation_miss"
                                 )
-                                # print(5)
+                        
                                 existss = False
                                 for anim_miss in list_animation_miss:
                                     if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:

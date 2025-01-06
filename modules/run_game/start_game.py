@@ -17,7 +17,7 @@ from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information , check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates , player_died_ships , enemy_died_ships 
 from ..client import list_check_need_send 
 from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money
-
+from .bomb import upgrade_attack
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
 
@@ -118,7 +118,7 @@ def show_shop():
         list_check_shop[0] = True
 
 
-flag_upgrade = [False]
+flag_upgrade = [True]
 def upgrade_flag():
     flag_upgrade[0] = True
 
@@ -198,7 +198,7 @@ pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height
 strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
 openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 47 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
 enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 54 , width = 55 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
-target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 50 , folder_name = "achievement" , image_name = "target_attack_medal.png")
+target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 54 , folder_name = "achievement" , image_name = "target_attack_medal.png")
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
@@ -600,6 +600,8 @@ def fight_window():
         # створюємо спсиок , завдяки якому будемо трясти екран при ударі
         render_offset = [0, 0]
 
+       
+
 
         if screen_shake[0] > 0:
             # записуємо рандомні числа у список render_offset , щоб за ними трясти екран
@@ -699,7 +701,8 @@ def fight_window():
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = main_screen)
         
-        achievement.target_attack()
+
+
         #----------------------------------------------------------------
         # анимация зачеркивания клеточек вокруг убитого корабля
         ship_border()
@@ -714,7 +717,6 @@ def fight_window():
         # отрисовка крестиков если игрок попал по кораблю
         if check_cross_animation[0] == "starts_cross_animation":
             for cross in list_cross:
-                # print(len(list_cross))
                 cross.animation(main_screen = main_screen , count_image = 13)
 
 
@@ -795,6 +797,7 @@ def fight_window():
         lone_hunter_enemy_medal.draw_image(screen = main_screen)
         openin_the_batte_enemy_medal.draw_image(screen = main_screen)
         enemy_medal_perfectionists.draw_image(screen = main_screen)
+        target_attack_enemy_medal.draw_image(screen = main_screen)
 
         # отрисовка наших медалей игрока
         achievement.medal_four_decker.draw_image(screen = main_screen)
@@ -903,6 +906,17 @@ def fight_window():
                                                     #Колонку кораблика вычисляем по такому принципу
                                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                     col = int(str_col[-1])
+                                                    #************************************************************************************************
+
+                                                    #************************************************************************************************
+
+
+                                                    check_time[0] = 0
+                                                    # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                    list_check_need_send[0] = "yes"         
+                                                    # flag_upgrade[0] = False
+
+                                                    count_7[0] = 0
                                                     
                                                     if shop.third_task.TEXT == shop.list_third_task[1]:
                                                         shop.single_ships.append(enemy_matrix[0][row ][col])
@@ -921,6 +935,7 @@ def fight_window():
                                                         shop.ship_hits.append(enemy_matrix[0][row][col])
                                                     if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
                                                         shop.ship_hits_three.append(enemy_matrix[0][row][col])
+                                                    
 
                                                     # ачивки
                                                     achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
@@ -989,6 +1004,38 @@ def fight_window():
                                                     #Колонку кораблика вычисляем по такому принципу
                                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                     col = int(str_col[-1])
+                                                    count_7 = []
+                                                    if flag_upgrade[0] == True:
+                                                        try:
+                                                            if row == 0 and col == 0:
+                                                                upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7)
+                                                            elif 0 < row < 9 and col == 0:
+                                                                upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7)
+                                                            elif row == 9 and col == 0:
+                                                                upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7)
+                                                            elif row == 0 and col == 9:
+                                                                upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7)            
+                                                            elif row == 9 and col == 9:
+                                                                upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7)         
+                                                            elif row == 9 and 0 < col < 9:
+                                                                upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7)
+                                                            elif row == 0 and 0 < col < 9:
+                                                                upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7)
+                                                            elif 0 < row < 9 and col == 9:
+                                                                upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7)
+                                                            elif 1 <= row < 9 and 1 <= col < 9:
+                                                                upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7)
+                                                            
+                                                            if count_7[0] > 0:
+                                                                turn[0] = "server_turn"
+                                                                check_time[0] = 0
+                                                            else:
+                                                                turn[0] = "client_turn"
+                                                                check_time[0] = 0
+                                                        except Exception as erorr:
+                                                            print(f"Ошибка связанная с матрицей : {erorr}")
+
+
 
                                                     if shop.third_task.TEXT == shop.list_third_task[1]:
                                                         shop.single_ships.append(enemy_matrix[0][row ][col])
@@ -1007,7 +1054,6 @@ def fight_window():
                                                         shop.ship_hits.append(enemy_matrix[0][row][col])
                                                     if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
                                                         shop.ship_hits_three.append(enemy_matrix[0][row][col])
-
                                                     # ачивки
                                                     
                                                     achievement.ten_shoot_in_row(cell = enemy_matrix[0][row][col])
@@ -1015,7 +1061,6 @@ def fight_window():
                                                     achievement.single_ships_achiv.append(enemy_matrix[0][row][col])
                                                     achievement.list_hits_achiv.append(enemy_matrix[0][row][col])
                                                     
-
                                                     # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                     # 5 - значить , що гравець зробив постріл , але схибив його
                                                     if enemy_matrix[0][row][col] == 0:
@@ -1031,7 +1076,6 @@ def fight_window():
                                                             shop.four_hits_in_row(number_cell = 5)
                                                         if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                                                             shop.eight_hits_in_row(number_cell = 5)
-
 
                                                     # робимо умову для випадку коли по клітичнці вже били
                                                     elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:

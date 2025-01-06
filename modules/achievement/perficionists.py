@@ -15,7 +15,7 @@ def monster_of_perfictionists():
             if died_ship == 1:
                 indx_one = idx
 
-        print(indx_one, len(enemy_dies_ships_for_ahiv[0]), enemy_dies_ships_for_ahiv[0])
+      
 
 
         if indx_one + 3 < len(enemy_dies_ships_for_ahiv[0]):

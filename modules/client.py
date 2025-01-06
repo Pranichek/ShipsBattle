@@ -1,8 +1,8 @@
 import socket ,threading , json , pygame , time
-from .classes import input_port, input_ip_adress, input_nick , Animation
+from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships
+from .server import enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
@@ -173,6 +173,7 @@ def connect_user():
        # створюємо цикл для бою(щоб робити обмін даними , до потрібного моменту)
         while True:
             try:
+                time.sleep(0.1)
                 for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                     animation_miss = Animation(
                                     x_cor = our_kill_ship_anim_miss[0] - 637,
@@ -195,9 +196,10 @@ def connect_user():
                 # win game without losing a ship
                 # achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
 
+                
+                # робимо зупинку на 0.5 секунду , що сервер і клієент встигали обмінюватися данними
+                
 
-                # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
-                time.sleep(0.2)
                 # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
                 client_socket.settimeout(10)
 
@@ -207,8 +209,12 @@ def connect_user():
                 except socket.timeout:
                     print("Слишком долгое ожидание от сервера")
                     continue
+
+
                 # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
                 server_data = json.loads(data_turn)
+
+                # achievement.show_target_attack_medal(flag = server_data["check_target_attack_achiv"])
 
                 enemy_balance[0] = server_data["money_balance"]
                 
@@ -308,9 +314,11 @@ def connect_user():
                         for cell in range(len(server_data["new_for_client"][row])):
                             list_grid[row][cell] = server_data["new_for_client"][row][cell]
 
-
-                achievement.show_target_attack_medal(flag = server_data["check_target_attack_achiv"])
-
+                if server_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
+                    target_medal_count[0] += 1
+                    target_attack_achievement.ACTIVE = True
+                    achievement.medal_target_attack.y_cor = 64
+                    achievement.list_save_coords_achiv.append((11 , achievement.medal_target_attack.x_cor , achievement.medal_target_attack.y_cor))
                 check_repeat[0] += 1
 
                 # если кто то уже выиграл , то остонавливаем цикл игры

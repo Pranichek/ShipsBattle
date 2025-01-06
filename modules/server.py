@@ -1,12 +1,13 @@
 import socket , json , time , threading
 from .screens import list_grid
 # Импортируем классы
-from .classes import input_port , input_ip_adress, input_nick , Animation
+from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement
 # Импортируем функцию записи в json файлы
 from .json_functions import write_json , list_server_status , list_users , read_json
 import modules.shop as shop
 import modules.achievement as achievement
 
+target_medal_count = [0]
 
 # чтобы у на ототбражались зачеркнутые клеточки вокргу корабля
 our_miss_anim = []
@@ -198,7 +199,8 @@ def start_server():
 
     # бесконечный цикл для боя
     while True:
-        try:
+            time.sleep(0.1)
+        # try:
             for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                 animation_miss = Animation(
                                 x_cor = our_kill_ship_anim_miss[0] - 637,
@@ -218,7 +220,6 @@ def start_server():
                         our_miss_anim.append(animation_miss)
                         enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
             # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
-            time.sleep(0.2)
             check_ten_times.append(1)
 
             # счетчик кораблей сервера
@@ -242,7 +243,7 @@ def start_server():
                     if enemy_matrix[0][row_client][cell_client] != 0 and enemy_matrix[0][row_client][cell_client] != 5 and enemy_matrix[0][row_client][cell_client] != 7:
                         count_client_ships += 1
 
-         
+            # achievement.target_attack()
 
             # если кораблей сервера не осталовь , то выиграл клиент
             if count_server_ships == 0 and count_client_ships > 0:
@@ -254,7 +255,7 @@ def start_server():
                 list_check_win[0] = "win_server"
 
             # список который сохраняет данные по поводу времени
-            if check_ten_times.count(1) >= 5:
+            if check_ten_times.count(1) >= 10:
                 check_ten_times.clear()
                 check_time[0] += 1
 
@@ -297,8 +298,13 @@ def start_server():
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
 
-            achievement.show_target_attack_medal(flag = ready_clinet_data["check_target_attack_achiv"])
-
+  
+            if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
+                target_medal_count[0] += 1
+                target_attack_achievement.ACTIVE = True
+                achievement.medal_target_attack.y_cor = 67
+                achievement.list_save_coords_achiv.append((11 , achievement.medal_target_attack.x_cor , achievement.medal_target_attack.y_cor))
+         
             enemy_balance[0] = ready_clinet_data["money_balance"]
 
             enemy_died_ships[0] = ready_clinet_data["player_died_ships"]
@@ -357,15 +363,15 @@ def start_server():
             # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
             if list_check_win[0] != None:
                 break
-        except TimeoutError:
-                print("Слишком долгое ожидание")
-                continue
-        except json.JSONDecodeError:
-            print("Не получилось декодировать данные/")
-            continue
-        except Exception as error:
-            print(f"Тупая ошибка: {error}")
-            continue
+        # except TimeoutError:
+        #         print("Слишком долгое ожидание")
+        #         continue
+        # except json.JSONDecodeError:
+        #     print("Не получилось декодировать данные/")
+        #     continue
+        # except Exception as error:
+        #     print(f"Тупая ошибка: {error}")
+        #     continue
 
         
         
