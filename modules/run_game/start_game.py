@@ -5,8 +5,8 @@ import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
 from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
-from ..classes import DrawImage , Button , Font  , list_ships 
-from ..classes.animation import rocket_animation , animation_boom , Animation , miss_rocket_animation , bomb_animation , animation_bomb_boom
+from ..classes import DrawImage, Button, Font, list_ships, Animation
+from ..classes.animation import rocket_animation , animation_boom , miss_rocket_animation , bomb_animation , animation_bomb_boom
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
 from ..classes.class_click import music_click
@@ -14,7 +14,7 @@ from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import list_check_ready_to_fight , dict_save_information ,check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates , player_died_ships , enemy_died_ships
+from ..server import list_check_ready_to_fight , dict_save_information, check_time , turn, list_player_role, enemy_matrix, list_check_win, list_check_win , our_miss_anim, enemy_balance, save_medals_coordinates, player_died_ships, enemy_died_ships, flag_bomb_animation
 from ..client import list_check_need_send 
 from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss
 from .bomb import upgrade_attack 
@@ -198,6 +198,8 @@ strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , heig
 openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 47 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
 enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 54 , width = 55 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
 target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 54 , folder_name = "achievement" , image_name = "target_attack_medal.png")
+#products_icons
+bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_name = "products_icons" , image_name = "bomb_icon.png")
 
 
 #backgrounds
@@ -502,9 +504,7 @@ def ships_position_window():
 x_enemy_cross = [0]
 y_enemy_cross = [0]
 
-#------------------------------------------------------------------------------------------------
-flag_bomb_animation = [""]
-#------------------------------------------------------------------------------------------------
+
 
 
 #------------------------------------------------------------------------------------------------
@@ -607,16 +607,13 @@ def fight_window():
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
         # функция которая красиво добавляет монетки
-        add_money()
+        add_money(check_buy_bomb = shop.check_buy_bomb_attack[0])
 
 
         # отримцємо координати курсору
         x_mouse , y_mouse = pygame.mouse.get_pos()
         # створюємо спсиок , завдяки якому будемо трясти екран при ударі
         render_offset = [0, 0]
-
-       
-    
 
         if screen_shake[0] > 0:
             # записуємо рандомні числа у список render_offset , щоб за ними трясти екран
@@ -723,12 +720,11 @@ def fight_window():
         # #----------------------------------------------------------------
 
         #----------------------------------------------------------------
-        #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока
+        #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
         for row in range(len(list_grid)):
             for cell in range(len(list_grid[row])):
                 if list_grid[row][cell] == 5:
                     cltka = (row * 10) + cell
-                                
                     x_anim_miss = list_object_map[cltka].x
                     y_anim_miss = list_object_map[cltka].y
 
@@ -739,7 +735,8 @@ def fight_window():
                     x_cor = x_anim_miss, 
                     y_cor = y_anim_miss, 
                     need_clear = False , 
-                    name_folder = "animation_miss"
+                    name_folder = "animation_miss",
+                    animation_speed = 3
                     )
                     
                     exists = False
@@ -757,9 +754,61 @@ def fight_window():
             anim_miss.animation(main_screen=main_screen, count_image=29)
         #----------------------------------------------------------------
 
+        #----------------------------------------------------------------
+        #перебор матрицы врага чтобы если что отрисовали не достающие крестики и зачеркнутые клеточки(матрица врага слева)
+        # например после удара бомбой
+        if flag_bomb_animation[0] == False and check_animation_rocket[0] == "":
+            for row in range(len(enemy_matrix[0])):
+                for cell in range(len(enemy_matrix[0][row])):
+                    if enemy_matrix[0][row][cell] == 7:
+                        cltka = (row * 10) + cell
+                        x_anim_miss = list_object_map_enemy[cltka].x
+                        y_anim_miss = list_object_map_enemy[cltka].y
+
+                        cross_animation = Animation(
+                        image_name = "0.png", 
+                        width = 55, 
+                        height = 55, 
+                        x_cor = x_anim_miss, 
+                        y_cor = y_anim_miss, 
+                        need_clear = False , 
+                        name_folder = "animation_cross",
+                        animation_speed = 3
+                        )
+                        exists = False
+                        for cross in list_cross:
+                            if cross.X_COR == cross_animation.X_COR and cross.Y_COR == cross_animation.Y_COR:
+                                exists = True
+                                break
+                        if not exists:
+                            list_cross.append(cross_animation)
+                    elif enemy_matrix[0][row][cell] == 5:
+                        cltka = (row * 10) + cell
+                        x_anim_miss = list_object_map_enemy[cltka].x
+                        y_anim_miss = list_object_map_enemy[cltka].y
+
+                        miss_cell_animation = Animation(
+                        image_name = "0.png", 
+                        width = 55, 
+                        height = 55, 
+                        x_cor = x_anim_miss + 1, 
+                        y_cor = y_anim_miss, 
+                        need_clear = False , 
+                        name_folder = "animation_miss",
+                        animation_speed = 3
+                        )
+                        exists = False
+                        for miss_cell in our_miss_anim:
+                            if miss_cell.X_COR == miss_cell_animation.X_COR and miss_cell.Y_COR == miss_cell_animation.Y_COR:
+                                exists = True
+                                break
+                        if not exists:
+                            our_miss_anim.append(miss_cell_animation)
+         #----------------------------------------------------------------
+
                    
         # #****************************************************************
-        # отрисовка крестиков если игрок попал по кораблю
+        # отрисовка крестиков если игрок попал по кораблю(на поле врага , слева)
         if check_cross_animation[0] == "starts_cross_animation":
             for cross in list_cross:
                 cross.animation(main_screen = main_screen , count_image = 13)
@@ -781,7 +830,8 @@ def fight_window():
                         x_cor = x_hit_the_ship[0], 
                         y_cor = y_hit_the_ship[0], 
                         need_clear = False , 
-                        name_folder = "animation_cross"
+                        name_folder = "animation_cross",
+                        animation_speed = 3
                     )
                     list_cross.append(cross_animation)
                     rocket_animation.clear_animation()
@@ -804,7 +854,8 @@ def fight_window():
                     x_cor = x_hit_the_ship[0] + 1, 
                     y_cor = y_hit_the_ship[0], 
                     need_clear = False , 
-                    name_folder = "animation_miss"
+                    name_folder = "animation_miss",
+                    animation_speed = 3
                 )
                 existss = False
                 for misses_cells in our_miss_anim:
@@ -817,20 +868,6 @@ def fight_window():
                 flag_miss_rocket_animation[0] = ""
         #************************************************************************************************
 
-
-        #************************************************************************************************
-        #анимация бомбы и взрыва после бомбы
-        if flag_bomb_animation[0] == True:
-            bomb_animation.X_COR = x_hit_the_ship[0] - 23
-            bomb_animation.Y_COR = y_hit_the_ship[0] - 23
-            if bomb_animation.animation(main_screen = main_screen, count_image = 7):
-                animation_bomb_boom.X_COR = x_hit_the_ship[0] - 23
-                animation_bomb_boom.Y_COR = y_hit_the_ship[0] - 23
-                if animation_bomb_boom.animation(main_screen = main_screen , count_image = 7):
-                    bomb_animation.clear_animation()
-                    animation_bomb_boom.clear_animation()
-                    flag_bomb_animation[0] = False
-        #************************************************************************************************
 
 
         # эти циклы для проверки , попал ли соперник по нашем кораблям
@@ -856,7 +893,8 @@ def fight_window():
                         x_cor =  list_object_map[cltx].x, 
                         y_cor = list_object_map[cltx].y, 
                         need_clear = False , 
-                        name_folder = "animation_cross"
+                        name_folder = "animation_cross",
+                        animation_speed = 3
                     )
                     # Проверка на то чтобы если в определенной клеточке уже стоит крестик, то мы не создавали еще один(для того чтобы не нагружать устройство)
                     exists = False
@@ -894,10 +932,17 @@ def fight_window():
         achievement.medal_perfictionists.draw_image(screen = main_screen)
         achievement.medal_target_attack.draw_image(screen = main_screen)
 
+        # products icon in the right top corner of the screen
+        if shop.check_buy_bomb_attack[0] == True:
+            bomb_icon.draw_image(screen = main_screen)
+
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
             item.draw(screen = main_screen)
             item.move()
+
+        
+
 
         #----------------------------------------------------------------
         # конструкция которая показывает окошки с выполнеными ачивками по очереди , а не одновременно
@@ -1118,10 +1163,8 @@ def fight_window():
                                                             shop.first_shot_is_kill(cell = enemy_matrix[0][row][col])
                                                         if shop.third_task.TEXT == shop.list_third_task[2]:
                                                             shop.check_three_2decker_ship_in_row.append(enemy_matrix[0][row][col])
-                                                            
                                                         if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                             shop.three_hits_in_row(cell = enemy_matrix[0][row][col])
-                                                            
                                                         if shop.third_task.TEXT == shop.list_third_task[-1]:
                                                             shop.count_three_ships.append(enemy_matrix[0][row][col])
                                                         if shop.second_task.TEXT == shop.list_second_task[2]:
@@ -1189,6 +1232,19 @@ def fight_window():
 
         achievement.monster_of_perfictionists()
 
+        #************************************************************************************************
+        #анимация бомбы и взрыва после бомбы
+        if flag_bomb_animation[0] == True:
+            bomb_animation.X_COR = x_hit_the_ship[0] - 280
+            bomb_animation.Y_COR = y_hit_the_ship[0] - 90
+            if bomb_animation.animation(main_screen = main_screen, count_image = 16):
+                animation_bomb_boom.X_COR = x_hit_the_ship[0] - 88
+                animation_bomb_boom.Y_COR = y_hit_the_ship[0] - 88
+                if animation_bomb_boom.animation(main_screen = main_screen , count_image = 7):
+                    bomb_animation.clear_animation()
+                    animation_bomb_boom.clear_animation()
+                    flag_bomb_animation[0] = False
+        #************************************************************************************************
 
           
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв

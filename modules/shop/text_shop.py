@@ -356,7 +356,6 @@ def kill_two_three_decker_in_a_row():
                 count_three = 0
                 print("с еденичкой")
                 return False
-                
             if count_three_ships.count(2) >= 2 and count_three >= 3 and 2 in check_killed_for_three_ships:
                 count_three_ships.clear()
                 count_three = 0
@@ -367,8 +366,8 @@ def kill_two_three_decker_in_a_row():
                 count_three = 0
                 print("с четверочкой")
                 return False
-            print(count_three , "count_tree")
-            print(check_killed_for_three_ships)
+
+    
             if count_three == 6 and "Kill two three decker in a row" not in count_three_ships:
                 check_completed_tasks[0] += 1
                 count_three_ships.append("Kill two three decker in a row")

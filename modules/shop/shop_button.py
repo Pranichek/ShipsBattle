@@ -1,6 +1,8 @@
 import pygame
 from os.path import abspath, join
 from .shop_image import shop_item
+from .text_shop import money_list , player_balance 
+from ..game_tools import player_balance_in_jar
 
 
 #класс для кнопки в магазині
@@ -86,7 +88,13 @@ def test():
 # флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
 check_buy_bomb_attack = [False]
 def buy_bomb():
-    check_buy_bomb_attack[0] = True
+    if check_buy_bomb_attack[0] == False:
+        if money_list[0] >= 10:
+            player_balance.TEXT = str(money_list[0])
+            player_balance_in_jar.text = str(money_list[0])
+            player_balance.update_text()
+            player_balance_in_jar.update_text()
+            check_buy_bomb_attack[0] = True
 
 # створюємо елементи від цього класу
 button_armor_for_ship = Button_Shop(

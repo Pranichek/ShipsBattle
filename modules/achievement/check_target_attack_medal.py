@@ -8,7 +8,7 @@ def show_target_attack_medal(flag):
         target_attack_achievement.ACTIVE = True
         medal_target_attack.y_cor = 64
         list_save_coords_achiv.append((11 , medal_target_attack.x_cor , medal_target_attack.y_cor))
-        exit()
+      
 
 medal_target_attack = DrawImage(
     x_cor = 960,

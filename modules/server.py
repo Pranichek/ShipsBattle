@@ -67,6 +67,11 @@ enemy_died_ships = [0]
 check_target_attack = ["None"]
 
 
+#------------------------------------------------------------------------------------------------
+flag_bomb_animation = [False]
+#------------------------------------------------------------------------------------------------
+
+
 
 # словарь для зберігання інформаці про гравців
 dict_save_information = {
@@ -218,25 +223,27 @@ def start_server():
     while True:
             time.sleep(0.1)
         # try:
-            for our_kill_ship_anim_miss in enemy_animation_miss_coord:
-                animation_miss = Animation(
-                                x_cor = our_kill_ship_anim_miss[0] - 637,
-                                y_cor = our_kill_ship_anim_miss[1],
-                                image_name="0.png",
-                                width = 55,
-                                height = 55,
-                                need_clear = False,
-                                name_folder = "animation_miss"
-                            )
-                if len(enemy_animation_miss_coord) > 0:
-                    exit = False                    
-                    for anim_miss in our_miss_anim:
-                        if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
-                            exit= True
-                    if not exit:
-                        our_miss_anim.append(animation_miss)
-                        if enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] == 0:
-                            enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
+            if flag_bomb_animation[0] == False:
+                for our_kill_ship_anim_miss in enemy_animation_miss_coord:
+                    animation_miss = Animation(
+                                    x_cor = our_kill_ship_anim_miss[0] - 637,
+                                    y_cor = our_kill_ship_anim_miss[1],
+                                    image_name="0.png",
+                                    width = 55,
+                                    height = 55,
+                                    need_clear = False,
+                                    name_folder = "animation_miss",
+                                    animation_speed = 3
+                                )
+                    if len(enemy_animation_miss_coord) > 0:
+                        exit = False                    
+                        for anim_miss in our_miss_anim:
+                            if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
+                                exit= True
+                        if not exit:
+                            our_miss_anim.append(animation_miss)
+                            if enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] == 0:
+                                enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
             # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
             check_ten_times.append(1)
 

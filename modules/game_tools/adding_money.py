@@ -1,4 +1,4 @@
-import modules.shop as shop
+import modules.shop.text_shop as shop
 from ..screens import main_screen
 from ..classes import Font
 from ..server import enemy_balance
@@ -55,7 +55,10 @@ check_money_eight_hits_in_row = [0]
 # убить три двухпалубных кораблей подряд
 check_three_2decker_ship_in_row = [0]
 
-def add_money():
+
+# при покупке бомбы
+check_money_bomb = [0]
+def add_money(check_buy_bomb: bool):
     # print(shop.check_completed_tasks[0] , "completed task")
     # print("check_money_two_hits_in_row:", check_money_two_hits_in_row[0])
 
@@ -93,6 +96,25 @@ def add_money():
     # print("check_first_kill_three_3dec:", check_first_kill_three_3dec[0])
 
     # print("check_money_eight_hits_in_row:", check_money_eight_hits_in_row[0])
+
+    if check_buy_bomb == True and check_money_bomb[0] == 0:
+        check_money_bomb[0] += 1
+        shop.money_list[0] -= 1
+        shop.player_balance.TEXT = str(shop.money_list[0])
+        shop.player_balance.update_text()
+        player_balance_in_jar.text = str(shop.money_list[0])
+        player_balance_in_jar.update_text()
+    if check_money_bomb[0] >= 1:
+        if check_money_bomb[0] != 10:
+            check_money_bomb[0] += 1
+            shop.money_list[0] -= 1
+            shop.player_balance.TEXT = str(shop.money_list[0])
+            shop.player_balance.update_text()
+            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.update_text()
+        elif check_buy_bomb == False and check_money_bomb[0] >= 10:
+            check_money_bomb[0] = 0
+
     
     if "True" in shop.two_hits_in_a_row:
         if check_money_two_hits_in_row[0] != 30:
@@ -154,7 +176,7 @@ def add_money():
             player_balance_in_jar.text = str(shop.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "You kill two three decker in row" in shop.count_three_ships:
+    if "Kill two three decker in a row" in shop.count_three_ships:
         if check_2_kills_3deck_in_row[0] != 80:
             check_2_kills_3deck_in_row[0] += 1
             shop.money_list[0] += 1

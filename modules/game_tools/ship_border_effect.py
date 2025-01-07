@@ -101,7 +101,8 @@ def ship_border():
                                     width = 55,
                                     height = 55,
                                     need_clear = False,
-                                    name_folder = "animation_miss"
+                                    name_folder = "animation_miss",
+                                    animation_speed = 3
                                 )
                                 if check_target_attack[0] != "Enemy did the target_attack achiv":
                                     if list_grid[rowka][cellka] == 5:
@@ -133,7 +134,8 @@ def ship_border():
                                     width = 55,
                                     height = 55,
                                     need_clear = False,
-                                    name_folder = "animation_miss"
+                                    name_folder = "animation_miss",
+                                    animation_speed = 3
                                 )
                                 # print(5)
                                 if check_target_attack[0] != "Enemy did the target_attack achiv":
@@ -167,7 +169,8 @@ def ship_border():
                                     width = 55,
                                     height = 55,
                                     need_clear = False,
-                                    name_folder = "animation_miss"
+                                    name_folder = "animation_miss",
+                                    animation_speed = 3
                                 )
                                 if check_target_attack[0] != "Enemy did the target_attack achiv":
                                     if list_grid[rowka][cellka] == 5:
@@ -201,7 +204,8 @@ def ship_border():
                                     width = 55,
                                     height = 55,
                                     need_clear = False,
-                                    name_folder = "animation_miss"
+                                    name_folder = "animation_miss",
+                                    animation_speed = 3
                                 )
                                 if check_target_attack[0] != "Enemy did the target_attack achiv":
                                     if list_grid[rowka][cellka] == 5:
@@ -235,7 +239,8 @@ def ship_border():
                                     width = 55,
                                     height = 55,
                                     need_clear = False,
-                                    name_folder = "animation_miss"
+                                    name_folder = "animation_miss",
+                                    animation_speed = 3
                                 )
                                 if check_target_attack[0] != "Enemy did the target_attack achiv":
                                     if list_grid[rowka][cellka] == 5:
@@ -272,7 +277,8 @@ def ship_border():
                                     width = 55,
                                     height = 55,
                                     need_clear = False,
-                                    name_folder = "animation_miss"
+                                    name_folder = "animation_miss",
+                                    animation_speed = 3
                                 )
                                 if check_target_attack[0] != "Enemy did the target_attack achiv":
                                     if list_grid[rowka][cellka] == 5:
