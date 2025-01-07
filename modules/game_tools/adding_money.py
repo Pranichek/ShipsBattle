@@ -56,7 +56,7 @@ check_money_eight_hits_in_row = [0]
 check_three_2decker_ship_in_row = [0]
 
 def add_money():
-    print(shop.check_completed_tasks[0] , "completed task")
+    # print(shop.check_completed_tasks[0] , "completed task")
     # print("check_money_two_hits_in_row:", check_money_two_hits_in_row[0])
 
     # print("check_money_four_hits_in_row:", check_money_four_hits_in_row[0])

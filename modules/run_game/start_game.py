@@ -755,34 +755,6 @@ def fight_window():
             anim_miss.animation(main_screen=main_screen, count_image=29)
         #----------------------------------------------------------------
 
-        #************************************************************************************************
-        # отрисовка промаха ракетой, и зарисовка клеточек(когда игрок атакует врага)
-        for djfk in our_miss_anim:
-            print(djfk.X_COR , djfk.Y_COR)
-
-        if flag_miss_rocket_animation[0] == "start_animation":
-            miss_rocket_animation.X_COR = x_hit_the_ship[0] - 231
-            miss_rocket_animation.Y_COR = y_hit_the_ship[0] - 23
-            if miss_rocket_animation.animation(main_screen = main_screen , count_image = 7):
-                miss_cell_animation = Animation(
-                    image_name = "0.png", 
-                    width = 55, 
-                    height = 55, 
-                    x_cor = x_hit_the_ship[0] + 1, 
-                    y_cor = y_hit_the_ship[0], 
-                    need_clear = False , 
-                    name_folder = "animation_miss"
-                )
-                existss = False
-                for misses_cells in our_miss_anim:
-                    if misses_cells.X_COR == miss_cell_animation.X_COR and misses_cells.Y_COR == miss_cell_animation.Y_COR:
-                        existss = True
-                        break
-                if not existss:
-                    our_miss_anim.append(miss_cell_animation)
-                miss_rocket_animation.clear_animation()
-                flag_miss_rocket_animation[0] = ""
-        #************************************************************************************************
                    
 
         # #****************************************************************
@@ -818,6 +790,31 @@ def fight_window():
                     check_cross_animation[0] = "starts_cross_animation"
         #----------------------------------------------------------------
 
+         #************************************************************************************************
+        # отрисовка промаха ракетой, и зарисовка клеточек(когда игрок атакует врага)
+        if flag_miss_rocket_animation[0] == "start_animation":
+            miss_rocket_animation.X_COR = x_hit_the_ship[0] - 231
+            miss_rocket_animation.Y_COR = y_hit_the_ship[0] - 23
+            if miss_rocket_animation.animation(main_screen = main_screen , count_image = 7):
+                miss_cell_animation = Animation(
+                    image_name = "0.png", 
+                    width = 55, 
+                    height = 55, 
+                    x_cor = x_hit_the_ship[0] + 1, 
+                    y_cor = y_hit_the_ship[0], 
+                    need_clear = False , 
+                    name_folder = "animation_miss"
+                )
+                existss = False
+                for misses_cells in our_miss_anim:
+                    if misses_cells.X_COR == miss_cell_animation.X_COR and misses_cells.Y_COR == miss_cell_animation.Y_COR:
+                        existss = True
+                        break
+                if not existss:
+                    our_miss_anim.append(miss_cell_animation)
+                miss_rocket_animation.clear_animation()
+                flag_miss_rocket_animation[0] = ""
+        #************************************************************************************************
 
 
 
