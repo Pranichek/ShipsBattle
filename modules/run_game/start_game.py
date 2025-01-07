@@ -6,7 +6,7 @@ import modules.screens.screen as module_screen_server
 from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
 from ..classes import DrawImage , Button , Font  , list_ships 
-from ..classes.animation import rocket_animation , animation_boom , Animation , miss_rocket_animation
+from ..classes.animation import rocket_animation , animation_boom , Animation , miss_rocket_animation , bomb_animation , animation_bomb_boom
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
 from ..classes.class_click import music_click
@@ -272,8 +272,6 @@ def main_window():
                                 change_scene(create_game_window())
         pygame.display.flip()
 
-
-
 def create_game_window():
     #викликаємо функцію для запуску серверу
     #встановлюємо назву вікна гри для сервера
@@ -334,8 +332,6 @@ def create_game_window():
 
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
-
-
 
 def join_game_window():
     #викликаємо функцію для запуску серверу
@@ -405,7 +401,6 @@ def join_game_window():
         #оновлюємо екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
 
-
 def waiting_window():
     print("Зашло")
     pygame.display.set_caption("Waiting window")
@@ -443,8 +438,6 @@ def waiting_window():
                 change_scene(None)
                  
         pygame.display.flip()
-
-  
 
 def ships_position_window():
     music_load_waiting.stop()
@@ -509,20 +502,30 @@ def ships_position_window():
 x_enemy_cross = [0]
 y_enemy_cross = [0]
 
+#------------------------------------------------------------------------------------------------
+flag_bomb_animation = [""]
+#------------------------------------------------------------------------------------------------
+
+
+#------------------------------------------------------------------------------------------------
 #флаг который говорит надо ли запускать анимация промаха ракеты, если игрок уларил но промахнулся
 flag_miss_rocket_animation = [""]
 # флаг который говорит надо ли запускать анимацию зачеркивания клеточки , если игрок промахнулся по кораблю
 check_animation_miss_cell = [""]
 # лист в котором хранятся все обьяекты зачеркивания клеточки после промаха ракетой
 list_miss_cell = []
+#------------------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------
 
 # флаг который првоеряет надо ли запускать анимацию ракеты если игрок ударил
 check_animation_rocket = [""]
 # флаг когда надо проигрывать анимацию крестика если попали по кораблю
 check_cross_animation  = [""]
-
 # список где хранятся крестики которые отрисовываются в том случаи если игрок попал ко кораблю
 list_cross = []
+#------------------------------------------------------------------------------------------------
+
 
 # спсики в которых хранятся координаты где должны отрисовываться анимации если игрок ударил по полю
 x_hit_the_ship = [0]
@@ -613,7 +616,7 @@ def fight_window():
         render_offset = [0, 0]
 
        
-
+    
 
         if screen_shake[0] > 0:
             # записуємо рандомні числа у список render_offset , щоб за ними трясти екран
@@ -714,7 +717,6 @@ def fight_window():
         shop_and_tasks.draw(surface = main_screen)
         
 
-
         #----------------------------------------------------------------
         # анимация зачеркивания клеточек вокруг убитого корабля
         ship_border()
@@ -750,13 +752,12 @@ def fight_window():
         #----------------------------------------------------------------
        
         #----------------------------------------------------------------
-        # отрисовка зачеркнутых клеточек , если игрок убил полностью корабль врага
+        # отрисовка зачеркнутых клеточек когда игрок промазал по полю
         for anim_miss in our_miss_anim:
             anim_miss.animation(main_screen=main_screen, count_image=29)
         #----------------------------------------------------------------
 
                    
-
         # #****************************************************************
         # отрисовка крестиков если игрок попал по кораблю
         if check_cross_animation[0] == "starts_cross_animation":
@@ -817,6 +818,20 @@ def fight_window():
         #************************************************************************************************
 
 
+        #************************************************************************************************
+        #анимация бомбы и взрыва после бомбы
+        if flag_bomb_animation[0] == True:
+            bomb_animation.X_COR = x_hit_the_ship[0] - 23
+            bomb_animation.Y_COR = y_hit_the_ship[0] - 23
+            if bomb_animation.animation(main_screen = main_screen, count_image = 7):
+                animation_bomb_boom.X_COR = x_hit_the_ship[0] - 23
+                animation_bomb_boom.Y_COR = y_hit_the_ship[0] - 23
+                if animation_bomb_boom.animation(main_screen = main_screen , count_image = 7):
+                    bomb_animation.clear_animation()
+                    animation_bomb_boom.clear_animation()
+                    flag_bomb_animation[0] = False
+        #************************************************************************************************
+
 
         # эти циклы для проверки , попал ли соперник по нашем кораблям
         for index_row ,row in enumerate(list_grid):
@@ -827,11 +842,9 @@ def fight_window():
                     # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
                     row = index_row
                     cell = str(index_cell)
-
                     # из двух чисел(индекс рядка и клеточки) мы находим номер клеточки куда выстрелил соперник
                     # То есть например 2й рядок и первая клеточка , то будет клеточка под номером 11
                     cltx = (row * 10) + int(cell[-1])
-
                     # получаем через список где хранятся клеточки , координати , в якій буде відображатися анимація попадання по нашему кораблю
                     x_enemy_cross[0] = list_object_map[cltx].x
                     y_enemy_cross[0] = list_object_map[cltx].y
@@ -1067,6 +1080,9 @@ def fight_window():
                                                     col = int(str_col[-1])
                                                     if shop.check_buy_bomb_attack[0] == True:
                                                         shop.check_buy_bomb_attack[0] = False
+                                                        flag_bomb_animation[0] = True
+                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
                                                         count_7 = [0]
                                                         if row == 0 and col == 0:
                                                             upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7)

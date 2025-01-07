@@ -58,32 +58,55 @@ class Animation():
         self.COUNT_MAIN_LOOP = 0
         self.IS_ANIMATION_DONE = False
 
+# анимация промаха ракетой
 miss_rocket_animation = Animation(
     image_name = "0.png" , 
-    width = 311 , 
-    height = 100 , 
-    x_cor = 311 , 
-    y_cor = 311 , 
-    need_clear = True , 
+    width = 311, 
+    height = 100, 
+    x_cor = 311, 
+    y_cor = 311, 
+    need_clear = True, 
     name_folder = "animation_rocket"
 )
 
+#просто полет ракетой
 rocket_animation = Animation(
-    image_name = "0.png" , 
-    width = 311 , 
-    height = 100 , 
-    x_cor = 311 , 
-    y_cor = 311 , 
-    need_clear = True , 
+    image_name = "0.png", 
+    width = 311, 
+    height = 100, 
+    x_cor = 311, 
+    y_cor = 311, 
+    need_clear = True,
     name_folder = "animation_rocket"
 )
-
+# анимация взрыва после ракеты
 animation_boom = Animation(
     image_name = "0.png" , 
-    width = 100 , 
-    height = 100 , 
-    x_cor = 500 , 
-    y_cor = 500 , 
-    need_clear = True , 
+    width = 100, 
+    height = 100, 
+    x_cor = 500, 
+    y_cor = 500, 
+    need_clear = True, 
     name_folder = "animation_boom"
+)
+
+# анимация бомбы
+bomb_animation = Animation(
+    image_name = "0.png",
+    width = 520,
+    height = 222,
+    x_cor = 500,
+    y_cor = 500,
+    need_clear = True,
+    name_folder = "bomb_animation"
+)
+# анимация взрыва после бомбы
+animation_bomb_boom = Animation(
+    image_name = "0.png" , 
+    width = 165, 
+    height = 165, 
+    x_cor = 500, 
+    y_cor = 500, 
+    need_clear = True, 
+    name_folder = "bomb_boom"
 )
