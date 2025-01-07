@@ -1,5 +1,5 @@
 import pygame
-import os
+from os.path import abspath, join
 
 class MusicPlayer:
      def __init__(self, name_sound):
@@ -7,7 +7,8 @@ class MusicPlayer:
         self.NAME_SOUND = name_sound  
        
      def play(self, loop=-1):
-        sound_path = os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
+        #os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
+        sound_path = abspath(join(__file__, "..", "..", "..", "static", "sounds", f"{self.NAME_SOUND}"))
 # Відтворення музики. Параметр loop визначає кількість повторень (-1 - безперервно).
         pygame.mixer.music.load(sound_path)
         pygame.mixer.music.play(loop)

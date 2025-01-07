@@ -1,11 +1,12 @@
 import pygame
-import os
+from os.path import abspath, join
 
 class Sound:
      def __init__(self, name_sound):
         pygame.mixer.init()
         self.NAME_SOUND = name_sound  
-        sound_path = os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
+        #os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
+        sound_path = abspath(join(__file__, "..", "..", "..", "static", "sounds", f"{self.NAME_SOUND}"))
         self.SOUND = pygame.mixer.Sound(sound_path)
               
      def play2(self, loops):

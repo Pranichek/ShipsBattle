@@ -1,4 +1,5 @@
-import pygame , os , random 
+import pygame , random 
+from os.path import abspath, join
 from .shop_image import shop_item
 from ..server import enemy_died_ships , player_died_ships
 
@@ -9,7 +10,8 @@ class Font_Shop:
         self.TEXT_COLOR = text_color
         self.SIZE = size
         self.NAME_FONT = name_font
-        self.PATH_TO_FONT = os.path.abspath(__file__ + f"/../../../media/fonts/{self.NAME_FONT}")
+        #"/../../../media/fonts/{self.NAME_FONT}"
+        self.PATH_TO_FONT = abspath(join(__file__, "..", "..", "..", "media", "fonts", f"{self.NAME_FONT}"))
         self.TEXT = text
         self.X_COR = x_cor
         self.Y_COR = y_cor

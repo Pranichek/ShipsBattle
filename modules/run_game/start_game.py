@@ -16,7 +16,8 @@ from .clinent_connect import connect_to_server , list_check_connection , fail_co
 from .random_placing import random_places_ships
 from ..server import list_check_ready_to_fight , dict_save_information ,check_time , turn , list_player_role , enemy_matrix , list_check_win , list_check_win , our_miss_anim , enemy_balance , save_medals_coordinates , player_died_ships , enemy_died_ships
 from ..client import list_check_need_send 
-from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss 
+from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss
+from .bomb import upgrade_attack 
 # from .bomb import upgrade_attack
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
@@ -776,7 +777,6 @@ def fight_window():
                 )
                 existss = False
                 for misses_cells in our_miss_anim:
-                    print(misses_cells.X_COR)
                     if misses_cells.X_COR == miss_cell_animation.X_COR and misses_cells.Y_COR == miss_cell_animation.Y_COR:
                         existss = True
                         break
@@ -1070,6 +1070,34 @@ def fight_window():
                                                     #Колонку кораблика вычисляем по такому принципу
                                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                     col = int(str_col[-1])
+                                                    count_7 = [0]
+                                                    if row == 0 and col == 0:
+                                                        upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7)
+                                                    elif 0 < row < 9 and 0 < col < 9:
+                                                        upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7)
+                                                    elif 1 <= row < 9 and col == 0:
+                                                        upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7)
+                                                    elif row == 9 and col == 0:
+                                                        upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7)
+                                                    elif row == 0 and col == 9:
+                                                        upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7)            
+                                                    elif row == 9 and col == 9:
+                                                        upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7)         
+                                                    elif row == 9 and 0 < col < 9:
+                                                        upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7)
+                                                    elif row == 0 and 0 < col < 9:
+                                                        upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7)
+                                                    elif 0 < row < 9 and col == 9:
+                                                        upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7)
+
+                                                    if count_7[0] > 0:
+                                                        turn[0] = "server_turn"
+                                                        check_time[0] = 0
+                                                    else:
+                                                        turn[0] = "client_turn"
+                                                        check_time[0] = 0
+                                                    count_7[0] = 0
+
                                                     # count_7 = []
                                                     # if flag_upgrade[0] == True:
                                                     #     try:
@@ -1130,46 +1158,46 @@ def fight_window():
                                                     
                                                     # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
                                                     # 5 - значить , що гравець зробив постріл , але схибив його
-                                                    if enemy_matrix[0][row][col] == 0:
-                                                        # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
-                                                        flag_miss_rocket_animation[0] = "start_animation"
-                                                        # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
-                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
-                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-                                                        # записуємо у матрицю ворога 5
-                                                        enemy_matrix[0][row][col] = 5
-                                                        # обнуляємо час для ходу
-                                                        check_time[0] = 0
-                                                        # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
-                                                        turn[0] = "client_turn"
-                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                            shop.two_hits_in_row(number_cell = 5)
-                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                            shop.four_hits_in_row(number_cell = 5)
-                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                            shop.eight_hits_in_row(number_cell = 5)
+                                                    # if enemy_matrix[0][row][col] == 0:
+                                                    #     # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
+                                                    #     flag_miss_rocket_animation[0] = "start_animation"
+                                                    #     # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+                                                    #     x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                    #     y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+                                                    #     # записуємо у матрицю ворога 5
+                                                    #     enemy_matrix[0][row][col] = 5
+                                                    #     # обнуляємо час для ходу
+                                                    #     check_time[0] = 0
+                                                    #     # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
+                                                    #     turn[0] = "client_turn"
+                                                    #     if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                    #         shop.two_hits_in_row(number_cell = 5)
+                                                    #     if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                    #         shop.four_hits_in_row(number_cell = 5)
+                                                    #     if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                    #         shop.eight_hits_in_row(number_cell = 5)
 
-                                                    # робимо умову для випадку коли по клітичнці вже били
-                                                    elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
-                                                        print("Уже стреляли в эту клетку")
-                                                    # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
-                                                    # 7 - значить , що гравець зробив постріл і попав по кораблю
-                                                    elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
-                                                        # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
-                                                        check_animation_rocket[0] = "start_animation"
-                                                        # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
-                                                        x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
-                                                        y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-                                                        # у матрицю ворога записуємо 7
-                                                        enemy_matrix[0][row][col] = 7
-                                                        # обнуляємо час для ходу
-                                                        check_time[0] = 0
-                                                        if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                            shop.two_hits_in_row(number_cell = 7)
-                                                        if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                            shop.four_hits_in_row(number_cell = 7)
-                                                        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                            shop.eight_hits_in_row(number_cell = 7)
+                                                    # # робимо умову для випадку коли по клітичнці вже били
+                                                    # elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
+                                                    #     print("Уже стреляли в эту клетку")
+                                                    # # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
+                                                    # # 7 - значить , що гравець зробив постріл і попав по кораблю
+                                                    # elif enemy_matrix[0][row][col] != 0 and enemy_matrix[0][row][col] != 5 and enemy_matrix[0][row][col] != 7:
+                                                    #     # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
+                                                    #     check_animation_rocket[0] = "start_animation"
+                                                    #     # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+                                                    #     x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                    #     y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+                                                    #     # у матрицю ворога записуємо 7
+                                                    #     enemy_matrix[0][row][col] = 7
+                                                    #     # обнуляємо час для ходу
+                                                    #     check_time[0] = 0
+                                                    #     if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                    #         shop.two_hits_in_row(number_cell = 7)
+                                                    #     if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                    #         shop.four_hits_in_row(number_cell = 7)
+                                                    #     if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                    #         shop.eight_hits_in_row(number_cell = 7)
 
 
         if shop.third_task.TEXT == shop.list_third_task[-1]:

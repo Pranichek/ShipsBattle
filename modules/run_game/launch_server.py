@@ -1,5 +1,5 @@
 from ..classes.class_click import music_click
-from ..classes.class_input_text import input_port, input_ip_adress, input_nick
+from ..classes.class_input_text import input_port, input_ip_adress
 from ..classes.class_image import DrawImage
 from ..server import server_thread
 

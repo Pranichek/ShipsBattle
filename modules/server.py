@@ -222,7 +222,8 @@ def start_server():
                             exit= True
                     if not exit:
                         our_miss_anim.append(animation_miss)
-                        enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
+                        if enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] == 0:
+                            enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
             # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
             check_ten_times.append(1)
 

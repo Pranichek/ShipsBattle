@@ -1,5 +1,5 @@
 import pygame
-import os
+from os.path import abspath, join
 from .shop_image import shop_item
 
 
@@ -12,7 +12,8 @@ class Button_Shop:
         self.Y_COR = y
         self.WIDTH = width
         self.HEIGHT = height
-        self.PTATH_IMAGE1 = os.path.abspath(__file__ + f"/../../../static/images_button/shop_buttons/{self.IMAGE_NAME}")
+        #os.path.abspath(__file__ + f"/../../../static/images_button/shop_buttons/{self.IMAGE_NAME}")
+        self.PTATH_IMAGE1 = abspath(join(__file__, "..", "..", "..", "static", "images_button", "shop_buttons", f"{self.IMAGE_NAME}"))
         self.IMAGE = pygame.transform.scale(pygame.image.load(self.PTATH_IMAGE1), (self.WIDTH , self.HEIGHT))
         self.RECT = self.IMAGE.get_rect(topleft=(self.X_COR, self.Y_COR))
         self.ACTION = action

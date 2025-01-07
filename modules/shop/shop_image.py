@@ -1,5 +1,5 @@
 import pygame
-import os
+from os.path import abspath, join
 
 
 
@@ -15,7 +15,8 @@ class Image_Shop:
         self.Y_COR = y_cor
         self.WIDTH = width
         self.HEIGHT = height
-        self.PATH = os.path.abspath(__file__ + f"/../../../media/{self.FOLDER_NAME}/{self.IMAGE_NAME}")
+        #"/../../../media/{self.FOLDER_NAME}/{self.IMAGE_NAME}"
+        self.PATH = abspath(join(__file__, "..", "..", "..", "media", f"{self.FOLDER_NAME}", f"{self.IMAGE_NAME}"))
         self.IMAGE = pygame.transform.scale(pygame.image.load(self.PATH), (self.WIDTH, self.HEIGHT)).convert_alpha()
         self.SPEED = 10
         self.ACTIVE = False 

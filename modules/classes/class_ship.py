@@ -1,5 +1,5 @@
 import pygame
-import os
+from os.path import abspath, join
 from ..screens import grid_player , list_grid , list_object_map 
 
 # Лист для проверки когда накладываем корабль на корабль
@@ -38,9 +38,11 @@ class Ship:
     # Метод загрузки картинок кораблей
     def load_image(self):
         # Переменная с абсолютным путём, до папки картинок кораблей ( абсолютный путь строится через модуль os.path.abspath()
-        ship = os.path.abspath(__file__ + f"/../../../media/ships/{self.IMAGE_SHIP}")
+        #"/../../../media/ships/{self.IMAGE_SHIP}"
+        ship = abspath(join(__file__,"..", "..", "..", "media", "ships", f"{self.IMAGE_SHIP}"))
         # Переменная с абсолютным путём, до папки перевёрнутых кораблей 
-        rotate_ship = os.path.abspath(__file__ + f"/../../../media/ships/{self.ROTATE_SHIP}")
+        #"/../../../media/ships/{self.ROTATE_SHIP}"
+        rotate_ship = abspath(join(__file__, "..", "..", "..", "media", "ships", f"{self.ROTATE_SHIP}"))
         # Загружаем картинку при помощи метода load
         image_ship = pygame.image.load(ship)
         # Загружаем картинку повернутого корабля при

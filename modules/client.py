@@ -191,7 +191,8 @@ def connect_user():
                                 exit= True
                         if not exit:
                             our_miss_anim.append(animation_miss)
-                            enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
+                            if enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] == 0:
+                                enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
 
                 # win game without losing a ship
                 # achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)

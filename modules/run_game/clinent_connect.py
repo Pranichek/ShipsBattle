@@ -1,7 +1,7 @@
 from ..classes.class_input_text import input_ip_adress , input_port
 from ..classes.class_image import DrawImage
 from ..classes.class_click import music_click
-from ..client import thread_connect , event_connect_to_server , list_check_connection
+from ..client import thread_connect , list_check_connection
 
 
 
