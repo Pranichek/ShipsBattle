@@ -11,7 +11,7 @@ def piooner():
             count_player_ships_achiv[0] = len(enemy_dies_ships_for_ahiv[0])
             count_enemy_kill_achiv[0] = len(player_died_ships_for_achiv[0])
 
-            if count_player_ships_achiv[0] == 1 and  count_enemy_kill_achiv[0] == 0 and count_enemy_kill_achiv[0] != "You killes three ships in row":
+            if count_player_ships_achiv[0] == 1 and count_enemy_kill_achiv[0] == 0 and count_enemy_kill_achiv[0] != "You killes three ships in row":
                 count_enemy_kill_achiv[0] = "You killes three ships in row"
                 piooner_achievement.ACTIVE = True
                 medal_fisr_kill_any_ship.y_cor = 24

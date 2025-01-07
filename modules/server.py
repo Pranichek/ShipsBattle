@@ -46,10 +46,12 @@ enemy_animation_miss_coord = []
 enemy_balance = [0]
 # сохраняем координаты вражеских медалей
 save_medals_coordinates = []
+
 # список в котором храним какие корабли убили у игрока
 player_died_ships = []
 # список в коотором храним какие корабли убил игрок у врага
 enemy_died_ships = ["yes"]
+
 # список в котором храним флаг выполнил ли игрок ачивку с названием target_attack
 check_target_attack = ["None"]
 

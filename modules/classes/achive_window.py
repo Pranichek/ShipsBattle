@@ -3,6 +3,7 @@ from ..classes import music_achieve
 pygame.init()
 
 list_achieves = []
+
 class Acievement:
     def __init__(self , achievement_image_name: str):
         self.IMAGE_NAME = achievement_image_name
@@ -30,7 +31,6 @@ class Acievement:
             self.VISIBLE += 5  
             if self.VISIBLE >= 311:
                 self.VISIBLE = 311
-     
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
         if self.VISIBLE > 0:
@@ -63,7 +63,6 @@ class Acievement:
                         self.WIDTH -= 5
                     if self.HEIGHT > 97:
                         self.HEIGHT -= 4
-
                     self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha()
                     self.fade_out()
                     if self.X_COR >= 540:

@@ -12,7 +12,7 @@ def opening_the_battle(grid: list , enemy_grid: list):
                 if grid[row][cell] != 5 and grid[row][cell] != 7 and grid[row][cell] != 0:
                     player_ships[0] += 1
                 if enemy_grid[0][row][cell] != 5 and enemy_grid[0][row][cell] != 7 and enemy_grid[0][row][cell] != 0:
-                    enemy_ships[0]+= 1
+                    enemy_ships[0] += 1
 
         if player_ships[0] == 20 and enemy_ships[0] <= 19:
             player_ships[0] = 100

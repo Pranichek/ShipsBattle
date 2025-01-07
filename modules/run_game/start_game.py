@@ -199,6 +199,8 @@ strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , heig
 openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 47 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
 enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 54 , width = 55 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
 target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 54 , folder_name = "achievement" , image_name = "target_attack_medal.png")
+
+
 #backgrounds
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
@@ -925,9 +927,6 @@ def fight_window():
         achievement.first_kill_four_decker_achivment()
         achievement.strategist(player_killed_ships = player_died_ships , role = list_player_role[0] , winner = list_check_win[0])
     
-
-
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -1184,9 +1183,8 @@ def fight_window():
 
         achievement.monster_of_perfictionists()
 
-        
-                                                
-                                            
+
+          
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
         if strategist_achievement.ACTIVE == False:
             if list_check_win[0] != None:   

@@ -25,3 +25,4 @@ medal_secrecy_ships = DrawImage(
     folder_name = "achievement",
     image_name = "master_of_disguist_medal.png"
 )
+

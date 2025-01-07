@@ -15,8 +15,6 @@ def monster_of_perfictionists():
             if died_ship == 1:
                 indx_one = idx
 
-      
-
 
         if indx_one + 3 < len(enemy_dies_ships_for_ahiv[0]):
             print(1)  # Проверка длины списка
