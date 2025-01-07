@@ -83,6 +83,11 @@ class Button_Shop:
 def test():
     print("Hello world!") 
 
+# флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
+check_buy_bomb_attack = [False]
+def buy_bomb():
+    check_buy_bomb_attack[0] = True
+
 # створюємо елементи від цього класу
 button_armor_for_ship = Button_Shop(
     x = 600 ,
@@ -131,7 +136,7 @@ button_bomb = Button_Shop(
     height = 97 ,
     image_name = "bomb.png",
     target_y = 263,
-    action = test
+    action = buy_bomb
 )
 
 button_auto_attack = Button_Shop(

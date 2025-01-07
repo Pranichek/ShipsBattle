@@ -23,7 +23,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][current_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 0:
+                elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
                     enemy_matrix[0][current_row][current_col] = 5
                     
     if index == "top_left_corner":
@@ -33,7 +33,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][col + index_col] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][col  + index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col] == 0:
+                elif enemy_matrix[0][current_row][col + index_col] == 0 or enemy_matrix[0][current_row][col + index_col] == 5:
                     enemy_matrix[0][current_row][col + index_col] = 5
 
     if index == "bot_left_corner":
@@ -44,7 +44,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][current_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 0:
+                elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
                     enemy_matrix[0][current_row][current_col] = 5
     
     if index == "left_wall":
@@ -55,7 +55,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][current_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 0:
+                elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
                     enemy_matrix[0][current_row][current_col] = 5
     
     if index == "top_right_corner":
@@ -66,7 +66,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][col  - index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 0:
+                elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
                     enemy_matrix[0][current_row][col - index_col] = 5
 
     if index == "bot_right_corner":
@@ -77,7 +77,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][col  - index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 0:
+                elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
                     enemy_matrix[0][current_row][col - index_col] = 5                
 
     if index == "bot_wall":
@@ -87,7 +87,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][col + index_col - 1] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][col + index_col - 1] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col - 1] == 0:
+                elif enemy_matrix[0][current_row][col + index_col - 1] == 0 or enemy_matrix[0][current_row][col + index_col - 1] == 5:
                     enemy_matrix[0][current_row][col + index_col - 1] = 5
 
     if index == "top_wall":
@@ -97,7 +97,7 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][col + index_col - 1] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][col + index_col - 1] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col - 1] == 0:
+                elif enemy_matrix[0][current_row][col + index_col - 1] == 0 or enemy_matrix[0][current_row][col + index_col - 1] == 5:
                     enemy_matrix[0][current_row][col + index_col - 1] = 5
     
     if index == "right_wall":
@@ -108,5 +108,5 @@ right_wall для правой стенки 3 на 3
                 if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
                     enemy_matrix[0][current_row][col - index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 0:
+                elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
                     enemy_matrix[0][current_row][col - index_col] = 5

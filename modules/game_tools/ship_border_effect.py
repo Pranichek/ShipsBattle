@@ -26,9 +26,7 @@ def ship_border():
             if list_grid[rowee][cellee] == 7:
                 if check_target_attack[0] != "Please" and check_kill[0] == True:
                     check_target_attack[0] = "Enemy did the target_attack achiv"
-                    print(check_target_attack[0] , "da")
     
-
                 if check_target_attack[0] != "Enemy did the target_attack achiv":
                     check_target_attack[0] = "None"
                 miss_row[0] = rowee

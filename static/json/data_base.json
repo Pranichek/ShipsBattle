@@ -1,6 +1,7 @@
 {
     "vova": {
-        "points": 300
+        "points": 300,
+        "password": ""
     },
     "katya": {
         "points": 0
