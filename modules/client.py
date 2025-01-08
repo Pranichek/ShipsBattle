@@ -1,5 +1,5 @@
 import socket ,threading , json , pygame , time
-from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement
+from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
 from .server import flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count , check_target_attack
@@ -321,8 +321,8 @@ def connect_user():
                 if server_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
                     target_medal_count[0] += 1
                     target_attack_achievement.ACTIVE = True
-                    achievement.medal_target_attack.y_cor = 64
-                    achievement.list_save_coords_achiv.append((11 , achievement.medal_target_attack.x_cor , achievement.medal_target_attack.y_cor))
+                    target_attack_medal.ACTIVE = True
+                    achievement.list_save_coords_achiv.append((11))
                 check_repeat[0] += 1
 
                 # если кто то уже выиграл , то остонавливаем цикл игры

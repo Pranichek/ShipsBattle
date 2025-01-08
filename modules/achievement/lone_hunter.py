@@ -1,4 +1,4 @@
-from ..classes import DrawImage , lone_hunter_achievement 
+from ..classes import lone_hunter_achievement, lone_hunter_medal
 from .four_decker_sniper import list_save_coords_achiv 
 from .four_decker_sniper import enemy_dies_ships_for_ahiv
 
@@ -45,8 +45,8 @@ def lone_hunter():
             if one == 4 and "Kill four single ships in a row" not in single_ships_achiv:
                 single_ships_achiv.append("Kill four single ships in a row")
                 lone_hunter_achievement.ACTIVE = True
-                medal_lone_hunter.y_cor = 24
-                list_save_coords_achiv.append((7 , medal_lone_hunter.x_cor , medal_lone_hunter.y_cor))
+                lone_hunter_medal.ACTIVE = True
+                list_save_coords_achiv.append((7))
                 print("You are kill four single ships in a row")
         else:
             single_ships_achiv.clear()
@@ -54,11 +54,3 @@ def lone_hunter():
                 start_index_single_achiv[0] += 1
 
 
-medal_lone_hunter = DrawImage(
-    x_cor = 840 ,
-    y_cor = -50,
-    width = 50,
-    height = 50,
-    folder_name = "achievement",
-    image_name = "lone_hunter_medal.png"
-)

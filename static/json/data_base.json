@@ -1,1 +1,10 @@
-{}
+{
+    "vova": {
+        "points": 0,
+        "password": "password"
+    },
+    "katya": {
+        "points": 0,
+        "password": "password"
+    }
+}

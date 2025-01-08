@@ -1,5 +1,6 @@
-from ..classes import DrawImage , first_four_decker_achivment 
+from ..classes import  first_four_decker_achivment , four_decker_sniper_medal
 
+#1 медалька
 list_save_coords_achiv = []
 
 # хранятся наши умершие корабли
@@ -21,20 +22,12 @@ def first_kill_four_decker_achivment():
                 if enemy_ships_4decker_achiv[0] != "kill four-decker ship":
                     if our_ships_4decker_achiv[0] > enemy_ships_4decker_achiv[0] and enemy_ships_4decker_achiv[0] == 0 and enemy_ships_4decker_achiv[0]!= "kill four-decker ship":
                         enemy_ships_4decker_achiv[0] = "kill four-decker ship"
-                        medal_four_decker.y_cor = 24
                         first_four_decker_achivment.ACTIVE = True
+                        four_decker_sniper_medal.ACTIVE = True
                         # 1 - номе задания
                         # 2 - икс
                         # 3 - игрек
-                        list_save_coords_achiv.append((1 , medal_four_decker.x_cor , medal_four_decker.y_cor))
+                        list_save_coords_achiv.append((1))
                         print("Ты убил четыреx палубный кораблик 777")
                             
 
-medal_four_decker = DrawImage(
-    x_cor = 750 ,
-    y_cor = -50,
-    width = 50 ,
-    height = 50 ,
-    folder_name = "achievement",
-    image_name = "medal_four_decker.png"
-)

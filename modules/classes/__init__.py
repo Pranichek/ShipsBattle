@@ -8,4 +8,4 @@ from .class_click import music_click , music_achieve
 from .class_music import music_load_main , music_load_waiting ,fight_music
 from .animation import *
 from .achive_window import *
-from .class_medal import test_medal
+from .class_medal import *

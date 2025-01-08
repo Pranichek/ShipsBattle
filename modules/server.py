@@ -1,7 +1,7 @@
 import socket , json , time , threading
 from .screens import list_grid
 # Импортируем классы
-from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement
+from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement , target_attack_medal
 # Импортируем функцию записи в json файлы
 from .json_functions import write_json , list_server_status , list_users , read_json
 import modules.shop as shop
@@ -337,8 +337,8 @@ def start_server():
             if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
                 target_medal_count[0] += 1
                 target_attack_achievement.ACTIVE = True
-                achievement.medal_target_attack.y_cor = 67
-                achievement.list_save_coords_achiv.append((11 , achievement.medal_target_attack.x_cor , achievement.medal_target_attack.y_cor))
+                target_attack_medal.ACTIVE = True
+                achievement.list_save_coords_achiv.append((11))
          
             enemy_balance[0] = ready_clinet_data["money_balance"]
 

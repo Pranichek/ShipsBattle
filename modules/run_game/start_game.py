@@ -1,11 +1,12 @@
 #імпортуємо усі потрібні модулі
 import pygame , random
 import modules.shop as shop
+import modules.classes.class_medal as class_medal
 import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
 from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
-from ..classes import DrawImage, Button, Font, list_ships, Animation , test_medal
+from ..classes import DrawImage, Button, Font, list_ships, Animation , player_medal , enemy_medals
 from ..classes.animation import rocket_animation , animation_boom , miss_rocket_animation , bomb_animation , animation_bomb_boom
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port, input_password
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
@@ -124,8 +125,7 @@ def upgrade_flag():
     flag_upgrade[0] = True
 
     
-def test_medals():
-    test_medal.ACTIVE = True
+
 
 
 #buttons
@@ -154,7 +154,6 @@ restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_ho
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
 # 
 upgrade_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = upgrade_flag)
-test_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = test_medals)
 
 
 
@@ -191,18 +190,18 @@ enemy_jar = DrawImage(x_cor = 102 , y_cor = 18 , width = 90 , height = 76 , fold
 # место где будет отображаться какое спец оружие купил пользователь
 user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 , folder_name = "backgrounds" , image_name = "user_weapon.png")
 # enemy_medals 
-four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_four_decker.png")
-auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
-destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
-first_hit_enemy_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_hit_medal.png")
-lone_hunter_enemy_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
-master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguist_medal.png")
-enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
-pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
-strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
-openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 47 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
-enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 54 , width = 55 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
-target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 54 , folder_name = "achievement" , image_name = "target_attack_medal.png")
+# four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_four_decker.png")
+# auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
+# destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
+# first_hit_enemy_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_hit_medal.png")
+# lone_hunter_enemy_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
+# master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguist_medal.png")
+# enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
+# pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
+# strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
+# openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 47 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
+# enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 54 , width = 55 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
+# target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 54 , folder_name = "achievement" , image_name = "target_attack_medal.png")
 #products_icons
 bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_name = "products_icons" , image_name = "bomb_icon.png")
 
@@ -248,12 +247,7 @@ def main_window():
         button_lower.draw(surface= main_screen)
         
         second_cold_image.draw_image(screen= main_screen)
-        join_game_frame.draw(surface= main_screen)
-
-        test_button.draw(surface = main_screen)
-        test_medal.draw_medals(screen = main_screen)
-        test_medal.completed_task()
-        test_medal.show_descriptions(screen = main_screen)
+        join_game_frame.draw(surface= main_screen)        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -263,7 +257,7 @@ def main_window():
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
-                test_button.check_click(event = event)
+
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
                 check_press_button[0] = None 
@@ -515,12 +509,11 @@ def ships_position_window():
         pygame.display.flip()
 
 
+
+
 # списки в которых хранятся координаты крестиков , если враг попал по кораблю игрока
 x_enemy_cross = [0]
 y_enemy_cross = [0]
-
-
-
 
 #------------------------------------------------------------------------------------------------
 #флаг который говорит надо ли запускать анимация промаха ракеты, если игрок уларил но промахнулся
@@ -599,25 +592,25 @@ def fight_window():
         # print(check_target_attack[0])
         for medal in range(0 , len(save_medals_coordinates)):
             if save_medals_coordinates[medal][0] == 1:
-                four_decker_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_four_decker_sniper_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 2:
-                enemy_prefect_shooter_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_perfect_shooter_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 3:
-                strategist_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_strategist_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 4:
-                first_hit_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_first_hit_medal.ACTVE = True
             elif save_medals_coordinates[medal][0] == 6:
-                master_of_disguise_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_master_of_disguist_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 7:
-                lone_hunter_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_lone_hunter_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 8:
-                pioneer_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_pioneer_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 10:
-                openin_the_batte_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_opening_battle_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 11:
-                target_attack_enemy_medal.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_target_attack_medal.ACTIVE = True
             elif save_medals_coordinates[medal][0] == 12:
-                enemy_medal_perfectionists.y_cor = save_medals_coordinates[medal][2]
+                class_medal.enemy_perfectionists_medal.ACTIVE = True
 
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)
@@ -922,30 +915,24 @@ def fight_window():
                     if not exists:
                         list_cross_player.append(cross_animation)
 
-        #enemy_medals
-        four_decker_enemy_medal.draw_image(screen = main_screen)
-        enemy_prefect_shooter_medal.draw_image(screen = main_screen)
-        first_hit_enemy_medal.draw_image(screen = main_screen)
-        strategist_enemy_medal.draw_image(screen = main_screen)
-        master_of_disguise_enemy_medal.draw_image(screen = main_screen)
-        pioneer_enemy_medal.draw_image(screen = main_screen)
-        lone_hunter_enemy_medal.draw_image(screen = main_screen)
-        openin_the_batte_enemy_medal.draw_image(screen = main_screen)
-        enemy_medal_perfectionists.draw_image(screen = main_screen)
-        target_attack_enemy_medal.draw_image(screen = main_screen)
+        
 
-        # отрисовка наших медалей игрока
-        achievement.medal_four_decker.draw_image(screen = main_screen)
-        achievement.medal_ten_shoot_in_row.draw_image(screen = main_screen)
-        achievement.medal_hit_shoot.draw_image(screen = main_screen)
-        achievement.strategist_medal.draw_image(screen = main_screen)
-        achievement.medal_secrecy_ships.draw_image(screen = main_screen)
-        achievement.medal_lone_hunter.draw_image(screen = main_screen)
-        #piooner
-        achievement.medal_fisr_kill_any_ship.draw_image(screen = main_screen)
-        achievement.medal_opening_battle.draw_image(screen = main_screen)
-        achievement.medal_perfictionists.draw_image(screen = main_screen)
-        achievement.medal_target_attack.draw_image(screen = main_screen)
+        #----------------------------------------------------------------
+        #отрисовка медалей 
+        for enemy_medal in enemy_medals:
+            enemy_medal.draw_medals(screen = main_screen)
+            enemy_medal.completed_task()
+
+        for medal in player_medal:
+            medal.draw_medals(screen = main_screen)
+            medal.completed_task()
+
+        for enem in enemy_medals:
+            enem.show_descriptions(screen = main_screen)
+
+        for player in player_medal:
+            player.show_descriptions(screen = main_screen)
+        #----------------------------------------------------------------
 
         # products icon in the right top corner of the screen
         if shop.check_buy_bomb_attack[0] == True:
@@ -955,9 +942,6 @@ def fight_window():
         for item in shop.shop_item:
             item.draw(screen = main_screen)
             item.move()
-
-        
-
 
         #----------------------------------------------------------------
         # конструкция которая показывает окошки с выполнеными ачивками по очереди , а не одновременно
