@@ -7,8 +7,7 @@ pygame.init()
 #створюємо клас
 class InputText:
     #створюємо метод конструктор та додаємо параметри для нього 
-    def __init__(self, width : int, height : int, x_cor : int, y_cor : int, base_text : str,name_image : str,
-                screen_name : str, font_name : str):
+    def __init__(self, width : int, height : int, x_cor : int, y_cor : int, base_text : str,name_image : str, screen_name : str, font_name : str):
         #створюємо властивості класа , для того щоб динамічно передавати різні дані
         self.width = width
         self.height = height
@@ -86,3 +85,4 @@ class InputText:
 input_nick = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 239, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "input_area.png")
 input_ip_adress = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 372, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "input_area.png")
 input_port = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "input_area.png")
+input_password = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 141, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "password", name_image= "input_area.png")

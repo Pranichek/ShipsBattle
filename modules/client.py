@@ -2,10 +2,11 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count , check_target_attack
+from .server import flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count , check_target_attack, check_kill, enemy_data_kill
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
+from .classes.class_input_text import input_password
 
 
 list_check_need_send = ["no"]
@@ -43,7 +44,9 @@ def connect_user():
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
-        list_users[input_nick.user_text] = {"points": 0}
+        list_users[input_nick.user_text] = {"points": 0,
+                                            "password": input_password.user_text
+                                            }
         #зберігаємо інформацію у json файл
         write_json(filename = "data_base.json" , object_dict = list_users)
 
@@ -80,6 +83,7 @@ def connect_user():
         data_for_server = read_json(name_file = "data_base.json")
         #беремо кількість балів користувача який приєднується до сервера , щоб користувач на сервері знав останнє їхнє значення
         points_for_server = data_for_server[input_nick.user_text]["points"]
+        password_for_server = data_for_server[input_nick.user_text]["password"]
         print(points_for_server , "points for client")
        
 
@@ -88,7 +92,8 @@ def connect_user():
         data_for_server = {
             "nick": str(input_nick.user_text),
             "points": points_for_server,
-            "status": list_server_status
+            "status": list_server_status,
+            "password": password_for_server
         }
        
         #dump - переводить словник , у джейсон строку(наш словник буде у вигляді звичайної строки, що полегшує відправку даних)
@@ -107,10 +112,9 @@ def connect_user():
         print(data_in_list["status"] , "status from server")
         print(data_in_list["points"] , "points from server")
 
-
         #якщо нік користувача який отримали з серверу не існує в словарі, то додаємо його до словаря з базовими очками
         if data_in_list["nick"] not in list_users:
-            list_users[data_in_list["nick"]] = {"points": data_in_list["points"]}
+            list_users[data_in_list["nick"]] = {"points": data_in_list["points"], "password": data_in_list["password"]}
             write_json(filename = "data_base.json" , object_dict = list_users)
         #якщо його нікнейм вже є (тобто такий користувач вже є), тоді просто оновлюємо його кількість баллів
         elif data_in_list["nick"] in list_users:
@@ -244,7 +248,8 @@ def connect_user():
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
                         "player_died_ships":player_died_ships,
-                        "check_target_attack_achiv":check_target_attack[0]
+                        "check_target_attack_achiv":check_target_attack[0],
+                        "check_kill" : check_kill[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -264,7 +269,8 @@ def connect_user():
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
                             "player_died_ships":player_died_ships,
-                            "check_target_attack_achiv":check_target_attack[0]
+                            "check_target_attack_achiv":check_target_attack[0],
+                            "check_kill" : check_kill[0]
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -284,7 +290,8 @@ def connect_user():
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
                             "player_died_ships":player_died_ships,
-                            "check_target_attack_achiv":check_target_attack[0]
+                            "check_target_attack_achiv":check_target_attack[0],
+                            "check_kill" : check_kill[0]
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -298,8 +305,10 @@ def connect_user():
                 
                 # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
                 turn[0] = server_data['turn']
-
+                check_kill[0] = server_data["check_kill"]
                 enemy_died_ships[0] = server_data["player_died_ships"]
+
+                enemy_data_kill[0] = server_data["check_kill"]
 
                 for medal in server_data["medals_coordinates"]:
                     if medal not in save_medals_coordinates:

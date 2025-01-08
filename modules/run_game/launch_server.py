@@ -1,7 +1,7 @@
 from ..classes.class_click import music_click
-from ..classes.class_input_text import input_port, input_ip_adress
+from ..classes.class_input_text import input_port, input_ip_adress, input_nick, input_password
 from ..classes.class_image import DrawImage
-from ..server import server_thread
+from ..server import server_thread, list_users
 
 #список для відслуджування чи нажати кнопка заупску серверу чи ні
 check_server_started = [False]
@@ -10,21 +10,38 @@ fail_start_server = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor =
 
 
 def start_server():
-    #запускаємо звук кліку кнопки
+   #запускаємо звук кліку кнопки
     music_click.play2(0)
     # розділяем нашь айпі на числа , тобо якщо воно було таке 192.168.0.1 то стане таким 192 168 0 1
     # це для того щоб можна було перевірити кожне число окремо
     ip_address = input_ip_adress.user_text.split(".")
-    # якщо цих чисел не 4 , то користувач не правильно увів дані 
-    if len(ip_address) != 4:
-        # передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
-        check_server_started[0] = "error_server"
-        # якщо вже було це вікно , то робимо його видимим 
-        if fail_start_server.visible == False:
-            fail_start_server.visible = True
-            print("error_server")
-        # return False - означає що сталася помилка ,та код не буде далі рухатися
-        return False
+    if input_nick.user_text in list_users:
+        if list_users[input_nick.user_text]["password"] == input_password.user_text:
+            print("пароль подтвердил")
+        elif list_users[input_nick.user_text]["password"] != input_password.user_text:
+            
+            # якщо цих чисел не 4 , то користувач не правильно увів дані 
+            if len(ip_address) != 4:
+                # передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
+                check_server_started[0] = "error_server"
+                # якщо вже було це вікно , то робимо його видимим 
+                if fail_start_server.visible == False:
+                    fail_start_server.visible = True
+                    print("error_server")
+                # return False - означає що сталася помилка ,та код не буде далі рухатися
+                return False
+    elif input_nick.user_text not in list_users:
+        print("первая игра")
+        # якщо цих чисел не 4 , то користувач не правильно увів дані 
+        if len(ip_address) != 4:
+            # передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
+            check_server_started[0] = "error_server"
+            # якщо вже було це вікно , то робимо його видимим 
+            if fail_start_server.visible == False:
+                fail_start_server.visible = True
+                print("error_server")
+            # return False - означає що сталася помилка ,та код не буде далі рухатися
+            return False       
     # перевіряємо чи кожне число в межах допустимого діапазону
     for number in ip_address:
         # перевіряємо чи це взагалі числа а не наприклад літери

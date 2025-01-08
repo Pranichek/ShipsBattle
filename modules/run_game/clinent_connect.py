@@ -1,7 +1,7 @@
-from ..classes.class_input_text import input_ip_adress , input_port
+from ..classes.class_input_text import input_ip_adress , input_port, input_nick, input_password
 from ..classes.class_image import DrawImage
 from ..classes.class_click import music_click
-from ..client import thread_connect , list_check_connection
+from ..client import thread_connect , list_check_connection, list_users
 
 
 
@@ -9,20 +9,38 @@ from ..client import thread_connect , list_check_connection
 fail_connect = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "backgrounds" , image_name = "fail_background.png")
 
 def connect_to_server():
-    #запускаємо звук кліку кнопки
+     #запускаємо звук кліку кнопки
     music_click.play2(0)
     # розділяем нашь айпі на числа , тобо якщо воно було таке 192.168.0.1 то стане таким 192 168 0 1
     # це для того щоб можна було перевірити кожне число окремо
     ip_address = input_ip_adress.user_text.split(".")
-    # якщо воно має більше чисел ніж 4 або менш ніж 4 чисел, то такий айпі не є вірним , і виводимо помилку
-    if len(ip_address) != 4:
-        list_check_connection[0] = "error_connection"
-        print("зашло")
-        if fail_connect.visible == False:
-            fail_connect.visible = True
-            print("error_connection")
-        # return False - означає що сталася помилка ,та код не буде далі рухатися
-        return False
+    if input_nick.user_text in list_users:
+        if list_users[input_nick.user_text]["password"] == input_password.user_text:
+            print("пароль подтвердил")
+        elif list_users[input_nick.user_text]["password"] != input_password.user_text:
+           
+            # якщо воно має більше чисел ніж 4 або менш ніж 4 чисел, то такий айпі не є вірним , і виводимо помилку
+            if len(ip_address) != 4:
+                list_check_connection[0] = "error_connection"
+                print("зашло")
+                if fail_connect.visible == False:
+                    fail_connect.visible = True
+                    print("error_connection")
+                # return False - означає що сталася помилка ,та код не буде далі рухатися
+                return False
+        
+    elif input_nick.user_text not in list_users:
+        print("первая игра")
+        ip_address = input_ip_adress.user_text.split(".")
+        # якщо воно має більше чисел ніж 4 або менш ніж 4 чисел, то такий айпі не є вірним , і виводимо помилку
+        if len(ip_address) != 4:
+            list_check_connection[0] = "error_connection"
+            print("зашло")
+            if fail_connect.visible == False:
+                fail_connect.visible = True
+                print("error_connection")
+            # return False - означає що сталася помилка ,та код не буде далі рухатися
+            return False
     
     # перевіряємо чи кожне число в межах допустимого діапазону
     for number in ip_address:

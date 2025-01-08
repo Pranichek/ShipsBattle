@@ -5,11 +5,11 @@ import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
 from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
-from ..classes import DrawImage, Button, Font, list_ships, Animation
+from ..classes import DrawImage, Button, Font, list_ships, Animation , test_medal
 from ..classes.animation import rocket_animation , animation_boom , miss_rocket_animation , bomb_animation , animation_bomb_boom
-from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port
+from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port, input_password
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
-from ..classes.class_click import music_click
+from ..classes.class_click import music_click, miss_water_sound
 from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
@@ -123,6 +123,10 @@ flag_upgrade = [True]
 def upgrade_flag():
     flag_upgrade[0] = True
 
+    
+def test_medals():
+    test_medal.ACTIVE = True
+
 
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
@@ -150,6 +154,7 @@ restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_ho
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
 # 
 upgrade_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = upgrade_flag)
+test_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = test_medals)
 
 
 
@@ -245,6 +250,10 @@ def main_window():
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)
 
+        test_button.draw(surface = main_screen)
+        test_medal.draw_medals(screen = main_screen)
+        test_medal.completed_task()
+        test_medal.show_descriptions(screen = main_screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -254,8 +263,7 @@ def main_window():
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
-
- 
+                test_button.check_click(event = event)
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
                 check_press_button[0] = None 
@@ -290,12 +298,14 @@ def create_game_window():
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
+        input_password.draw_text()
 
         back_to_menu.draw(surface= main_screen)
 
         third_cold_image.draw_image(screen= main_screen)
         fourth_cold_image.draw_image(screen= main_screen)
         start_game_button.draw(surface= main_screen)
+
 
         #если попытались создать сервер кторый нельзя(например неправильны айпи) , то выводим предуприждение об этом
         if check_server_started[0] == "error_server":
@@ -325,12 +335,14 @@ def create_game_window():
                 input_nick.user_text = input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
                 input_port.user_text = input_port.base_text
+                input_password.user_text = input_password.base_text
                 change_scene(main_window())
         
                 
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
             input_port.check_event(event)  
+            input_password.check_event(event)
 
         #оновлюєио екран щоб можна було бачити зміни на ньому
         pygame.display.flip()
@@ -355,6 +367,7 @@ def join_game_window():
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
+        input_password.draw_text()
 
         back_to_menu.draw(surface= main_screen)
 
@@ -388,6 +401,7 @@ def join_game_window():
                 input_nick.user_text =  input_nick.base_text
                 input_ip_adress.user_text = input_ip_adress.base_text
                 input_port.user_text = input_port.base_text
+                input_password.user_text = input_password.base_text
                 run_game = False
                 change_scene(main_window())
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -398,6 +412,7 @@ def join_game_window():
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
             input_port.check_event(event)  
+            input_password.check_event(event)
 
 
         #оновлюємо екран щоб можна було бачити зміни на ньому
@@ -1077,6 +1092,7 @@ def fight_window():
                                                             shop.four_hits_in_row(number_cell = 5)
                                                         if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                                                             shop.eight_hits_in_row(number_cell = 5)
+                                                        miss_water_sound.play2(loops = 1)
 
                                                     # робимо умову для випадку коли по клітичнці вже били
                                                     elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:
@@ -1197,6 +1213,7 @@ def fight_window():
                                                                 shop.four_hits_in_row(number_cell = 5)
                                                             if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                                                                 shop.eight_hits_in_row(number_cell = 5)
+                                                            miss_water_sound.play2(loops = 1)
 
                                                         # робимо умову для випадку коли по клітичнці вже били
                                                         elif enemy_matrix[0][row][col] == 5 or enemy_matrix[0][row][col] == 7:

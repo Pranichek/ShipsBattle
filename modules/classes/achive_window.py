@@ -15,7 +15,6 @@ class Acievement:
         self.HEIGHT = 97
         self.MAX_WIDTH = 354
         self.MAX_HEIGHT = 281
-
         self.PATH_BORDER_IMAGE = abspath(join(__file__, "..", "..", "..", "media", "achievement", f"{self.IMAGE_NAME}.png"))
         self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha()
         # 

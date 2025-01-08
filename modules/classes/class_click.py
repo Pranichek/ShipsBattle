@@ -15,3 +15,5 @@ class Sound:
 
 music_click = Sound(name_sound = "button_pressed.mp3")
 music_achieve = Sound(name_sound = "get_achievement.mp3")
+death_ship_sound = Sound(name_sound = "death_ship.mp3")
+miss_water_sound = Sound(name_sound = "miss_attack.mp3")

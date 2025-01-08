@@ -1,6 +1,6 @@
 from ..screens import list_grid , list_object_map , main_screen
 from ..classes  import list_ships , Animation
-from ..server import save_miss_coordinates , player_died_ships , check_target_attack
+from ..server import save_miss_coordinates , player_died_ships , check_target_attack, check_kill
 
 # номер рядка и клеточки в этом рядке где отрисовываются зачеркиванные клеточки
 miss_row = [0]
@@ -10,8 +10,6 @@ miss_col = [0]
 list_direction = [""]
 # список клеток которые уже проверялись
 check_number_cell = []
-# флаг убитого корабля
-check_kill = [False]
 # длина корабля
 count_len = [1]
 # список в котором сохраняем все обьекты зачерканных клеточек

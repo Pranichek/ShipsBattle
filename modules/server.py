@@ -6,12 +6,15 @@ from .classes import input_port , input_ip_adress, input_nick , Animation , targ
 from .json_functions import write_json , list_server_status , list_users , read_json
 import modules.shop as shop
 import modules.achievement as achievement
+from .classes.class_input_text import input_password
+from .classes.class_click import death_ship_sound, miss_water_sound
 
 target_medal_count = [0]
-
+check_kill = ["wait"]
+enemy_data_kill = ['']
 # чтобы у на ототбражались зачеркнутые клеточки вокргу корабля
 our_miss_anim = []
-
+check_kill = [False]
 # функция для болной загрузки данных
 def recv_all(socket, buffer_size = 1024):
     data = b""
@@ -99,7 +102,9 @@ def start_server():
     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
-        list_users[input_nick.user_text] = {"points": 0}
+        list_users[input_nick.user_text] = {"points": 0,
+                                            "password": input_password.user_text
+                                            }
         #зберігаємо інформацію у json файл
         write_json(filename = "data_base.json" , object_dict = list_users)
 
@@ -147,8 +152,9 @@ def start_server():
 
         #якщо нікнейма суперника ще немає у словарі то записуємо його нік у джейосн файл
         if data_in_list["nick"] not in list_users:
-            list_users[data_in_list["nick"]] = {"points": data_in_list["points"]}
-            write_json(filename = "data_base.json" , object_dict = list_users)
+            if data_in_list["password"] not in list_users[input_password]["password"]:
+                list_users[data_in_list["nick"]] = {"points": data_in_list["points"], "password": data_in_list["password"]}
+                write_json(filename = "data_base.json" , object_dict = list_users)
 
         #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
         elif data_in_list["nick"] in list_users:
@@ -159,13 +165,16 @@ def start_server():
         data_for_client = read_json(name_file = "data_base.json")
         #беремо кол-во баллів користувача який запсукає сервер, щоб відправати оновлену кількість 
         points_for_client = data_for_client[input_nick.user_text]["points"]
+        password_for_client = data_for_client[input_nick.user_text]["password"]
+
         print(points_for_client , "points for client")
         
         #формуємо дані користувача який запустив сервер ,для відправки до клієнта який під'єднався
         data_for_client = {
             "nick": str(input_nick.user_text),
             "points": points_for_client,
-            "status": list_server_status
+            "status": list_server_status,
+            "password": password_for_client
         }
         #відправляємо дані на клієнта , dumps - перетворює словарь у джейсон строку 
         client_socket.send(json.dumps(data_for_client).encode())
@@ -306,8 +315,9 @@ def start_server():
                 "check_ten_times":check_ten_times.count(1),
                 "medals_coordinates":achievement.list_save_coords_achiv,
                 "player_died_ships":player_died_ships,
-                "check_target_attack_achiv":check_target_attack[0]
-            }
+                "check_target_attack_achiv":check_target_attack[0],
+                "check_kill" : check_kill[0]
+            }   
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
             client_socket.send(json.dumps(game_information).encode())
@@ -322,7 +332,10 @@ def start_server():
             
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
-
+            enemy_data_kill = ready_clinet_data["check_kill"]
+            if enemy_data_kill == True:
+                death_ship_sound.play2(loops = 1 )
+                pass
             # print(ready_clinet_data["check_target_attack_achiv"])
   
             if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
