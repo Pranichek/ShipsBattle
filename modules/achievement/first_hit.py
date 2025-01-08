@@ -16,5 +16,5 @@ def first_shot(cell: int):
                 shoots.append("True")
                 first_hit_achievement.ACTIVE = True
                 first_hit_medal.ACTIVE = True
-                list_save_coords_achiv.append((4))
+                list_save_coords_achiv.append(4)
 

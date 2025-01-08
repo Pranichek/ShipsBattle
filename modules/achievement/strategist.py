@@ -18,7 +18,7 @@ def strategist(player_killed_ships: list, role: str, winner: str):
                     if winner == "win_client":
                         strategist_achievement.ACTIVE = True
                         strategist_medal.ACTIVE = True
-                        list_save_coords_achiv.append((3))
+                        list_save_coords_achiv.append(3)
                         check_end_game[0] = 13
 
 

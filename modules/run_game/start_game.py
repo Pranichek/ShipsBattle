@@ -591,26 +591,27 @@ def fight_window():
         achievement.enemy_dies_ships_for_ahiv[0] = enemy_died_ships[0]
         # print(check_target_attack[0])
         for medal in range(0 , len(save_medals_coordinates)):
-            if save_medals_coordinates[medal][0] == 1:
+            if save_medals_coordinates[medal] == 1:
                 class_medal.enemy_four_decker_sniper_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 2:
+            elif save_medals_coordinates[medal] == 2:
                 class_medal.enemy_perfect_shooter_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 3:
+            elif save_medals_coordinates[medal] == 3:
                 class_medal.enemy_strategist_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 4:
-                class_medal.enemy_first_hit_medal.ACTVE = True
-            elif save_medals_coordinates[medal][0] == 6:
+            elif save_medals_coordinates[medal] == 4:
+                class_medal.enemy_first_hit_medal.ACTIVE= True
+            elif save_medals_coordinates[medal] == 6:
                 class_medal.enemy_master_of_disguist_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 7:
+            elif save_medals_coordinates[medal] == 7:
                 class_medal.enemy_lone_hunter_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 8:
+            elif save_medals_coordinates[medal] == 8:
                 class_medal.enemy_pioneer_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 10:
+            elif save_medals_coordinates[medal] == 10:
                 class_medal.enemy_opening_battle_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 11:
+            elif save_medals_coordinates[medal] == 11:
                 class_medal.enemy_target_attack_medal.ACTIVE = True
-            elif save_medals_coordinates[medal][0] == 12:
+            elif save_medals_coordinates[medal] == 12:
                 class_medal.enemy_perfectionists_medal.ACTIVE = True
+
 
         # ставимо фпс на значення 60
         module_screen_server.FPS.tick(120)

@@ -46,7 +46,7 @@ def lone_hunter():
                 single_ships_achiv.append("Kill four single ships in a row")
                 lone_hunter_achievement.ACTIVE = True
                 lone_hunter_medal.ACTIVE = True
-                list_save_coords_achiv.append((7))
+                list_save_coords_achiv.append(7)
                 print("You are kill four single ships in a row")
         else:
             single_ships_achiv.clear()

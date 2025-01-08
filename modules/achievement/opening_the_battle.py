@@ -18,5 +18,5 @@ def opening_the_battle(grid: list , enemy_grid: list):
             player_ships[0] = 100
             opening_the_battle_achievement.ACTIVE = True
             opening_battle_medal.ACTIVE = True
-            list_save_coords_achiv.append((10))
+            list_save_coords_achiv.append(10)
 

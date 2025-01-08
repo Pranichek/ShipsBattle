@@ -32,7 +32,7 @@ def monster_of_perfictionists():
                                 if indx_four - indx_one == 3:
                                     perfictionists_achiement.ACTIVE = True
                                     perfectionists_medal.ACTIVE = True
-                                    list_save_coords_achiv.append((12))
+                                    list_save_coords_achiv.append(12)
                         else:
                             list_hits_achiv.clear()
 

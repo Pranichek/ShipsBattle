@@ -15,4 +15,4 @@ def kept_all_ships_alive_for_ten_turns(grid: object):
         count_turns_achiv.append("True")
         master_of_disguist_achievement.ACTIVE = True
         master_of_disguist_medal.ACTIVE = True
-        list_save_coords_achiv.append((6))
+        list_save_coords_achiv.append(6)

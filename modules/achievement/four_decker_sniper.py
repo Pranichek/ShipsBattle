@@ -27,7 +27,7 @@ def first_kill_four_decker_achivment():
                         # 1 - номе задания
                         # 2 - икс
                         # 3 - игрек
-                        list_save_coords_achiv.append((1))
+                        list_save_coords_achiv.append(1)
                         print("Ты убил четыреx палубный кораблик 777")
                             
 

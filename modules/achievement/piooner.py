@@ -16,7 +16,7 @@ def piooner():
                     count_enemy_kill_achiv[0] = "task piooner is done"
                     piooner_achievement.ACTIVE = True
                     pioneer_medal.ACTIVE = True
-                    list_save_coords_achiv.append((8))
+                    list_save_coords_achiv.append(8)
                     print("Ure")
 
 

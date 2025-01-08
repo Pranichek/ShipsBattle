@@ -19,7 +19,7 @@ def ten_shoot_in_row(cell: int):
         shoots.append("True")
         ten_shoot_in_row_achievement.ACTIVE = True
         perfect_shooter_medal.ACTIVE = True
-        list_save_coords_achiv.append((2))
+        list_save_coords_achiv.append(2)
         print("10 выстрелов по кораблям подряд")
 
 
