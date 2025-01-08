@@ -7,14 +7,11 @@ from .json_functions import write_json , list_server_status , list_users , read_
 import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
-from .classes.class_click import death_ship_sound, miss_water_sound
+from .classes.class_click import death_ship_sound
 
 target_medal_count = [0]
-check_kill = ["wait"]
-enemy_data_kill = ['']
 # чтобы у на ототбражались зачеркнутые клеточки вокргу корабля
 our_miss_anim = []
-check_kill = [False]
 # функция для болной загрузки данных
 def recv_all(socket, buffer_size = 1024):
     data = b""
@@ -152,9 +149,8 @@ def start_server():
 
         #якщо нікнейма суперника ще немає у словарі то записуємо його нік у джейосн файл
         if data_in_list["nick"] not in list_users:
-            if data_in_list["password"] not in list_users[input_password]["password"]:
-                list_users[data_in_list["nick"]] = {"points": data_in_list["points"], "password": data_in_list["password"]}
-                write_json(filename = "data_base.json" , object_dict = list_users)
+            list_users[data_in_list["nick"]] = {"points": data_in_list["points"], "password": data_in_list["password"]}
+            write_json(filename = "data_base.json" , object_dict = list_users)
 
         #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
         elif data_in_list["nick"] in list_users:
@@ -316,7 +312,6 @@ def start_server():
                 "medals_coordinates":achievement.list_save_coords_achiv,
                 "player_died_ships":player_died_ships,
                 "check_target_attack_achiv":check_target_attack[0],
-                "check_kill" : check_kill[0]
             }   
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -332,10 +327,11 @@ def start_server():
             
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
-            enemy_data_kill = ready_clinet_data["check_kill"]
-            if enemy_data_kill == True:
-                death_ship_sound.play2(loops = 1 )
-                pass
+            # enemy_data_kill = ready_clinet_data["check_kill"]
+            # if enemy_data_kill == True:
+            #     print("//////////////////////////////////////////////////////////////")
+            #     death_ship_sound.play2(loops = 1)
+
             # print(ready_clinet_data["check_target_attack_achiv"])
   
             if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:

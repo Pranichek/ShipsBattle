@@ -18,9 +18,7 @@ def connect_to_server():
         if list_users[input_nick.user_text]["password"] == input_password.user_text:
             print("пароль подтвердил")
         elif list_users[input_nick.user_text]["password"] != input_password.user_text:
-           
-            # якщо воно має більше чисел ніж 4 або менш ніж 4 чисел, то такий айпі не є вірним , і виводимо помилку
-            if len(ip_address) != 4:
+
                 list_check_connection[0] = "error_connection"
                 print("зашло")
                 if fail_connect.visible == False:
@@ -28,6 +26,8 @@ def connect_to_server():
                     print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
+
+
         
     elif input_nick.user_text not in list_users:
         print("первая игра")
