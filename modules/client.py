@@ -2,7 +2,7 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal,destroyer_achievement,destroyer_medal
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count , check_target_attack, get_new_killed_data
+from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , check_target_attack, get_new_killed_data, count_5
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
@@ -317,26 +317,47 @@ def connect_user():
                         for cell in range(len(server_data["new_for_client"][row])):
                             list_grid[row][cell] = server_data["new_for_client"][row][cell]
 
-                if server_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
-                    target_medal_count[0] += 1
+                if server_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and 11 not in achievement.list_save_coords_achiv:
                     target_attack_achievement.ACTIVE = True
                     target_attack_medal.ACTIVE = True
-                    achievement.list_save_coords_achiv.append((11))
+                    achievement.list_save_coords_achiv.append(11)
                 check_repeat[0] += 1
 
                 # проверка ачивки для бомбы
                 if check_bomb[0] == True and get_new_killed_data[0] == 0:
                     get_new_killed_data[0] += 1
-                elif get_new_killed_data[0] >= 1:
+                elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
+                    print(123)
                     new_killed_ships[0] = len(enemy_died_ships[0])
                     if new_killed_ships[0] - old_killed_ships[0] >= 2:
+                        print(new_killed_ships[0], old_killed_ships[0])
                         destroyer_medal.ACTIVE = True
                         destroyer_achievement.ACTIVE = True
                         check_bomb[0] = False
-                        achievement.list_save_coords_achiv.append((9))
+                        achievement.list_save_coords_achiv.append(9)
+                    # get_new_killed_data[0] = 13
                     else:
                         check_bomb[0] = False
                         get_new_killed_data[0] = 0
+                elif get_new_killed_data[0] >= 1:
+                    print(1)
+                    new_killed_ships[0] = len(enemy_died_ships[0])
+                    print(new_killed_ships[0], old_killed_ships[0])
+                    if new_killed_ships[0] - old_killed_ships[0] >= 1:
+                        print(2)
+                        if count_5[0] <= 0:
+                            print(3)
+                            if 11 not in achievement.list_save_coords_achiv:
+                                print(4)
+                                target_attack_achievement.ACTIVE = True
+                                target_attack_medal.ACTIVE = True
+                                achievement.list_save_coords_achiv.append(11)
+                            else:
+                                count_5[0] = 0
+                        else:
+                            count_5[0] = 0
+                    else:
+                        count_5[0] = 0
 
                 achievement.opening_the_battle(grid = list_grid, enemy_grid = enemy_matrix)
 

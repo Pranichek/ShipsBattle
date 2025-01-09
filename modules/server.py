@@ -7,9 +7,8 @@ from .json_functions import write_json , list_server_status , list_users , read_
 import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
-from .classes.class_click import death_ship_sound
 
-target_medal_count = [0]
+
 # чтобы у на ототбражались зачеркнутые клеточки вокргу корабля
 our_miss_anim = []
 # функция для болной загрузки данных
@@ -21,6 +20,9 @@ def recv_all(socket, buffer_size = 1024):
         if len(part) < buffer_size:  # Якщо менше buffer_size, це остання частина
             break
     return data
+
+count_5 = [0]
+
 
 #для ачивки убить два или больше окрабля одной бомбой
 old_killed_ships = [0]
@@ -335,8 +337,7 @@ def start_server():
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
   
-            if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
-                target_medal_count[0] += 1
+            if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and 11 not in achievement.list_save_coords_achiv:
                 target_attack_achievement.ACTIVE = True
                 target_attack_medal.ACTIVE = True
                 achievement.list_save_coords_achiv.append(11)
@@ -344,11 +345,12 @@ def start_server():
             enemy_balance[0] = ready_clinet_data["money_balance"]
 
             enemy_died_ships[0] = ready_clinet_data["player_died_ships"]
+  
 
-            # проверка ачивки для бомбы
             if check_bomb[0] == True and get_new_killed_data[0] == 0:
                 get_new_killed_data[0] += 1
-            elif get_new_killed_data[0] >= 1:
+            elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
+                print(123)
                 new_killed_ships[0] = len(enemy_died_ships[0])
                 if new_killed_ships[0] - old_killed_ships[0] >= 2:
                     print(new_killed_ships[0], old_killed_ships[0])
@@ -356,10 +358,65 @@ def start_server():
                     destroyer_achievement.ACTIVE = True
                     check_bomb[0] = False
                     achievement.list_save_coords_achiv.append(9)
+                # get_new_killed_data[0] = 13
                 else:
                     check_bomb[0] = False
                     get_new_killed_data[0] = 0
+            elif get_new_killed_data[0] >= 1:
+                print(1)
+                new_killed_ships[0] = len(enemy_died_ships[0])
+                print(new_killed_ships[0], old_killed_ships[0])
+                if new_killed_ships[0] - old_killed_ships[0] >= 1:
+                    print(2)
+                    if count_5[0] <= 0:
+                        print(3)
+                        if 11 not in achievement.list_save_coords_achiv:
+                            print(4)
+                            target_attack_achievement.ACTIVE = True
+                            target_attack_medal.ACTIVE = True
+                            achievement.list_save_coords_achiv.append(11)
+                        else:
+                            count_5[0] = 0
+                    else:
+                        count_5[0] = 0
+                else:
+                    count_5[0] = 0
+            # elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
+            #     print(123)
+            #     new_killed_ships[0] = len(enemy_died_ships[0])
+            #     if new_killed_ships[0] - old_killed_ships[0] >= 2:
+            #         print(new_killed_ships[0], old_killed_ships[0])
+            #         destroyer_medal.ACTIVE = True
+            #         destroyer_achievement.ACTIVE = True
+            #         check_bomb[0] = False
+            #         achievement.list_save_coords_achiv.append(9)
+            #     # get_new_killed_data[0] = 13
+            #     else:
+            #         check_bomb[0] = False
+            #         get_new_killed_data[0] = 0
+            # if get_new_killed_data[0] >= 1:
+            #     print(1)
+            #     new_killed_ships[0] = len(enemy_died_ships[0])
+            #     print(new_killed_ships[0], old_killed_ships[0])
+            #     if new_killed_ships[0] - old_killed_ships[0] >= 1:
+            #         print(2)
+            #         if count_5[0] <= 0:
+            #             print(3)
+            #             if 11 not in achievement.list_save_coords_achiv:
+            #                 print(4)
+            #                 target_attack_achievement.ACTIVE = True
+            #                 target_attack_medal.ACTIVE = True
+            #                 achievement.list_save_coords_achiv.append(11)
+            #             else:
+            #                 count_5[0] = 0
+            #         else:
+            #             count_5[0] = 0
+            #     else:
+            #         count_5[0] = 0
+            # else:
+            #     count_5[0] = 0
 
+        
             # координаты медалей враг
             for medal in ready_clinet_data["medals_coordinates"]:
                 if medal not in save_medals_coordinates:

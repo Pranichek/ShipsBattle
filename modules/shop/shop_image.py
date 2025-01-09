@@ -18,11 +18,11 @@ class Image_Shop:
         #"/../../../media/{self.FOLDER_NAME}/{self.IMAGE_NAME}"
         self.PATH = abspath(join(__file__, "..", "..", "..", "media", f"{self.FOLDER_NAME}", f"{self.IMAGE_NAME}"))
         self.IMAGE = pygame.transform.scale(pygame.image.load(self.PATH), (self.WIDTH, self.HEIGHT)).convert_alpha()
-        self.SPEED = 10
+        self.SPEED = 13
         self.ACTIVE = False 
         self.TURN = "Down"
         self.TARGET_Y = target_y
-        self.visible = 0  
+        self.visible = 0 
 
     # Відображає зображення на екрані, враховуючи поточну прозорість (visible)
     def draw(self, screen: pygame.Surface):

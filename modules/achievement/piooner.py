@@ -12,7 +12,7 @@ def piooner():
                 count_player_ships_achiv[0] = len(enemy_dies_ships_for_ahiv[0])
                 count_enemy_kill_achiv[0] = len(player_died_ships_for_achiv[0])
 
-                if count_player_ships_achiv[0] == 1 and count_enemy_kill_achiv[0] == 0 and count_enemy_kill_achiv[0] != "task piooner is done":
+                if count_player_ships_achiv[0] >= 1 and count_enemy_kill_achiv[0] == 0 and count_enemy_kill_achiv[0] != "task piooner is done":
                     count_enemy_kill_achiv[0] = "task piooner is done"
                     piooner_achievement.ACTIVE = True
                     pioneer_medal.ACTIVE = True

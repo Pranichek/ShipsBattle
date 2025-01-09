@@ -18,7 +18,7 @@ class Font_Shop:
         self.TARGET_Y = target_y
         self.MAX_WIDTH = max_width
         self.MAX_HEIGHT = max_height
-        self.SPEED = 10
+        self.SPEED = 13
         self.VISIBLE = 0
         self.TURN = "Down"
         self.ACTIVE = False
