@@ -1,13 +1,12 @@
 import socket ,threading , json , pygame , time
-from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal
+from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal,destroyer_achievement,destroyer_medal
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count , check_target_attack
+from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , target_medal_count , check_target_attack
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
-from .classes.class_click import death_ship_sound
 
 list_check_need_send = ["no"]
 
@@ -324,6 +323,15 @@ def connect_user():
                     target_attack_medal.ACTIVE = True
                     achievement.list_save_coords_achiv.append((11))
                 check_repeat[0] += 1
+
+                # проверка ачивки для бомбы
+                if check_bomb[0] == True:
+                    new_killed_ships[0] = len(enemy_died_ships[0])
+                    if new_killed_ships[0] - old_killed_ships[0] >= 2:
+                        destroyer_medal.ACTIVE = True
+                        destroyer_achievement.ACTIVE = True
+                        check_bomb[0] = False
+                        achievement.list_save_coords_achiv.append((9))
 
                 # если кто то уже выиграл , то остонавливаем цикл игры
                 # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл

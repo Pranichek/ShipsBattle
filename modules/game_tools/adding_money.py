@@ -99,7 +99,7 @@ def add_money(check_buy_bomb: bool):
 
     if check_buy_bomb == True and check_money_bomb[0] == 0:
         check_money_bomb[0] += 1
-        shop.money_list[0] -= 1
+        shop.money_list[0] -= 0
         shop.player_balance.TEXT = str(shop.money_list[0])
         shop.player_balance.update_text()
         player_balance_in_jar.text = str(shop.money_list[0])
@@ -107,7 +107,7 @@ def add_money(check_buy_bomb: bool):
     if check_money_bomb[0] >= 1:
         if check_money_bomb[0] != 10:
             check_money_bomb[0] += 1
-            shop.money_list[0] -= 1
+            shop.money_list[0] -= 0
             shop.player_balance.TEXT = str(shop.money_list[0])
             shop.player_balance.update_text()
             player_balance_in_jar.text = str(shop.money_list[0])

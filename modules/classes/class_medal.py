@@ -67,12 +67,12 @@ first_hit_medal = Medal(x_cor = 800, y_cor = 26, width = 60, height = 60, image_
 lone_hunter_medal = Medal(x_cor = 850, y_cor = 24, width = 60, height = 60, image_name = "lone_hunter_medal", medal_image_description = "lone_hunter")
 master_of_disguist_medal = Medal(x_cor = 800, y_cor = 64, width = 60, height = 60, image_name = "master_of_disguist_medal", medal_image_description = "master_of_diguise")
 opening_battle_medal = Medal(x_cor = 900, y_cor = 64, width = 60, height = 60, image_name = "medal_opening_the_battle", medal_image_description = "opening_the_battle")
-perfectionists_medal = Medal(x_cor = 1000, y_cor = 64, width = 60, height = 60, image_name = "medal_perfectionists", medal_image_description = "monster_of_perfections")
+collector_medal = Medal(x_cor = 1000, y_cor = 64, width = 60, height = 60, image_name = "collector", medal_image_description = "collector")
 perfect_shooter_medal = Medal(x_cor = 995, y_cor = 24, width = 70, height = 60, image_name = "perfect_shooter_medal", medal_image_description = "perfect_shooter")
 pioneer_medal = Medal(x_cor = 950, y_cor = 24, width = 60, height = 60, image_name = "pioneer_medal", medal_image_description = "pioneer")
 strategist_medal = Medal(x_cor = 750, y_cor = 64, width = 60, height = 60, image_name = "strategist_medal", medal_image_description = "strategist")
 target_attack_medal = Medal(x_cor = 950, y_cor = 64, width = 60, height = 60, image_name = "target_attack_medal", medal_image_description = "targeted_attack")
-player_medal = [four_decker_sniper_medal, auto_sight_medal, destroyer_medal, first_hit_medal, lone_hunter_medal, master_of_disguist_medal, opening_battle_medal, perfectionists_medal, perfect_shooter_medal, pioneer_medal, strategist_medal, target_attack_medal]
+player_medal = [four_decker_sniper_medal, auto_sight_medal, destroyer_medal, first_hit_medal, lone_hunter_medal, master_of_disguist_medal, opening_battle_medal, collector_medal, perfect_shooter_medal, pioneer_medal, strategist_medal, target_attack_medal]
 
 enemy_four_decker_sniper_medal = Medal(x_cor = 220, y_cor = 24, width = 60, height = 60, image_name = "medal_four_decker" , medal_image_description = "four_decker_sniper")
 enemy_auto_sight_medal = Medal(x_cor = 370, y_cor = 24, width = 55, height = 55, image_name = "auto_sight_medal", medal_image_description = "auto_sight")
@@ -81,12 +81,12 @@ enemy_first_hit_medal = Medal(x_cor = 270, y_cor = 26, width = 60, height = 60, 
 enemy_lone_hunter_medal = Medal(x_cor = 320, y_cor = 24, width = 60, height = 60, image_name = "lone_hunter_medal", medal_image_description = "lone_hunter")
 enemy_master_of_disguist_medal = Medal(x_cor = 270, y_cor = 64, width = 60, height = 60, image_name = "master_of_disguist_medal", medal_image_description = "master_of_diguise")
 enemy_opening_battle_medal = Medal(x_cor = 370, y_cor = 64, width = 60, height = 60, image_name = "medal_opening_the_battle", medal_image_description = "opening_the_battle")
-enemy_perfectionists_medal = Medal(x_cor = 470, y_cor = 64, width = 60, height = 60, image_name = "medal_perfectionists", medal_image_description = "monster_of_perfections")
+enemy_collector_medal = Medal(x_cor = 470, y_cor = 64, width = 60, height = 60, image_name = "collector", medal_image_description = "collector")
 enemy_perfect_shooter_medal = Medal(x_cor = 465, y_cor = 24, width = 70, height = 60, image_name = "perfect_shooter_medal", medal_image_description = "perfect_shooter")
 enemy_pioneer_medal = Medal(x_cor = 420, y_cor = 24, width = 60, height = 60, image_name = "pioneer_medal", medal_image_description = "pioneer")
 enemy_strategist_medal = Medal(x_cor = 220, y_cor = 64, width = 60, height = 60, image_name = "strategist_medal", medal_image_description = "strategist")
 enemy_target_attack_medal = Medal(x_cor = 420, y_cor = 64, width = 60, height = 60, image_name = "target_attack_medal", medal_image_description = "targeted_attack")
-enemy_medals = [enemy_four_decker_sniper_medal,enemy_auto_sight_medal,enemy_destroyer_medal,enemy_first_hit_medal,enemy_lone_hunter_medal,enemy_master_of_disguist_medal,enemy_opening_battle_medal,enemy_perfectionists_medal,enemy_perfect_shooter_medal,enemy_pioneer_medal,enemy_strategist_medal,enemy_target_attack_medal]
+enemy_medals = [enemy_four_decker_sniper_medal,enemy_auto_sight_medal,enemy_destroyer_medal,enemy_first_hit_medal,enemy_lone_hunter_medal,enemy_master_of_disguist_medal,enemy_opening_battle_medal, enemy_collector_medal,enemy_perfect_shooter_medal,enemy_pioneer_medal,enemy_strategist_medal,enemy_target_attack_medal]
 
 
 

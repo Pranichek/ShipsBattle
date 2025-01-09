@@ -1,7 +1,7 @@
 import socket , json , time , threading
 from .screens import list_grid
 # Импортируем классы
-from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement , target_attack_medal
+from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement , target_attack_medal, destroyer_medal, destroyer_achievement
 # Импортируем функцию записи в json файлы
 from .json_functions import write_json , list_server_status , list_users , read_json
 import modules.shop as shop
@@ -21,6 +21,11 @@ def recv_all(socket, buffer_size = 1024):
         if len(part) < buffer_size:  # Якщо менше buffer_size, це остання частина
             break
     return data
+
+#для ачивки убить два или больше окрабля одной бомбой
+old_killed_ships = [0]
+new_killed_ships = [0]
+check_bomb = [False]
 
 # список для того чтобы от времени отнималась ровно одна секунда
 check_ten_times = []
@@ -327,12 +332,6 @@ def start_server():
             
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
-            # enemy_data_kill = ready_clinet_data["check_kill"]
-            # if enemy_data_kill == True:
-            #     print("//////////////////////////////////////////////////////////////")
-            #     death_ship_sound.play2(loops = 1)
-
-            # print(ready_clinet_data["check_target_attack_achiv"])
   
             if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and target_medal_count[0] == 0:
                 target_medal_count[0] += 1
@@ -343,6 +342,15 @@ def start_server():
             enemy_balance[0] = ready_clinet_data["money_balance"]
 
             enemy_died_ships[0] = ready_clinet_data["player_died_ships"]
+
+            # проверка ачивки для бомбы
+            if check_bomb[0] == True:
+                new_killed_ships[0] = len(enemy_died_ships[0])
+                if new_killed_ships[0] - old_killed_ships[0] >= 2:
+                    destroyer_medal.ACTIVE = True
+                    destroyer_achievement.ACTIVE = True
+                    check_bomb[0] = False
+                    achievement.list_save_coords_achiv.append((9))
 
             # координаты медалей враг
             for medal in ready_clinet_data["medals_coordinates"]:

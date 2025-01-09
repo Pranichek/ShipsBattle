@@ -137,6 +137,8 @@ perfictionists_achiement = Acievement(achievement_image_name = "perfictionists_a
 
 target_attack_achievement = Acievement(achievement_image_name = "target_attack")
 
-list_achieves.extend([first_four_decker_achivment , ten_shoot_in_row_achievement , strategist_achievement , first_hit_achievement , master_of_disguist_achievement , piooner_achievement ,lone_hunter_achievement , opening_the_battle_achievement , perfictionists_achiement , target_attack_achievement])
+destroyer_achievement = Acievement(achievement_image_name = "destroyer_window")
+
+list_achieves.extend([first_four_decker_achivment , ten_shoot_in_row_achievement , strategist_achievement , first_hit_achievement , master_of_disguist_achievement , piooner_achievement ,lone_hunter_achievement , opening_the_battle_achievement , perfictionists_achiement , target_attack_achievement, destroyer_achievement])
 
 

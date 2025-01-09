@@ -89,11 +89,7 @@ def test():
 check_buy_bomb_attack = [False]
 def buy_bomb():
     if check_buy_bomb_attack[0] == False:
-        if money_list[0] >= 10:
-            player_balance.TEXT = str(money_list[0])
-            player_balance_in_jar.text = str(money_list[0])
-            player_balance.update_text()
-            player_balance_in_jar.update_text()
+        if money_list[0] >= 0:
             check_buy_bomb_attack[0] = True
 
 # створюємо елементи від цього класу

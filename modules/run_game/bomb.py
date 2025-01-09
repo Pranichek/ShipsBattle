@@ -1,8 +1,7 @@
 from ..server import enemy_matrix
-from ..screens.create_grid import list_object_map_enemy
-from ..classes.animation import Animation
+from ..server import enemy_died_ships
 
-def upgrade_attack(index : str, col: int, row: int, count_7 : int):
+def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list, old_killed_ships: int):
     """
 ВНИМАНИЕ ЖООООООООСКИЕ КАСТЫЛИ, ВСЕМ БАЯТЬСЯ ! ! !
 entry_cell для внутренних клеток, если надо ударить 3 на 3 во внутренних клеточках
@@ -15,15 +14,18 @@ bot_wall для нижней стенки 3 на 3
 top_wall для верхней стенки 3 на 3 
 right_wall для правой стенки 3 на 3 
     """
+    old_killed_ships[0] = len(enemy_died_ships[0])
     if index == "entry_cell":
         for row_offset in range(-1, 2):
             for index_col in range(0, 3):
                 current_row = row + row_offset
                 current_col = col - 1 + index_col
                 if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][current_col])
                     enemy_matrix[0][current_row][current_col] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][current_col] = 5
                     
     if index == "top_left_corner":
@@ -31,9 +33,11 @@ right_wall для правой стенки 3 на 3
             for index_col in range(0, 3):
                 current_row = row + row_offset
                 if enemy_matrix[0][current_row][col + index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][col + index_col])
                     enemy_matrix[0][current_row][col  + index_col] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][col + index_col] == 0 or enemy_matrix[0][current_row][col + index_col] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][col + index_col] = 5
 
     if index == "bot_left_corner":
@@ -42,9 +46,11 @@ right_wall для правой стенки 3 на 3
                 current_row = row - row_offset
                 current_col = col + index_col
                 if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][current_col])
                     enemy_matrix[0][current_row][current_col] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][current_col] = 5
     
     if index == "left_wall":
@@ -53,9 +59,11 @@ right_wall для правой стенки 3 на 3
                 current_row = row + row_offset
                 current_col = col + index_col
                 if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][current_col])
                     enemy_matrix[0][current_row][current_col] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][current_col] = 5
     
     if index == "top_right_corner":
@@ -64,9 +72,11 @@ right_wall для правой стенки 3 на 3
                 current_row = row + row_offset
 
                 if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][col - index_col])
                     enemy_matrix[0][current_row][col  - index_col] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][col - index_col] = 5
 
     if index == "bot_right_corner":
@@ -75,9 +85,11 @@ right_wall для правой стенки 3 на 3
                 current_row = row - row_offset
 
                 if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][col - index_col])
                     enemy_matrix[0][current_row][col  - index_col] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][col - index_col] = 5                
 
     if index == "bot_wall":
@@ -85,9 +97,11 @@ right_wall для правой стенки 3 на 3
             for index_col in range(0, 3):
                 current_row = row - row_offset
                 if enemy_matrix[0][current_row][col + index_col - 1] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][col + index_col - 1])
                     enemy_matrix[0][current_row][col + index_col - 1] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][col + index_col - 1] == 0 or enemy_matrix[0][current_row][col + index_col - 1] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][col + index_col - 1] = 5
 
     if index == "top_wall":
@@ -95,9 +109,11 @@ right_wall для правой стенки 3 на 3
             for index_col in range(0, 3):
                 current_row = row + row_offset
                 if enemy_matrix[0][current_row][col + index_col - 1] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][col + index_col - 1])
                     enemy_matrix[0][current_row][col + index_col - 1] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][col + index_col - 1] == 0 or enemy_matrix[0][current_row][col + index_col - 1] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][col + index_col - 1] = 5
     
     if index == "right_wall":
@@ -106,7 +122,11 @@ right_wall для правой стенки 3 на 3
                 current_row = row + row_offset
 
                 if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[0][current_row][col - index_col])
                     enemy_matrix[0][current_row][col - index_col] = 7
                     count_7[0] += 1
                 elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
+                    count_misses.append(0)
                     enemy_matrix[0][current_row][col - index_col] = 5
+
+  
