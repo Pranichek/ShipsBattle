@@ -156,6 +156,8 @@ def start_server():
         data_in_list = json.loads(response_data)
         print(data_in_list, "from client")
 
+
+
         #якщо нікнейма суперника ще немає у словарі то записуємо його нік у джейосн файл
         if data_in_list["nick"] not in list_users:
             list_users[data_in_list["nick"]] = {"points": data_in_list["points"], "password": data_in_list["password"]}

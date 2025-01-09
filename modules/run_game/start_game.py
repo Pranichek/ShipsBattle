@@ -126,8 +126,6 @@ def upgrade_flag():
 
     
 
-
-
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
 create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height = 80 , action = button_action)
@@ -933,8 +931,11 @@ def fight_window():
             if list_achieves[index_achiv[0]].VISIBLE == 0:
                 check_achiv[0] = False
                 index_achiv[0] = 100
-        #----------------------------------------------------------------
 
+
+       
+  
+        #----------------------------------------------------------------
         if shop.first_task.TEXT == shop.list_first_task[2]:
             shop.kill_one_three_decker_ship()
 

@@ -91,9 +91,11 @@ class Font_Shop:
         self.text_surface.set_alpha(self.VISIBLE)
         screen.blit(self.text_surface, (self.X_COR, self.Y_COR))
 
+
+
 # створюємо списки із завданнями , щоб кожен раз вони були рандомні
 list_first_task = [
-    "2 hits in a row" , 
+    "2 hits in a row", 
     "4 hits in a row" ,
     "Kill one three-decker ship", 
     "3 hits in a row",
@@ -118,6 +120,9 @@ list_fourth_task = [
     ]
 
 
+copy_first_tadk_list = list_first_task.copy()
+
+
 # лист збереження грошей
 money_list = [0]
 
@@ -139,6 +144,7 @@ def two_hits_in_row(number_cell: int):
             check_completed_tasks[0] += 1
             print("Two hits in a row")
             two_hits_in_a_row.append("True")
+
 
 # 1 three hits in a row
 three_hits_in_a_row = []
