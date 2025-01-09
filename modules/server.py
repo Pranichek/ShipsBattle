@@ -26,6 +26,8 @@ def recv_all(socket, buffer_size = 1024):
 old_killed_ships = [0]
 new_killed_ships = [0]
 check_bomb = [False]
+# счетчик чтобы взять новые данные про умершие корабли врага
+get_new_killed_data = [0]
 
 # список для того чтобы от времени отнималась ровно одна секунда
 check_ten_times = []
@@ -337,20 +339,26 @@ def start_server():
                 target_medal_count[0] += 1
                 target_attack_achievement.ACTIVE = True
                 target_attack_medal.ACTIVE = True
-                achievement.list_save_coords_achiv.append((11))
+                achievement.list_save_coords_achiv.append(11)
          
             enemy_balance[0] = ready_clinet_data["money_balance"]
 
             enemy_died_ships[0] = ready_clinet_data["player_died_ships"]
 
             # проверка ачивки для бомбы
-            if check_bomb[0] == True:
+            if check_bomb[0] == True and get_new_killed_data[0] == 0:
+                get_new_killed_data[0] += 1
+            elif get_new_killed_data[0] >= 1:
                 new_killed_ships[0] = len(enemy_died_ships[0])
                 if new_killed_ships[0] - old_killed_ships[0] >= 2:
+                    print(new_killed_ships[0], old_killed_ships[0])
                     destroyer_medal.ACTIVE = True
                     destroyer_achievement.ACTIVE = True
                     check_bomb[0] = False
-                    achievement.list_save_coords_achiv.append((9))
+                    achievement.list_save_coords_achiv.append(9)
+                else:
+                    check_bomb[0] = False
+                    get_new_killed_data[0] = 0
 
             # координаты медалей враг
             for medal in ready_clinet_data["medals_coordinates"]:

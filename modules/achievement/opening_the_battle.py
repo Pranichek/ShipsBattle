@@ -9,9 +9,9 @@ def opening_the_battle(grid: list , enemy_grid: list):
         enemy_ships[0] = 0
         for row in range(len(grid)):
             for cell in range(len(grid[row])):
-                if grid[row][cell] != 5 and grid[row][cell] != 7 and grid[row][cell] != 0:
+                if grid[row][cell] in [1, 2, 3, 4]:
                     player_ships[0] += 1
-                if enemy_grid[0][row][cell] != 5 and enemy_grid[0][row][cell] != 7 and enemy_grid[0][row][cell] != 0:
+                if enemy_grid[0][row][cell] in [1, 2, 3, 4]:
                     enemy_ships[0] += 1
 
         if player_ships[0] == 20 and enemy_ships[0] <= 19:

@@ -587,10 +587,11 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
-        print(enemy_died_ships[0])
-        old_killed_ships[0] = 0
+
         # print(list_grid)
         # print(check_target_attack[0])
+        achievement.player_died_ships_for_achiv[0] = player_died_ships
+        achievement.enemy_dies_ships_for_ahiv[0] = enemy_died_ships[0]
         for medal in range(0 , len(save_medals_coordinates)):
             if save_medals_coordinates[medal] == 1:
                 class_medal.enemy_four_decker_sniper_medal.ACTIVE = True
@@ -1014,29 +1015,27 @@ def fight_window():
                                                         count_7 = [0]
                                                         count_ships = []
                                                         count_misses = []
-                                                        old_killed_ships[0] = 0
+                                                        old_killed_ships[0] = len(enemy_died_ships[0])
                                                         if row == 0 and col == 0:
-                                                            upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif 0 < row < 9 and 0 < col < 9:
-                                                            upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif 1 <= row < 9 and col == 0:
-                                                            upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif row == 9 and col == 0:
-                                                            upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif row == 0 and col == 9:
-                                                            upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)          
+                                                            upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)          
                                                         elif row == 9 and col == 9:
-                                                            upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)        
+                                                            upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)        
                                                         elif row == 9 and 0 < col < 9:
-                                                            upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif row == 0 and 0 < col < 9:
-                                                            upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif 0 < row < 9 and col == 9:
-                                                            upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         
                                                         if count_7[0] > 0:
-                                                            check_bomb[0] = True
-                                                            turn[0] = "server_turn"
                                                             check_time[0] = 0
                                                             if shop.third_task.TEXT == shop.list_third_task[1]:
                                                                 shop.single_ships.extend(count_ships)
@@ -1072,9 +1071,11 @@ def fight_window():
                                                             achievement.first_shot(7)
                                                             achievement.single_ships_achiv.extend(list_ships)
                                                             achievement.list_hits_achiv.extend(list_ships)
-                                                        else:
+                                                            check_bomb[0] = True
+                                                            list_check_need_send[0] = "yes" 
                                                             turn[0] = "client_turn"
-                                                            check_time[0] = 0
+                                                        else:
+    
                                                             if shop.third_task.TEXT == shop.list_third_task[1]:
                                                                 shop.single_ships.extend(count_misses)
                                                             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
@@ -1100,6 +1101,9 @@ def fight_window():
                                                             achievement.first_shot(0)
                                                             achievement.single_ships_achiv.extend(list_ships)
                                                             achievement.list_hits_achiv.extend(list_ships)
+                                                            list_check_need_send[0] = "yes" 
+                                                            turn[0] = "server_turn"
+                                                            check_time[0] = 0
                                                         count_7[0] = 0
                                                         count_ships.clear()
                                                         count_misses.clear()
@@ -1204,25 +1208,25 @@ def fight_window():
                                                         count_7 = [0]
                                                         count_ships = []
                                                         count_misses = []
-                                                        old_killed_ships[0] = 0
+                                                        old_killed_ships[0] = len(enemy_died_ships[0])
                                                         if row == 0 and col == 0:
-                                                            upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif 0 < row < 9 and 0 < col < 9:
-                                                            upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif 1 <= row < 9 and col == 0:
-                                                            upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif row == 9 and col == 0:
-                                                            upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif row == 0 and col == 9:
-                                                            upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)          
+                                                            upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)          
                                                         elif row == 9 and col == 9:
-                                                            upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)        
+                                                            upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)        
                                                         elif row == 9 and 0 < col < 9:
-                                                            upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif row == 0 and 0 < col < 9:
-                                                            upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         elif 0 < row < 9 and col == 9:
-                                                            upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, old_killed_ships = old_killed_ships)
+                                                            upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
                                                         
                                                         if count_7[0] > 0:
                                                             check_bomb[0] = True
@@ -1255,7 +1259,6 @@ def fight_window():
                                                             if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                                                                 for hit in range(0, count_7[0]):
                                                                     shop.eight_hits_in_row(number_cell = 7)
-
                                                             # ачивки
                                                             for hit in range(0, count_7[0]):
                                                                 achievement.ten_shoot_in_row(7)

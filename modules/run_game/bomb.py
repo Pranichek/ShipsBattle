@@ -1,7 +1,7 @@
 from ..server import enemy_matrix
 from ..server import enemy_died_ships
 
-def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list, old_killed_ships: int):
+def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list):
     """
 ВНИМАНИЕ ЖООООООООСКИЕ КАСТЫЛИ, ВСЕМ БАЯТЬСЯ ! ! !
 entry_cell для внутренних клеток, если надо ударить 3 на 3 во внутренних клеточках
@@ -14,7 +14,7 @@ bot_wall для нижней стенки 3 на 3
 top_wall для верхней стенки 3 на 3 
 right_wall для правой стенки 3 на 3 
     """
-    old_killed_ships[0] = len(enemy_died_ships[0])
+  
     if index == "entry_cell":
         for row_offset in range(-1, 2):
             for index_col in range(0, 3):
