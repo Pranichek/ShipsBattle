@@ -92,6 +92,13 @@ def buy_bomb():
         if money_list[0] >= 0:
             check_buy_bomb_attack[0] = True
 
+flagbimb200=["no"]
+cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
+check_2= [11,12,13,14,15,16,17,18,19,20]
+def buy_auto_rocket():
+    flagbimb200[0] = "yes"
+
+
 # створюємо елементи від цього класу
 button_armor_for_ship = Button_Shop(
     x = 600 ,
@@ -150,7 +157,7 @@ button_auto_attack = Button_Shop(
     height = 105 ,
     image_name = "auto_rocket.png",
     target_y = 263,
-    action = test
+    action = buy_auto_rocket
 )
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати

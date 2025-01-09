@@ -53,6 +53,7 @@ class Grid:
                 x_screen += width_cell
             y_screen += height_cell
             x_screen = self.X_SCREEN
+
     def snap_to_grid(self, x, y):
     # Рассчитываем индекс столбца сетки (grid_x), в который попадает точка (x)-координата корабля.
     # 1. Вычитаем координату начала сетки по X (self.X_SCREEN), чтобы получить относительное положение.
@@ -79,6 +80,41 @@ class Grid:
     #    - Умножаем индекс столбца (grid_x) на ширину ячейки (62) и добавляем смещение сетки (self.X_SCREEN).
     # 2. Аналогично, рассчитываем экранные координаты центра ячейки по Y.
         return self.X_SCREEN + grid_x * 62, self.Y_SCREEN + grid_y * 62
+    
+    def snap_to_grid_enemy(self, x, y):
+
+        grid_x = round((x - self.X_SCREEN) / 55)  
+
+        grid_y = round((y - self.Y_SCREEN) / 55)  
+
+        grid_x = max(0, min(10 - 1, grid_x))
+ 
+        grid_y = max(0, min(10 - 1, grid_y))
+  
+        return self.X_SCREEN + grid_x * 55, self.Y_SCREEN + grid_y * 55
+    
+    """""
+    ****************************************************************************************
+    """""
+    def cell_number_to_coordinates(self, cell_number):
+        # Преобразуем номер клетки в экранные координаты
+        # cell_number - это номер клетки, который начинается с 1 (например, 1, 2, 3,...)
+        grid_x = (cell_number ) % 10  # Преобразуем в столбец
+        grid_y = (cell_number ) // 10  # Преобразуем в строку
+        x_coord = self.X_SCREEN + grid_x * 55
+        y_coord = self.Y_SCREEN + grid_y * 55
+        return x_coord, y_coord
+    def coordinates_to_number(self, x_coord, y_coord):
+        # Преобразуем экранные координаты в номер клетки
+        # x_coord и y_coord - это экранные координаты точки
+        grid_x = (x_coord - self.X_SCREEN) // 55  # Вычисляем столбец
+        grid_y = (y_coord - self.Y_SCREEN) // 55  # Вычисляем строку
+        cell_number = grid_y * 10 + grid_x + 1  # Преобразуем в номер клетки
+        return cell_number
+    
+    """""
+    ****************************************************************************************
+    """""
     
     
 grid_player = Grid(x_screen = 81 , y_screen = 76)

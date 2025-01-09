@@ -82,7 +82,7 @@ class InputText:
             self.screen_name.blit(text_surface, (self.x_cor + 90, self.y_cor + 13))
 
 
-input_nick = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 239, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "input_area.png")
-input_ip_adress = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 372, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "input_area.png")
-input_port = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "input_area.png")
-input_password = InputText(width= 346 , height= 80 , x_cor= 467, y_cor= 141, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "password", name_image= "input_area.png")
+input_nick = InputText(width = 346 , height = 80 , x_cor = 467, y_cor = 297, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "nickname", name_image= "input_area.png")
+input_ip_adress = InputText(width = 346 , height = 80 , x_cor = 467, y_cor = 400, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "ip adress", name_image= "input_area.png")
+input_port = InputText(width = 346 , height = 80 , x_cor = 467, y_cor = 501, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "port", name_image= "input_area.png")
+input_password = InputText(width = 346 , height = 80 , x_cor = 467, y_cor= 195, font_name = "Jersey15.ttf" , screen_name = main_screen , base_text= "password", name_image= "input_area.png")

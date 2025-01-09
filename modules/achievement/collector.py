@@ -33,14 +33,13 @@ def monster_of_perfictionists():
                 elif killed_ships[0].count(4) >= 2:
                     index_killed_ships[0] += len(killed_ships[0]) - 1
             
-        
             if len(killed_ships[0]) >= 4:
-                print(777)
+               
                 if 0 not in list_hits_achiv and 5 not in list_hits_achiv:
                     if 1 in killed_ships[0] and 2 in killed_ships[0] and 3 in killed_ships[0] and 4 in killed_ships[0]:
-                        print(888)
+                    
                         if killed_ships[0].count(1) == 1 and killed_ships[0].count(2) == 1 and killed_ships[0].count(3) == 1 and killed_ships[0].count(4) == 1:
-                            print(999)
+                      
                             killed_ships.append(True)
                             perfictionists_achiement.ACTIVE = True
                             collector_medal.ACTIVE = True

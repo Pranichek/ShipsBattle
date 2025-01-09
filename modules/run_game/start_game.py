@@ -6,7 +6,7 @@ import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
 from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
-from ..classes import DrawImage, Button, Font, list_ships, Animation , player_medal , enemy_medals
+from ..classes import DrawImage, Button, Font, list_ships, Animation , player_medal , enemy_medals, sdckn
 from ..classes.animation import rocket_animation , animation_boom , miss_rocket_animation , bomb_animation , animation_bomb_boom
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port, input_password
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
@@ -17,11 +17,48 @@ from .clinent_connect import connect_to_server , list_check_connection , fail_co
 from .random_placing import random_places_ships
 from ..server import count_5, list_check_ready_to_fight , dict_save_information, check_time , turn, list_player_role, enemy_matrix, list_check_win, list_check_win , our_miss_anim, enemy_balance, save_medals_coordinates, player_died_ships, enemy_died_ships, flag_bomb_animation, old_killed_ships, check_bomb
 from ..client import list_check_need_send 
-from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss
+from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss , Missile_200
 from .bomb import upgrade_attack 
 # from .bomb import upgrade_attack
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
+
+
+
+
+
+"""""
+****************************************************************************************
+"""""
+
+def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5, grid_height=5, cell_size=55):
+    # Привязываем центральную точку курсора к сетке
+    snapped_x, snapped_y = grid.snap_to_grid_enemy(mouse_x, mouse_y)
+
+    # Вычисляем координаты левого верхнего угла сетки 5x5
+    rect_x = snapped_x - (grid_width // 2) * cell_size
+    rect_y = snapped_y - (grid_height // 2) * cell_size
+    center_x = rect_x +137
+    center_y = rect_y +137
+    xxxx=grid.coordinates_to_number(center_x, center_y)
+    print (f"aahahahavot eta cletca,{xxxx}")
+    # Рисуем сетку
+    for row in range(grid_height):
+        for col in range(grid_width):
+            cell_rect = pygame.Rect(
+                rect_x + col * cell_size,
+                rect_y + row * cell_size,
+                cell_size,
+                cell_size
+            )
+            pygame.draw.rect(screen, color, cell_rect, 1)
+
+    return center_x, center_y
+
+"""""
+****************************************************************************************
+"""""
+
 
 
 #список для проверки нажата ли кнопка
@@ -187,21 +224,10 @@ player_jar = DrawImage(x_cor = 1190 , y_cor = 18 , width = 90 , height = 76 , fo
 enemy_jar = DrawImage(x_cor = 102 , y_cor = 18 , width = 90 , height = 76 , folder_name = "decorations" , image_name = "jar_balance.png")
 # место где будет отображаться какое спец оружие купил пользователь
 user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 , folder_name = "backgrounds" , image_name = "user_weapon.png")
-# enemy_medals 
-# four_decker_enemy_medal = DrawImage(x_cor = 221 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "medal_four_decker.png")
-# auto_sight_medal = DrawImage(x_cor = 424 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "auto_sight_medal.png")
-# destroying_medal = DrawImage(x_cor = 415 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "destroying_medal.png")
-# first_hit_enemy_medal = DrawImage(x_cor = 272 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "first_hit_medal.png")
-# lone_hunter_enemy_medal = DrawImage(x_cor = 311 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "lone_hunter_medal.png")
-# master_of_disguise_enemy_medal = DrawImage(x_cor = 341 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement", image_name = "master_of_disguist_medal.png")
-# enemy_prefect_shooter_medal = DrawImage(x_cor = 360 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "perfect_shooter_medal.png")
-# pioneer_enemy_medal = DrawImage(x_cor = 472 , y_cor = -50 , width = 100 , height = 50 , folder_name = "achievement" , image_name = "pioneer_medal.png")
-# strategist_enemy_medal = DrawImage(x_cor = 267 , y_cor = -50 , width = 50 , height = 50 , folder_name = "achievement" , image_name = "strategist_medal.png")
-# openin_the_batte_enemy_medal = DrawImage(x_cor = 368 , y_cor = -80 , width = 47 , height = 65 , folder_name = "achievement" , image_name = "medal_opening_the_battle.png")
-# enemy_medal_perfectionists = DrawImage(x_cor = 451 , y_cor = -50 , height = 54 , width = 55 , folder_name = "achievement" , image_name = "medal_perfectionists.png")
-# target_attack_enemy_medal = DrawImage(x_cor = 413 , y_cor = -50 , height = 54 , width = 54 , folder_name = "achievement" , image_name = "target_attack_medal.png")
-#products_icons
+choice_ip = DrawImage(x_cor = 488, y_cor = 61, width = 299, height = 60, folder_name = "decorations", image_name = "choice_ip.png")
+#products icons
 bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_name = "products_icons" , image_name = "bomb_icon.png")
+auto_rocket_icon = DrawImage(x_cor = 1137, y_cor = 58, width = 45.54, height = 40.09, folder_name = "products_icons", image_name = "auto_rocket_icon.png")
 
 
 #backgrounds
@@ -220,6 +246,7 @@ can_attack = DrawImage(width = 191 , height = 53 , x_cor = 820 , y_cor = 118 , f
 can_not_attack = DrawImage(width = 191 , height = 53 , x_cor = 311 , y_cor = 118 , folder_name = "backgrounds" , image_name = "not_active.png")
 # Finish background
 finish_bg = DrawImage(width = 1280 , height = 832 , x_cor = 0 , y_cor = 0 , folder_name = "backgrounds" , image_name = "win_game_bg.png")
+
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
 def main_window():
@@ -274,14 +301,17 @@ def main_window():
                                 change_scene(create_game_window())
         pygame.display.flip()
 
+
 def create_game_window():
     #викликаємо функцію для запуску серверу
     #встановлюємо назву вікна гри для сервера
     pygame.display.set_caption("Create Game Window")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
+
     #основний цикл роботи вікна користувача
     while run_game:
+        x, y = pygame.mouse.get_pos()
         module_screen_server.FPS.tick(120)
         input_data_bg.draw_image(screen= main_screen)
         data = read_json(name_file = "utility.json")
@@ -298,7 +328,10 @@ def create_game_window():
         fourth_cold_image.draw_image(screen= main_screen)
         start_game_button.draw(surface= main_screen)
 
+        choice_ip.draw_image(screen= main_screen)
 
+    
+        
         #если попытались создать сервер кторый нельзя(например неправильны айпи) , то выводим предуприждение об этом
         if check_server_started[0] == "error_server":
             fail_start_server.draw_image(screen = main_screen)
@@ -321,6 +354,14 @@ def create_game_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)
+                if x >= 497 and x <= 497 + 135:
+                    if y >= 69 and y <= 69 + 46:
+                        sdckn.change_to_wan_ip()
+                elif x >= 640 and x <= 640 + 100:
+                    if y >= 69 and y <= 69 + 46:
+                        sdckn.change_to_local_ip()
+
+                
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
                 run_game = False
@@ -545,6 +586,8 @@ list_cross_player = []
 check_achiv = [False]
 index_achiv = [100]
 
+
+numberofbim = [""]
 
 # функція для бою між гравцями
 def fight_window():
@@ -890,7 +933,33 @@ def fight_window():
                     if not exists:
                         list_cross_player.append(cross_animation)
 
-        
+
+        mouse_x , mouse_y = pygame.mouse.get_pos()
+         
+        if shop.shop_item[0].TURN != "Up":
+            if shop.flagbimb200[0] == 'yes':
+                #X_COR,X_COR= enemy_grid.snap_to_grid(mouse_x,mouse_y)
+                center_xy=draw_cursor(screen = main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color =colorsetka)
+                draw_cursor(screen = main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color =colorsetka)
+                
+                x_mouse=center_xy[0]
+                y_mouse=center_xy[1]
+                numberofbim[0] = enemy_grid.coordinates_to_number(x_mouse, y_mouse)
+                print (x_mouse,y_mouse)
+            
+            
+            if x_mouse >= 182 and x_mouse <= 67 + 450:
+                if y_mouse >= 322 and y_mouse <= 257 + 450  and numberofbim[0] not in shop.check_2:
+                    colorsetka=(0, 255, 0)    
+                else:
+                    colorsetka=(255, 0, 0)
+            else:
+                colorsetka=(255, 0, 0)
+
+
+
+
+     
 
         #----------------------------------------------------------------
         #отрисовка медалей 
@@ -912,6 +981,8 @@ def fight_window():
         # products icon in the right top corner of the screen
         if shop.check_buy_bomb_attack[0] == True:
             bomb_icon.draw_image(screen = main_screen)
+        if shop.flagbimb200[0] == "yes":
+            auto_rocket_icon.draw_image(screen = main_screen)
 
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
@@ -961,7 +1032,6 @@ def fight_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
-
             # перевіряємо чи натиснули на кнопку показу магазину 
             if list_check_shop[0] == True:
                 # якщо так , то говоримо щоб усі елементи рухались униз(щоб гравець зміг їх побачити)
@@ -1018,23 +1088,23 @@ def fight_window():
                                                         count_misses = []
                                                         old_killed_ships[0] = len(enemy_died_ships[0])
                                                         if row == 0 and col == 0:
-                                                            upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
+                                                            upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
                                                         elif 0 < row < 9 and 0 < col < 9:
-                                                            upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
+                                                            upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
                                                         elif 1 <= row < 9 and col == 0:
-                                                            upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
+                                                            upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
                                                         elif row == 9 and col == 0:
-                                                            upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
+                                                            upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
                                                         elif row == 0 and col == 9:
-                                                            upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)          
+                                                            upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)          
                                                         elif row == 9 and col == 9:
-                                                            upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)        
+                                                            upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)        
                                                         elif row == 9 and 0 < col < 9:
-                                                            upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
+                                                            upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
                                                         elif row == 0 and 0 < col < 9:
-                                                            upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
+                                                            upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
                                                         elif 0 < row < 9 and col == 9:
-                                                            upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses)
+                                                            upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
                                                         
                                                         if count_7[0] > 0:
                                                             check_time[0] = 0
@@ -1200,7 +1270,58 @@ def fight_window():
                                                     #Колонку кораблика вычисляем по такому принципу
                                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                     col = int(str_col[-1])
-                                                    if shop.check_buy_bomb_attack[0] == True:
+
+                                                    if shop.flagbimb200[0] =="yes" and numberofbim[0] not in shop.cheak: 
+                                                        kord = Missile_200(row,col,enemy_matrix)
+                                                        #если false flag  то бан клетка и если NOne значит нету корабликов 
+                                                        if kord != "false" and kord != None :
+                                                            if kord[0][0] != "True":
+                                                                lenkord = len(kord)
+                                                                for i in range(lenkord):
+                                                                    # знаходим номер клетки 
+                                                                    kletka= kord[i][0]*10 + kord[i][1]
+                                                                    print (f"kletka",kletka)
+                                                                    print (f"col row ",col,row,i )
+
+                                                                    # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         
+                                                                    x_y = enemy_grid.cell_number_to_coordinates(kletka)
+                                                                    print ("шиталово 0",x_y)
+                                                                    check_animation_rocket[0] = "start_animation"  
+                                                                    x_hit_the_ship[0] = x_y[0]
+                                                                    y_hit_the_ship[0] = x_y[1]
+                                                                    print (x_hit_the_ship[0],y_hit_the_ship[0])
+                                                                    
+                                                                    # у матрицю ворога записуємо 7
+                                                                    enemy_matrix[0][kord[i][0]][kord[i][1]] = 7
+                                                                    # обнуляємо час ходу
+                                                                    check_time[0] = 0
+                                                                    # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                                    turn[0] = "server_turn"      
+                                                                    shop.flagbimb200[0] ="no"
+                                                            else:
+                                                                #знаходим номер клетки 
+                                                                kletka= kord[0][1]*10 + kord[0][2]
+                                                                print (f"kletka",kletka)
+                                                                print (f"col row ",col,row,0 )
+                                                                # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         
+                                                                x_y = enemy_grid.cell_number_to_coordinates(kletka)
+                                                                print ("шиталово 0",x_y)
+                                                                check_animation_rocket[0] = "start_animation"  
+                                                                x_hit_the_ship[0] = x_y[0]
+                                                                y_hit_the_ship[0] = x_y[1]
+                                                            
+                                                                # у матрицю ворога записуємо 7
+                                                                enemy_matrix[0][kord[0][1]][kord[0][2]] = 5 
+                                                                # обнуляємо час ходу
+                                                                check_time[0] = 0
+                                                                # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
+                                                                
+                                                                list_check_need_send[0] = "yes"
+                                                                turn[0] = "client_turn"      
+                                                                #bimbcordlistx.append(x_y[0])
+                                                                #bimbcordlisty.append(x_y[1])
+                                                                shop.flagbimb200[0] ="no"
+                                                    elif shop.check_buy_bomb_attack[0] == True:
                                                         print("BOMBASTIK")
                                                         shop.check_buy_bomb_attack[0] = False
                                                         flag_bomb_animation[0] = True
