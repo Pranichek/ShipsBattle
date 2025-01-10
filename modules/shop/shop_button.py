@@ -98,6 +98,12 @@ check_2= [11,12,13,14,15,16,17,18,19,20]
 def buy_auto_rocket():
     flagbimb200[0] = "yes"
 
+but_flag = [False]
+def buy_restore_cell():
+    if but_flag[0] == False:
+        but_flag[0] = True
+
+
 
 # створюємо елементи від цього класу
 button_armor_for_ship = Button_Shop(
@@ -127,7 +133,7 @@ button_restores_cell = Button_Shop(
     height = 105 ,
     image_name = "restore_one_cell.png",
     target_y = 263,
-    action = test
+    action = buy_restore_cell
 )
 
 button_fire_rocket = Button_Shop(

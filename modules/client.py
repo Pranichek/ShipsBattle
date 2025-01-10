@@ -8,6 +8,7 @@ import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
 
+# лист для клиента в котором храним надо ли что то изменять после его атаки
 list_check_need_send = ["no"]
 
 

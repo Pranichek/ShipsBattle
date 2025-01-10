@@ -69,7 +69,8 @@ def ship_border():
                             if len_ship == count_len[0] - 1:
                                 print("убили корабль" , count_len[0])
                                 check_kill[0] = True
-                                check_number_cell.append(num_cell)
+                                for i in range(0, count_len[0]):
+                                    check_number_cell.append(num_cell + i)
                                 player_died_ships.append(count_len[0])
   
 
@@ -83,7 +84,8 @@ def ship_border():
                             if len_ship == count_len[0] - 1:
                                 print("убили корабль" , count_len[0])
                                 check_kill[0] = True
-                                check_number_cell.append(num_cell)
+                                for i in range(0, count_len[0]):
+                                    check_number_cell.append(num_cell + i)
                                 player_died_ships.append(count_len[0])
 
 

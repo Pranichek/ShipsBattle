@@ -24,9 +24,6 @@ from .bomb import upgrade_attack
 pygame.init()
 
 
-but_flag = [False]
-def but_flug_func():
-    but_flag[0] = True
 
 
 # def sheet_func(row, col):
@@ -42,7 +39,6 @@ def but_flug_func():
 #             turn[0] = "server_turn"
 #             # обнуляємо час ходу
 #             check_time[0] = 0
-
 
 """""
 ****************************************************************************************
@@ -241,7 +237,6 @@ lan_ip_button = Button(x = 790, y = 410, image_path = "lan_ip_button.png", image
 wan_ip_button = Button(x = 437, y = 410, image_path = "wan_ip.png", image_hover_path = "wan_ip_hover.png", width = 58, height = 60, action = set_wan_ip)
 
 
-sheet = Button(x = 100, y = 110,image_path= "restart_game.png" , image_hover_path= "restart_game_hover.png" , width = 408, height = 80, action= but_flug_func)
 
 
 #images decoration
@@ -279,6 +274,7 @@ user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 
 #products icons
 bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_name = "products_icons" , image_name = "bomb_icon.png")
 auto_rocket_icon = DrawImage(x_cor = 1137, y_cor = 58, width = 45.54, height = 40.09, folder_name = "products_icons", image_name = "auto_rocket_icon.png")
+restore_cell_icon = DrawImage(x_cor = 1147, y_cor = 23, width = 31, height = 28.4, folder_name = "products_icons", image_name = "restore_cell_icon.png")
 
 
 #backgrounds
@@ -945,8 +941,8 @@ def fight_window():
                 for cell in range(len(enemy_matrix[0][row])):
                     if enemy_matrix[0][row][cell] in [1, 2, 3, 4]:
                         cltka = (row * 10) + cell
-                        x_anim_miss = list_object_map[cltka].x
-                        y_anim_miss = list_object_map[cltka].y
+                        x_anim_miss = list_object_map_enemy[cltka].x
+                        y_anim_miss = list_object_map_enemy[cltka].y
 
                         for cross in list_cross:
                             if cross.X_COR == x_anim_miss and cross.Y_COR == y_anim_miss:
@@ -1031,7 +1027,8 @@ def fight_window():
                 flag_miss_rocket_animation[0] = ""
         #************************************************************************************************
 
-        sheet.draw(surface= main_screen)
+
+        shop.button_restores_cell.draw(screen = main_screen)
 
         # эти циклы для проверки , попал ли соперник по нашем кораблям
         for index_row ,row in enumerate(list_grid):
@@ -1126,6 +1123,8 @@ def fight_window():
             bomb_icon.draw_image(screen = main_screen)
         if shop.flagbimb200[0] == "yes":
             auto_rocket_icon.draw_image(screen = main_screen)
+        if shop.but_flag[0] == True:
+            restore_cell_icon.draw_image(screen = main_screen)
 
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
@@ -1186,7 +1185,6 @@ def fight_window():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 shop_and_tasks.check_click(event = event)
-                sheet.check_click(event = event)
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop.shop_item:
                     try:
@@ -1198,7 +1196,7 @@ def fight_window():
                 if y_mouse >= 24 and y_mouse <= 60 and x_mouse >= 11 and x_mouse <= 67 and shop.shop_item[0].TURN == "Up":
                     for items in shop.shop_item:
                         items.ACTIVE = True  
-                if but_flag[0] == True:
+                if shop.but_flag[0] == True:
                     if shop.shop_item[0].TURN != "Up":          
                         if x_mouse >= 705 and x_mouse <= 705 + 550:# перевіряємо щоб гравець натискав на свою сітку 
                             if y_mouse >= 257 and y_mouse <= 257 + 550:
@@ -1233,7 +1231,6 @@ def fight_window():
                                                 
                                                 
                                                 if cltx not in check_number_cell:
-                                                    print("aaaaaaaaaaaaa")
                                                     try:
                                                         if list_grid[row + 1][col] == 2:
                                                             list_grid[row][col] = 2
@@ -1295,12 +1292,14 @@ def fight_window():
                                                             list_grid[row][col] = 4
                                                     except:
                                                         print("index error")
-                                                    health_anim[0] = True
+                                                    if list_grid[row][col] != 7:
+                                                        health_anim[0] = True
+                                                        shop.but_flag[0] = False
                                                     row_list[0] = row
                                                     col_list[0] = col
                                                     number_list[0] = list_grid[row][col]
                                                     print(list_grid[row][col])
-                                                    but_flag[0] = False
+
                 
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":

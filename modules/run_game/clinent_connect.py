@@ -9,22 +9,41 @@ from ..client import thread_connect , list_check_connection, list_users
 fail_connect = DrawImage(width = 901 , height = 283 , x_cor = 180 , y_cor = 273 , folder_name = "backgrounds" , image_name = "fail_background.png")
 
 def connect_to_server():
-     #запускаємо звук кліку кнопки
+   #запускаємо звук кліку кнопки
     music_click.play2(0)
     # розділяем нашь айпі на числа , тобо якщо воно було таке 192.168.0.1 то стане таким 192 168 0 1
     # це для того щоб можна було перевірити кожне число окремо
     ip_address = input_ip_adress.user_text.split(".")
-
-    if input_password.user_text == "password" or input_password.user_text == "" or  input_password.user_text == " " or input_nick.user_text == "" or input_nick.user_text == "nickname":
+    
+            
+    # якщо цих чисел не 4 , то користувач не правильно увів дані 
+    if len(ip_address) != 4:
         list_check_connection[0] = "error_connection"
         print("зашло")
         if fail_connect.visible == False:
             fail_connect.visible = True
             print("error_connection")
+        # return False - означає що сталася помилка ,та код не буде далі рухатися
+        return False
+        # return False - означає що сталася помилка ,та код не буде далі рухатися
+    if input_password.user_text == "password" or input_password.user_text == "" or  input_password.user_text == " " or input_nick.user_text == "" or input_nick.user_text == "nickname":
+            list_check_connection[0] = "error_connection"
+            print("зашло")
+            if fail_connect.visible == False:
+                fail_connect.visible = True
+                print("error_connection")
             # return False - означає що сталася помилка ,та код не буде далі рухатися
             return False
     else:
         if input_nick.user_text in list_users:
+            if list_users[input_nick.user_text]["password"] == "password":
+                list_check_connection[0] = "error_connection"
+                print("зашло")
+                if fail_connect.visible == False:
+                    fail_connect.visible = True
+                    print("error_connection")
+                # return False - означає що сталася помилка ,та код не буде далі рухатися
+                return False
             if list_users[input_nick.user_text]["password"] == input_password.user_text:
                 print("пароль подтвердил")
             if list_users[input_nick.user_text]["password"] != input_password.user_text:
@@ -33,56 +52,25 @@ def connect_to_server():
                 if fail_connect.visible == False:
                     fail_connect.visible = True
                     print("error_connection")
-                    # return False - означає що сталася помилка ,та код не буде далі рухатися
-                    return False
-            if list_users[input_nick.user_text]["password"] == "password":
-                list_check_connection[0] = "error_connection"
-                print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
-                    print("error_connection")
-                    # return False - означає що сталася помилка ,та код не буде далі рухатися
-                    return False
-            
-        elif input_nick.user_text not in list_users:
-            if input_password.user_text == "password":
-                list_check_connection[0] = "error_connection"
-                print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
-                    print("error_connection")
-                    # return False - означає що сталася помилка ,та код не буде далі рухатися
-                    return False
-            print("первая игра")
-
-            
-        elif input_nick.user_text not in list_users:
-            print("первая игра")
-            ip_address = input_ip_adress.user_text.split(".")
-            # якщо воно має більше чисел ніж 4 або менш ніж 4 чисел, то такий айпі не є вірним , і виводимо помилку
-            if len(ip_address) != 4:
-                list_check_connection[0] = "error_connection"
-                print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
-                    print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
         
+        elif input_nick.user_text not in list_users:
+            print("первая игра")
+    
         # перевіряємо чи кожне число в межах допустимого діапазону
         for number in ip_address:
             # перевіряємо чи це взагалі числа а не наприклад літери
             if not number.isdigit():
                 # якшо це не цифри, то передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
-                list_check_connection[0] = "error_server"
+                list_check_connection[0] = "error_connection"
                 print("зашло")
-                # якщо вже було це вікно , то робимо його видимим 
                 if fail_connect.visible == False:
                     fail_connect.visible = True
-                    print("error_server")
+                    print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
-            # якщо айпі не підходить у рамки нормальних значеннь виводимо помулку
+            # якщо користувач увів числа але вони не підходять під рамки для нормального айпі, то виводимо окно про помилку
             if not 0 <= int(number) <= 255:
                 list_check_connection[0] = "error_connection"
                 print("зашло")
@@ -92,9 +80,9 @@ def connect_to_server():
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
         try:
-            #  тепер первіряємо порт на правильність написання
+            # тепер перівіряємо на правильність порт 
             port = int(input_port.user_text)
-            # якщо користувач взагалі не увів цифр або тільки одну то виводимо помилку за допомогою передавання про помилку у список
+            #  якщо користувач увів нічого або лише тільки одну цифру то виводимо окно с помилкою
             if len(ip_address) <= 1:
                     list_check_connection[0] = "error_connection"
                     print("зашло")
@@ -103,7 +91,7 @@ def connect_to_server():
                         print("error_connection")
                     # return False - означає що сталася помилка ,та код не буде далі рухатися
                     return False
-            # якщо користувач увів порт який не підходить у рамки портів то виводимо помилку за допомогою передавання про помилку у список
+            # якщо порт не підходить під рамки, то виводимо окно с помилкою
             elif not 1240 < port < 65553:
                 list_check_connection[0] = "error_connection"
                 print("зашло")
@@ -113,12 +101,12 @@ def connect_to_server():
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
         except ValueError:
-            # якщо порт взагалі не цифра , то  виводимо помилку за допомогою передавання про помилку у список
+            #  якщо порт взагалі не цифри то також виводимо окно із помилкою
             list_check_connection[0] = "error_connection"
             print("зашло")
             if fail_connect.visible == False:
                 fail_connect.visible = True
-                print("error_server")
+                print("error_connection")
             # return False - означає що сталася помилка ,та код не буде далі рухатися
             return False
         # якщо усі перевірки пройдені і користувач вперше натиснув на цю кнопку то запускаємо підключення до серверу
