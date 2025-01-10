@@ -6,19 +6,22 @@ from .class_input_text import input_ip_adress
 
 def get_local_ip():
     try:
-        # Попробовать получить IPv4
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.connect(("8.8.8.8", 80))
-        ip = sock.getsockname()[0]
-        sock.close()
-    except OSError:
-        # Если IPv4 недоступен пробуем IPv6
-        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-        sock.connect(("2001:4860:4860::8888", 80)) 
-        ip = sock.getsockname()[0]
-        sock.close()
-    return ip
-    
+        try:
+            # Попробовать получить IPv4
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.connect(("8.8.8.8", 80))
+            ip = sock.getsockname()[0]
+            sock.close()
+        except OSError:
+            # Если IPv4 недоступен пробуем IPv6
+            sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+            sock.connect(("2001:4860:4860::8888", 80)) 
+            ip = sock.getsockname()[0]
+            sock.close()
+        return ip
+    except Exception as error:
+        print(f"Ошибка при получении IP: {error}")
+        return None
     
 class ServerIp:
     def __init__(self):

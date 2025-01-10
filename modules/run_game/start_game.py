@@ -1,5 +1,5 @@
 #імпортуємо усі потрібні модулі
-import pygame , random
+import pygame, random, socket
 import modules.shop as shop
 import modules.classes.class_medal as class_medal
 import modules.achievement as achievement
@@ -161,8 +161,38 @@ flag_upgrade = [True]
 def upgrade_flag():
     flag_upgrade[0] = True
 
+flag_ip = [None]
+def get_local_ip():
+    try:
+        try:
+            # Попробовать получить IPv4
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.connect(("8.8.8.8", 80))
+            ip = sock.getsockname()[0]
+            sock.close()
+        except OSError:
+            # Если IPv4 недоступен пробуем IPv6
+            sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+            sock.connect(("2001:4860:4860::8888", 80)) 
+            ip = sock.getsockname()[0]
+            sock.close()
+        music_click.play2(0)
+        input_ip_adress.user_text = ip
+        input_ip_adress.VISIBLE = 0
+        input_ip_adress.active = True 
+        flag_ip[0] = True
+    except Exception as error:
+        print(f"Ошибка при получении IP: {error}")
+        return None
     
+def set_wan_ip():
+    music_click.play2(0)
+    input_ip_adress.user_text = "0.0.0.0"
+    input_ip_adress.VISIBLE = 0
+    input_ip_adress.active = True 
+    flag_ip[0] = True
 
+    
 #buttons
 #кнопка кторая перекидывает на фрейм по созданию игры(запуска сервера)
 create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height = 80 , action = button_action)
@@ -189,6 +219,9 @@ restart_game = Button(x = 437, y = 713,image_path= "restart_game.png" , image_ho
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
 # 
 upgrade_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_hover_path= "restart_game_hover.png", width= 106, height= 50, action = upgrade_flag)
+
+lan_ip_button = Button(x = 790, y = 410, image_path = "lan_ip_button.png", image_hover_path = "lan_ip_button_hover.png", width = 58, height = 60, action = get_local_ip)
+wan_ip_button = Button(x = 437, y = 410, image_path = "wan_ip.png", image_hover_path = "wan_ip_hover.png", width = 58, height = 60, action = set_wan_ip)
 
 
 
@@ -224,7 +257,6 @@ player_jar = DrawImage(x_cor = 1190 , y_cor = 18 , width = 90 , height = 76 , fo
 enemy_jar = DrawImage(x_cor = 102 , y_cor = 18 , width = 90 , height = 76 , folder_name = "decorations" , image_name = "jar_balance.png")
 # место где будет отображаться какое спец оружие купил пользователь
 user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 , folder_name = "backgrounds" , image_name = "user_weapon.png")
-choice_ip = DrawImage(x_cor = 488, y_cor = 61, width = 299, height = 60, folder_name = "decorations", image_name = "choice_ip.png")
 #products icons
 bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_name = "products_icons" , image_name = "bomb_icon.png")
 auto_rocket_icon = DrawImage(x_cor = 1137, y_cor = 58, width = 45.54, height = 40.09, folder_name = "products_icons", image_name = "auto_rocket_icon.png")
@@ -317,6 +349,9 @@ def create_game_window():
         data = read_json(name_file = "utility.json")
         status_server = data["status"]
 
+        wan_ip_button.draw(surface = main_screen)
+        lan_ip_button.draw(surface = main_screen)
+
         input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
@@ -328,10 +363,49 @@ def create_game_window():
         fourth_cold_image.draw_image(screen= main_screen)
         start_game_button.draw(surface= main_screen)
 
-        choice_ip.draw_image(screen= main_screen)
-
-    
+        if input_nick.active == True:
+            if input_nick.user_text == input_nick.base_text or input_nick.user_text == "":
+                input_nick.fade_out()
+            else:
+                input_nick.fade_in()
+        else:  # Если поле неактивно
+            if input_nick.user_text == "" or input_nick.user_text == input_nick.base_text:  # Если пользователь ничего не ввел
+                input_nick.user_text = input_nick.base_text  # Восстановление базового текста
+                input_nick.fade_in() 
+            
+        if input_ip_adress.active == True or flag_ip[0] == True:
+            if input_ip_adress.VISIBLE >= 255:
+                flag_ip[0] = None
+            if input_ip_adress.user_text == input_ip_adress.base_text or input_ip_adress.user_text == "":
+                input_ip_adress.fade_out()
+            else:
+                input_ip_adress.fade_in()
+        else:
+            if input_ip_adress.user_text == "" or input_ip_adress.user_text == input_ip_adress.base_text:
+                input_ip_adress.user_text = input_ip_adress.base_text
+                input_ip_adress.fade_in()
+     
         
+        if input_port.active == True:
+            if input_port.user_text == input_port.base_text or input_port.user_text == "":
+                input_port.fade_out()
+            else:
+                input_port.fade_in()
+        else:
+            if input_port.user_text == "" or input_port.user_text == input_port.base_text:
+                input_port.user_text = input_port.base_text
+                input_port.fade_in()
+
+        if input_password.active == True:
+            if input_password.user_text == input_password.base_text or input_password.user_text == "":
+                input_password.fade_out()
+            else:
+                input_password.fade_in()
+        else:
+            if input_password.user_text == "" or input_password.user_text == input_password.base_text:
+                input_password.user_text = input_password.base_text
+                input_password.fade_in()
+            
         #если попытались создать сервер кторый нельзя(например неправильны айпи) , то выводим предуприждение об этом
         if check_server_started[0] == "error_server":
             fail_start_server.draw_image(screen = main_screen)
@@ -354,14 +428,9 @@ def create_game_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)
-                if x >= 497 and x <= 497 + 135:
-                    if y >= 69 and y <= 69 + 46:
-                        sdckn.change_to_wan_ip()
-                elif x >= 640 and x <= 640 + 100:
-                    if y >= 69 and y <= 69 + 46:
-                        sdckn.change_to_local_ip()
+                lan_ip_button.check_click(event = event)
+                wan_ip_button.check_click(event = event)
 
-                
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
                 run_game = False
@@ -407,6 +476,46 @@ def join_game_window():
         third_cold_image.draw_image(screen= main_screen)
         fourth_cold_image.draw_image(screen= main_screen)
         join_game_button.draw(surface= main_screen)
+
+        if input_nick.active == True:
+            if input_nick.user_text == input_nick.base_text or input_nick.user_text == "":
+                input_nick.fade_out()
+            else:
+                input_nick.fade_in()
+        else:  # Если поле неактивно
+            if input_nick.user_text == "" or input_nick.user_text == input_nick.base_text:  # Если пользователь ничего не ввел
+                input_nick.user_text = input_nick.base_text  # Восстановление базового текста
+                input_nick.fade_in()  # Плавное появление базового текста
+
+        if input_ip_adress.active == True:
+            if input_ip_adress.user_text == input_ip_adress.base_text or input_ip_adress.user_text == "":
+                input_ip_adress.fade_out()
+            else:
+                input_ip_adress.fade_in()
+        else:
+            if input_ip_adress.user_text == "" or input_ip_adress.user_text == input_ip_adress.base_text:
+                input_ip_adress.user_text = input_ip_adress.base_text
+                input_ip_adress.fade_in()
+        
+        if input_port.active == True:
+            if input_port.user_text == input_port.base_text or input_port.user_text == "":
+                input_port.fade_out()
+            else:
+                input_port.fade_in()
+        else:
+            if input_port.user_text == "" or input_port.user_text == input_port.base_text:
+                input_port.user_text = input_port.base_text
+                input_port.fade_in()
+
+        if input_password.active == True:
+            if input_password.user_text == input_password.base_text or input_password.user_text == "":
+                input_password.fade_out()
+            else:
+                input_password.fade_in()
+        else:
+            if input_password.user_text == "" or input_password.user_text == input_password.base_text:
+                input_password.user_text = input_password.base_text
+                input_password.fade_in()
 
         #если не нашли сервер по которому подключаемся или ввели что то неправильно, выводим табличку о том что таокго сервера нет
         #этот список находится в файле connect_to_server.check_after_randomy

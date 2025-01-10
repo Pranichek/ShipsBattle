@@ -24,6 +24,7 @@ def recv_all(socket, buffer_size = 1024):
 count_5 = [0]
 
 
+
 #для ачивки убить два или больше окрабля одной бомбой
 old_killed_ships = [0]
 new_killed_ships = [0]
@@ -322,7 +323,7 @@ def start_server():
                 "check_ten_times":check_ten_times.count(1),
                 "medals_coordinates":achievement.list_save_coords_achiv,
                 "player_died_ships":player_died_ships,
-                "check_target_attack_achiv":check_target_attack[0],
+                "check_target_attack_achiv":check_target_attack[0]
             }   
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -378,41 +379,6 @@ def start_server():
                         count_5[0] = 0
                 else:
                     count_5[0] = 0
-            # elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
-            #     print(123)
-            #     new_killed_ships[0] = len(enemy_died_ships[0])
-            #     if new_killed_ships[0] - old_killed_ships[0] >= 2:
-            #         print(new_killed_ships[0], old_killed_ships[0])
-            #         destroyer_medal.ACTIVE = True
-            #         destroyer_achievement.ACTIVE = True
-            #         check_bomb[0] = False
-            #         achievement.list_save_coords_achiv.append(9)
-            #     # get_new_killed_data[0] = 13
-            #     else:
-            #         check_bomb[0] = False
-            #         get_new_killed_data[0] = 0
-            # if get_new_killed_data[0] >= 1:
-            #     print(1)
-            #     new_killed_ships[0] = len(enemy_died_ships[0])
-            #     print(new_killed_ships[0], old_killed_ships[0])
-            #     if new_killed_ships[0] - old_killed_ships[0] >= 1:
-            #         print(2)
-            #         if count_5[0] <= 0:
-            #             print(3)
-            #             if 11 not in achievement.list_save_coords_achiv:
-            #                 print(4)
-            #                 target_attack_achievement.ACTIVE = True
-            #                 target_attack_medal.ACTIVE = True
-            #                 achievement.list_save_coords_achiv.append(11)
-            #             else:
-            #                 count_5[0] = 0
-            #         else:
-            #             count_5[0] = 0
-            #     else:
-            #         count_5[0] = 0
-            # else:
-            #     count_5[0] = 0
-
         
             # координаты медалей враг
             for medal in ready_clinet_data["medals_coordinates"]:
