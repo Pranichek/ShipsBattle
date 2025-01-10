@@ -2,7 +2,7 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal,destroyer_achievement,destroyer_medal
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , check_target_attack, get_new_killed_data, count_5, row_list, col_list, number_list
+from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , check_target_attack, get_new_killed_data, count_5, row_list, col_list, number_list, check_send_data_health
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
@@ -248,7 +248,10 @@ def connect_user():
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
                         "player_died_ships":player_died_ships,
-                        "check_target_attack_achiv":check_target_attack[0]
+                        "check_target_attack_achiv":check_target_attack[0],
+                        "row":row_list[0],
+                        "col":col_list[0],
+                        "number":number_list[0],
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
@@ -269,6 +272,9 @@ def connect_user():
                             "medals_coordinates":achievement.list_save_coords_achiv,
                             "player_died_ships":player_died_ships,
                             "check_target_attack_achiv":check_target_attack[0],
+                            "row":row_list[0],
+                            "col":col_list[0],
+                            "number":number_list[0],
                         }
                         # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
                         client_socket.send(json.dumps(client_dict).encode())
@@ -289,6 +295,9 @@ def connect_user():
                             "medals_coordinates":achievement.list_save_coords_achiv,
                             "player_died_ships":player_died_ships,
                             "check_target_attack_achiv":check_target_attack[0],
+                            "row":row_list[0],
+                            "col":col_list[0],
+                            "number":number_list[0],
                         }
                         client_socket.send(json.dumps(client_dict).encode())
                         list_check_need_send[0] = "no"
@@ -364,10 +373,13 @@ def connect_user():
 
                 achievement.opening_the_battle(grid = list_grid, enemy_grid = enemy_matrix)
 
-                if row_list[0] != 100:
+                if row_list[0] != 100 and check_send_data_health[0] > 9:
                     row_list[0] = 100
                     col_list[0] = 100
                     number_list[0] = 100
+                    check_send_data_health[0] = 0
+                if row_list[0] != 100 and check_send_data_health[0] <= 9:
+                    check_send_data_health[0] += 1
 
                 # если кто то уже выиграл , то остонавливаем цикл игры
                 # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл

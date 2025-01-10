@@ -6,8 +6,8 @@ import modules.achievement as achievement
 import modules.screens.screen as module_screen_server
 from ..classes.achive_window import strategist_achievement , list_achieves
 from ..screens import main_screen , list_object_map , grid_player , list_grid , enemy_grid , list_object_map_enemy
-from ..classes import DrawImage, Button, Font, list_ships, Animation , player_medal , enemy_medals, sdckn
-from ..classes.animation import rocket_animation , animation_boom , miss_rocket_animation , bomb_animation , animation_bomb_boom
+from ..classes import DrawImage, Button, Font, list_ships, Animation , player_medal , enemy_medals
+from ..classes.animation import rocket_animation , animation_boom , miss_rocket_animation , bomb_animation , animation_bomb_boom, animation_health
 from ..classes.class_input_text import input_ip_adress ,input_nick ,input_port, input_password
 from ..classes.class_music import music_load_main , music_load_waiting , fight_music
 from ..classes.class_click import music_click, miss_water_sound
@@ -29,19 +29,19 @@ def but_flug_func():
     but_flag[0] = True
 
 
-def sheet_func(row, col):
-    if list_grid[row][col] == 7:
-        # оскільки ці умови , якщо гравець це клієнт
-        # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
-        if list_player_role[0] == "player_client":
-            list_check_need_send[0] = "yes"  # Готуємо дані для відправки
-            turn[0] = "client_turn"  # Передаємо хід серверу
-            # обнуляємо час ходу
-            check_time[0] = 0
-        elif list_player_role[0] == "server_player":
-            turn[0] = "server_turn"
-            # обнуляємо час ходу
-            check_time[0] = 0
+# def sheet_func(row, col):
+#     if list_grid[row][col] == 7:
+#         # оскільки ці умови , якщо гравець це клієнт
+#         # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
+#         if list_player_role[0] == "player_client":
+#             list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+#             turn[0] = "client_turn"  # Передаємо хід серверу
+#             # обнуляємо час ходу
+#             check_time[0] = 0
+#         elif list_player_role[0] == "server_player":
+#             turn[0] = "server_turn"
+#             # обнуляємо час ходу
+#             check_time[0] = 0
 
 
 """""
@@ -678,10 +678,12 @@ def ships_position_window():
 
 
 
+# флаг для анимации аптечки
+health_anim = [False]
+
 # списки в которых хранятся координаты крестиков , если враг попал по кораблю игрока
 x_enemy_cross = [0]
 y_enemy_cross = [0]
-
 
 #------------------------------------------------------------------------------------------------
 #флаг который говорит надо ли запускать анимация промаха ракеты, если игрок уларил но промахнулся
@@ -941,6 +943,14 @@ def fight_window():
         if flag_bomb_animation[0] == False and check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
             for row in range(len(enemy_matrix[0])):
                 for cell in range(len(enemy_matrix[0][row])):
+                    if enemy_matrix[0][row][cell] in [1, 2, 3, 4]:
+                        cltka = (row * 10) + cell
+                        x_anim_miss = list_object_map[cltka].x
+                        y_anim_miss = list_object_map[cltka].y
+
+                        for cross in list_cross:
+                            if cross.X_COR == x_anim_miss and cross.Y_COR == y_anim_miss:
+                               list_cross.remove(cross)
                     if enemy_matrix[0][row][cell] == 7:
                         cltka = (row * 10) + cell
                         x_anim_miss = list_object_map_enemy[cltka].x
@@ -1060,6 +1070,14 @@ def fight_window():
                     if not exists:
                         list_cross_player.append(cross_animation)
 
+        if health_anim[0] == True:
+            for cross in list_cross_player:
+                if cross.X_COR  == animation_health.X_COR and cross.Y_COR  == animation_health.Y_COR:
+                    list_cross_player.remove(cross)
+            if animation_health.animation(main_screen = main_screen, count_image = 6):
+                health_anim[0] = False
+                animation_health.clear_animation()
+
 
         mouse_x , mouse_y = pygame.mouse.get_pos()
          
@@ -1085,8 +1103,6 @@ def fight_window():
 
 
 
-
-     
 
         #----------------------------------------------------------------
         #отрисовка медалей 
@@ -1182,52 +1198,110 @@ def fight_window():
                 if y_mouse >= 24 and y_mouse <= 60 and x_mouse >= 11 and x_mouse <= 67 and shop.shop_item[0].TURN == "Up":
                     for items in shop.shop_item:
                         items.ACTIVE = True  
+                if but_flag[0] == True:
+                    if shop.shop_item[0].TURN != "Up":          
+                        if x_mouse >= 705 and x_mouse <= 705 + 550:# перевіряємо щоб гравець натискав на свою сітку 
+                            if y_mouse >= 257 and y_mouse <= 257 + 550:
+                                # шукаємо клітинку на яку натиснув гравець
+                                for cell in list_object_map: 
+                                    if cell.x <= x_mouse and x_mouse < cell.x + 55:
+                                        if cell.y <= y_mouse and y_mouse < cell.y + 55:
+                                            # Узнаем номер клетки где стоит кораблик
+                                            number_cell_our = list_object_map.index(cell)
+                                            # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                            str_col_our = str(number_cell_our) 
+                                            # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                            row = number_cell_our // 10  
+                                            #Колонку кораблика вычисляем по такому принципу
+                                            # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                            col = int(str_col_our[-1])
 
-                                    # # перевіряємо щоб гравець натискав на свою сітку 
-                if x_mouse >= 705 and x_mouse <= 705 + 550:
-                    if y_mouse >= 257 and y_mouse <= 257 + 550:
-                        # шукаємо клітинку на яку натиснув гравець
-                        for cell in list_object_map: 
-                            if cell.x <= x_mouse and x_mouse < cell.x + 55:
-                                if cell.y <= y_mouse and y_mouse < cell.y + 55:
-                                    # Узнаем номер клетки где стоит кораблик
-                                    number_cell_our = list_object_map.index(cell)
-                                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
-                                    str_col_our = str(number_cell_our) 
-                                    # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
-                                    row = number_cell_our // 10  
-                                    #Колонку кораблика вычисляем по такому принципу
-                                    # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
-                                    col = int(str_col_our[-1])
-                                    print(9999999999)
-                                    # номер клеточки
-                                    if list_grid[row][col] == 7:
-                                        print("zachlo")
-                                    # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
-                                        row_our = index_row
-                                        cell_our = str(index_cell)
-                                        cltx = (row_our * 10) + int(cell_our[-1])
-                                        
-                                        if cltx not in check_number_cell:
-                                            if but_flag[0] == True:
-                                                print("aaaaaaaaaaaaa")
-                                                sheet_func(row= row, col= col)
-                                                
-                                                if list_grid[row + 1][col] == 2 or list_grid[row - 1][col] == 2 or list_grid[row][col + 1] == 2 or list_grid[row ][col- 1] == 2:
-                                                    list_grid[row][col] = 2
-                                              
-                                                if list_grid[row + 1][col] == 3 or list_grid[row - 1][col] == 3 or list_grid[row][col + 1] == 3 or list_grid[row ][col- 1] == 3:
-                                                    list_grid[row][col] = 3
-                                                
-                                                if list_grid[row + 1][col] == 4 or list_grid[row - 1][col] == 4 or list_grid[row][col + 1] == 4 or list_grid[row ][col- 1] == 4:
-                                                    list_grid[row][col] = 4
-                                            
-                                                row_list[0] = row
-                                                col_list[0] = col
-                                                number_list[0] = list_grid[row][col]
-                                                print(list_grid[row][col])
-                                                but_flag[0] = False
+                                            clt = (row * 10) + int(str_col_our[-1])
 
+                                            x_anim = list_object_map[clt].x
+                                            y_anim = list_object_map[clt].y
+                                            # номер клеточки
+                                            if list_grid[row][col] == 7:
+                                                # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
+                                                row_our = index_row
+                                                cell_our = str(index_cell)
+                                                cltx = (row_our * 10) + int(cell_our[-1])
+
+
+                                                animation_health.X_COR = x_anim
+                                                animation_health.Y_COR = y_anim
+                                                
+                                                
+                                                if cltx not in check_number_cell:
+                                                    print("aaaaaaaaaaaaa")
+                                                    try:
+                                                        if list_grid[row + 1][col] == 2:
+                                                            list_grid[row][col] = 2
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row - 1][col] == 2:
+                                                            list_grid[row][col] = 2
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row][col + 1] == 2:
+                                                            list_grid[row][col] = 2
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row][col - 1] == 2:
+                                                            list_grid[row][col] = 2
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row + 1][col] == 3:
+                                                            list_grid[row][col] = 3
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row - 1][col] == 3:
+                                                            list_grid[row][col] = 3
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row][col + 1] == 3:
+                                                            list_grid[row][col] = 3
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row][col - 1] == 3:
+                                                            list_grid[row][col] = 3
+                                                    except:
+                                                        print("index error")
+
+                                                    try:
+                                                        if list_grid[row + 1][col] == 4:
+                                                            list_grid[row][col] = 4
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row - 1][col] == 4:
+                                                            list_grid[row][col] = 4
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row][col + 1] == 4:
+                                                            list_grid[row][col] = 4
+                                                    except:
+                                                        print("index error")
+                                                    try:
+                                                        if list_grid[row][col - 1] == 4:
+                                                            list_grid[row][col] = 4
+                                                    except:
+                                                        print("index error")
+                                                    health_anim[0] = True
+                                                    row_list[0] = row
+                                                    col_list[0] = col
+                                                    number_list[0] = list_grid[row][col]
+                                                    print(list_grid[row][col])
+                                                    but_flag[0] = False
+                
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
                         # нижче умови для атаки 
@@ -1699,6 +1773,11 @@ def fight_window():
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1
+
+        # if row_list[0] != 100:
+        #         row_list[0] = 100
+        #         col_list[0] = 100
+        #         number_list[0] = 100
    
 
         # відмальовуємо екран із координатами що збергаються у списку render_offset , щоб якщо гравець потрапив по карблю , то був ефект трясіння

@@ -9,4 +9,3 @@ from .class_music import music_load_main , music_load_waiting ,fight_music
 from .animation import *
 from .achive_window import *
 from .class_medal import *
-from .class_server_ip import *

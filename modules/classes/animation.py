@@ -116,3 +116,15 @@ animation_bomb_boom = Animation(
     name_folder = "bomb_boom",
     animation_speed = 4
 )
+
+# анимация аптечки
+animation_health = Animation(
+    image_name = "0.png",
+    width = 60,
+    height = 60,
+    x_cor = 500,
+    y_cor = 500,
+    need_clear = True,
+    name_folder = "animation_medical",
+    animation_speed = 4
+)

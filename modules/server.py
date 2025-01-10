@@ -28,6 +28,7 @@ count_5 = [0]
 number_list = [100]
 row_list = [100]
 col_list = [100]
+check_send_data_health = [0]
 
 
 #для ачивки убить два или больше окрабля одной бомбой
@@ -244,7 +245,6 @@ def start_server():
     # бесконечный цикл для боя
     while True:
             time.sleep(0.1)
-        # try:
             if flag_bomb_animation[0] == False:
                 for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                     animation_miss = Animation(
@@ -347,6 +347,9 @@ def start_server():
             
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
+
+            if ready_clinet_data["row"] != 100:
+                enemy_matrix[0][ready_clinet_data["row"]][ready_clinet_data["col"]] = ready_clinet_data["number"]
   
             if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and 11 not in achievement.list_save_coords_achiv:
                 target_attack_achievement.ACTIVE = True
@@ -437,12 +440,14 @@ def start_server():
 
             check_repeat[0] += 1
 
-            if row_list[0] != 100:
+            
+            if row_list[0] != 100 and check_send_data_health[0] > 9:
                 row_list[0] = 100
                 col_list[0] = 100
                 number_list[0] = 100
-
-            
+                check_send_data_health[0] = 0
+            if row_list[0] != 100 and check_send_data_health[0] <= 9:
+                check_send_data_health[0] += 1
             # если кто то уже выиграл , то остонавливаем цикл игры
             # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
             if list_check_win[0] != None:
