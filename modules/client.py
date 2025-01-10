@@ -364,6 +364,11 @@ def connect_user():
 
                 achievement.opening_the_battle(grid = list_grid, enemy_grid = enemy_matrix)
 
+                if row_list[0] != 100:
+                    row_list[0] = 100
+                    col_list[0] = 100
+                    number_list[0] = 100
+
                 # если кто то уже выиграл , то остонавливаем цикл игры
                 # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
                 if server_data["check_end_game"] != None:
