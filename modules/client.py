@@ -2,7 +2,7 @@ import socket ,threading , json , pygame , time
 from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal,destroyer_achievement,destroyer_medal
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
-from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , check_target_attack, get_new_killed_data, count_5
+from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , check_target_attack, get_new_killed_data, count_5, row_list, col_list, number_list
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
@@ -218,6 +218,9 @@ def connect_user():
                 # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
                 server_data = json.loads(data_turn)
 
+                if server_data["row"] != 100:
+                    enemy_matrix[0][server_data["row"]][server_data["col"]] = server_data["number"]
+
                 # achievement.show_target_attack_medal(flag = server_data["check_target_attack_achiv"])
 
                 enemy_balance[0] = server_data["money_balance"]
@@ -245,7 +248,7 @@ def connect_user():
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
                         "player_died_ships":player_died_ships,
-                        "check_target_attack_achiv":check_target_attack[0],
+                        "check_target_attack_achiv":check_target_attack[0]
                     }
                     client_socket.send(json.dumps(client_dict).encode())
                 # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні

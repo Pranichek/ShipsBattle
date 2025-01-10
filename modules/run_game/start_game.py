@@ -15,16 +15,33 @@ from ..json_functions import read_json , write_json , list_users
 from .launch_server import start_server , fail_start_server , check_server_started
 from .clinent_connect import connect_to_server , list_check_connection , fail_connect
 from .random_placing import random_places_ships
-from ..server import count_5, list_check_ready_to_fight , dict_save_information, check_time , turn, list_player_role, enemy_matrix, list_check_win, list_check_win , our_miss_anim, enemy_balance, save_medals_coordinates, player_died_ships, enemy_died_ships, flag_bomb_animation, old_killed_ships, check_bomb
+from ..server import row_list,col_list,number_list ,count_5, list_check_ready_to_fight , dict_save_information, check_time , turn, list_player_role, enemy_matrix, list_check_win, list_check_win , our_miss_anim, enemy_balance, save_medals_coordinates, player_died_ships, enemy_died_ships, flag_bomb_animation, old_killed_ships, check_bomb
 from ..client import list_check_need_send 
-from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss , Missile_200
+from ..game_tools import ship_border , enemy_balance_in_jar , player_balance_in_jar , add_money , list_animation_miss , Missile_200, check_number_cell
 from .bomb import upgrade_attack 
 # from .bomb import upgrade_attack
 #ініціалізуємо pygame щоб можна було із ним працювати
 pygame.init()
 
 
+but_flag = [False]
+def but_flug_func():
+    but_flag[0] = True
 
+
+def sheet_func(row, col):
+    if list_grid[row][col] == 7:
+        # оскільки ці умови , якщо гравець це клієнт
+        # то коли гравець зробив постріл і схибив , записуємо флаг "yes", щоб відправити на сервер інформацію про те ,що треба змінити чергу 
+        if list_player_role[0] == "player_client":
+            list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+            turn[0] = "client_turn"  # Передаємо хід серверу
+            # обнуляємо час ходу
+            check_time[0] = 0
+        elif list_player_role[0] == "server_player":
+            turn[0] = "server_turn"
+            # обнуляємо час ходу
+            check_time[0] = 0
 
 
 """""
@@ -223,6 +240,8 @@ upgrade_button = Button(x = 100, y = 100, image_path= "restart_game.png", image_
 lan_ip_button = Button(x = 790, y = 410, image_path = "lan_ip_button.png", image_hover_path = "lan_ip_button_hover.png", width = 58, height = 60, action = get_local_ip)
 wan_ip_button = Button(x = 437, y = 410, image_path = "wan_ip.png", image_hover_path = "wan_ip_hover.png", width = 58, height = 60, action = set_wan_ip)
 
+
+sheet = Button(x = 100, y = 110,image_path= "restart_game.png" , image_hover_path= "restart_game_hover.png" , width = 408, height = 80, action= but_flug_func)
 
 
 #images decoration
@@ -737,8 +756,7 @@ def fight_window():
     grid_image.load_image()
 
     while run_game:
-
-        # print(list_grid)
+        print(list_grid)
         # print(check_target_attack[0])
         achievement.player_died_ships_for_achiv[0] = player_died_ships
         achievement.enemy_dies_ships_for_ahiv[0] = enemy_died_ships[0]
@@ -1003,7 +1021,7 @@ def fight_window():
                 flag_miss_rocket_animation[0] = ""
         #************************************************************************************************
 
-
+        sheet.draw(surface= main_screen)
 
         # эти циклы для проверки , попал ли соперник по нашем кораблям
         for index_row ,row in enumerate(list_grid):
@@ -1152,6 +1170,7 @@ def fight_window():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 shop_and_tasks.check_click(event = event)
+                sheet.check_click(event = event)
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop.shop_item:
                     try:
@@ -1163,6 +1182,51 @@ def fight_window():
                 if y_mouse >= 24 and y_mouse <= 60 and x_mouse >= 11 and x_mouse <= 67 and shop.shop_item[0].TURN == "Up":
                     for items in shop.shop_item:
                         items.ACTIVE = True  
+
+                                    # # перевіряємо щоб гравець натискав на свою сітку 
+                if x_mouse >= 705 and x_mouse <= 705 + 550:
+                    if y_mouse >= 257 and y_mouse <= 257 + 550:
+                        # шукаємо клітинку на яку натиснув гравець
+                        for cell in list_object_map: 
+                            if cell.x <= x_mouse and x_mouse < cell.x + 55:
+                                if cell.y <= y_mouse and y_mouse < cell.y + 55:
+                                    # Узнаем номер клетки где стоит кораблик
+                                    number_cell_our = list_object_map.index(cell)
+                                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                    str_col_our = str(number_cell_our) 
+                                    # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                    row = number_cell_our // 10  
+                                    #Колонку кораблика вычисляем по такому принципу
+                                    # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                    col = int(str_col_our[-1])
+                                    print(9999999999)
+                                    # номер клеточки
+                                    if list_grid[row][col] == 7:
+                                        print("zachlo")
+                                    # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
+                                        row_our = index_row
+                                        cell_our = str(index_cell)
+                                        cltx = (row_our * 10) + int(cell_our[-1])
+                                        
+                                        if cltx not in check_number_cell:
+                                            if but_flag[0] == True:
+                                                print("aaaaaaaaaaaaa")
+                                                sheet_func(row= row, col= col)
+                                                
+                                                if list_grid[row + 1][col] == 2 or list_grid[row - 1][col] == 2 or list_grid[row][col + 1] == 2 or list_grid[row ][col- 1] == 2:
+                                                    list_grid[row][col] = 2
+                                              
+                                                if list_grid[row + 1][col] == 3 or list_grid[row - 1][col] == 3 or list_grid[row][col + 1] == 3 or list_grid[row ][col- 1] == 3:
+                                                    list_grid[row][col] = 3
+                                                
+                                                if list_grid[row + 1][col] == 4 or list_grid[row - 1][col] == 4 or list_grid[row][col + 1] == 4 or list_grid[row ][col- 1] == 4:
+                                                    list_grid[row][col] = 4
+                                            
+                                                row_list[0] = row
+                                                col_list[0] = col
+                                                number_list[0] = list_grid[row][col]
+                                                print(list_grid[row][col])
+                                                but_flag[0] = False
 
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":

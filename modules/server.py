@@ -20,9 +20,14 @@ def recv_all(socket, buffer_size = 1024):
         if len(part) < buffer_size:  # Якщо менше buffer_size, це остання частина
             break
     return data
-
+#
 count_5 = [0]
+#
 
+
+number_list = [100]
+row_list = [100]
+col_list = [100]
 
 
 #для ачивки убить два или больше окрабля одной бомбой
@@ -323,7 +328,10 @@ def start_server():
                 "check_ten_times":check_ten_times.count(1),
                 "medals_coordinates":achievement.list_save_coords_achiv,
                 "player_died_ships":player_died_ships,
-                "check_target_attack_achiv":check_target_attack[0]
+                "check_target_attack_achiv":check_target_attack[0],
+                "row":row_list[0],
+                "col":col_list[0],
+                "number":number_list[0]
             }   
 
             # отправляем даныне на сервер , и делаем их джейсон строкой
@@ -428,6 +436,11 @@ def start_server():
             achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
 
             check_repeat[0] += 1
+
+            if row_list[0] != 100:
+                row_list[0] = 100
+                col_list[0] = 100
+                number_list[0] = 100
 
             
             # если кто то уже выиграл , то остонавливаем цикл игры
