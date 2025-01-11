@@ -127,59 +127,53 @@ def connect_user():
         list_player_role[0] = "player_client"
         while True:
             # try:
-            time.sleep(0.1)
-            client_socket.settimeout(0.1)
-            client_socket.connect((ip_adress, port))
-            # Зчитуємо дані з файлу
-            data_ready = read_json(name_file="status_connect_game.json")
-            #нащи данные
-            status_from_file = data_ready["status"]
+            try:
+                time.sleep(0.1)
+                client_socket.settimeout(0.1)
+                client_socket.connect((ip_adress, port))
+                # Зчитуємо дані з файлу
+            except:
+                data_ready = read_json(name_file="status_connect_game.json")
+                #нащи данные
+                status_from_file = data_ready["status"]
 
 
-            # Формуємо відповідь
-            response = {
-                "status": status_from_file
-                }
-            client_socket.send(json.dumps(response).encode())
-            client_socket.settimeout(3)
-            # Отримуємо дані від клієнта
-            data_connect = client_socket.recv(1024).decode()
-            if data_connect.strip():  
-                data_in_dict = json.loads(data_connect)
-            else:
-                print("Почему то данных нет , и рядок пустой")
-    
-            print(status_from_file)
-            print(data_in_dict["status"])
+                # Формуємо відповідь
+                response = {
+                    "status": status_from_file
+                    }
+                client_socket.send(json.dumps(response).encode())
+                client_socket.settimeout(3)
+                # Отримуємо дані від клієнта
+                data_connect = client_socket.recv(1024).decode()
+                if data_connect.strip():  
+                    data_in_dict = json.loads(data_connect)
+                else:
+                    print("Почему то данных нет , и рядок пустой")
+        
+                print(status_from_file)
+                print(data_in_dict["status"])
 
 
-            # Перевірка завершення
-            if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
-                list_check_ready_to_fight[0] = "fight"
-                break
-            elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
-                list_check_ready_to_fight[0] = "wait"
-            # except TimeoutError:
-            #     print("Слишком долгое ожидание")
-            #     continue
-            # except json.JSONDecodeError:
-            #     print("Не получилось декодировать данные/")
-            #     continue
-            # except Exception as error:
-            #     print(f"Тупая ошибка: {error}")
-            #     continue
-           
+                # Перевірка завершення
+                if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
+                    list_check_ready_to_fight[0] = "fight"
+                    break
+                elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
+                    list_check_ready_to_fight[0] = "wait"
+
+            
         dict_save_information["player_nick"] = str(input_nick.user_text)
         dict_save_information["enemy_nick"] = data_in_list["nick"]
         dict_save_information["player_points"] = points_for_server
         dict_save_information["enemy_points"] = data_in_list["points"]
-
        # створюємо цикл для бою(щоб робити обмін даними , до потрібного моменту)
         while True:
             try:
                 time.sleep(0.1)
                 client_socket.settimeout(0.1)
                 client_socket.connect((ip_adress, port))
+            except:
                 if flag_bomb_animation[0] == False:
                     for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                         animation_miss = Animation(
@@ -202,210 +196,189 @@ def connect_user():
                                 if enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] == 0:
                                     enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
 
-                # win game without losing a ship
-                # achievement.strategist(grid = list_grid , enemy_grid = enemy_matrix)
+             
+                        client_socket.settimeout(3)
 
-                
-                # робимо зупинку на 0.5 секунду , що сервер і клієент встигали обмінюватися данними
-                
-
-                # settimeout(3) - говорить про те що , якщо за три секундни клієнт не отримав ніяких даних то тільки потім буде виводити помилку
-                client_socket.settimeout(10)
-
-                # Отримання всіх даних від серверу
-                try:
-                    data_turn = recv_all(client_socket).decode()
-                except socket.timeout:
-                    print("Слишком долгое ожидание от сервера")
-                    continue
+                        # Отримання всіх даних від серверу
+                        try:
+                            data_turn = recv_all(client_socket).decode()
+                        except socket.timeout:
+                            print("Слишком долгое ожидание от сервера")
+                            continue
 
 
-                # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
-                server_data = json.loads(data_turn)
+                        # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
+                        server_data = json.loads(data_turn)
 
-                if server_data["row"] != 100:
-                    enemy_matrix[0][server_data["row"]][server_data["col"]] = server_data["number"]
+                        if server_data["row"] != 100:
+                            enemy_matrix[0][server_data["row"]][server_data["col"]] = server_data["number"]
 
-                # achievement.show_target_attack_medal(flag = server_data["check_target_attack_achiv"])
+                        # achievement.show_target_attack_medal(flag = server_data["check_target_attack_achiv"])
 
-                enemy_balance[0] = server_data["money_balance"]
-                
-                # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
-                check_time[0] = server_data['time']
+                        enemy_balance[0] = server_data["money_balance"]
+                        
+                        # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
+                        check_time[0] = server_data['time']
 
-                if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
-                    if shop.second_task.TEXT == shop.list_second_task[1]:
-                        shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+                        if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
+                            if shop.second_task.TEXT == shop.list_second_task[1]:
+                                shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
 
-                if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
-                    achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
+                        if turn[0] == "server_turn" and check_time[0] == 1 and server_data["check_ten_times"] == 1:
+                            achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
 
-                # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
-                if list_check_need_send[0] == "no":
-                    # якщо не не атакував , то відправляємо дані , але ті які на ход ніяк не влияють(нам потрбіно завжди щось відправляти на севре , щоб не бцло помилки)
-                    client_dict = {
-                        "turn": "server_turn",
-                        "time": 0 ,
-                        "need" : "no",
-                        'client_matrix':list_grid,
-                        "new_for_server" : enemy_matrix[0],
-                        "misses_coordinate": save_miss_coordinates,
-                        "money_balance":shop.money_list[0],
-                        "medals_coordinates":achievement.list_save_coords_achiv,
-                        "player_died_ships":player_died_ships,
-                        "check_target_attack_achiv":check_target_attack[0],
-                        "row":row_list[0],
-                        "col":col_list[0],
-                        "number":number_list[0],
-                    }
-                    client_socket.send(json.dumps(client_dict).encode())
-                # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
-                elif list_check_need_send[0] == "yes":
-                    # print(1)
-                    print(turn[0])
-                    # якщо клієент зробив постріл , але схибив його , то змінюємо чергу за допмогою "turn": "server_turn"
-                    if turn[0] == "server_turn":
-                        print(2)
-                        client_dict = {
-                            "turn": "server_turn",
-                            "time": 0 ,
-                            "need" : "yes",
-                            'client_matrix':list_grid,
-                            "new_for_server" : enemy_matrix[0],
-                            "misses_coordinate": save_miss_coordinates,
-                            "money_balance":shop.money_list[0],
-                            "medals_coordinates":achievement.list_save_coords_achiv,
-                            "player_died_ships":player_died_ships,
-                            "check_target_attack_achiv":check_target_attack[0],
-                            "row":row_list[0],
-                            "col":col_list[0],
-                            "number":number_list[0],
-                        }
-                        # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
-                        client_socket.send(json.dumps(client_dict).encode())
-                        list_check_need_send[0] = "no"
-                        check_time[0] = 0
-                        continue
-                    # якщо клієнт зробив постріл і потрапив по кораблю , то не змінюємо чергу , а просто обнуляємо час , оскільки клієнт потрпив
-                    if turn[0] == "client_turn":
-                        # print(3)
-                        client_dict = {
-                            "turn": "client_turn",
-                            "time": 0 ,
-                            "need" : "yes",
-                            'client_matrix':list_grid,
-                            "new_for_server" : enemy_matrix[0],
-                            "misses_coordinate": save_miss_coordinates,
-                            "money_balance":shop.money_list[0],
-                            "medals_coordinates":achievement.list_save_coords_achiv,
-                            "player_died_ships":player_died_ships,
-                            "check_target_attack_achiv":check_target_attack[0],
-                            "row":row_list[0],
-                            "col":col_list[0],
-                            "number":number_list[0],
-                        }
-                        client_socket.send(json.dumps(client_dict).encode())
-                        list_check_need_send[0] = "no"
-                        check_time[0] = 0
-                        continue
-
-
-                if check_repeat[0] == 0:
-                    # сохраняем матрицу сервера
-                    enemy_matrix[0] = server_data["server_matrix"]
-                
-                # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
-                turn[0] = server_data['turn']
-                enemy_died_ships[0] = server_data["player_died_ships"]
-
-                for medal in server_data["medals_coordinates"]:
-                    if medal not in save_medals_coordinates:
-                        save_medals_coordinates.append(medal)
-
-                # для зачерканных клеточек
-                for coord_miss in server_data["misses_coordinate"]:
-                    if coord_miss not in enemy_animation_miss_coord:
-                        enemy_animation_miss_coord.append(coord_miss)
+                        # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
+                        if list_check_need_send[0] == "no":
+                            # якщо не не атакував , то відправляємо дані , але ті які на ход ніяк не влияють(нам потрбіно завжди щось відправляти на севре , щоб не бцло помилки)
+                            client_dict = {
+                                "turn": "server_turn",
+                                "time": 0 ,
+                                "need" : "no",
+                                'client_matrix':list_grid,
+                                "new_for_server" : enemy_matrix[0],
+                                "misses_coordinate": save_miss_coordinates,
+                                "money_balance":shop.money_list[0],
+                                "medals_coordinates":achievement.list_save_coords_achiv,
+                                "player_died_ships":player_died_ships,
+                                "check_target_attack_achiv":check_target_attack[0],
+                                "row":row_list[0],
+                                "col":col_list[0],
+                                "number":number_list[0],
+                            }
+                            client_socket.send(json.dumps(client_dict).encode())
+                        # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
+                        elif list_check_need_send[0] == "yes":
+                            # print(1)
+                            print(turn[0])
+                            # якщо клієент зробив постріл , але схибив його , то змінюємо чергу за допмогою "turn": "server_turn"
+                            if turn[0] == "server_turn":
+                                print(2)
+                                client_dict = {
+                                    "turn": "server_turn",
+                                    "time": 0 ,
+                                    "need" : "yes",
+                                    'client_matrix':list_grid,
+                                    "new_for_server" : enemy_matrix[0],
+                                    "misses_coordinate": save_miss_coordinates,
+                                    "money_balance":shop.money_list[0],
+                                    "medals_coordinates":achievement.list_save_coords_achiv,
+                                    "player_died_ships":player_died_ships,
+                                    "check_target_attack_achiv":check_target_attack[0],
+                                    "row":row_list[0],
+                                    "col":col_list[0],
+                                    "number":number_list[0],
+                                }
+                                # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
+                                client_socket.send(json.dumps(client_dict).encode())
+                                list_check_need_send[0] = "no"
+                                check_time[0] = 0
+                                continue
+                            # якщо клієнт зробив постріл і потрапив по кораблю , то не змінюємо чергу , а просто обнуляємо час , оскільки клієнт потрпив
+                            if turn[0] == "client_turn":
+                                # print(3)
+                                client_dict = {
+                                    "turn": "client_turn",
+                                    "time": 0 ,
+                                    "need" : "yes",
+                                    'client_matrix':list_grid,
+                                    "new_for_server" : enemy_matrix[0],
+                                    "misses_coordinate": save_miss_coordinates,
+                                    "money_balance":shop.money_list[0],
+                                    "medals_coordinates":achievement.list_save_coords_achiv,
+                                    "player_died_ships":player_died_ships,
+                                    "check_target_attack_achiv":check_target_attack[0],
+                                    "row":row_list[0],
+                                    "col":col_list[0],
+                                    "number":number_list[0],
+                                }
+                                client_socket.send(json.dumps(client_dict).encode())
+                                list_check_need_send[0] = "no"
+                                check_time[0] = 0
+                                continue
 
 
-                # обновляем матрицу клиента , на матрицу с пострелами сервера
-                if check_repeat[0] >= 1:
-                    for row in range(len(server_data["new_for_client"])):
-                        for cell in range(len(server_data["new_for_client"][row])):
-                            list_grid[row][cell] = server_data["new_for_client"][row][cell]
+                        if check_repeat[0] == 0:
+                            # сохраняем матрицу сервера
+                            enemy_matrix[0] = server_data["server_matrix"]
+                        
+                        # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
+                        turn[0] = server_data['turn']
+                        enemy_died_ships[0] = server_data["player_died_ships"]
 
-                if server_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and 11 not in achievement.list_save_coords_achiv:
-                    target_attack_achievement.ACTIVE = True
-                    target_attack_medal.ACTIVE = True
-                    achievement.list_save_coords_achiv.append(11)
-                check_repeat[0] += 1
+                        for medal in server_data["medals_coordinates"]:
+                            if medal not in save_medals_coordinates:
+                                save_medals_coordinates.append(medal)
 
-                # проверка ачивки для бомбы
-                if check_bomb[0] == True and get_new_killed_data[0] == 0:
-                    get_new_killed_data[0] += 1
-                elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
-                    print(123)
-                    new_killed_ships[0] = len(enemy_died_ships[0])
-                    if new_killed_ships[0] - old_killed_ships[0] >= 2:
-                        print(new_killed_ships[0], old_killed_ships[0])
-                        destroyer_medal.ACTIVE = True
-                        destroyer_achievement.ACTIVE = True
-                        check_bomb[0] = False
-                        achievement.list_save_coords_achiv.append(9)
-                    # get_new_killed_data[0] = 13
-                    else:
-                        check_bomb[0] = False
-                        get_new_killed_data[0] = 0
-                elif get_new_killed_data[0] >= 1:
-                    print(1)
-                    new_killed_ships[0] = len(enemy_died_ships[0])
-                    print(new_killed_ships[0], old_killed_ships[0])
-                    if new_killed_ships[0] - old_killed_ships[0] >= 1:
-                        print(2)
-                        if count_5[0] <= 0:
-                            print(3)
-                            if 11 not in achievement.list_save_coords_achiv:
-                                print(4)
-                                target_attack_achievement.ACTIVE = True
-                                target_attack_medal.ACTIVE = True
-                                achievement.list_save_coords_achiv.append(11)
+                        # для зачерканных клеточек
+                        for coord_miss in server_data["misses_coordinate"]:
+                            if coord_miss not in enemy_animation_miss_coord:
+                                enemy_animation_miss_coord.append(coord_miss)
+
+
+                        # обновляем матрицу клиента , на матрицу с пострелами сервера
+                        if check_repeat[0] >= 1:
+                            for row in range(len(server_data["new_for_client"])):
+                                for cell in range(len(server_data["new_for_client"][row])):
+                                    list_grid[row][cell] = server_data["new_for_client"][row][cell]
+
+                        if server_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and 11 not in achievement.list_save_coords_achiv:
+                            target_attack_achievement.ACTIVE = True
+                            target_attack_medal.ACTIVE = True
+                            achievement.list_save_coords_achiv.append(11)
+                        check_repeat[0] += 1
+
+                        # проверка ачивки для бомбы
+                        if check_bomb[0] == True and get_new_killed_data[0] == 0:
+                            get_new_killed_data[0] += 1
+                        elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
+                            print(123)
+                            new_killed_ships[0] = len(enemy_died_ships[0])
+                            if new_killed_ships[0] - old_killed_ships[0] >= 2:
+                                print(new_killed_ships[0], old_killed_ships[0])
+                                destroyer_medal.ACTIVE = True
+                                destroyer_achievement.ACTIVE = True
+                                check_bomb[0] = False
+                                achievement.list_save_coords_achiv.append(9)
+                            # get_new_killed_data[0] = 13
+                            else:
+                                check_bomb[0] = False
+                                get_new_killed_data[0] = 0
+                        elif get_new_killed_data[0] >= 1:
+                            print(1)
+                            new_killed_ships[0] = len(enemy_died_ships[0])
+                            print(new_killed_ships[0], old_killed_ships[0])
+                            if new_killed_ships[0] - old_killed_ships[0] >= 1:
+                                print(2)
+                                if count_5[0] <= 0:
+                                    print(3)
+                                    if 11 not in achievement.list_save_coords_achiv:
+                                        print(4)
+                                        target_attack_achievement.ACTIVE = True
+                                        target_attack_medal.ACTIVE = True
+                                        achievement.list_save_coords_achiv.append(11)
+                                    else:
+                                        count_5[0] = 0
+                                else:
+                                    count_5[0] = 0
                             else:
                                 count_5[0] = 0
-                        else:
-                            count_5[0] = 0
-                    else:
-                        count_5[0] = 0
 
-                achievement.opening_the_battle(grid = list_grid, enemy_grid = enemy_matrix)
+                        achievement.opening_the_battle(grid = list_grid, enemy_grid = enemy_matrix)
 
-                if row_list[0] != 100 and check_send_data_health[0] > 9:
-                    row_list[0] = 100
-                    col_list[0] = 100
-                    number_list[0] = 100
-                    check_send_data_health[0] = 0
-                if row_list[0] != 100 and check_send_data_health[0] <= 9:
-                    check_send_data_health[0] += 1
+                        if row_list[0] != 100 and check_send_data_health[0] > 9:
+                            row_list[0] = 100
+                            col_list[0] = 100
+                            number_list[0] = 100
+                            check_send_data_health[0] = 0
+                        if row_list[0] != 100 and check_send_data_health[0] <= 9:
+                            check_send_data_health[0] += 1
 
-                # если кто то уже выиграл , то остонавливаем цикл игры
-                # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
-                if server_data["check_end_game"] != None:
-                    list_check_win[0] = server_data["check_end_game"]
-                    print("end")
-                    break
-
-            except TimeoutError:
-                print("Час очікування відповіді сервера вичерпано")
-                continue
-            except json.JSONDecodeError:
-                print("Помилка декодування даних")
-                if server_data["check_end_game"] != None:
-                    break
-                else:
-                    continue
-            except Exception as e:
-                print(f"Несподівана помилка: {e}")
-                continue
-
+                        # если кто то уже выиграл , то остонавливаем цикл игры
+                        # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
+                        if server_data["check_end_game"] != None:
+                            list_check_win[0] = server_data["check_end_game"]
+                            print("end")
+                            break
 
         #створюємо зміну потока, із функцією підключення коритсувача до серверу
 thread_connect = threading.Thread(target = connect_user ,daemon=True)
