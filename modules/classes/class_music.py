@@ -12,7 +12,6 @@ class MusicPlayer:
 # Відтворення музики. Параметр loop визначає кількість повторень (-1 - безперервно).
         pygame.mixer.music.load(sound_path)
         pygame.mixer.music.play(loop)
-        pygame.mixer.music.set_volume(0.2)
         self.is_paused = False
 
      def pause(self):

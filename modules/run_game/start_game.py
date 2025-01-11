@@ -124,7 +124,8 @@ def music_lower():
     if get2 - 0.1 < 0.01:
         pygame.mixer.music.set_volume(0)
 
-# функция для подключения к бою
+
+
 def connect_to_fight():
     count_zero = 0
     for row in list_grid:
@@ -224,6 +225,7 @@ random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , im
 # кнопка для добавления звука
 button_upp = Button(x=53 ,y=44 , image_path="button_music_upp.png", image_hover_path="button_volue_up_hover.png", width = 74, height = 71, action = music_up)
 button_lower = Button(x=53,y=136, image_path="button_music_lower.png", image_hover_path="button_music_lower_hover.png", width = 74, height= 71, action = music_lower)
+
 #кнопка возвращения на сервер
 back_to_server = Button(x= 39 , y = 56 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width = 158 , height = 41 , action= button_action)
 # Restart game
@@ -329,6 +331,7 @@ def main_window():
                 join_game_frame.check_click(event = event)
                 button_upp.check_click(event = event)
                 button_lower.check_click(event = event)
+                
 
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
