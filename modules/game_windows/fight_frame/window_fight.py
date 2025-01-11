@@ -175,6 +175,14 @@ def fight_window():
 
     while run_game:
         module_screen.FPS.tick(60)
+        current_fps = module_screen.FPS.get_fps()
+        procent_fps = int(100 - ((100 * current_fps) / 60))
+        print(3 /procent_fps)
+        animation_health.ANIMATION_SPEED = 3 / procent_fps
+        animation_boom.ANIMATION_SPEED = 3 /procent_fps
+        animation_boom.ANIMATION_SPEED = 3 /  procent_fps
+        animation_health.ANIMATION_SPEED = 3 / procent_fps
+        animation_bomb_boom.ANIMATION_SPEED = 3 /procent_fps
         achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
         achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships[0]
         for medal in range(0 , len(server_module.save_medals_coordinates)):

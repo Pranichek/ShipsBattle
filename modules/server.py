@@ -200,7 +200,7 @@ def start_server():
             #Ставимо сервер у режим очікування підключень
             try:
                 server_socket.listen()
-                server_socket.settimeout(0.01)
+                server_socket.settimeout(0.1)
                 client_socket, adress = server_socket.accept()
             except:
                 # Зчитуємо дані з файлу
