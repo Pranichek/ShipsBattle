@@ -37,7 +37,7 @@ def ships_position_window():
             apply_fade_effect(screen = main_screen)
             run_game = False
             change_scene(None)
-            change_scene(game_windows.window_fight())
+            change_scene(game_windows.fight_window())
             check_press_button[0] = None
             
         elif list_check_ready_to_fight[0] == "wait":

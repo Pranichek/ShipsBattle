@@ -126,48 +126,48 @@ def connect_user():
 
         list_player_role[0] = "player_client"
         while True:
-            try:
-                time.sleep(0.1)
-                client_socket.settimeout(0.1)
-                client_socket.connect((ip_adress, port))
-                # Зчитуємо дані з файлу
-                data_ready = read_json(name_file="status_connect_game.json")
-                #нащи данные
-                status_from_file = data_ready["status"]
+            # try:
+            time.sleep(0.1)
+            client_socket.settimeout(0.1)
+            client_socket.connect((ip_adress, port))
+            # Зчитуємо дані з файлу
+            data_ready = read_json(name_file="status_connect_game.json")
+            #нащи данные
+            status_from_file = data_ready["status"]
 
 
-                # Формуємо відповідь
-                response = {
-                    "status": status_from_file
-                    }
-                client_socket.send(json.dumps(response).encode())
-                client_socket.settimeout(3)
-                # Отримуємо дані від клієнта
-                data_connect = client_socket.recv(1024).decode()
-                if data_connect.strip():  
-                    data_in_dict = json.loads(data_connect)
-                else:
-                    print("Почему то данных нет , и рядок пустой")
-       
-                print(status_from_file)
-                print(data_in_dict["status"])
+            # Формуємо відповідь
+            response = {
+                "status": status_from_file
+                }
+            client_socket.send(json.dumps(response).encode())
+            client_socket.settimeout(3)
+            # Отримуємо дані від клієнта
+            data_connect = client_socket.recv(1024).decode()
+            if data_connect.strip():  
+                data_in_dict = json.loads(data_connect)
+            else:
+                print("Почему то данных нет , и рядок пустой")
+    
+            print(status_from_file)
+            print(data_in_dict["status"])
 
 
-                # Перевірка завершення
-                if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
-                    list_check_ready_to_fight[0] = "fight"
-                    break
-                elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
-                    list_check_ready_to_fight[0] = "wait"
-            except TimeoutError:
-                print("Слишком долгое ожидание")
-                continue
-            except json.JSONDecodeError:
-                print("Не получилось декодировать данные/")
-                continue
-            except Exception as error:
-                print(f"Тупая ошибка: {error}")
-                continue
+            # Перевірка завершення
+            if status_from_file == data_in_dict["status"] and status_from_file != "places ships":
+                list_check_ready_to_fight[0] = "fight"
+                break
+            elif status_from_file == "You can connect to the game" and status_from_file != data_in_dict["status"]:
+                list_check_ready_to_fight[0] = "wait"
+            # except TimeoutError:
+            #     print("Слишком долгое ожидание")
+            #     continue
+            # except json.JSONDecodeError:
+            #     print("Не получилось декодировать данные/")
+            #     continue
+            # except Exception as error:
+            #     print(f"Тупая ошибка: {error}")
+            #     continue
            
         dict_save_information["player_nick"] = str(input_nick.user_text)
         dict_save_information["enemy_nick"] = data_in_list["nick"]

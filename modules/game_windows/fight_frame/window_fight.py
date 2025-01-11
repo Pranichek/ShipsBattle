@@ -859,7 +859,7 @@ def fight_window():
                                                         # ачивки
                                                         achievement.ten_shoot_in_row(cell = server_module.enemy_matrix[0][row][col])
                                                         achievement.first_shot(cell = server_module.enemy_matrix[0][row][col])
-                                                        achievement.single_ships_achiv.append(second_frame_nick_player.enemy_matrix[0][row][col])
+                                                        achievement.single_ships_achiv.append(server_module.enemy_matrix[0][row][col])
                                                         achievement.list_hits_achiv.append(server_module.enemy_matrix[0][row][col])
                                                         
 
@@ -1172,7 +1172,7 @@ def fight_window():
 
           
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
-        if server_module.strategist_achievement.ACTIVE == False:
+        if achievement.strategist_achievement.ACTIVE == False:
             if server_module.list_check_win[0] != None:   
                 # якщо вже їтось виграв , то робимо ефект затемнення
                 apply_fade_effect(screen = module_screen.main_screen)

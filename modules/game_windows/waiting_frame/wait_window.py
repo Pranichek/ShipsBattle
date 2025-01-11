@@ -32,7 +32,7 @@ def waiting_window():
             apply_fade_effect(screen = main_screen)
             check_press_button[0] = None
             run_game = False
-            change_scene(game_windows.window_fight())
+            change_scene(game_windows.fight_window())
             
 
         waiting_background.draw_image(screen = main_screen)

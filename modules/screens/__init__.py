@@ -1,5 +1,5 @@
 # Імпортуємо основний екран сервера з модуля server_screen
-from .screen import main_screen
+from .screen import main_screen, FPS
 from .create_grid import grid_player , enemy_grid , list_object_map , list_object_map_enemy
 from .grid_list import list_grid
 

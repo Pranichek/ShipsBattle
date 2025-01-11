@@ -1,4 +1,4 @@
-import modules.shop.text_shop as shop
+import modules.shop as task_game
 from ..screens import main_screen
 from ..classes import Font
 from ..server import enemy_balance
@@ -9,7 +9,7 @@ player_balance_in_jar = Font(
     y_cor = 45 ,
     size = 36,
     name_font = "Jersey15.ttf",
-    text = str(shop.money_list[0]),
+    text = str(task_game.money_list[0]),
     text_color = "Yellow",
     screen = main_screen
 )
@@ -59,7 +59,7 @@ check_three_2decker_ship_in_row = [0]
 # при покупке бомбы
 check_money_bomb = [0]
 def add_money(check_buy_bomb: bool):
-    # print(shop.check_completed_tasks[0] , "completed task")
+    # print(task_game.check_completed_tasks[0] , "completed task")
     # print("check_money_two_hits_in_row:", check_money_two_hits_in_row[0])
 
     # print("check_money_four_hits_in_row:", check_money_four_hits_in_row[0])
@@ -99,171 +99,171 @@ def add_money(check_buy_bomb: bool):
 
     if check_buy_bomb == True and check_money_bomb[0] == 0:
         check_money_bomb[0] += 1
-        shop.money_list[0] -= 0
-        shop.player_balance.TEXT = str(shop.money_list[0])
-        shop.player_balance.update_text()
-        player_balance_in_jar.text = str(shop.money_list[0])
+        task_game.money_list[0] -= 0
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
         player_balance_in_jar.update_text()
     if check_money_bomb[0] >= 1:
         if check_money_bomb[0] != 10:
             check_money_bomb[0] += 1
-            shop.money_list[0] -= 0
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
-            player_balance_in_jar.text = str(shop.money_list[0])
+            task_game.money_list[0] -= 0
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
         elif check_buy_bomb == False and check_money_bomb[0] >= 10:
             check_money_bomb[0] = 0
 
     
-    if "True" in shop.two_hits_in_a_row:
+    if "True" in task_game.two_hits_in_a_row:
         if check_money_two_hits_in_row[0] != 30:
             check_money_two_hits_in_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
-            player_balance_in_jar.text = str(shop.money_list[0])
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "True" in shop.four_hits_in_a_row:
+    if "True" in task_game.four_hits_in_a_row:
         if check_money_four_hits_in_row[0] != 30:
             check_money_four_hits_in_row[0] += 1 
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if shop.kill_three_deckcer_ship[0] == "kill three deck ship":
+    if task_game.kill_three_deckcer_ship[0] == "kill three deck ship":
         if check_kill_one_3deck[0]!= 30:
             check_kill_one_3deck[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if shop.kill_count[0] == "Kill two ships":
+    if task_game.kill_count[0] == "Kill two ships":
         if check_money_two_kill_in_a_row[0] != 50:
             check_money_two_kill_in_a_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
             
 
-    if "You kill three double decker in row" in shop.check_three_2decker_ship_in_row:
+    if "You kill three double decker in row" in task_game.check_three_2decker_ship_in_row:
         if check_three_2decker_ship_in_row[0] != 80:
             check_three_2decker_ship_in_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
     
-    if shop.enemy_ships_4decker[0] == "kill four-decker ship":
+    if task_game.enemy_ships_4decker[0] == "kill four-decker ship":
         if check_kill_first_four_deck[0] != 80:
             check_kill_first_four_deck[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "Kill two three decker in a row" in shop.count_three_ships:
+    if "Kill two three decker in a row" in task_game.count_three_ships:
         if check_2_kills_3deck_in_row[0] != 80:
             check_2_kills_3deck_in_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "Kill four single ships in a row" in shop.single_ships:
+    if "Kill four single ships in a row" in task_game.single_ships:
         if check_kill_four_1decker_in_row[0] != 80:
             check_kill_four_1decker_in_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "You are kill ship in one shot" in shop.count_shot:
+    if "You are kill ship in one shot" in task_game.count_shot:
         if check_kill_in_first_shot[0] != 100:
             check_kill_in_first_shot[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "True" in shop.count_turns:
+    if "True" in task_game.count_turns:
         if check_kept_alive_for_5_turns[0] != 50:
             check_kept_alive_for_5_turns[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
             
 
-    if "You killes three ships in row" == shop.count_kill_three[0]:
+    if "You killes three ships in row" == task_game.count_kill_three[0]:
         if check_kill_three_ships_in_row[0] != 100:
             check_kill_three_ships_in_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if shop.check_completed_tasks[0] == 999:
+    if task_game.check_completed_tasks[0] == 999:
         if check_completed_three_tasks[0]!= 100:
             check_completed_three_tasks[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "True" in shop.three_hits_in_a_row:
+    if "True" in task_game.three_hits_in_a_row:
         if check_money_three_hits_in_row[0] != 30:
             check_money_three_hits_in_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
-    if "kill three-decker ship" == shop.enemy_ships_3decker[0]:
+    if "kill three-decker ship" == task_game.enemy_ships_3decker[0]:
         if check_first_kill_three_3dec[0]!= 50:
             check_first_kill_three_3dec[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
 
 
-    if "True" in shop.egight_hits_in_a_row:
+    if "True" in task_game.egight_hits_in_a_row:
         if check_money_eight_hits_in_row[0] != 100:
             check_money_eight_hits_in_row[0] += 1
-            shop.money_list[0] += 1
-            shop.player_balance.TEXT = str(shop.money_list[0])
-            shop.player_balance.update_text()
+            task_game.money_list[0] += 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
-            player_balance_in_jar.text = str(shop.money_list[0])
+            player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
