@@ -24,7 +24,6 @@ def recv_all(socket, buffer_size = 1024):
 count_5 = [0]
 #
 
-
 number_list = [100]
 row_list = [100]
 col_list = [100]
@@ -196,7 +195,11 @@ def start_server():
         # Бесконечный цикл для провери расстановки кораблей
         while True:
             try:
-                time.sleep(1)
+                time.sleep(0.1)
+                server_socket.bind((ip_address, port))
+                #Ставимо сервер у режим очікування підключень
+                server_socket.listen()
+                client_socket, adress = server_socket.accept()
                 # Зчитуємо дані з файлу
                 data_ready = read_json(name_file="status_connect_game.json")
                 #нащи данные
@@ -245,6 +248,10 @@ def start_server():
     # бесконечный цикл для боя
     while True:
             time.sleep(0.1)
+            server_socket.bind((ip_address, port))
+            #Ставимо сервер у режим очікування підключень
+            server_socket.listen()
+            client_socket, adress = server_socket.accept()
             if flag_bomb_animation[0] == False:
                 for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                     animation_miss = Animation(

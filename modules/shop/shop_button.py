@@ -1,8 +1,7 @@
 import pygame
 from os.path import abspath, join
 from .shop_image import shop_item
-from .text_shop import money_list , player_balance 
-from ..game_tools import player_balance_in_jar
+from .text_shop import money_list 
 
 
 #класс для кнопки в магазині

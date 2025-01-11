@@ -127,7 +127,9 @@ def connect_user():
         list_player_role[0] = "player_client"
         while True:
             try:
-                time.sleep(1)
+                time.sleep(0.1)
+                client_socket.settimeout(0.1)
+                client_socket.connect((ip_adress, port))
                 # Зчитуємо дані з файлу
                 data_ready = read_json(name_file="status_connect_game.json")
                 #нащи данные
@@ -176,6 +178,8 @@ def connect_user():
         while True:
             try:
                 time.sleep(0.1)
+                client_socket.settimeout(0.1)
+                client_socket.connect((ip_adress, port))
                 if flag_bomb_animation[0] == False:
                     for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                         animation_miss = Animation(
