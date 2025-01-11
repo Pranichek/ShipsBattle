@@ -181,7 +181,7 @@ def fight_window():
         animation_boom.ANIMATION_SPEED = 3 * (60 / current_fps)
         animation_bomb_boom.ANIMATION_SPEED = 4 * (60 / current_fps)
         miss_rocket_animation.ANIMATION_SPEED = 3 * (60 / current_fps)
-        print(rocket_animation.ANIMATION_SPEED)
+        # print(rocket_animation.ANIMATION_SPEED)
         achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
         achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships[0]
         for medal in range(0 , len(server_module.save_medals_coordinates)):
