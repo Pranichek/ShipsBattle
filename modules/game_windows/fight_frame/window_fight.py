@@ -175,12 +175,6 @@ def fight_window():
 
     while run_game:
         module_screen.FPS.tick(60)
-        current_fps = module_screen.FPS.get_fps()
-        rocket_animation.ANIMATION_SPEED = 3 * (60 / current_fps)
-        animation_health.ANIMATION_SPEED = 4 * (60 / current_fps)
-        animation_boom.ANIMATION_SPEED = 3 * (60 / current_fps)
-        animation_bomb_boom.ANIMATION_SPEED = 4 * (60 / current_fps)
-        miss_rocket_animation.ANIMATION_SPEED = 3 * (60 / current_fps)
         # print(rocket_animation.ANIMATION_SPEED)
         achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
         achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships[0]

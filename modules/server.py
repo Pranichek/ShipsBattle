@@ -223,8 +223,7 @@ def start_server():
         dict_save_information["enemy_points"] = data_in_list["points"]
         # бесконечный цикл для боя
         while True:
-            time.sleep(0.1)
-            print("Zahodit")    
+            time.sleep(0.1)   
             if flag_bomb_animation[0] == False:
                 for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                     animation_miss = Animation(

@@ -1,6 +1,7 @@
 import pygame 
 from os.path import abspath, join
 from ..classes import music_achieve
+from ..screens import FPS
 pygame.init()
 
 list_achieves = []
@@ -50,6 +51,7 @@ class Acievement:
         self.COUNT_MOVE = 0
 
     def move(self):
+        current_procent = 60 / (FPS.get_fps() + 10)
         if self.ACTIVE == True:
             if self.COUNT_REPEAT == 0:
                 music_achieve.play2(loops = 1)
@@ -57,13 +59,13 @@ class Acievement:
                     # Перевіряємо кількість повторів
                     # Повертаємо вікно до початкової позиції
                     if self.X_COR < 640:
-                        self.X_COR += 1    
+                        self.X_COR += 1 * current_procent  
                     if self.Y_COR > 100:
-                        self.Y_COR -= 0.8
+                        self.Y_COR -= 0.8 * current_procent  
                     if self.WIDTH > 122:
-                        self.WIDTH -= 5
+                        self.WIDTH -= 5 * current_procent  
                     if self.HEIGHT > 97:
-                        self.HEIGHT -= 4
+                        self.HEIGHT -= 4 * current_procent  
                     self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha()
                     self.fade_out()
                     if self.X_COR >= 540:
@@ -74,14 +76,14 @@ class Acievement:
             if not self.CHECK_END_ANIM:
                 # Рух до початкової позиції (вліво)
                 if self.X_COR > self.X_MAX:
-                    self.X_COR -= 3.4
+                    self.X_COR -= 3.4 * current_procent  
                 if self.WIDTH < self.MAX_WIDTH:
-                    self.WIDTH += 5
+                    self.WIDTH += 5 * current_procent  
                     self.fade_in()
                 else:
                     self.WIDTH = self.MAX_WIDTH
                 if self.HEIGHT < self.MAX_HEIGHT:
-                    self.HEIGHT += 4
+                    self.HEIGHT += 4 * current_procent  
                 else:
                     self.HEIGHT = self.MAX_HEIGHT
                     self.CHECK_END_ANIM = True
@@ -89,24 +91,24 @@ class Acievement:
                 # Горизонтальний рух (вправо/вліво)
                 if self.DIRECTION == "More":
                     if self.WIDTH > 337:
-                        self.WIDTH -= 0.7
+                        self.WIDTH -= 0.7 * current_procent  
                     if self.HEIGHT > 265:
-                        self.HEIGHT -= 0.7
+                        self.HEIGHT -= 0.7 * current_procent  
                     if self.X_COR < self.X_MAX + 20:  # Рух вправо
-                        self.X_COR += 0.1
+                        self.X_COR += 0.1 * current_procent  
                     if self.WIDTH <= 337 and self.HEIGHT <= 265:
                         self.DIRECTION = "Less"
-                        self.COUNT_MOVE += 1
+                        self.COUNT_MOVE += 1 
                 elif self.DIRECTION == "Less":
                     if self.WIDTH < self.MAX_WIDTH:
-                        self.WIDTH += 0.7
+                        self.WIDTH += 0.7 * current_procent  
                     if self.HEIGHT < self.MAX_HEIGHT:
-                        self.HEIGHT += 0.7
+                        self.HEIGHT += 0.7 * current_procent  
                     if self.X_COR > self.X_MAX:  # Рух вліво
-                        self.X_COR -= 0.1
+                        self.X_COR -= 0.1 * current_procent  
                     if self.WIDTH >= self.MAX_WIDTH and self.HEIGHT >= self.MAX_HEIGHT:
                         self.DIRECTION = "More"
-                    self.COUNT_MOVE += 1
+                    self.COUNT_MOVE += 1 
                 else:
                     self.DIRECTION = "More"
             self.COUNT_REPEAT += 1

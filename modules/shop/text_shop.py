@@ -1,6 +1,7 @@
 import pygame , random 
 from os.path import abspath, join
 from .shop_image import shop_item
+from ..screens import  FPS
 
 
 #класс для тексту в магазині
@@ -47,10 +48,11 @@ class Font_Shop:
     # Використовується прапорець turn, щоб визначити напрямок руху
     # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
     def move(self):
+        current_speed = self.SPEED * (60 / FPS.get_fps())
         if self.ACTIVE:
             if self.TURN == "Down":
                 if self.Y_COR < self.TARGET_Y:
-                    self.Y_COR += self.SPEED
+                    self.Y_COR += current_speed
                     self.fade_in()
                     if self.Y_COR >= self.TARGET_Y:
                         self.Y_COR = self.TARGET_Y
@@ -58,7 +60,7 @@ class Font_Shop:
 
             elif self.TURN == "Up":
                 if self.Y_COR > -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE))):
-                    self.Y_COR -= self.SPEED
+                    self.Y_COR -= current_speed
                     self.fade_out()
                     if self.Y_COR <= -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE))):
                         self.Y_COR = -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE)))

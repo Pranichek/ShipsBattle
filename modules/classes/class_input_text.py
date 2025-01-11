@@ -1,7 +1,7 @@
 import pygame 
 from os.path import abspath, join
 from .class_click import del_letter_sound, typing_sound
-from ..screens.screen import main_screen
+from ..screens.screen import main_screen, FPS
 
 pygame.init()
 
@@ -28,14 +28,16 @@ class InputText:
         self.VISIBLE = 255
 
     def fade_in(self):
+        current_procent = 60 / FPS.get_fps()
         if self.VISIBLE < 311:
-            self.VISIBLE += 5  
+            self.VISIBLE += 5 * current_procent
             if self.VISIBLE >= 311:
                 self.VISIBLE = 311
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
+        current_procent = 60 / FPS.get_fps()
         if self.VISIBLE > 0:
-            self.VISIBLE -= 10  
+            self.VISIBLE -= 10 * current_procent
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
     #створюємо метод завантаження картинки

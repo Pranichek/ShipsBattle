@@ -2,6 +2,7 @@ import pygame
 from os.path import abspath, join
 from .shop_image import shop_item
 from .text_shop import money_list 
+from ..screens import FPS
 
 
 #класс для кнопки в магазині
@@ -55,11 +56,12 @@ class Button_Shop:
     #Використовується прапорець turn, щоб визначити напрямок руху
     # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
     def move(self):
+        current_speed = self.SPEED * (60 / FPS.get_fps())
         if self.ACTIVE:
             if self.TURN == "Down":
                 if self.Y_COR < self.TARGET_Y: 
-                    self.Y_COR += self.SPEED
-                    self.RECT.y += self.SPEED
+                    self.Y_COR += current_speed
+                    self.RECT.y += current_speed
                     self.fade_in()
                     if self.Y_COR >= self.TARGET_Y:  
                         self.Y_COR = self.TARGET_Y
@@ -68,8 +70,8 @@ class Button_Shop:
 
             elif self.TURN == "Up":
                 if self.Y_COR > -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
-                    self.Y_COR -= self.SPEED
-                    self.RECT.y -= self.SPEED
+                    self.Y_COR -= current_speed
+                    self.RECT.y -= current_speed
                     self.fade_out()
                     if self.Y_COR <= -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
                         self.Y_COR = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
