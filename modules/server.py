@@ -185,8 +185,11 @@ def start_server():
         while True:
             # try:
             time.sleep(1)
-            # server_socket.bind((ip_address, port))
-            # Зчитуємо дані з файлу
+            #Ставимо сервер у режим очікування підключень
+            server_socket.listen()
+            #приймаємо користувача який під'єднується до серверу
+            client_socket, adress = server_socket.accept()
+
             data_ready = read_json(name_file="status_connect_game.json")
             #нащи данные
             status_from_file = data_ready["status"]
@@ -215,6 +218,11 @@ def start_server():
         # бесконечный цикл для боя
         while True:
             time.sleep(0.1)   
+            #Ставимо сервер у режим очікування підключень
+            server_socket.listen()
+            #приймаємо користувача який під'єднується до серверу
+            client_socket, adress = server_socket.accept()
+            
             if flag_bomb_animation[0] == False:
                 for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                     animation_miss = Animation(

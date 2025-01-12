@@ -128,6 +128,9 @@ def connect_user():
         while True:
             # try:
             time.sleep(1)
+            client_socket.close()  # Закрываем сокет
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
+            client_socket.connect((ip_adress, port))
             # Зчитуємо дані з файлу
             data_ready = read_json(name_file="status_connect_game.json")
             #нащи данные
@@ -149,15 +152,7 @@ def connect_user():
                 break
             elif status_from_file == "You can connect to the game" and status_from_file != data_connect:
                 list_check_ready_to_fight[0] = "wait"
-            # except TimeoutError:
-            #     print("Слишком долгое ожидание")
-            #     continue
-            # except json.JSONDecodeError:
-            #     print("Не получилось декодировать данные/")
-            #     continue
-            # except Exception as error:
-            #     print(f"Тупая ошибка: {error}")
-            #     continue
+
 
                 
         dict_save_information["player_nick"] = str(input_nick.user_text)
@@ -166,7 +161,11 @@ def connect_user():
         dict_save_information["enemy_points"] = data_in_list["points"]
         # створюємо цикл для бою(щоб робити обмін даними , до потрібного моменту)
         while True:
-            time.sleep(0.1)    
+            time.sleep(0.1)  
+            print(ip_adress, port)
+            client_socket.close()  # Закрываем сокет
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
+            client_socket.connect((ip_adress, port))
             if flag_bomb_animation[0] == False:
                 for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                     animation_miss = Animation(
