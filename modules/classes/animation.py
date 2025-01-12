@@ -27,7 +27,10 @@ class Animation():
         self.IMAGE = transformed_image
     
     def animation(self, count_image: int, main_screen: pygame.Surface):
-        current_speed = self.ANIMATION_SPEED * ((screen_module.FPS.get_fps() + 10) / 60)
+        fps = screen_module.FPS.get_fps()
+        if screen_module.FPS.get_fps() <= 0:
+            fps = 0.01
+        current_speed = self.ANIMATION_SPEED * ((fps + 10) / 60)
         if len(self.LIST_IMAGES) == 0:
             for number in range(count_image):
                 #'/../../../media/{self.NAME_FOLDER}/{number}.png'

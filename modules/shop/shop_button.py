@@ -56,7 +56,10 @@ class Button_Shop:
     #Використовується прапорець turn, щоб визначити напрямок руху
     # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
     def move(self):
-        current_speed = self.SPEED * (60 / FPS.get_fps())
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        current_speed = self.SPEED * (60 / fps)
         if self.ACTIVE:
             if self.TURN == "Down":
                 if self.Y_COR < self.TARGET_Y: 

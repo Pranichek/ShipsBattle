@@ -28,16 +28,22 @@ class InputText:
         self.VISIBLE = 255
 
     def fade_in(self):
-        current_procent = 60 / FPS.get_fps()
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        current_speed = (60 / fps)
         if self.VISIBLE < 311:
-            self.VISIBLE += 5 * current_procent
+            self.VISIBLE += 5 * current_speed
             if self.VISIBLE >= 311:
                 self.VISIBLE = 311
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
-        current_procent = 60 / FPS.get_fps()
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        current_speed =  (60 / fps)
         if self.VISIBLE > 0:
-            self.VISIBLE -= 10 * current_procent
+            self.VISIBLE -= 10 * current_speed
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
     #створюємо метод завантаження картинки

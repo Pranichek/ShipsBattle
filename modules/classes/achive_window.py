@@ -51,7 +51,10 @@ class Acievement:
         self.COUNT_MOVE = 0
 
     def move(self):
-        current_procent = 60 / (FPS.get_fps() + 10)
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        current_procent = 60 / (fps + 10)
         if self.ACTIVE == True:
             if self.COUNT_REPEAT == 0:
                 music_achieve.play2(loops = 1)
