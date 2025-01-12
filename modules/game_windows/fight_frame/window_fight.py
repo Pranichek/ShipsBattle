@@ -403,7 +403,7 @@ def fight_window():
         # отрисовка сетки для прицеливания при авто-ударе
         if shop.shop_item[0].TURN != "Up":
             if shop.flagbimb200[0] == 'yes':
-                center_xy=draw_cursor(screen = module_screen.main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color =colorsetka)
+                center_xy = draw_cursor(screen = module_screen.main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color =colorsetka)
                 draw_cursor(screen = module_screen.main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color =colorsetka)
                 
                 x_mouse=center_xy[0]
@@ -547,76 +547,7 @@ def fight_window():
                                                     str_col = str_col_our,
                                                     health_anim = health_anim
                                                 )
-                                                # # 
-                                                #     try:
-                                                #         if list_grid[row + 1][col] == 2:
-                                                #             list_grid[row][col] = 2
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row - 1][col] == 2:
-                                                #             list_grid[row][col] = 2
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row][col + 1] == 2:
-                                                #             list_grid[row][col] = 2
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row][col - 1] == 2:
-                                                #             list_grid[row][col] = 2
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row + 1][col] == 3:
-                                                #             list_grid[row][col] = 3
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row - 1][col] == 3:
-                                                #             list_grid[row][col] = 3
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row][col + 1] == 3:
-                                                #             list_grid[row][col] = 3
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row][col - 1] == 3:
-                                                #             list_grid[row][col] = 3
-                                                #     except:
-                                                #         print("index error")
-
-                                                #     try:
-                                                #         if list_grid[row + 1][col] == 4:
-                                                #             list_grid[row][col] = 4
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row - 1][col] == 4:
-                                                #             list_grid[row][col] = 4
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row][col + 1] == 4:
-                                                #             list_grid[row][col] = 4
-                                                #     except:
-                                                #         print("index error")
-                                                #     try:
-                                                #         if list_grid[row][col - 1] == 4:
-                                                #             list_grid[row][col] = 4
-                                                #     except:
-                                                #         print("index error")
-                                                #     if list_grid[row][col] != 7:
-                                                #         health_anim[0] = True
-                                                #         shop.but_flag[0] = False
-                                                #     server_module.row_list[0] = row
-                                                #     server_module.col_list[0] = col
-                                                #     server_module.number_list[0] = list_grid[row][col]
-                                                
-                
+                                                                
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
                         # нижче умови для атаки 
