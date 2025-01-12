@@ -17,6 +17,6 @@ def piooner():
                     piooner_achievement.ACTIVE = True
                     pioneer_medal.ACTIVE = True
                     list_save_coords_achiv.append(8)
-                    print("Ure")
+               
 
 

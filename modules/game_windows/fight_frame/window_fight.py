@@ -1,6 +1,8 @@
 import pygame, random
 import modules.game_windows as game_windows
 import modules.shop as shop
+from ...screens import main_screen
+from os.path import abspath, join
 import modules.screens.screen as module_screen
 import modules.server as server_module
 import modules.achievement as achievement
@@ -27,7 +29,9 @@ list_check_shop = [None]
 def show_shop():
     if shop.shop_item[0].TURN == "Down": 
         list_check_shop[0] = True
-
+# курсор картинка
+cursor_image = pygame.transform.scale(pygame.image.load(abspath(join(__file__, "..", "..", "..", "..", "media", "decorations", "cursor.png"))), (32, 32))
+cursor_img_rect = cursor_image.get_rect()
 #images
 grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , folder_name = "grid", image_name = "background_grid.png")
 player_face = DrawImage(width = 154 , height = 123 ,x_cor = 1104 , y_cor = 79 , folder_name = "decorations" , image_name = "active_player.png")
@@ -56,6 +60,7 @@ second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
 
 
+
 screen_shake = [0]
 
 list_check_shop = [None]
@@ -79,7 +84,7 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
     center_x = rect_x +137
     center_y = rect_y +137
     xxxx=grid.coordinates_to_number(center_x, center_y)
-    print (f"aahahahavot eta cletca,{xxxx}")
+
     # Рисуем сетку
     for row in range(grid_height):
         for col in range(grid_width):
@@ -132,8 +137,12 @@ list_cross_player = []
 check_achiv = [False]
 index_achiv = [100]
 
-
 numberofbim = [""]
+
+# списки которые проверяют нажал ли пользователь на использования своего оружия
+activate_auto_rocket = [False]
+activate_restore_cell = [False]
+activate_bomb = [False]
 
 # функція для бою між гравцями
 def fight_window():
@@ -185,7 +194,6 @@ def fight_window():
 
     while run_game:
         module_screen.FPS.tick(60)
-        # print(rocket_animation.ANIMATION_SPEED)
         achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
         achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships[0]
         for medal in range(0 , len(server_module.save_medals_coordinates)):
@@ -347,13 +355,11 @@ def fight_window():
         for anim_miss in server_module.our_miss_anim:
             anim_miss.animation(main_screen=module_screen.main_screen, count_image=29)
         #----------------------------------------------------------------
-
         #----------------------------------------------------------------
         #перебор матрицы врага чтобы если что отрисовали не достающие крестики и зачеркнутые клеточки(матрица врага слева)
         # например после удара бомбой
         update_enemy_matrix_animations(check_animation_rocket = check_animation_rocket, flag_miss_rocket_animation = flag_miss_rocket_animation, list_cross = list_cross)
                            
-
         # отрисовка крестиков если игрок попал по кораблю(на поле врага , слева)
         for cross in list_cross:
             cross.animation(main_screen = module_screen.main_screen , count_image = 13)
@@ -402,14 +408,14 @@ def fight_window():
         mouse_x , mouse_y = pygame.mouse.get_pos()
         # отрисовка сетки для прицеливания при авто-ударе
         if shop.shop_item[0].TURN != "Up":
-            if shop.flagbimb200[0] == 'yes':
+            if shop.flagbimb200[0] == 'yes' and activate_auto_rocket[0] == True:
                 center_xy = draw_cursor(screen = module_screen.main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color =colorsetka)
                 draw_cursor(screen = module_screen.main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color =colorsetka)
                 
                 x_mouse=center_xy[0]
                 y_mouse=center_xy[1]
                 numberofbim[0] = enemy_grid.coordinates_to_number(x_mouse, y_mouse)
-                print (x_mouse,y_mouse)
+    
             
             if x_mouse >= 182 and x_mouse <= 67 + 450:
                 if y_mouse >= 322 and y_mouse <= 257 + 450  and numberofbim[0] not in shop.check_2:
@@ -484,6 +490,20 @@ def fight_window():
         achievement.lone_hunter()
         achievement.first_kill_four_decker_achivment()
         achievement.strategist(player_killed_ships = server_module.player_died_ships , role = server_module.list_player_role[0] , winner = server_module.list_check_win[0])
+
+        for button in shop.shop_item:
+            try:
+                if button.ACTION:
+                    mouse = pygame.mouse.get_pos()
+                    if button.RECT.collidepoint(mouse):
+                        pygame.mouse.set_visible(False)
+                        cursor_img_rect.center = pygame.mouse.get_pos()
+                        main_screen.blit(cursor_image, cursor_img_rect)
+                        break
+                    else:
+                        pygame.mouse.set_visible(True)
+            except:
+                continue
     
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -500,6 +520,20 @@ def fight_window():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 shop_and_tasks.check_click(event = event)
+                # активация суперспособностей
+                mouse = pygame.mouse.get_pos()
+                if bomb_icon.rect.collidepoint(mouse):
+                    activate_bomb[0] = True
+                    activate_auto_rocket[0] = False
+                    activate_restore_cell[0] = False
+                elif auto_rocket_icon.rect.collidepoint(mouse):
+                    activate_auto_rocket[0] = True
+                    activate_bomb[0] = True
+                    activate_restore_cell[0] = False
+                elif restore_cell_icon.rect.collidepoint(mouse):
+                    activate_restore_cell[0] = True
+                    activate_bomb[0] = False
+                    activate_auto_rocket[0] = False
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop.shop_item:
                     try:
@@ -520,7 +554,8 @@ def fight_window():
                                 if cell.x <= x_mouse and x_mouse < cell.x + 55:
                                     if cell.y <= y_mouse and y_mouse < cell.y + 55:
                                         # для восстановления клеточки корабля
-                                        if shop.but_flag[0] == True:
+                                        if shop.but_flag[0] == True and activate_restore_cell[0] == True:
+                                            activate_restore_cell[0] = False
                                             # Узнаем номер клетки где стоит кораблик
                                             number_cell_our = list_object_map.index(cell)
                                             # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
@@ -535,19 +570,14 @@ def fight_window():
 
                                             # номер клеточки
                                             if list_grid[row][col] == 7:
-                                                # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
-                                                # cltx = (row * 10) + int(str_col_our[-1])
-                                                # animation_health.X_COR = x_anim
-                                                # animation_health.Y_COR = y_anim
                                                 if cltx not in check_number_cell:
-                                                    print("Да")
                                                     restore_part_of_ship(
                                                     col = col,
                                                     row = row,
                                                     str_col = str_col_our,
                                                     health_anim = health_anim
                                                 )
-                                                                
+                x_mouse, y_mouse = pygame.mouse.get_pos()                                           
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
                         # нижче умови для атаки 
@@ -570,7 +600,7 @@ def fight_window():
                                                     #Колонку кораблика вычисляем по такому принципу
                                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                     col = int(str_col[-1])
-                                                    if shop.flagbimb200[0] == "yes" and numberofbim[0] not in shop.cheak: 
+                                                    if shop.flagbimb200[0] == "yes" and numberofbim[0] not in shop.cheak and activate_auto_rocket[0] == True: 
                                                         kord = Missile_200(row,col,server_module.enemy_matrix)
                                                         #если false flag  то бан клетка и если NOne значит нету корабликов 
                                                         if kord != "false" and kord != None :
@@ -579,17 +609,11 @@ def fight_window():
                                                                 for i in range(lenkord):
                                                                     # знаходим номер клетки 
                                                                     kletka= kord[i][0]*10 + kord[i][1]
-                                                                    print (f"kletka",kletka)
-                                                                    print (f"col row ",col,row,i )
-
                                                                     # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         
                                                                     x_y = enemy_grid.cell_number_to_coordinates(kletka)
-                                                                    print ("шиталово 0",x_y)
                                                                     check_animation_rocket[0] = "start_animation"  
                                                                     x_hit_the_ship[0] = x_y[0]
                                                                     y_hit_the_ship[0] = x_y[1]
-                                                                    print (x_hit_the_ship[0],y_hit_the_ship[0])
-                                                                    
                                                                     # у матрицю ворога записуємо 7
                                                                     server_module.enemy_matrix[0][kord[i][0]][kord[i][1]] = 7
                                                                     # обнуляємо час ходу
@@ -597,33 +621,29 @@ def fight_window():
                                                                     # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
                                                                     server_module.turn[0] = "server_turn"      
                                                                     shop.flagbimb200[0] ="no"
+                                                                    activate_auto_rocket[0] = False
                                                             else:
                                                                 #знаходим номер клетки 
                                                                 kletka= kord[0][1]*10 + kord[0][2]
-                                                                print (f"kletka",kletka)
-                                                                print (f"col row ",col,row,0 )
                                                                 # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         
                                                                 x_y = enemy_grid.cell_number_to_coordinates(kletka)
-                                                                print ("шиталово 0",x_y)
                                                                 check_animation_rocket[0] = "start_animation"  
                                                                 x_hit_the_ship[0] = x_y[0]
                                                                 y_hit_the_ship[0] = x_y[1]
-                                                            
                                                                 # у матрицю ворога записуємо 7
                                                                 server_module.enemy_matrix[0][kord[0][1]][kord[0][2]] = 5 
                                                                 # обнуляємо час ходу
                                                                 server_module.check_time[0] = 0
                                                                 # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                                
                                                                 list_check_need_send[0] = "yes"
                                                                 server_module.turn[0] = "client_turn"      
-                                                                #bimbcordlistx.append(x_y[0])
-                                                                #bimbcordlisty.append(x_y[1])
                                                                 shop.flagbimb200[0] ="no"
+                                                                activate_auto_rocket[0] = False
 
-                                                    elif shop.check_buy_bomb_attack[0] == True:
+                                                    elif shop.check_buy_bomb_attack[0] == True and activate_bomb[0] == True:
                                                         shop.check_buy_bomb_attack[0] = False
                                                         server_module.flag_bomb_animation[0] = True
+                                                        activate_bomb[0] = False
                                                         x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
                                                         y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
                                                         count_7 = [0]
@@ -638,7 +658,7 @@ def fight_window():
                                                             count_ships = count_ships,
                                                             count_misses = count_misses
                                                         )
-                                                    else:
+                                                    elif activate_bomb[0] == False and activate_auto_rocket[0] == False:
                                                         simple_shot(
                                                             col = col, 
                                                             row = row, 
@@ -670,7 +690,7 @@ def fight_window():
                                                     # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                     col = int(str_col[-1])
                                                     # автоудар
-                                                    if shop.flagbimb200[0] == "yes" and numberofbim[0] not in shop.cheak: 
+                                                    if shop.flagbimb200[0] == "yes" and numberofbim[0] not in shop.cheak and activate_auto_rocket[0] == True: 
                                                         kord = Missile_200(row,col,server_module.enemy_matrix)
                                                         #если false flag  то бан клетка и если NOne значит нету корабликов 
                                                         if kord != "false" and kord != None :
@@ -679,48 +699,40 @@ def fight_window():
                                                                 for i in range(lenkord):
                                                                     # знаходим номер клетки 
                                                                     kletka= kord[i][0]*10 + kord[i][1]
-                                                                    print (f"kletka",kletka)
-                                                                    print (f"col row ",col,row,i )
-
                                                                     # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         
                                                                     x_y = enemy_grid.cell_number_to_coordinates(kletka)
-                                                                    print ("шиталово 0",x_y)
                                                                     check_animation_rocket[0] = "start_animation"  
                                                                     x_hit_the_ship[0] = x_y[0]
                                                                     y_hit_the_ship[0] = x_y[1]
-                                                                    print (x_hit_the_ship[0],y_hit_the_ship[0])
-                                                                    
                                                                     # у матрицю ворога записуємо 7
                                                                     server_module.enemy_matrix[0][kord[i][0]][kord[i][1]] = 7
                                                                     # обнуляємо час ходу
                                                                     server_module.check_time[0] = 0
                                                                     # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
                                                                     server_module.turn[0] = "server_turn"      
-                                                                    shop.flagbimb200[0] ="no"
+                                                                    shop.flagbimb200[0] = "no"
+                                                                    activate_auto_rocket[0] = False
                                                             else:
                                                                 #знаходим номер клетки 
-                                                                kletka= kord[0][1]*10 + kord[0][2]
-                                                                print (f"kletka",kletka)
-                                                                print (f"col row ",col,row,0 )
+                                                                kletka= kord[0][1] * 10 + kord[0][2]
                                                                 # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         
                                                                 x_y = enemy_grid.cell_number_to_coordinates(kletka)
-                                                                print ("шиталово 0",x_y)
                                                                 check_animation_rocket[0] = "start_animation"  
                                                                 x_hit_the_ship[0] = x_y[0]
                                                                 y_hit_the_ship[0] = x_y[1]
-                                                            
                                                                 # у матрицю ворога записуємо 7
                                                                 server_module.enemy_matrix[0][kord[0][1]][kord[0][2]] = 5 
                                                                 # обнуляємо час ходу
                                                                 server_module.check_time[0] = 0
                                                                 # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                                
                                                                 server_module.turn[0] = "client_turn"      
                                                                 shop.flagbimb200[0] = "no"
+                                                                activate_auto_rocket[0] = False
                                                     #бомба 3 на 3
-                                                    elif shop.check_buy_bomb_attack[0] == True:
+                                                    elif shop.check_buy_bomb_attack[0] == True and activate_bomb[0] == True:
                                                         shop.check_buy_bomb_attack[0] = False
                                                         server_module.flag_bomb_animation[0] = True
+                                                        activate_bomb[0] = False
                                                         x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
                                                         y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
                                                         count_7 = [0]
@@ -736,7 +748,7 @@ def fight_window():
                                                             count_misses = count_misses
                                                         )
                                                     # простой удар
-                                                    else:
+                                                    elif activate_bomb[0] == False and activate_auto_rocket[0] == False:
                                                         simple_shot(
                                                             col = col, 
                                                             row = row, 

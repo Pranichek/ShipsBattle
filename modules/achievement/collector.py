@@ -24,7 +24,6 @@ def monster_of_perfictionists():
                             index_killed_ships[0] += 1
             if len(killed_ships[0]) >= 3:
                 if killed_ships[0].count(1) >= 2:
-                    print(8989)
                     index_killed_ships[0] += len(killed_ships[0]) - 1
                 elif killed_ships[0].count(2) >= 2:
                     index_killed_ships[0] += len(killed_ships[0]) - 1
@@ -51,33 +50,4 @@ def monster_of_perfictionists():
                     index_killed_ships[0] += 3
                     list_hits_achiv.clear()
                 
-        # indx_one = 0
-        # indx_two = 0
-        # indx_three = 0
-        # indx_four = 0
-        # for idx, died_ship in enumerate(enemy_dies_ships_for_ahiv[0]):
-        #     if died_ship == 1:
-        #         indx_one = idx
-        # if indx_one + 3 < len(enemy_dies_ships_for_ahiv[0]):
-        #     print(1)  # Проверка длины списка
-        #     if enemy_dies_ships_for_ahiv[0][indx_one + 1] == 2:  
-        #         print(2)# Уточняем индекс
-        #         indx_two = enemy_dies_ships_for_ahiv[0][indx_one + 1]
-        #         if enemy_dies_ships_for_ahiv[0][indx_one + 2] == 3:
-        #             print(3)
-        #             indx_three = enemy_dies_ships_for_ahiv[0][indx_one + 2]
-        #             if enemy_dies_ships_for_ahiv[0][indx_one + 3] == 4:
-        #                 print(4)
-        #                 indx_four = enemy_dies_ships_for_ahiv[0][indx_one + 3]
-        #                 indx_one = 1
-        #                 if 0 not in list_hits_achiv and 5 not in list_hits_achiv:
-        #                     print(5)
-        #                     print(indx_one , indx_two , indx_three , indx_four)
-        #                     if indx_one < indx_two < indx_three < indx_four:
-        #                         if indx_four - indx_one == 3:
-        #                             perfictionists_achiement.ACTIVE = True
-        #                             collector_medal.ACTIVE = True
-        #                             list_save_coords_achiv.append(12)
-        #                 else:
-        #                     list_hits_achiv.clear()
-
+     

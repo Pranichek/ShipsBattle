@@ -3,6 +3,9 @@ from os.path import abspath, join
 from .shop_image import shop_item
 from .text_shop import money_list 
 from ..screens import FPS
+from os.path import abspath, join
+from ..screens import main_screen
+
 
 
 #класс для кнопки в магазині
@@ -15,15 +18,17 @@ class Button_Shop:
         self.WIDTH = width
         self.HEIGHT = height
         #os.path.abspath(__file__ + f"/../../../static/images_button/shop_buttons/{self.IMAGE_NAME}")
-        self.PTATH_IMAGE1 = abspath(join(__file__, "..", "..", "..", "static", "images_button", "shop_buttons", f"{self.IMAGE_NAME}"))
-        self.IMAGE = pygame.transform.scale(pygame.image.load(self.PTATH_IMAGE1), (self.WIDTH , self.HEIGHT))
+        self.PATH_IMAGE1 = abspath(join(__file__, "..", "..", "..", "static", "images_button", "shop_buttons", f"{self.IMAGE_NAME}"))
+        self.IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_IMAGE1), (self.WIDTH , self.HEIGHT))
         self.RECT = self.IMAGE.get_rect(topleft=(self.X_COR, self.Y_COR))
+        self.RECT.height -= 13
         self.ACTION = action
         self.ACTIVE = False 
         self.TURN = "Down"
         self.VISIBLE = 0
         self.TARGET_Y = target_y
         self.SPEED = 13
+
 
     # створюємо метод кнопки , який буде перевиряти чи натиснута кнопка , якщо так , то виконуємо дії яка прив'язана до кнопки
     def check_click(self, event):
