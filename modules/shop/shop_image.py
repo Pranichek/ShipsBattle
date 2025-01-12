@@ -23,26 +23,31 @@ class Image_Shop:
         self.ACTIVE = False 
         self.TURN = "Down"
         self.TARGET_Y = target_y
-        self.visible = 0 
+        self.VISIBLE = 0 
 
     # Відображає зображення на екрані, враховуючи поточну прозорість (visible)
     def draw(self, screen: pygame.Surface):
-        self.IMAGE.set_alpha(self.visible)
+        self.IMAGE.set_alpha(self.VISIBLE)
         screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
 
     # Плавно змінює прозорість зображення:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
-        if self.visible < 255:
-            self.visible += 5  
-            if self.visible >= 255:
-                self.visible = 255
-     
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        if self.VISIBLE < 255:
+            self.VISIBLE += 5 * (60 / fps)
+            if self.VISIBLE >= 255:
+                self.VISIBLE = 255
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
-        if self.visible > 0:
-            self.visible -= 5  
-            if self.visible <= 0:
-                self.visible = 0
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        if self.VISIBLE > 0:
+            self.VISIBLE -= 5 * (60 / fps)
+            if self.VISIBLE <= 0:
+                self.VISIBLE = 0
        
     # Зображення може плавно переміщатися вниз (до цільової позиції) і назад
     #Використовується прапорець turn, щоб визначити напрямок руху

@@ -42,14 +42,20 @@ class Button_Shop:
             screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
     # Плавно змінює прозорість кнопки:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
         if self.VISIBLE < 255:
-            self.VISIBLE += 5  
+            self.VISIBLE += 5 * (60 / fps)
             if self.VISIBLE >= 255:
                 self.VISIBLE = 255
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
         if self.VISIBLE > 0:
-            self.VISIBLE -= 5  
+            self.VISIBLE -= 5 * (60 / fps)
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
     # Кнопка може плавно переміщатися вниз (до цільової позиції) і назад
@@ -63,9 +69,9 @@ class Button_Shop:
         if self.ACTIVE:
             if self.TURN == "Down":
                 if self.Y_COR < self.TARGET_Y: 
+                    self.fade_in()
                     self.Y_COR += current_speed
                     self.RECT.y += current_speed
-                    self.fade_in()
                     if self.Y_COR >= self.TARGET_Y:  
                         self.Y_COR = self.TARGET_Y
                         self.RECT.y == self.TARGET_Y

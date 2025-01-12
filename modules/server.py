@@ -9,8 +9,7 @@ import modules.achievement as achievement
 from .classes.class_input_text import input_password
 
 
-# чтобы у на ототбражались зачеркнутые клеточки вокргу корабля
-our_miss_anim = []
+
 # функция для болной загрузки данных
 def recv_all(socket, buffer_size = 1024):
     data = b""
@@ -20,56 +19,48 @@ def recv_all(socket, buffer_size = 1024):
         if len(part) < buffer_size:  # Якщо менше buffer_size, це остання частина
             break
     return data
-#
-count_5 = [0]
-#
 
+# чтобы у на ототбражались зачеркнутые клеточки вокргу корабля(список в котором храним анимации зачеркнутых клеточек на поле игрока , то есть с права)
+our_miss_anim = []
+
+#для бомбы чтобы считать сколько клеточек в радиусе 3х3 было 5
+count_5 = [0]
+
+# для восстановления клеточки
 number_list = [100]
 row_list = [100]
 col_list = [100]
 check_send_data_health = [0]
 
-
 #для ачивки убить два или больше окрабля одной бомбой
 old_killed_ships = [0]
 new_killed_ships = [0]
 check_bomb = [False]
+
 # счетчик чтобы взять новые данные про умершие корабли врага
 get_new_killed_data = [0]
-
 # список для того чтобы от времени отнималась ровно одна секунда
 check_ten_times = []
-
 # список для того чтобы мы получили матрицу соперника только один раз
 check_repeat = [0]
-
 # список для проверки перехода на фрейм боя
 list_check_ready_to_fight = [None]
-
 # лист очереди
 turn = ["server_turn"]
-
 # лист таймер времени
 check_time = [0]
-
 # Лист для проверки за кого мы играем(сервер или клиент)
 list_player_role = [""]
-
 # лист где храним матрицу врага
 enemy_matrix = ["yes"]
-
 # список куда сохраняем кто выиграл
 list_check_win = [None]
-
 #сохранаяем координаты где должнны отображаться анимация зачеркивания клеточек,  когда враг убил У НАС КОРАБЛЬ
 save_miss_coordinates = []
-
 # сохраняем где отрисовываем анимацию зачеркания когда мы убили корабль
 enemy_animation_miss_coord = []
-
 # список где сохраняем баланс врага
 enemy_balance = [0]
-
 # сохраняем координаты вражеских медалей
 save_medals_coordinates = []
 
@@ -327,6 +318,7 @@ def start_server():
             # Розбір JSON
             ready_clinet_data = json.loads(client_data)
 
+            # для восстановления клеточки
             if ready_clinet_data["row"] != 100:
                 enemy_matrix[0][ready_clinet_data["row"]][ready_clinet_data["col"]] = ready_clinet_data["number"]
 
@@ -342,6 +334,7 @@ def start_server():
 
             if check_bomb[0] == True and get_new_killed_data[0] == 0:
                 get_new_killed_data[0] += 1
+            # для бомбы задание
             elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
                 print(123)
                 new_killed_ships[0] = len(enemy_died_ships[0])
@@ -354,6 +347,7 @@ def start_server():
                 else:
                     check_bomb[0] = False
                     get_new_killed_data[0] = 0
+            # Targetted attack for bomb
             elif get_new_killed_data[0] >= 1:
                 new_killed_ships[0] = len(enemy_died_ships[0])
                 print(new_killed_ships[0], old_killed_ships[0])

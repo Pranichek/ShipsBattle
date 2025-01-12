@@ -32,15 +32,20 @@ class Font_Shop:
         self.text_surface = self.text_surface.convert_alpha()
      # Плавно змінює прозорість кнопки:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
         if self.VISIBLE < 255:
-            self.VISIBLE += 5
+            self.VISIBLE += 5 * (60 / fps)
             if self.VISIBLE >= 255:
                 self.VISIBLE = 255
-
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
         if self.VISIBLE > 0:
-            self.VISIBLE -= 5
+            self.VISIBLE -= 5 * (60 / fps)
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
 
