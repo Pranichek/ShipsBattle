@@ -72,11 +72,12 @@ enemy_died_ships = [0]
 # список в котором храним флаг выполнил ли игрок ачивку с названием target_attack
 check_target_attack = ["None"]
 
-
 #------------------------------------------------------------------------------------------------
 flag_bomb_animation = [False]
 #------------------------------------------------------------------------------------------------
 
+# флаг в котором храним все ли впорядке с связью между игроками
+check_connection = [True]
 
 
 # словарь для зберігання інформаці про гравців
@@ -185,8 +186,10 @@ def start_server():
         while True:
             try:
                 time.sleep(1)
+                check_connection[0] = True
                 #Ставимо сервер у режим очікування підключень
                 server_socket.listen()
+                server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
                 client_socket, adress = server_socket.accept()
 
@@ -211,12 +214,15 @@ def start_server():
                     list_check_ready_to_fight[0] = "wait"
             except TimeoutError:
                 print("Слишком долгое ожидание")
+                check_connection[0] = False
                 continue
             except json.JSONDecodeError:
                 print("Не получилось декодировать данные/")
+                check_connection[0] = False
                 continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
+                check_connection[0] = False
                 continue
 
 
@@ -230,9 +236,10 @@ def start_server():
                 time.sleep(0.1)   
                 #Ставимо сервер у режим очікування підключень
                 server_socket.listen()
+                server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
                 client_socket, adress = server_socket.accept()
-                
+                check_connection[0] = True
                 if flag_bomb_animation[0] == False:
                     for our_kill_ship_anim_miss in enemy_animation_miss_coord:
                         animation_miss = Animation(
@@ -349,12 +356,10 @@ def start_server():
 
                 enemy_died_ships[0] = ready_clinet_data["player_died_ships"]
 
-
                 if check_bomb[0] == True and get_new_killed_data[0] == 0:
                     get_new_killed_data[0] += 1
                 # для бомбы задание
                 elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
-                    print(123)
                     new_killed_ships[0] = len(enemy_died_ships[0])
                     if new_killed_ships[0] - old_killed_ships[0] >= 2:
                         print(new_killed_ships[0], old_killed_ships[0])
@@ -445,13 +450,16 @@ def start_server():
                 if list_check_win[0] != None:
                     break
             except TimeoutError:
-                    print("Слишком долгое ожидание")
-                    continue
+                print("Слишком долгое ожидание")
+                check_connection[0] = False
+                continue
             except json.JSONDecodeError:
                 print("Не получилось декодировать данные/")
+                check_connection[0] = False
                 continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
+                check_connection[0] = False
                 continue
 
                 

@@ -133,3 +133,15 @@ animation_health = Animation(
     name_folder = "animation_medical",
     animation_speed = 4
 )
+
+# когда проблемы с соеденением
+animation_connection_problem = Animation(
+    image_name = "0.png",
+    width = 901,
+    height = 284,
+    x_cor = 210,
+    y_cor = 274,
+    need_clear = False,
+    name_folder = "error_connection_animation",
+    animation_speed = 31
+)

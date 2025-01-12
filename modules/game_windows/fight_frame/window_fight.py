@@ -16,7 +16,7 @@ from ...classes.class_image import DrawImage
 from ...classes.achive_window import list_achieves
 from ...classes.class_button import Button
 from ...classes.class_text import Font
-from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation
+from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem
 from ...classes.class_ship import list_ships
 from ..button_pressed import check_press_button
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect
@@ -29,7 +29,16 @@ list_check_shop = [None]
 def show_shop():
     if shop.shop_item[0].TURN == "Down": 
         list_check_shop[0] = True
-# курсор картинка
+
+# функция для отчистки активации оружия(того что кпуил пользователь)
+def clear_weapon_function():
+    activate_auto_rocket[0] = False
+    activate_restore_cell[0] = False
+    activate_bomb[0] = False
+    active_product_shine.x_cor = -100
+    active_product_shine.y_cor = -100
+
+# картинка курсора
 cursor_image = pygame.transform.scale(pygame.image.load(abspath(join(__file__, "..", "..", "..", "..", "media", "decorations", "cursor.png"))), (32, 32))
 cursor_img_rect = cursor_image.get_rect()
 #images
@@ -47,6 +56,8 @@ grid_image_for_enemy = DrawImage(width = 596  , height = 597 , x_cor = 23 , y_co
 bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_name = "products_icons" , image_name = "bomb_icon.png")
 auto_rocket_icon = DrawImage(x_cor = 1137, y_cor = 58, width = 45.54, height = 40.09, folder_name = "products_icons", image_name = "auto_rocket_icon.png")
 restore_cell_icon = DrawImage(x_cor = 1147, y_cor = 23, width = 31, height = 28.4, folder_name = "products_icons", image_name = "restore_cell_icon.png")
+# сияние которое подсвечивает активаное оружие
+active_product_shine = DrawImage(x_cor = 1155, y_cor = 91, width = 60, height = 60, folder_name = "decorations", image_name = "shine_for_weapon.png")
 
 #fonts
 player_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = server_module.dict_save_information["player_nick"] , screen = module_screen.main_screen , x_cor = 914 , y_cor = 126, text_color = "White")
@@ -58,7 +69,7 @@ second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_
 
 #Buttons
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action= show_shop)
-
+clear_weapon = Button(x = 1064, y = 8, image_path = "clear_weapon.png" , image_hover_path = "clear_weapon_hover.png" , width = 109, height = 13, action = clear_weapon_function)
 
 
 screen_shake = [0]
@@ -77,7 +88,6 @@ def upgrade_flag():
 def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5, grid_height=5, cell_size=55):
     # Привязываем центральную точку курсора к сетке
     snapped_x, snapped_y = grid.snap_to_grid_enemy(mouse_x, mouse_y)
-
     # Вычисляем координаты левого верхнего угла сетки 5x5
     rect_x = snapped_x - (grid_width // 2) * cell_size
     rect_y = snapped_y - (grid_height // 2) * cell_size
@@ -388,7 +398,14 @@ def fight_window():
                 miss_rocket_animation.clear_animation()
                 flag_miss_rocket_animation[0] = ""
         #************************************************************************************************
-
+        print(server_module.check_connection[0])
+        #----------------------------------------------------------------
+        # анимация потери соеденения
+        if server_module.check_connection[0] == False:
+            animation_connection_problem.animation(main_screen = main_screen, count_image = 5)
+            if animation_connection_problem.COUNT_IMAGES >= 4:
+                animation_connection_problem.clear_animation()
+        #----------------------------------------------------------------
 
         shop.button_restores_cell.draw(screen = module_screen.main_screen)
 
@@ -441,7 +458,11 @@ def fight_window():
         for player in player_medal:
             player.show_descriptions(screen = module_screen.main_screen)
         #----------------------------------------------------------------
+        # кнопка которая отчищает оружие
+        clear_weapon.draw(surface = main_screen)
 
+        # подсвечивание товара(суперспособности) какой сейчас активен
+        active_product_shine.draw_image(screen = main_screen)
         # products icon in the right top corner of the screen
         if shop.check_buy_bomb_attack[0] == True:
             bomb_icon.draw_image(screen = module_screen.main_screen)
@@ -519,6 +540,7 @@ def fight_window():
                 list_check_shop[0] = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                clear_weapon.check_click(event = event)
                 shop_and_tasks.check_click(event = event)
                 # активация суперспособностей
                 mouse = pygame.mouse.get_pos()
@@ -526,14 +548,21 @@ def fight_window():
                     activate_bomb[0] = True
                     activate_auto_rocket[0] = False
                     activate_restore_cell[0] = False
+                    active_product_shine.x_cor = bomb_icon.x_cor - 17
+                    active_product_shine.y_cor = bomb_icon.y_cor - 17
                 elif auto_rocket_icon.rect.collidepoint(mouse):
                     activate_auto_rocket[0] = True
                     activate_bomb[0] = True
                     activate_restore_cell[0] = False
+                    active_product_shine.x_cor = auto_rocket_icon.x_cor - 13
+                    active_product_shine.y_cor = auto_rocket_icon.y_cor - 10
                 elif restore_cell_icon.rect.collidepoint(mouse):
                     activate_restore_cell[0] = True
                     activate_bomb[0] = False
                     activate_auto_rocket[0] = False
+                    active_product_shine.x_cor = restore_cell_icon.x_cor - 17
+                    active_product_shine.y_cor = restore_cell_icon.y_cor - 20
+                    
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop.shop_item:
                     try:
@@ -555,7 +584,6 @@ def fight_window():
                                     if cell.y <= y_mouse and y_mouse < cell.y + 55:
                                         # для восстановления клеточки корабля
                                         if shop.but_flag[0] == True and activate_restore_cell[0] == True:
-                                            activate_restore_cell[0] = False
                                             # Узнаем номер клетки где стоит кораблик
                                             number_cell_our = list_object_map.index(cell)
                                             # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
@@ -570,6 +598,8 @@ def fight_window():
 
                                             # номер клеточки
                                             if list_grid[row][col] == 7:
+                                                activate_restore_cell[0] = False
+                                                shop.but_flag[0] = False
                                                 if cltx not in check_number_cell:
                                                     restore_part_of_ship(
                                                     col = col,
@@ -577,6 +607,8 @@ def fight_window():
                                                     str_col = str_col_our,
                                                     health_anim = health_anim
                                                 )
+                                                active_product_shine.x_cor = -100
+                                                active_product_shine.y_cor = -100
                 x_mouse, y_mouse = pygame.mouse.get_pos()                                           
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
@@ -622,6 +654,8 @@ def fight_window():
                                                                     server_module.turn[0] = "server_turn"      
                                                                     shop.flagbimb200[0] ="no"
                                                                     activate_auto_rocket[0] = False
+                                                                    active_product_shine.x_cor = -100
+                                                                    active_product_shine.y_cor = -100
                                                             else:
                                                                 #знаходим номер клетки 
                                                                 kletka= kord[0][1]*10 + kord[0][2]
@@ -639,6 +673,8 @@ def fight_window():
                                                                 server_module.turn[0] = "client_turn"      
                                                                 shop.flagbimb200[0] ="no"
                                                                 activate_auto_rocket[0] = False
+                                                                active_product_shine.x_cor = -100
+                                                                active_product_shine.y_cor = -100
 
                                                     elif shop.check_buy_bomb_attack[0] == True and activate_bomb[0] == True:
                                                         shop.check_buy_bomb_attack[0] = False
@@ -658,6 +694,8 @@ def fight_window():
                                                             count_ships = count_ships,
                                                             count_misses = count_misses
                                                         )
+                                                        active_product_shine.x_cor = -100
+                                                        active_product_shine.y_cor = -100
                                                     elif activate_bomb[0] == False and activate_auto_rocket[0] == False:
                                                         simple_shot(
                                                             col = col, 
@@ -668,6 +706,8 @@ def fight_window():
                                                             check_animation_rocket = check_animation_rocket,
                                                             cell = cell
                                                         )
+                                                        active_product_shine.x_cor = -100
+                                                        active_product_shine.y_cor = -100
                                                     
 
                         # перевіряємо за яку роль грає гравець                    
@@ -712,6 +752,8 @@ def fight_window():
                                                                     server_module.turn[0] = "server_turn"      
                                                                     shop.flagbimb200[0] = "no"
                                                                     activate_auto_rocket[0] = False
+                                                                    active_product_shine.x_cor = -100
+                                                                    active_product_shine.y_cor = -100
                                                             else:
                                                                 #знаходим номер клетки 
                                                                 kletka= kord[0][1] * 10 + kord[0][2]
@@ -728,6 +770,8 @@ def fight_window():
                                                                 server_module.turn[0] = "client_turn"      
                                                                 shop.flagbimb200[0] = "no"
                                                                 activate_auto_rocket[0] = False
+                                                                active_product_shine.x_cor = -100
+                                                                active_product_shine.y_cor = -100
                                                     #бомба 3 на 3
                                                     elif shop.check_buy_bomb_attack[0] == True and activate_bomb[0] == True:
                                                         shop.check_buy_bomb_attack[0] = False
@@ -747,6 +791,8 @@ def fight_window():
                                                             count_ships = count_ships,
                                                             count_misses = count_misses
                                                         )
+                                                        active_product_shine.x_cor = -100
+                                                        active_product_shine.y_cor = -100
                                                     # простой удар
                                                     elif activate_bomb[0] == False and activate_auto_rocket[0] == False:
                                                         simple_shot(
@@ -758,6 +804,8 @@ def fight_window():
                                                             check_animation_rocket = check_animation_rocket,
                                                             cell = cell
                                                         )
+                                                        active_product_shine.x_cor = -100
+                                                        active_product_shine.y_cor = -100
                                                         
 
 
