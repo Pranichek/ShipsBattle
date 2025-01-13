@@ -160,101 +160,102 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
     """
     Ця функція для удару бомбою
     """
-    if row == 0 and col == 0:
-        upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
-    elif 0 < row < 9 and 0 < col < 9:
-        upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
-    elif 1 <= row < 9 and col == 0:
-        upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
-    elif row == 9 and col == 0:
-        upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
-    elif row == 0 and col == 9:
-        upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)          
-    elif row == 9 and col == 9:
-        upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)        
-    elif row == 9 and 0 < col < 9:
-        upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
-    elif row == 0 and 0 < col < 9:
-        upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
-    elif 0 < row < 9 and col == 9:
-        upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
-    
-    if count_7[0] > 0:
-        check_bomb[0] = True
-        server_module.check_time[0] = 0
-        if server_module.list_player_role[0] == "server_player":
-            server_module.turn[0] = "server_turn"
-            # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
-        elif server_module.list_player_role[0] ==  "player_client":
-            client_module.list_check_need_send[0] = "yes"  # Готуємо дані для відправки
-            server_module.turn[0] = "client_turn"  # Передаємо хід серверу
+    if server_module.enemy_matrix[0] != "yes":
+        if row == 0 and col == 0:
+            upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
+        elif 0 < row < 9 and 0 < col < 9:
+            upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
+        elif 1 <= row < 9 and col == 0:
+            upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
+        elif row == 9 and col == 0:
+            upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
+        elif row == 0 and col == 9:
+            upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)          
+        elif row == 9 and col == 9:
+            upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)        
+        elif row == 9 and 0 < col < 9:
+            upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
+        elif row == 0 and 0 < col < 9:
+            upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
+        elif 0 < row < 9 and col == 9:
+            upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
+        
+        if count_7[0] > 0:
+            check_bomb[0] = True
+            server_module.check_time[0] = 0
+            if server_module.list_player_role[0] == "server_player":
+                server_module.turn[0] = "server_turn"
+                # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
+            elif server_module.list_player_role[0] ==  "player_client":
+                client_module.list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+                server_module.turn[0] = "client_turn"  # Передаємо хід серверу
 
-        if shop.third_task.TEXT == shop.list_third_task[1]:
-            shop.single_ships.extend(count_ships)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-            if 1 in list_ships:
-                shop.first_shot_is_kill(1)
-            else:
-                shop.first_shot_is_kill(2)
-        if shop.third_task.TEXT == shop.list_third_task[2]:
-            shop.check_three_2decker_ship_in_row.extend(count_ships)
-        if shop.first_task.TEXT == shop.list_first_task[-1]:
+            if shop.third_task.TEXT == shop.list_third_task[1]:
+                shop.single_ships.extend(count_ships)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                if 1 in list_ships:
+                    shop.first_shot_is_kill(1)
+                else:
+                    shop.first_shot_is_kill(2)
+            if shop.third_task.TEXT == shop.list_third_task[2]:
+                shop.check_three_2decker_ship_in_row.extend(count_ships)
+            if shop.first_task.TEXT == shop.list_first_task[-1]:
+                for hit in range(0, count_7[0]):
+                    shop.three_hits_in_row(7)
+            if shop.third_task.TEXT == shop.list_third_task[-1]:
+                shop.count_three_ships.extend(count_ships)
+            if shop.second_task.TEXT == shop.list_second_task[2]:
+                shop.ship_hits.extend(count_ships)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                shop.ship_hits_three.extend(count_ships)
+            if shop.first_task.TEXT == shop.list_first_task[0]:
+                for hit in range(0, count_7[0]):
+                    shop.two_hits_in_row(number_cell = 7)
+            if shop.first_task.TEXT == shop.list_first_task[1]:
+                for hit in range(0, count_7[0]):
+                    shop.four_hits_in_row(number_cell = 7)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                for hit in range(0, count_7[0]):
+                    shop.eight_hits_in_row(number_cell = 7)
+            # ачивки
             for hit in range(0, count_7[0]):
-                shop.three_hits_in_row(7)
-        if shop.third_task.TEXT == shop.list_third_task[-1]:
-            shop.count_three_ships.extend(count_ships)
-        if shop.second_task.TEXT == shop.list_second_task[2]:
-            shop.ship_hits.extend(count_ships)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-            shop.ship_hits_three.extend(count_ships)
-        if shop.first_task.TEXT == shop.list_first_task[0]:
-            for hit in range(0, count_7[0]):
-                shop.two_hits_in_row(number_cell = 7)
-        if shop.first_task.TEXT == shop.list_first_task[1]:
-            for hit in range(0, count_7[0]):
-                shop.four_hits_in_row(number_cell = 7)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-            for hit in range(0, count_7[0]):
-                shop.eight_hits_in_row(number_cell = 7)
-        # ачивки
-        for hit in range(0, count_7[0]):
-            achievement.ten_shoot_in_row(7)
-        achievement.first_shot(7)
-        achievement.single_ships_achiv.extend(list_ships)
-        achievement.list_hits_achiv.extend(list_ships)
-    else:
-        server_module.check_time[0] = 0
-        if server_module.list_player_role[0] == "server_player":
-            server_module.turn[0] = "client_turn"
-        elif server_module.list_player_role[0] ==  "player_client":
-            client_module.list_check_need_send[0] = "yes"  # Готуємо дані для відправки
-            server_module.turn[0] = "server_turn"  # Передаємо хід серверу
-    
-        if shop.third_task.TEXT == shop.list_third_task[1]:
-            shop.single_ships.extend(count_misses)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-            shop.first_shot_is_kill(0)
-        if shop.third_task.TEXT == shop.list_third_task[2]:
-            shop.check_three_2decker_ship_in_row.extend(count_misses)
-        if shop.first_task.TEXT == shop.list_first_task[-1]:
-            shop.three_hits_in_row(0)
-        if shop.third_task.TEXT == shop.list_third_task[-1]:
-            shop.count_three_ships.extend(count_misses)
-        if shop.second_task.TEXT == shop.list_second_task[2]:
-            shop.ship_hits.extend(count_misses)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-            shop.ship_hits_three.extend(count_misses)
-        if shop.first_task.TEXT == shop.list_first_task[0]:
-            shop.two_hits_in_row(number_cell = 5)
-        if shop.first_task.TEXT == shop.list_first_task[1]:
-            shop.four_hits_in_row(number_cell = 5)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-            shop.eight_hits_in_row(number_cell = 5)
-        # ачивки
-        achievement.ten_shoot_in_row(5)
-        achievement.first_shot(0)
-        achievement.single_ships_achiv.extend(list_ships)
-        achievement.list_hits_achiv.extend(list_ships)
-    count_7[0] = 0
-    count_ships.clear()
-    count_misses.clear()
+                achievement.ten_shoot_in_row(7)
+            achievement.first_shot(7)
+            achievement.single_ships_achiv.extend(list_ships)
+            achievement.list_hits_achiv.extend(list_ships)
+        else:
+            server_module.check_time[0] = 0
+            if server_module.list_player_role[0] == "server_player":
+                server_module.turn[0] = "client_turn"
+            elif server_module.list_player_role[0] ==  "player_client":
+                client_module.list_check_need_send[0] = "yes"  # Готуємо дані для відправки
+                server_module.turn[0] = "server_turn"  # Передаємо хід серверу
+        
+            if shop.third_task.TEXT == shop.list_third_task[1]:
+                shop.single_ships.extend(count_misses)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                shop.first_shot_is_kill(0)
+            if shop.third_task.TEXT == shop.list_third_task[2]:
+                shop.check_three_2decker_ship_in_row.extend(count_misses)
+            if shop.first_task.TEXT == shop.list_first_task[-1]:
+                shop.three_hits_in_row(0)
+            if shop.third_task.TEXT == shop.list_third_task[-1]:
+                shop.count_three_ships.extend(count_misses)
+            if shop.second_task.TEXT == shop.list_second_task[2]:
+                shop.ship_hits.extend(count_misses)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                shop.ship_hits_three.extend(count_misses)
+            if shop.first_task.TEXT == shop.list_first_task[0]:
+                shop.two_hits_in_row(number_cell = 5)
+            if shop.first_task.TEXT == shop.list_first_task[1]:
+                shop.four_hits_in_row(number_cell = 5)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                shop.eight_hits_in_row(number_cell = 5)
+            # ачивки
+            achievement.ten_shoot_in_row(5)
+            achievement.first_shot(0)
+            achievement.single_ships_achiv.extend(list_ships)
+            achievement.list_hits_achiv.extend(list_ships)
+        count_7[0] = 0
+        count_ships.clear()
+        count_misses.clear()
