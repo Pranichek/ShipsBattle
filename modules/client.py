@@ -1,9 +1,8 @@
 import socket ,threading , json , pygame , time
-from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal,destroyer_achievement,destroyer_medal
+from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal,destroyer_achievement,destroyer_medal, list_ships
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
 import modules.server as server_module
-# from .server import check_bomb,old_killed_ships,new_killed_ships,flag_bomb_animation ,enemy_balance , list_check_ready_to_fight , dict_save_information, turn , check_time , list_player_role , enemy_matrix , check_repeat , list_check_win , enemy_animation_miss_coord , recv_all , save_miss_coordinates , our_miss_anim , save_medals_coordinates , player_died_ships , enemy_died_ships , check_target_attack, get_new_killed_data, count_5, row_list, col_list, number_list, check_send_data_health
 from .screens import list_grid
 import modules.shop as shop
 import modules.achievement as achievement
@@ -15,6 +14,7 @@ list_check_need_send = ["no"]
 
 pygame.init()
 
+a = [0]
 
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
@@ -73,7 +73,7 @@ def connect_user():
             list_check_connection[0] = "error_connection"  # Сбрасываем событие
             event_connect_to_server.clear()
             print(event_connect_to_server)
-       
+        server_module.player_ships_coord_len.clear()
         print(ip_adress , "ip address")
         print(port , "port")
 
@@ -128,7 +128,7 @@ def connect_user():
         server_module.list_player_role[0] = "player_client"
         while True:
             try:
-                time.sleep(1)
+                time.sleep(0.1)
                 client_socket.close()  # Закрываем сокет
                 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
                 client_socket.connect((ip_adress, port))
@@ -182,28 +182,10 @@ def connect_user():
                 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
                 client_socket.connect((ip_adress, port))
                 server_module.check_connection[0] = True
-                if server_module.flag_bomb_animation[0] == False:
-                    for our_kill_ship_anim_miss in server_module.enemy_animation_miss_coord:
-                        animation_miss = Animation(
-                                        x_cor = our_kill_ship_anim_miss[0] - 637,
-                                        y_cor = our_kill_ship_anim_miss[1],
-                                        image_name="0.png",
-                                        width = 55,
-                                        height = 55,
-                                        need_clear = False,
-                                        name_folder = "animation_miss",
-                                        animation_speed = 3
-                                    )
-                        if len(server_module.enemy_animation_miss_coord) > 0:
-                            exit = False
-                            for anim_miss in server_module.our_miss_anim:
-                                if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
-                                    exit= True
-                            if not exit:
-                                server_module.our_miss_anim.append(animation_miss)
-                                if server_module.enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] == 0:
-                                    server_module.enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
 
+                if server_module.check_repeat[0] >= 2:
+                    for ship in list_ships:
+                        server_module.player_ships_coord_len.append((ship.X_COR, ship.Y_COR, ship.LENGHT, ship.ORIENTATION_SHIP))
         
                 client_socket.settimeout(3)
                 # Отримання всіх даних від серверу
@@ -217,10 +199,11 @@ def connect_user():
                 # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
                 server_data = json.loads(data_turn)
 
+                server_module.enemy_ships[0] = server_data["player_ships"]
+
                 if server_data["row"] != 100:
                     server_module.enemy_matrix[0][server_data["row"]][server_data["col"]] = server_data["number"]
 
-                # achievement.show_target_attack_medal(flag = server_data["check_target_attack_achiv"])
 
                 server_module.enemy_balance[0] = server_data["money_balance"]
                 
@@ -239,15 +222,13 @@ def connect_user():
                     # якщо не не атакував , то відправляємо дані , але ті які на ход ніяк не влияють(нам потрбіно завжди щось відправляти на севре , щоб не бцло помилки)
                     client_dict = {
                         "turn": "server_turn",
-                        "time": 0 ,
+                        "time": 0,
                         "need" : "no",
                         'client_matrix':list_grid,
                         "new_for_server" : server_module.enemy_matrix[0],
-                        "misses_coordinate": server_module.save_miss_coordinates,
                         "money_balance":shop.money_list[0],
                         "medals_coordinates":achievement.list_save_coords_achiv,
-                        "player_died_ships":server_module.player_died_ships,
-                        "check_target_attack_achiv":server_module.check_target_attack[0],
+                        "player_ships":server_module.player_ships_coord_len,
                         "row":server_module.row_list[0],
                         "col":server_module.col_list[0],
                         "number":server_module.number_list[0],
@@ -266,11 +247,9 @@ def connect_user():
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : server_module.enemy_matrix[0],
-                            "misses_coordinate": server_module.save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
-                            "player_died_ships":server_module.player_died_ships,
-                            "check_target_attack_achiv":server_module.check_target_attack[0],
+                            "player_ships":server_module.player_ships_coord_len,
                             "row":server_module.row_list[0],
                             "col":server_module.col_list[0],
                             "number":server_module.number_list[0],
@@ -289,11 +268,9 @@ def connect_user():
                             "need" : "yes",
                             'client_matrix':list_grid,
                             "new_for_server" : server_module.enemy_matrix[0],
-                            "misses_coordinate": server_module.save_miss_coordinates,
                             "money_balance":shop.money_list[0],
                             "medals_coordinates":achievement.list_save_coords_achiv,
-                            "player_died_ships":server_module.player_died_ships,
-                            "check_target_attack_achiv":server_module.check_target_attack[0],
+                            "player_ships":server_module.player_ships_coord_len,
                             "row":server_module.row_list[0],
                             "col":server_module.col_list[0],
                             "number":server_module.number_list[0],
@@ -303,23 +280,16 @@ def connect_user():
                         server_module.check_time[0] = 0
                         continue
 
-
                 if server_module.check_repeat[0] == 0:
                     # сохраняем матрицу сервера
                     server_module.enemy_matrix[0] = server_data["server_matrix"]
                 
                 # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
                 server_module.turn[0] = server_data['turn']
-                server_module.enemy_died_ships[0] = server_data["player_died_ships"]
 
                 for medal in server_data["medals_coordinates"]:
                     if medal not in server_module.save_medals_coordinates:
                         server_module.save_medals_coordinates.append(medal)
-
-                # для зачерканных клеточек
-                for coord_miss in server_data["misses_coordinate"]:
-                    if coord_miss not in server_module.enemy_animation_miss_coord:
-                        server_module.enemy_animation_miss_coord.append(coord_miss)
 
 
                 # обновляем матрицу клиента , на матрицу с пострелами сервера
@@ -328,42 +298,7 @@ def connect_user():
                         for cell in range(len(server_data["new_for_client"][row])):
                             list_grid[row][cell] = server_data["new_for_client"][row][cell]
 
-                if server_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and 11 not in achievement.list_save_coords_achiv:
-                    target_attack_achievement.ACTIVE = True
-                    target_attack_medal.ACTIVE = True
-                    achievement.list_save_coords_achiv.append(11)
                 server_module.check_repeat[0] += 1
-
-                # проверка ачивки для бомбы
-                if server_module.check_bomb[0] == True and server_module.get_new_killed_data[0] == 0:
-                    server_module.get_new_killed_data[0] += 1
-                elif server_module.get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
-                    server_module.new_killed_ships[0] = len(server_module.enemy_died_ships[0])
-                    if server_module.new_killed_ships[0] - server_module.old_killed_ships[0] >= 2:
-                        print(server_module.new_killed_ships[0], server_module.old_killed_ships[0])
-                        destroyer_medal.ACTIVE = True
-                        destroyer_achievement.ACTIVE = True
-                        server_module.check_bomb[0] = False
-                        achievement.list_save_coords_achiv.append(9)
-                    # get_new_killed_data[0] = 13
-                    else:
-                        server_module.check_bomb[0] = False
-                        server_module.get_new_killed_data[0] = 0
-                elif server_module.get_new_killed_data[0] >= 1:
-                    server_module.new_killed_ships[0] = len(server_module.enemy_died_ships[0])
-                    print(server_module.new_killed_ships[0], server_module.old_killed_ships[0])
-                    if server_module.new_killed_ships[0] - server_module.old_killed_ships[0] >= 1:
-                        if server_module.count_5[0] <= 0:
-                            if 11 not in achievement.list_save_coords_achiv:
-                                target_attack_achievement.ACTIVE = True
-                                target_attack_medal.ACTIVE = True
-                                achievement.list_save_coords_achiv.append(11)
-                            else:
-                                server_module.count_5[0] = 0
-                        else:
-                            server_module.count_5[0] = 0
-                    else:
-                        server_module.count_5[0] = 0
 
                 achievement.opening_the_battle(grid = list_grid, enemy_grid = server_module.enemy_matrix)
 

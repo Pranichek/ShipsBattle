@@ -8,7 +8,7 @@ single_ships_achiv = []
 check_killed_for_single_ships_achiv = []
 start_index_single_achiv = [0]
 def lone_hunter():
-    if enemy_dies_ships_for_ahiv[0] != 0 and enemy_dies_ships_for_ahiv[0] != "":
+    if enemy_dies_ships_for_ahiv[0] != "":
         one = single_ships_achiv.count(1)
         check_killed_for_single_ships_achiv.clear()
         check_killed_for_single_ships_achiv.extend(enemy_dies_ships_for_ahiv[0][start_index_single_achiv[0]:])
@@ -50,7 +50,7 @@ def lone_hunter():
                 print("You are kill four single ships in a row")
         else:
             single_ships_achiv.clear()
-            if enemy_dies_ships_for_ahiv [0] != "" and len(enemy_dies_ships_for_ahiv [0]) >= start_index_single_achiv[0]: 
+            if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single_achiv[0]: 
                 start_index_single_achiv[0] += 1
 
 

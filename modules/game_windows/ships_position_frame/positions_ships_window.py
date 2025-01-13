@@ -1,6 +1,8 @@
 import pygame
 import modules.screens as module_screen
 import modules.game_windows as game_windows
+import modules.server as server_module
+from ...classes.animation import animation_connection_problem
 from ...screens import grid_player, main_screen, list_object_map
 from ...server import list_check_ready_to_fight
 from ...classes.class_music import music_load_main, music_load_waiting
@@ -46,6 +48,7 @@ def ships_position_window():
             change_scene(None)
             change_scene(scene = game_windows.waiting_window())
             check_press_button[0] = None
+
             
         
         ships_position_bg.draw_image(screen = main_screen)
@@ -63,6 +66,14 @@ def ships_position_window():
         #draw buttons
         ready_for_battle.draw(surface= main_screen)
         random_place_ships.draw(surface= main_screen)
+
+        #----------------------------------------------------------------
+        # анимация потери соеденения
+        if server_module.check_connection[0] == False:
+            animation_connection_problem.animation(main_screen = main_screen, count_image = 5)
+            if animation_connection_problem.COUNT_IMAGES >= 4:
+                animation_connection_problem.clear_animation()
+        #----------------------------------------------------------------
 
         for event in pygame.event.get():
             for ship in list_ships:

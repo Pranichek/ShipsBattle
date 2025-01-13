@@ -6,7 +6,7 @@ ship_hits = []
 kill_count = [0]
 count_zero = [0]
 def kill_two_ships_in_a_row():
-    if enemy_dies_ships_for_ahiv[0] != 0:
+    if enemy_dies_ships_for_ahiv[0] != "":
         if kill_count[0] != "Kill two ships":
             kill_count[0] = len(enemy_dies_ships_for_ahiv[0]) - count_zero[0] 
 

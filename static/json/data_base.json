@@ -1,1 +1,18 @@
-{}
+{
+    "vova": {
+        "points": 0,
+        "password": "1234"
+    },
+    "katya": {
+        "points": 0,
+        "password": "1234"
+    },
+    "dfkjv": {
+        "points": 0,
+        "password": "dfkjnv"
+    },
+    "dflkm": {
+        "points": 0,
+        "password": "ldfkv"
+    }
+}

@@ -5,7 +5,7 @@ ship_hits_three = []
 count_zero_thrible = [0]
 count_kill_three = [0]
 def kill_three_ships_in_a_row():
-    if enemy_dies_ships_for_ahiv[0] != 0:
+    if enemy_dies_ships_for_ahiv[0] != "":
         if count_kill_three[0] != "You killes three ships in row":
             count_kill_three[0] = len(enemy_dies_ships_for_ahiv[0]) - count_zero_thrible[0]
 

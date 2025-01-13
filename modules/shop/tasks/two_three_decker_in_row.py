@@ -6,7 +6,7 @@ count_three_ships = []
 check_killed_for_three_ships = []
 start_index = [0]
 def kill_two_three_decker_in_a_row():
-    if enemy_dies_ships_for_ahiv[0] != 0:
+    if enemy_dies_ships_for_ahiv[0] != "":
         count_three = count_three_ships.count(3)
         check_killed_for_three_ships.clear()
         check_killed_for_three_ships.extend(enemy_dies_ships_for_ahiv[0][start_index[0]:])
@@ -50,5 +50,5 @@ def kill_two_three_decker_in_a_row():
 
         else:
             count_three_ships.clear()
-            if enemy_dies_ships_for_ahiv[0]!= "yes" and len(enemy_dies_ships_for_ahiv[0]) >= start_index[0]:
+            if enemy_dies_ships_for_ahiv[0]!= "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index[0]:
                 start_index[0] += 1

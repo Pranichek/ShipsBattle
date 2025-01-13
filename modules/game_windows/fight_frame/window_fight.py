@@ -11,15 +11,15 @@ from ...game_tools import count_money
 from ...screens import grid_player, list_object_map, list_object_map_enemy, enemy_grid, list_grid
 from ...classes.class_music import music_load_waiting, fight_music
 from ...classes.class_click import miss_water_sound
-from ...classes.class_medal import player_medal, enemy_medals
+from ...classes.class_medal import player_medal, enemy_medals, target_attack_medal, destroyer_medal
 from ...classes.class_image import DrawImage
-from ...classes.achive_window import list_achieves
+from ...classes.achive_window import list_achieves, target_attack_achievement, destroyer_achievement
 from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem
 from ...classes.class_ship import list_ships
 from ..button_pressed import check_press_button
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack
 from ..change_window import change_scene
 from ...client import list_check_need_send
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
@@ -111,11 +111,9 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
 
 # флаг для анимации аптечки
 health_anim = [False]
-
 # списки в которых хранятся координаты крестиков , если враг попал по кораблю игрока
 x_enemy_cross = [0]
 y_enemy_cross = [0]
-
 #------------------------------------------------------------------------------------------------
 #флаг который говорит надо ли запускать анимация промаха ракеты, если игрок уларил но промахнулся
 flag_miss_rocket_animation = [""]
@@ -126,20 +124,14 @@ list_miss_cell = []
 #------------------------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------------------------
-
 # флаг который првоеряет надо ли запускать анимацию ракеты если игрок ударил
 check_animation_rocket = [""]
 # флаг когда надо проигрывать анимацию крестика если попали по кораблю
 check_cross_animation  = [""]
-# список где хранятся крестики которые отрисовываются в том случаи если игрок попал ко кораблю
-list_cross = []
 #------------------------------------------------------------------------------------------------
-
-
 # спсики в которых хранятся координаты где должны отрисовываться анимации если игрок ударил по полю
 x_hit_the_ship = [0]
 y_hit_the_ship = [0]
-
 
 # спсиок где хранятся крестки которые ресуюются если враг попал по кораблю игрока
 list_cross_player = []
@@ -148,12 +140,17 @@ check_achiv = [False]
 index_achiv = [100]
 
 numberofbim = [""]
-
 # списки которые проверяют нажал ли пользователь на использования своего оружия
 activate_auto_rocket = [False]
 activate_restore_cell = [False]
 activate_bomb = [False]
-
+#----------------------------------------------------------------
+#для бомбы чтобы считать сколько клеточек в радиусе 3х3 было 5
+count_5 = [0]
+#для ачивки убить два или больше корабля одной бомбой
+old_killed_ships = [0]
+new_killed_ships = [0]
+check_bomb = [False]
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -204,8 +201,11 @@ def fight_window():
 
     while run_game:
         module_screen.FPS.tick(60)
-        achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
-        achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships[0]
+        kill_enemy_ships()
+        print(server_module.enemy_died_ships)
+        if len(server_module.enemy_died_ships) > 0:
+            achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
+            achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships
         for medal in range(0 , len(server_module.save_medals_coordinates)):
             if server_module.save_medals_coordinates[medal] == 1:
                 class_medal.enemy_four_decker_sniper_medal.ACTIVE = True
@@ -368,7 +368,12 @@ def fight_window():
         #----------------------------------------------------------------
         #перебор матрицы врага чтобы если что отрисовали не достающие крестики и зачеркнутые клеточки(матрица врага слева)
         # например после удара бомбой
-        update_enemy_matrix_animations(check_animation_rocket = check_animation_rocket, flag_miss_rocket_animation = flag_miss_rocket_animation, list_cross = list_cross)
+        update_enemy_matrix_animations(
+            check_animation_rocket = check_animation_rocket, 
+            flag_miss_rocket_animation = flag_miss_rocket_animation, 
+            list_cross = list_cross,
+            our_miss_anim = our_miss_anim
+        )
                            
         # отрисовка крестиков если игрок попал по кораблю(на поле врага , слева)
         for cross in list_cross:
@@ -398,7 +403,6 @@ def fight_window():
                 miss_rocket_animation.clear_animation()
                 flag_miss_rocket_animation[0] = ""
         #************************************************************************************************
-        print(server_module.check_connection[0])
         #----------------------------------------------------------------
         # анимация потери соеденения
         if server_module.check_connection[0] == False:
@@ -410,7 +414,12 @@ def fight_window():
         shop.button_restores_cell.draw(screen = module_screen.main_screen)
 
         # эти функция для проверки , попал ли соперник по нашем кораблям
-        check_and_add_hit_markers(x_enemy_cross = x_enemy_cross, y_enemy_cross = y_enemy_cross, list_cross_player = list_cross_player)
+        check_and_add_hit_markers(
+            x_enemy_cross = x_enemy_cross, 
+            y_enemy_cross = y_enemy_cross, 
+            list_cross_player = list_cross_player,
+            
+        )
 
         # анимация использования аптечки
         if health_anim[0] == True:
@@ -507,6 +516,26 @@ def fight_window():
         if shop.second_task.TEXT == shop.list_second_task[-1]:
             shop.first_kill_three_decker()
 
+        #target attack
+        if check_target_attack[0] == True and 11 not in achievement.list_save_coords_achiv:
+            target_attack_achievement.ACTIVE = True
+            target_attack_medal.ACTIVE = True
+            achievement.list_save_coords_achiv.append(11)
+
+        # destoyer achievement
+        # для бомбы задание
+        if check_bomb[0] == True and 9 not in achievement.list_save_coords_achiv:
+            new_killed_ships[0] = len(server_module.enemy_died_ships)
+            if new_killed_ships[0] - old_killed_ships[0] >= 2:
+                print(new_killed_ships[0], old_killed_ships[0])
+                destroyer_medal.ACTIVE = True
+                destroyer_achievement.ACTIVE = True
+                check_bomb[0] = False
+                achievement.list_save_coords_achiv.append(9)
+            else:
+                check_bomb[0] = False
+
+
         achievement.piooner() 
         achievement.lone_hunter()
         achievement.first_kill_four_decker_achivment()
@@ -525,7 +554,9 @@ def fight_window():
                         pygame.mouse.set_visible(True)
             except:
                 continue
-    
+        print(activate_auto_rocket[0])
+        print(activate_bomb[0])
+        print(activate_restore_cell[0])
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -552,7 +583,7 @@ def fight_window():
                     active_product_shine.y_cor = bomb_icon.y_cor - 17
                 elif auto_rocket_icon.rect.collidepoint(mouse):
                     activate_auto_rocket[0] = True
-                    activate_bomb[0] = True
+                    activate_bomb[0] = False
                     activate_restore_cell[0] = False
                     active_product_shine.x_cor = auto_rocket_icon.x_cor - 13
                     active_product_shine.y_cor = auto_rocket_icon.y_cor - 10
@@ -686,13 +717,15 @@ def fight_window():
                                                         
                                                         count_ships = []
                                                         count_misses = []
-                                                        server_module.old_killed_ships[0] = len(server_module.enemy_died_ships[0])
+                                                        old_killed_ships[0] = len(server_module.enemy_died_ships)
                                                         bomb_shot(
                                                             row = row,
                                                             col = col,
                                                             count_7 = count_7,
                                                             count_ships = count_ships,
-                                                            count_misses = count_misses
+                                                            count_misses = count_misses,
+                                                            count_5 = count_5,
+                                                            check_bomb = check_bomb
                                                         )
                                                         active_product_shine.x_cor = -100
                                                         active_product_shine.y_cor = -100
@@ -783,13 +816,15 @@ def fight_window():
                                                         
                                                         count_ships = []
                                                         count_misses = []
-                                                        server_module.old_killed_ships[0] = len(server_module.enemy_died_ships[0])
+                                                        old_killed_ships[0] = len(server_module.enemy_died_ships)
                                                         bomb_shot(
                                                             row = row,
                                                             col = col,
                                                             count_7 = count_7,
                                                             count_ships = count_ships,
-                                                            count_misses = count_misses
+                                                            count_misses = count_misses,
+                                                            count_5 = count_5,
+                                                            check_bomb = check_bomb
                                                         )
                                                         active_product_shine.x_cor = -100
                                                         active_product_shine.y_cor = -100

@@ -3,7 +3,7 @@ from ...achievement import enemy_dies_ships_for_ahiv
 
 kill_three_deckcer_ship = [0]
 def kill_one_three_decker_ship():
-    if enemy_dies_ships_for_ahiv[0] != 0:
+    if enemy_dies_ships_for_ahiv[0] != "":
         if kill_three_deckcer_ship[0] != "kill three deck ship":
             if 3 in enemy_dies_ships_for_ahiv[0]:
                 kill_three_deckcer_ship[0] += 1

@@ -1,5 +1,6 @@
 from .did_three_tasks import check_completed_tasks
 from ...achievement import enemy_dies_ships_for_ahiv, player_died_ships_for_achiv
+
 our_ships_4decker = [0]
 enemy_ships_4decker = [0]
 def first_kill_four_decker():

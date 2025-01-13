@@ -4,7 +4,7 @@ from ...achievement import enemy_dies_ships_for_ahiv, player_died_ships_for_achi
 our_ships_3decker = [0]
 enemy_ships_3decker = [0]
 def first_kill_three_decker():
-     if enemy_dies_ships_for_ahiv[0] != 0:
+     if enemy_dies_ships_for_ahiv[0] != "":
         if enemy_ships_3decker[0] != "kill three-decker ship":
             our_ships_3decker[0] = 0
             enemy_ships_3decker[0] = 0

@@ -11,7 +11,7 @@ enemy_dies_ships_for_ahiv = [""]
 our_ships_4decker_achiv = [0]
 enemy_ships_4decker_achiv = [0]
 def first_kill_four_decker_achivment():
-    if enemy_dies_ships_for_ahiv[0] != 0 and enemy_dies_ships_for_ahiv[0] != "":
+    if enemy_dies_ships_for_ahiv[0] != "":
         if enemy_ships_4decker_achiv[0] != "kill four-decker ship":
             our_ships_4decker_achiv[0] = 0
             enemy_ships_4decker_achiv[0] = 0

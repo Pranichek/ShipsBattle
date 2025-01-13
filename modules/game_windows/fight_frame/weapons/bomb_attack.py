@@ -156,31 +156,31 @@ right_wall для правой стенки 3 на 3
 
 
 
-def bomb_shot(row: int, col:int, count_7: list, count_ships: list, count_misses: list):
+def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count_misses: list, check_bomb:list):
     """
     Ця функція для удару бомбою
     """
     if row == 0 and col == 0:
-        upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)
+        upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     elif 0 < row < 9 and 0 < col < 9:
-        upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)
+        upgrade_attack(index = "entry_cell", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     elif 1 <= row < 9 and col == 0:
-        upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)
+        upgrade_attack(index = "left_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     elif row == 9 and col == 0:
-        upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)
+        upgrade_attack(index = "bot_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     elif row == 0 and col == 9:
-        upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)          
+        upgrade_attack(index = "top_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)          
     elif row == 9 and col == 9:
-        upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)        
+        upgrade_attack(index = "bot_right_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)        
     elif row == 9 and 0 < col < 9:
-        upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)
+        upgrade_attack(index = "bot_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     elif row == 0 and 0 < col < 9:
-        upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)
+        upgrade_attack(index = "top_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     elif 0 < row < 9 and col == 9:
-        upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = server_module.count_5)
+        upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     
     if count_7[0] > 0:
-        server_module.check_bomb[0] = True
+        check_bomb = True
         server_module.check_time[0] = 0
         if server_module.list_player_role[0] == "server_player":
             server_module.turn[0] = "server_turn"

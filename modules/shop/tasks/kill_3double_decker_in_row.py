@@ -5,7 +5,7 @@ check_three_2decker_ship_in_row = []
 check_killed_for_double_ships = []
 start_index_two = [0]
 def kill_three_double_decker_in_a_row():
-    if enemy_dies_ships_for_ahiv[0] != 0:
+    if enemy_dies_ships_for_ahiv[0] != "":
         two = check_three_2decker_ship_in_row.count(2)
         check_killed_for_double_ships.clear()
         check_killed_for_double_ships.extend(enemy_dies_ships_for_ahiv[0][start_index_two[0]:])
@@ -46,5 +46,5 @@ def kill_three_double_decker_in_a_row():
                     print("Ты убил три двухпалубных кораблей подряд")
         else:
             check_three_2decker_ship_in_row.clear()
-            if enemy_dies_ships_for_ahiv[0] != "yes" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_two[0]:
+            if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_two[0]:
                 start_index_two[0] += 1

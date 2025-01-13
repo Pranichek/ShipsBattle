@@ -5,7 +5,7 @@ single_ships = []
 check_killed_for_single_ships = []
 start_index_single = [0]
 def kill_four_single_ships_in_a_row():
-    if enemy_dies_ships_for_ahiv[0] != 0:
+    if enemy_dies_ships_for_ahiv[0] != "":
         one = single_ships.count(1)
         check_killed_for_single_ships.clear()
         check_killed_for_single_ships.extend(enemy_dies_ships_for_ahiv[0][start_index_single[0]:])
@@ -45,5 +45,5 @@ def kill_four_single_ships_in_a_row():
                 print("You are kill four single ships in a row")
         else:
             single_ships.clear()
-            if enemy_dies_ships_for_ahiv[0] != "yes" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single[0]: 
+            if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single[0]: 
                 start_index_single[0] += 1

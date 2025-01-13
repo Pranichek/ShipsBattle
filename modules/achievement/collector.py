@@ -8,7 +8,7 @@ index_killed_ships = [0]
 killed_ships = [""]
 def monster_of_perfictionists():
     if True not in killed_ships:
-        if enemy_dies_ships_for_ahiv[0] != 0 and enemy_dies_ships_for_ahiv[0] != "":
+        if enemy_dies_ships_for_ahiv[0] != "":
                 # for killed_ship in enemy_dies_ships_for_ahiv[0]:
             killed_ships[0] =  enemy_dies_ships_for_ahiv[0][index_killed_ships[0]:]
 

@@ -1,7 +1,7 @@
 import socket , json , time , threading
 from .screens import list_grid
 # Импортируем классы
-from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement , target_attack_medal, destroyer_medal, destroyer_achievement
+from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement , target_attack_medal, destroyer_medal, destroyer_achievement, list_ships
 # Импортируем функцию записи в json файлы
 from .json_functions import write_json , list_server_status , list_users , read_json
 import modules.shop as shop
@@ -20,22 +20,16 @@ def recv_all(socket, buffer_size = 1024):
             break
     return data
 
-# чтобы у на ототбражались зачеркнутые клеточки вокргу корабля(список в котором храним анимации зачеркнутых клеточек на поле игрока , то есть с права)
-our_miss_anim = []
+#где стоят корабли соперника
+enemy_ships = [""]
+player_ships_coord_len = []
 
-#для бомбы чтобы считать сколько клеточек в радиусе 3х3 было 5
-count_5 = [0]
 
 # для восстановления клеточки
 number_list = [100]
 row_list = [100]
 col_list = [100]
 check_send_data_health = [0]
-
-#для ачивки убить два или больше окрабля одной бомбой
-old_killed_ships = [0]
-new_killed_ships = [0]
-check_bomb = [False]
 
 # счетчик чтобы взять новые данные про умершие корабли врага
 get_new_killed_data = [0]
@@ -55,8 +49,6 @@ list_player_role = [""]
 enemy_matrix = ["yes"]
 # список куда сохраняем кто выиграл
 list_check_win = [None]
-#сохранаяем координаты где должнны отображаться анимация зачеркивания клеточек,  когда враг убил У НАС КОРАБЛЬ
-save_miss_coordinates = []
 # сохраняем где отрисовываем анимацию зачеркания когда мы убили корабль
 enemy_animation_miss_coord = []
 # список где сохраняем баланс врага
@@ -67,10 +59,8 @@ save_medals_coordinates = []
 # список в котором храним какие корабли убили у игрока
 player_died_ships = []
 # список в коотором храним какие корабли убил игрок у врага
-enemy_died_ships = [0]
+enemy_died_ships = []
 
-# список в котором храним флаг выполнил ли игрок ачивку с названием target_attack
-check_target_attack = ["None"]
 
 #------------------------------------------------------------------------------------------------
 flag_bomb_animation = [False]
@@ -125,6 +115,7 @@ def start_server():
         print("connecting")
         print(ip_address , "ip address")
         print(port, "port")
+        player_ships_coord_len.clear()
 
         #записуємо в словарь статус очікування підключення до серверу
         #передаем в словарь файл статус ожидания
@@ -185,13 +176,15 @@ def start_server():
         # Бесконечный цикл для провери расстановки кораблей
         while True:
             try:
-                time.sleep(1)
-                check_connection[0] = True
+                time.sleep(0.1)
                 #Ставимо сервер у режим очікування підключень
+                server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+                server_socket.bind((ip_address, port))
                 server_socket.listen()
                 server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
                 client_socket, adress = server_socket.accept()
+                check_connection[0] = True
 
                 data_ready = read_json(name_file="status_connect_game.json")
                 #нащи данные
@@ -233,34 +226,20 @@ def start_server():
         # бесконечный цикл для боя
         while True:
             try:
-                time.sleep(0.1)   
+                time.sleep(0.1)  
                 #Ставимо сервер у режим очікування підключень
+                server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+                server_socket.bind((ip_address, port))
                 server_socket.listen()
                 server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
                 client_socket, adress = server_socket.accept()
                 check_connection[0] = True
-                if flag_bomb_animation[0] == False:
-                    for our_kill_ship_anim_miss in enemy_animation_miss_coord:
-                        animation_miss = Animation(
-                                        x_cor = our_kill_ship_anim_miss[0] - 637,
-                                        y_cor = our_kill_ship_anim_miss[1],
-                                        image_name="0.png",
-                                        width = 55,
-                                        height = 55,
-                                        need_clear = False,
-                                        name_folder = "animation_miss",
-                                        animation_speed = 3
-                                    )
-                        if len(enemy_animation_miss_coord) > 0:
-                            exit = False                    
-                            for anim_miss in our_miss_anim:
-                                if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
-                                    exit= True
-                            if not exit:
-                                our_miss_anim.append(animation_miss)
-                                if enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] == 0:
-                                    enemy_matrix[0][our_kill_ship_anim_miss[2]][our_kill_ship_anim_miss[3]] = 5
+
+                if check_repeat[0] >= 2:
+                    for ship in list_ships:
+                        player_ships_coord_len.append((ship.X_COR, ship.Y_COR, ship.LENGHT, ship.ORIENTATION_SHIP))
+
                 # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
                 check_ten_times.append(1)
 
@@ -318,12 +297,10 @@ def start_server():
                     'server_matrix': list_grid,
                     "new_for_client": enemy_matrix[0],
                     "check_end_game": list_check_win[0],
-                    "misses_coordinate": save_miss_coordinates,
                     "money_balance":shop.money_list[0],
                     "check_ten_times":check_ten_times.count(1),
                     "medals_coordinates":achievement.list_save_coords_achiv,
-                    "player_died_ships":player_died_ships,
-                    "check_target_attack_achiv":check_target_attack[0],
+                    "player_ships":player_ships_coord_len,
                     "row":row_list[0],
                     "col":col_list[0],
                     "number":number_list[0]
@@ -343,50 +320,15 @@ def start_server():
                 # Розбір JSON
                 ready_clinet_data = json.loads(client_data)
 
+                enemy_ships[0] = ready_clinet_data["player_ships"]
+
                 # для восстановления клеточки
                 if ready_clinet_data["row"] != 100:
                     enemy_matrix[0][ready_clinet_data["row"]][ready_clinet_data["col"]] = ready_clinet_data["number"]
 
-                if ready_clinet_data["check_target_attack_achiv"] == "Enemy did the target_attack achiv" and 11 not in achievement.list_save_coords_achiv:
-                    target_attack_achievement.ACTIVE = True
-                    target_attack_medal.ACTIVE = True
-                    achievement.list_save_coords_achiv.append(11)
-            
                 enemy_balance[0] = ready_clinet_data["money_balance"]
 
-                enemy_died_ships[0] = ready_clinet_data["player_died_ships"]
 
-                if check_bomb[0] == True and get_new_killed_data[0] == 0:
-                    get_new_killed_data[0] += 1
-                # для бомбы задание
-                elif get_new_killed_data[0] >= 1 and 9 not in achievement.list_save_coords_achiv:
-                    new_killed_ships[0] = len(enemy_died_ships[0])
-                    if new_killed_ships[0] - old_killed_ships[0] >= 2:
-                        print(new_killed_ships[0], old_killed_ships[0])
-                        destroyer_medal.ACTIVE = True
-                        destroyer_achievement.ACTIVE = True
-                        check_bomb[0] = False
-                        achievement.list_save_coords_achiv.append(9)
-                    else:
-                        check_bomb[0] = False
-                        get_new_killed_data[0] = 0
-                # Targetted attack for bomb
-                elif get_new_killed_data[0] >= 1:
-                    new_killed_ships[0] = len(enemy_died_ships[0])
-                    print(new_killed_ships[0], old_killed_ships[0])
-                    if new_killed_ships[0] - old_killed_ships[0] >= 1:
-                        if count_5[0] <= 0:
-                            if 11 not in achievement.list_save_coords_achiv:
-                                target_attack_achievement.ACTIVE = True
-                                target_attack_medal.ACTIVE = True
-                                achievement.list_save_coords_achiv.append(11)
-                            else:
-                                count_5[0] = 0
-                        else:
-                            count_5[0] = 0
-                    else:
-                        count_5[0] = 0
-            
                 # координаты медалей враг
                 for medal in ready_clinet_data["medals_coordinates"]:
                     if medal not in save_medals_coordinates:
@@ -454,7 +396,7 @@ def start_server():
                 check_connection[0] = False
                 continue
             except json.JSONDecodeError:
-                print("Не получилось декодировать данные/")
+                print("Не получилось декодировать данные")
                 check_connection[0] = False
                 continue
             except Exception as error:

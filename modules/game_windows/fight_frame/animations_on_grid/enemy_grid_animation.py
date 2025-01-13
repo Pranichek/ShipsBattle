@@ -2,7 +2,7 @@ import modules.server as server_module
 from ....classes import Animation
 from ....screens import list_object_map_enemy
 
-def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocket_animation: list, list_cross: list):
+def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocket_animation: list, list_cross: list, our_miss_anim: list):
     """
      Функция которая отрисовывает крестики и зачеркнутые клеточки на вражеском поле(то есть поле которое слева)
     """
@@ -48,16 +48,16 @@ def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocke
                     image_name = "0.png", 
                     width = 55, 
                     height = 55, 
-                    x_cor = x_anim_miss + 1, 
+                    x_cor = x_anim_miss, 
                     y_cor = y_anim_miss, 
                     need_clear = False , 
                     name_folder = "animation_miss",
                     animation_speed = 3
                     )
                     exists = False
-                    for miss_cell in server_module.our_miss_anim:
+                    for miss_cell in our_miss_anim:
                         if miss_cell.X_COR == miss_cell_animation.X_COR and miss_cell.Y_COR == miss_cell_animation.Y_COR:
                             exists = True
                             break
                     if not exists:
-                        server_module.our_miss_anim.append(miss_cell_animation)
+                       our_miss_anim.append(miss_cell_animation)
