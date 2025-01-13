@@ -1,7 +1,7 @@
 import socket , json , time , threading
 from .screens import list_grid
 # Импортируем классы
-from .classes import input_port , input_ip_adress, input_nick , Animation , target_attack_achievement , target_attack_medal, destroyer_medal, destroyer_achievement, list_ships
+from .classes import input_port , input_ip_adress, input_nick, list_ships
 # Импортируем функцию записи в json файлы
 from .json_functions import write_json , list_server_status , list_users , read_json
 import modules.shop as shop
@@ -23,14 +23,11 @@ def recv_all(socket, buffer_size = 1024):
 #где стоят корабли соперника
 enemy_ships = [""]
 player_ships_coord_len = []
-
-
 # для восстановления клеточки
 number_list = [100]
 row_list = [100]
 col_list = [100]
 check_send_data_health = [0]
-
 # счетчик чтобы взять новые данные про умершие корабли врага
 get_new_killed_data = [0]
 # список для того чтобы от времени отнималась ровно одна секунда
@@ -55,17 +52,13 @@ enemy_animation_miss_coord = []
 enemy_balance = [0]
 # сохраняем координаты вражеских медалей
 save_medals_coordinates = []
-
 # список в котором храним какие корабли убили у игрока
 player_died_ships = []
 # список в коотором храним какие корабли убил игрок у врага
 enemy_died_ships = []
-
-
 #------------------------------------------------------------------------------------------------
 flag_bomb_animation = [False]
 #------------------------------------------------------------------------------------------------
-
 # флаг в котором храним все ли впорядке с связью между игроками
 check_connection = [True]
 
@@ -177,10 +170,8 @@ def start_server():
         while True:
             try:
                 time.sleep(0.1)
-                print(7878)
                 #Ставимо сервер у режим очікування підключень
                 server_socket.listen()
-                server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
                 client_socket, adress = server_socket.accept()
                 check_connection[0] = True
@@ -194,7 +185,6 @@ def start_server():
                 response = status_from_file
                     
                 client_socket.send(response.encode()) 
-                client_socket.settimeout(3)
                 # Отримуємо дані від клієнта
                 data_connect = client_socket.recv(1024).decode()
 
@@ -221,14 +211,12 @@ def start_server():
         dict_save_information["player_points"] = points_for_client
         dict_save_information["enemy_points"] = data_in_list["points"]
         client_socket.close()
-        print(349543959343498)
         # бесконечный цикл для боя
         while True:
             try:
                 time.sleep(0.1)  
                 #Ставимо сервер у режим очікування підключень
                 server_socket.listen()
-                server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
                 client_socket, adress = server_socket.accept()
                 check_connection[0] = True
@@ -305,7 +293,6 @@ def start_server():
                 # отправляем даныне на сервер , и делаем их джейсон строкой
                 client_socket.send(json.dumps(game_information).encode())
                 # settimeout(3) - ставит ожидания 3 секунды , и если за это время никакие данные от клиента не прийдут , то выдает ошибку
-                client_socket.settimeout(0.1)
                 # Отримання всіх даних
                 try:
                     client_data = recv_all(client_socket).decode()
@@ -315,7 +302,6 @@ def start_server():
                 
                 # Розбір JSON
                 ready_clinet_data = json.loads(client_data)
-                    
 
                 enemy_ships[0] = ready_clinet_data["player_ships"]
 

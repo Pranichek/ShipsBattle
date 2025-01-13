@@ -1,5 +1,5 @@
-import socket ,threading , json , pygame , time
-from .classes import input_port, input_ip_adress, input_nick , Animation , target_attack_achievement, target_attack_medal,destroyer_achievement,destroyer_medal, list_ships
+import socket ,threading, json, time
+from .classes import input_port, input_ip_adress, input_nick ,list_ships
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
 import modules.server as server_module
@@ -11,10 +11,6 @@ from .classes.class_input_text import input_password
 # лист для клиента в котором храним надо ли что то изменять после его атаки
 list_check_need_send = ["no"]
 
-
-pygame.init()
-
-a = [0]
 
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
@@ -85,8 +81,6 @@ def connect_user():
         password_for_server = data_for_server[input_nick.user_text]["password"]
         print(points_for_server , "points for client")
        
-
-
         #формуємо дані для відправки на сервер , у виді словника, щоб можна було у одні строці їх відправити
         data_for_server = {
             "nick": str(input_nick.user_text),
@@ -94,17 +88,15 @@ def connect_user():
             "status": list_server_status,
             "password": password_for_server
         }
-       
+    
         #dump - переводить словник , у джейсон строку(наш словник буде у вигляді звичайної строки, що полегшує відправку даних)
         # відправляємо дані від користувача на сервер , та кодуємо їх у байти
         client_socket.send(json.dumps(data_for_server).encode())
-
 
         #отримуємовід сервера дані у вигляді байтів , та декодуємо їх
         data = client_socket.recv(1024).decode()
         #переводимо дані які отримали у виді строки у вигляд словаря, щоб модна було брати інйормацію по ключам
         data_in_list = json.loads(data)
-
 
         #виводимо отримані дані на консоль
         print(data_in_list["nick"] , "nick from server")
@@ -142,11 +134,8 @@ def connect_user():
                 response = status_from_file
 
                 client_socket.send(response.encode()) 
-                client_socket.settimeout(3)
-                # Отримуємо дані від клієнта
+                # Отримуємо дані від серверу
                 data_connect = client_socket.recv(1024).decode()
-
-                print(status_from_file)
 
                 # Перевірка завершення
                 if status_from_file == data_connect and status_from_file != "places ships":
@@ -168,8 +157,6 @@ def connect_user():
                 continue
           
             
-
-
                 
         server_module.dict_save_information["player_nick"] = str(input_nick.user_text)
         server_module.dict_save_information["enemy_nick"] = data_in_list["nick"]
@@ -188,7 +175,6 @@ def connect_user():
                     for ship in list_ships:
                         server_module.player_ships_coord_len.append((ship.X_COR, ship.Y_COR, ship.LENGHT, ship.ORIENTATION_SHIP))
         
-                client_socket.settimeout(3)
                 # Отримання всіх даних від серверу
                 try:
                     data_turn = server_module.recv_all(client_socket).decode()

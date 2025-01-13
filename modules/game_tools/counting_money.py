@@ -119,8 +119,6 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
 
 
 
-
-    
     if "True" in task_game.two_hits_in_a_row:
         if check_money_two_hits_in_row[0] != 30:
             check_money_two_hits_in_row[0] += 1
