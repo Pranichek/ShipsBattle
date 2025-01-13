@@ -118,8 +118,7 @@ y_enemy_cross = [0]
 flag_miss_rocket_animation = [""]
 # флаг который говорит надо ли запускать анимацию зачеркивания клеточки , если игрок промахнулся по кораблю
 check_animation_miss_cell = [""]
-# лист в котором хранятся все обьяекты зачеркивания клеточки после промаха ракетой
-list_miss_cell = []
+
 #------------------------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------------------------
@@ -200,8 +199,10 @@ def fight_window():
 
     while run_game:
         module_screen.FPS.tick(60)
+        #----------------------------------------------------------------
+        ship_border()
+        # #----------------------------------------------------------------
         kill_enemy_ships()
-        print(server_module.enemy_died_ships)
         if len(server_module.enemy_died_ships) > 0:
             achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
             achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships
@@ -326,11 +327,6 @@ def fight_window():
         
 
         #----------------------------------------------------------------
-        # анимация зачеркивания клеточек вокруг убитого корабля
-        ship_border()
-        # #----------------------------------------------------------------
-
-        #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
         for row in range(len(list_grid)):
             for cell in range(len(list_grid[row])):
@@ -361,7 +357,7 @@ def fight_window():
        
         #----------------------------------------------------------------
         # отрисовка зачеркнутых клеточек когда игрок промазал по полю
-        for anim_miss in server_module.our_miss_anim:
+        for anim_miss in our_miss_anim:
             anim_miss.animation(main_screen=module_screen.main_screen, count_image=29)
         #----------------------------------------------------------------
         #----------------------------------------------------------------
@@ -515,31 +511,51 @@ def fight_window():
         if shop.second_task.TEXT == shop.list_second_task[-1]:
             shop.first_kill_three_decker()
 
-        #target attack
-        if check_target_attack[0] == True and 11 not in achievement.list_save_coords_achiv:
-            target_attack_achievement.ACTIVE = True
-            target_attack_medal.ACTIVE = True
-            achievement.list_save_coords_achiv.append(11)
+
 
         # destoyer achievement
         # для бомбы задание
         if check_bomb[0] == True and 9 not in achievement.list_save_coords_achiv:
+            print(new_killed_ships[0], old_killed_ships[0])
             new_killed_ships[0] = len(server_module.enemy_died_ships)
             if new_killed_ships[0] - old_killed_ships[0] >= 2:
                 print(new_killed_ships[0], old_killed_ships[0])
                 destroyer_medal.ACTIVE = True
                 destroyer_achievement.ACTIVE = True
-                check_bomb[0] = False
                 achievement.list_save_coords_achiv.append(9)
-            else:
-                check_bomb[0] = False
 
+        if check_bomb[0] == True and 11 not in achievement.list_save_coords_achiv:
+            new_killed_ships[0] = len(server_module.enemy_died_ships)
+            print(new_killed_ships[0], old_killed_ships[0])
+            if new_killed_ships[0] - old_killed_ships[0] >= 1:
+                if count_5[0] <= 0:
+                    if 11 not in achievement.list_save_coords_achiv:
+                        target_attack_achievement.ACTIVE = True
+                        target_attack_medal.ACTIVE = True
+                        achievement.list_save_coords_achiv.append(11)
+                    else:
+                        count_5[0] = 0
+                else:
+                    count_5[0] = 0
+            else:
+                count_5[0] = 0
+
+        if check_bomb[0] == True:
+            check_bomb[0] = False
+        
+        #target attack
+        if check_target_attack[0] == True and 11 not in achievement.list_save_coords_achiv:
+            target_attack_achievement.ACTIVE = True
+            target_attack_medal.ACTIVE = True
+            achievement.list_save_coords_achiv.append(11)
+        
 
         achievement.piooner() 
         achievement.lone_hunter()
         achievement.first_kill_four_decker_achivment()
         achievement.strategist(player_killed_ships = server_module.player_died_ships , role = server_module.list_player_role[0] , winner = server_module.list_check_win[0])
 
+        # print(server_module.enemy_matrix[0])
         for button in shop.shop_item:
             try:
                 if button.ACTION:
@@ -553,9 +569,6 @@ def fight_window():
                         pygame.mouse.set_visible(True)
             except:
                 continue
-        print(activate_auto_rocket[0])
-        print(activate_bomb[0])
-        print(activate_restore_cell[0])
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  

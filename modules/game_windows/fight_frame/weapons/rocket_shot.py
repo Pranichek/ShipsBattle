@@ -3,7 +3,7 @@ import modules.server as server_module
 import modules.client as client_module
 import modules.achievement as achievement
 from ....screens import list_object_map_enemy
-from ....classes.class_click import miss_water_sound
+from ....classes.class_click import miss_water_sound, shot_sound
 
 
 def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_ship: list, flag_miss_rocket_animation: list, check_animation_rocket: list):
@@ -39,6 +39,7 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
         y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
         # записуємо у матрицю ворога 5
+        print(server_module.enemy_matrix[0], "enemy_matrix")
         server_module.enemy_matrix[0][row][col] = 5
         # обнуляємо час для ходу
         server_module.check_time[0] = 0
@@ -67,6 +68,7 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
         x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
         y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+        shot_sound.play2(loops = 1)
         # у матрицю ворога записуємо 7
         server_module.enemy_matrix[0][row][col] = 7
         # обнуляємо час для ходу

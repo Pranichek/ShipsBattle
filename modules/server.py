@@ -177,9 +177,8 @@ def start_server():
         while True:
             try:
                 time.sleep(0.1)
+                print(7878)
                 #Ставимо сервер у режим очікування підключень
-                server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
-                server_socket.bind((ip_address, port))
                 server_socket.listen()
                 server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
@@ -211,7 +210,6 @@ def start_server():
                 continue
             except json.JSONDecodeError:
                 print("Не получилось декодировать данные/")
-                check_connection[0] = False
                 continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
@@ -223,13 +221,13 @@ def start_server():
         dict_save_information["enemy_nick"] = data_in_list["nick"]
         dict_save_information["player_points"] = points_for_client
         dict_save_information["enemy_points"] = data_in_list["points"]
+        client_socket.close()
+        print(349543959343498)
         # бесконечный цикл для боя
         while True:
             try:
                 time.sleep(0.1)  
                 #Ставимо сервер у режим очікування підключень
-                server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
-                server_socket.bind((ip_address, port))
                 server_socket.listen()
                 server_socket.settimeout(3)
                 #приймаємо користувача який під'єднується до серверу
@@ -242,7 +240,6 @@ def start_server():
 
                 # робимо зупинку на 0.1 секунду , що сервер і клієент встигали обмінюватися данними
                 check_ten_times.append(1)
-
                 # счетчик кораблей сервера
                 count_server_ships = 0
                 # счетчик кораблей клиента
@@ -319,6 +316,7 @@ def start_server():
                 
                 # Розбір JSON
                 ready_clinet_data = json.loads(client_data)
+                    
 
                 enemy_ships[0] = ready_clinet_data["player_ships"]
 
@@ -334,13 +332,7 @@ def start_server():
                     if medal not in save_medals_coordinates:
                         save_medals_coordinates.append(medal)
 
-                # координаты где должны находится зачеркнутые клеточки , если игрок убмл корабль
-                for coord_miss in ready_clinet_data["misses_coordinate"]:
-                    if coord_miss not in enemy_animation_miss_coord:
-                        enemy_animation_miss_coord.append(coord_miss)
-
                 if check_repeat[0] == 0:
-                    print(777)
                     enemy_matrix[0] = ready_clinet_data["client_matrix"]
                 # обновляем матрицу сервера(ready_clinet_data["new_for_server"] - матрица в которой хранится пострелы клиента)
                 if check_repeat[0] >= 1:
@@ -374,12 +366,10 @@ def start_server():
                     achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
                     
 
-
                 achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
 
                 check_repeat[0] += 1
 
-                
                 if row_list[0] != 100 and check_send_data_health[0] > 9:
                     row_list[0] = 100
                     col_list[0] = 100
@@ -396,13 +386,14 @@ def start_server():
                 check_connection[0] = False
                 continue
             except json.JSONDecodeError:
-                print("Не получилось декодировать данные")
-                check_connection[0] = False
+                print("Не получилось декодировать данные/")
                 continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
                 check_connection[0] = False
                 continue
+           
+           
 
                 
             

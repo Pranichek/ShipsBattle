@@ -37,3 +37,33 @@ def check_and_add_hit_markers(x_enemy_cross: list, y_enemy_cross: list, list_cro
                         break
                 if not exists:
                     list_cross_player.append(cross_animation)
+            # elif cell == 5:
+            #     row = index_row
+            #     cell = str(index_cell)
+            #     # из двух чисел(индекс рядка и клеточки) мы находим номер клеточки куда выстрелил соперник
+            #     # То есть например 2й рядок и первая клеточка , то будет клеточка под номером 11
+            #     cltx = (row * 10) + int(cell[-1])
+            #     # получаем через список где хранятся клеточки , координати , в якій буде відображатися анимація попадання по нашему кораблю
+            #     x_enemy_cross[0] = list_object_map[cltx].x
+            #     y_enemy_cross[0] = list_object_map[cltx].y
+            #     # создаем екземпляр крестика , чтобы мы могли их отрисовывать столько раз , сколько попали по нашему кораблю
+            #     miss_animation = Animation(
+            #         image_name = "0.png" , 
+            #         width = 55 , 
+            #         height = 55 , 
+            #         x_cor =  list_object_map[cltx].x, 
+            #         y_cor = list_object_map[cltx].y, 
+            #         need_clear = False , 
+            #         name_folder = "animation_miss",
+            #         animation_speed = 3
+            #     )
+
+            #     exist = False
+            #     for anim_miss in list_animation_miss:
+            #         # проверяем по координатам каждый крестик с тем который хотим создать 
+            #         # если такой уже есть, то выходим из цикла и не добавляем с список
+            #         if anim_miss.X_COR == miss_animation.X_COR and anim_miss.Y_COR == miss_animation.Y_COR:
+            #             exist = True
+            #             break
+            #     if not exist:
+            #         list_animation_miss.append(miss_animation)

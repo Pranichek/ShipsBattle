@@ -166,6 +166,7 @@ def connect_user():
                 print(f"Неизвестная ошибка: {error}")
                 server_module.check_connection[0] = False
                 continue
+          
             
 
 
@@ -328,6 +329,7 @@ def connect_user():
                 print(f"Неизвестная ошибка: {error}")
                 server_module.check_connection[0] = False
                 continue
+          
 
         #створюємо зміну потока, із функцією підключення коритсувача до серверу
 thread_connect = threading.Thread(target = connect_user ,daemon=True)
