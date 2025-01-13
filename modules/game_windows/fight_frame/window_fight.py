@@ -10,7 +10,6 @@ import modules.classes.class_medal as class_medal
 from ...game_tools import count_money
 from ...screens import grid_player, list_object_map, list_object_map_enemy, enemy_grid, list_grid
 from ...classes.class_music import music_load_waiting, fight_music
-from ...classes.class_click import miss_water_sound
 from ...classes.class_medal import player_medal, enemy_medals, target_attack_medal, destroyer_medal
 from ...classes.class_image import DrawImage
 from ...classes.achive_window import list_achieves, target_attack_achievement, destroyer_achievement
