@@ -213,7 +213,6 @@ def start_server():
                 continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
-                check_connection[0] = False
                 continue
 
 
@@ -390,7 +389,6 @@ def start_server():
                 continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
-                check_connection[0] = False
                 continue
            
            
