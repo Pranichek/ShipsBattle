@@ -103,20 +103,24 @@ def test():
 # флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
 check_buy_bomb_attack = [False]
 def buy_bomb():
-    if check_buy_bomb_attack[0] == False:
-        if money_list[0] >= 0:
-            check_buy_bomb_attack[0] = True
+    if money_list[0] >= 150:
+        if check_buy_bomb_attack[0] == False:
+            if money_list[0] >= 0:
+                check_buy_bomb_attack[0] = True
 
 flagbimb200=["no"]
 cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
 check_2= [11,12,13,14,15,16,17,18,19,20]
 def buy_auto_rocket():
-    flagbimb200[0] = "yes"
-
+    if money_list[0] >= 200:
+        if flagbimb200[0] == "no":
+            flagbimb200[0] = "yes"
+   
 but_flag = [False]
 def buy_restore_cell():
-    if but_flag[0] == False:
-        but_flag[0] = True
+    if money_list[0] >= 50:
+        if but_flag[0] == False:
+            but_flag[0] = True
 
 
 

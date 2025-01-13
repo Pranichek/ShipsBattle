@@ -201,7 +201,7 @@ def fight_window():
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
         ship_border()
-        # #----------------------------------------------------------------
+        #----------------------------------------------------------------
         kill_enemy_ships()
         if len(server_module.enemy_died_ships) > 0:
             achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
@@ -232,7 +232,11 @@ def fight_window():
 
       
         # функция которая красиво добавляет/отнимает монетки
-        count_money(check_buy_bomb = shop.check_buy_bomb_attack[0])
+        count_money(
+            check_buy_bomb = shop.check_buy_bomb_attack[0], 
+            check_buy_restorce = shop.but_flag[0],
+            check_buy_auto_rocket = shop.flagbimb200[0]
+            )
 
 
         # отримцємо координати курсору
@@ -587,24 +591,27 @@ def fight_window():
                 shop_and_tasks.check_click(event = event)
                 # активация суперспособностей
                 mouse = pygame.mouse.get_pos()
-                if bomb_icon.rect.collidepoint(mouse):
-                    activate_bomb[0] = True
-                    activate_auto_rocket[0] = False
-                    activate_restore_cell[0] = False
-                    active_product_shine.x_cor = bomb_icon.x_cor - 17
-                    active_product_shine.y_cor = bomb_icon.y_cor - 17
-                elif auto_rocket_icon.rect.collidepoint(mouse):
-                    activate_auto_rocket[0] = True
-                    activate_bomb[0] = False
-                    activate_restore_cell[0] = False
-                    active_product_shine.x_cor = auto_rocket_icon.x_cor - 13
-                    active_product_shine.y_cor = auto_rocket_icon.y_cor - 10
-                elif restore_cell_icon.rect.collidepoint(mouse):
-                    activate_restore_cell[0] = True
-                    activate_bomb[0] = False
-                    activate_auto_rocket[0] = False
-                    active_product_shine.x_cor = restore_cell_icon.x_cor - 17
-                    active_product_shine.y_cor = restore_cell_icon.y_cor - 20
+                if shop.check_buy_bomb_attack[0] == True:
+                    if bomb_icon.rect.collidepoint(mouse):
+                        activate_bomb[0] = True
+                        activate_auto_rocket[0] = False
+                        activate_restore_cell[0] = False
+                        active_product_shine.x_cor = bomb_icon.x_cor - 17
+                        active_product_shine.y_cor = bomb_icon.y_cor - 17
+                elif shop.flagbimb200[0] == "yes":
+                    if auto_rocket_icon.rect.collidepoint(mouse):
+                        activate_auto_rocket[0] = True
+                        activate_bomb[0] = False
+                        activate_restore_cell[0] = False
+                        active_product_shine.x_cor = auto_rocket_icon.x_cor - 13
+                        active_product_shine.y_cor = auto_rocket_icon.y_cor - 10
+                elif shop.but_flag[0] == True:
+                    if restore_cell_icon.rect.collidepoint(mouse):
+                        activate_restore_cell[0] = True
+                        activate_bomb[0] = False
+                        activate_auto_rocket[0] = False
+                        active_product_shine.x_cor = restore_cell_icon.x_cor - 17
+                        active_product_shine.y_cor = restore_cell_icon.y_cor - 20
                     
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop.shop_item:

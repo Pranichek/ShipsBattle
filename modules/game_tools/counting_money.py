@@ -58,62 +58,67 @@ check_three_2decker_ship_in_row = [0]
 
 # при покупке бомбы
 check_money_bomb = [0]
-def count_money(check_buy_bomb: bool):
-    # print(task_game.check_completed_tasks[0] , "completed task")
-    # print("check_money_two_hits_in_row:", check_money_two_hits_in_row[0])
+# при покупке восстановления
+check_money_restoration = [0]
+# для покупки авто ракеты
+check_money_auto_rocket = [0]
+def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool):
+    if check_buy_auto_rocket == "yes" and check_money_auto_rocket[0] == 0:
+        check_money_auto_rocket[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    if check_money_auto_rocket[0] >= 1:
+        if check_money_auto_rocket[0] != 200:
+            check_money_auto_rocket[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        elif check_buy_auto_rocket == "no" and check_money_auto_rocket[0] >= 200:
+            check_money_auto_rocket[0] = 0
 
-    # print("check_money_four_hits_in_row:", check_money_four_hits_in_row[0])
-
-    # print("check_kill_one_3deck:", check_kill_one_3deck[0])
-
-
-    # print("check_money_two_kill_in_a_row:", check_money_two_kill_in_a_row[0])
-
-    # print("check_2_kills_3deck_in_row:", check_2_kills_3deck_in_row[0])
-
-
-    # print("check_kill_first_four_deck:", check_kill_first_four_deck[0])
-
-
-    # print("check_three_2decker_ship_in_row:", check_three_2decker_ship_in_row[0])
-
-    # print("check_kill_four_1decker_in_row:", check_kill_four_1decker_in_row[0])
-
-    # print("check_kill_in_first_shot:", check_kill_in_first_shot[0])
-
-
-    # print("check_kept_alive_for_5_turns:", check_kept_alive_for_5_turns[0])
-
-   
-    # print("check_kill_three_ships_in_row:", check_kill_three_ships_in_row[0])
-
-
-    # print("check_completed_three_tasks:", check_completed_three_tasks[0])
-
-
-    # print("check_money_three_hits_in_row:", check_money_three_hits_in_row[0])
-
-    # print("check_first_kill_three_3dec:", check_first_kill_three_3dec[0])
-
-    # print("check_money_eight_hits_in_row:", check_money_eight_hits_in_row[0])
+    if check_buy_restorce == True and check_money_restoration[0] == 0:
+        check_money_restoration[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    if check_money_restoration[0] >= 1:
+        if check_money_restoration[0] != 50:
+            check_money_restoration[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        elif check_buy_restorce == False and check_money_restoration[0] >= 50:
+            check_money_restoration[0] = 0
 
     if check_buy_bomb == True and check_money_bomb[0] == 0:
         check_money_bomb[0] += 1
-        task_game.money_list[0] -= 0
+        task_game.money_list[0] -= 1
         task_game.player_balance.TEXT = str(task_game.money_list[0])
         task_game.player_balance.update_text()
         player_balance_in_jar.text = str(task_game.money_list[0])
         player_balance_in_jar.update_text()
     if check_money_bomb[0] >= 1:
-        if check_money_bomb[0] != 10:
+        if check_money_bomb[0] != 150:
             check_money_bomb[0] += 1
-            task_game.money_list[0] -= 0
+            task_game.money_list[0] -= 1
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
-        elif check_buy_bomb == False and check_money_bomb[0] >= 10:
+        elif check_buy_bomb == False and check_money_bomb[0] >= 150:
             check_money_bomb[0] = 0
+
+
+
 
     
     if "True" in task_game.two_hits_in_a_row:
