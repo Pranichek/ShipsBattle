@@ -38,16 +38,16 @@ def ships_position_window():
     while run_game:
         module_screen.FPS.tick(60)
         data_ready = read_json(name_file = "status_connect_game.json")
-        status_rade_to_game = data_ready["status"] 
+        status_ready_to_game = data_ready["status"] 
 
-        if status_rade_to_game == "fight":
+        if status_ready_to_game == "fight":
             server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)
             run_game = False
             change_scene(None)
             change_scene(game_windows.fight_window())
             check_press_button[0] = None
-        elif server_module.responce[0] == "wait window":
+        elif status_ready_to_game == "wait window":
             server_module.list_check_ready_to_fight[0] = "wait"
             apply_fade_effect(screen = main_screen)
             run_game = False

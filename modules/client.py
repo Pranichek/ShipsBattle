@@ -65,9 +65,9 @@ def start_client():
             information_str = json.dumps(player_information)
             client_socket.sendall(information_str.encode("utf-8"))
 
-            enemy_data = client_socket.recv(1024).decode("utf-8")
-            server_module.enemy_data[0] = json.loads(enemy_data)
-            print(server_module.enemy_data[0])
+            data_enemy = client_socket.recv(1024).decode("utf-8")
+            server_module.enemy_data[0] = json.loads(data_enemy)
+            print(server_module.enemy_data[0]["grid"])
             list_connect_status = {
                 "status": "connect"
             }

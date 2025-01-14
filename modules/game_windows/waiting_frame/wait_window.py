@@ -22,9 +22,9 @@ def waiting_window():
     while run_game:
         module_screen.FPS.tick(60)
         data_ready = read_json(name_file = "status_connect_game.json")
-        status_rade_to_game = data_ready["status"] 
+        status_ready_to_game = data_ready["status"] 
 
-        if status_rade_to_game == "fight":
+        if status_ready_to_game == "fight":
             server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)
             run_game = False
