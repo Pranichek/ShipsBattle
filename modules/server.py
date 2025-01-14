@@ -20,6 +20,9 @@ def recv_all(socket, buffer_size = 1024):
             break
     return data
 
+responce = [""]
+data_enemy = [""]
+
 #где стоят корабли соперника
 enemy_ships = [""]
 player_ships_coord_len = []
@@ -170,39 +173,36 @@ def start_server():
         while True:
             try:
                 time.sleep(0.1)
-                #Ставимо сервер у режим очікування підключень
-                server_socket.listen()
-                #приймаємо користувача який під'єднується до серверу
-                client_socket, adress = server_socket.accept()
-                check_connection[0] = True
+                if check_connection[0] != False:
+                    check_connection[0] = True
+                    data_ready = read_json(name_file="status_connect_game.json")
+                    #нащи данные
+                    status_from_file = data_ready["status"]
 
-                data_ready = read_json(name_file="status_connect_game.json")
-                #нащи данные
-                status_from_file = data_ready["status"]
-
-                # Формуємо відповідь
-            
-                response = status_from_file
+                    # Формуємо відповідь
+                
+                    responce[0] = str(status_from_file)
+                        
+                    client_socket.sendall(responce[0].encode("utf-8")) 
+                    print(8989)
+                    # Отримуємо дані від клієнта
+                    client_socket.settimeout(1)
+                    data_enemy[0] = client_socket.recv(1024).decode()
                     
-                client_socket.send(response.encode()) 
-                # Отримуємо дані від клієнта
-                data_connect = client_socket.recv(1024).decode()
-
-                # Перевірка завершення
-                if status_from_file == data_connect and status_from_file != "places ships":
-                    list_check_ready_to_fight[0] = "fight"
-                    break
-                elif status_from_file == "You can connect to the game" and status_from_file != data_connect:
-                    list_check_ready_to_fight[0] = "wait"
-            except TimeoutError:
-                print("Слишком долгое ожидание")
-                check_connection[0] = False
-                continue
-            except json.JSONDecodeError:
-                print("Не получилось декодировать данные/")
-                continue
+                    if list_check_ready_to_fight[0] == "fight":
+                        break
+                else:
+                    print(777777)
+                    #Ставимо сервер у режим очікування підключень
+                    server_socket.listen()
+                    #приймаємо користувача який під'єднується до серверу
+                    client_socket, adress = server_socket.accept()
+                    check_connection[0] = True
+                    print(123)
+                    continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
+                check_connection[0] = False
                 continue
 
 
@@ -215,12 +215,12 @@ def start_server():
         while True:
             try:
                 time.sleep(0.1)  
-                #Ставимо сервер у режим очікування підключень
-                server_socket.listen()
-                #приймаємо користувача який під'єднується до серверу
-                client_socket, adress = server_socket.accept()
+                if check_connection[0] == False:
+                    #Ставимо сервер у режим очікування підключень
+                    server_socket.listen()
+                    #приймаємо користувача який під'єднується до серверу
+                    client_socket, adress = server_socket.accept()
                 check_connection[0] = True
-
                 if check_repeat[0] >= 2:
                     for ship in list_ships:
                         player_ships_coord_len.append((ship.X_COR, ship.Y_COR, ship.LENGHT, ship.ORIENTATION_SHIP))
@@ -366,15 +366,16 @@ def start_server():
                 # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
                 if list_check_win[0] != None:
                     break
-            except TimeoutError:
-                print("Слишком долгое ожидание")
-                check_connection[0] = False
-                continue
-            except json.JSONDecodeError:
-                print("Не получилось декодировать данные/")
-                continue
+            # except TimeoutError:
+            #     print("Слишком долгое ожидание")
+            #     check_connection[0] = False
+            #     continue
+            # except json.JSONDecodeError:
+            #     print("Не получилось декодировать данные/")
+            #     continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
+                check_connection[0] = False
                 continue
            
            

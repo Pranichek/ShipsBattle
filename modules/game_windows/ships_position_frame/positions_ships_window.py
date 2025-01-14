@@ -14,6 +14,7 @@ from ..change_window import change_scene
 from ..button_pressed import check_press_button
 from .check_placing_ships import connect_to_fight
 from .random_placing import random_places_ships
+
 #images 
 ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 ,folder_name= "backgrounds" , image_name= "position_ships_bg.png")
 # фон на якомй стоять кораблі перед початком бою
@@ -35,7 +36,7 @@ def ships_position_window():
 
     while run_game:
         module_screen.FPS.tick(60)
-        if list_check_ready_to_fight[0] == "fight":
+        if server_module.list_check_ready_to_fight[0] == "fight":
             apply_fade_effect(screen = main_screen)
             run_game = False
             change_scene(None)
@@ -48,6 +49,12 @@ def ships_position_window():
             change_scene(None)
             change_scene(scene = game_windows.waiting_window())
             check_press_button[0] = None
+
+        if server_module.responce[0] == server_module.data_enemy[0] and server_module.responce[0] != "places ships":
+            server_module.list_check_ready_to_fight[0] = "fight"
+            break
+        elif server_module.responce[0] == "You can connect to the game":
+            server_module.list_check_ready_to_fight[0] = "wait"
 
             
         

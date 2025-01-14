@@ -121,39 +121,35 @@ def connect_user():
         while True:
             try:
                 time.sleep(0.1)
-                client_socket.close()  # Закрываем сокет
-                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
-                client_socket.connect((ip_adress, port))
-                server_module.check_connection[0] = True
-                # Зчитуємо дані з файлу
-                data_ready = read_json(name_file="status_connect_game.json")
-                #нащи данные
-                status_from_file = data_ready["status"] 
+                if server_module.check_connection[0] != False:
+                    server_module.check_connection[0] = True
+                    # Зчитуємо дані з файлу
+                    data_ready = read_json(name_file="status_connect_game.json")
+                    #нащи данные
+                    status_from_file = data_ready["status"] 
 
-                # Формуємо відповідь
-                response = status_from_file
+                    # Формуємо відповідь
+                    server_module.responce[0] = str(status_from_file)
 
-                client_socket.send(response.encode()) 
-                # Отримуємо дані від серверу
-                data_connect = client_socket.recv(1024).decode()
+                    client_socket.sendall(server_module.responce[0].encode("utf-8")) 
+                    # Отримуємо дані від серверу
+                    client_socket.settimeout(1)
+                    server_module.data_enemy[0] = client_socket.recv(1024).decode()
 
-                # Перевірка завершення
-                if status_from_file == data_connect and status_from_file != "places ships":
-                    server_module.list_check_ready_to_fight[0] = "fight"
-                    break
-                elif status_from_file == "You can connect to the game" and status_from_file != data_connect:
-                    server_module.list_check_ready_to_fight[0] = "wait"
-            except TimeoutError:
-                print("Слишком долгое ожидание")
-                server_module.check_connection[0] = False
-                continue
-            except json.JSONDecodeError:
-                print("Не получилось декодировать данные/")
-                server_module.check_connection[0] = False
-                continue
+                    if server_module.list_check_ready_to_fight[0] == "fight":
+                        break
+                else:
+                    print(78787878)
+                    client_socket.close()     # Закрываем сокет
+                    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
+                    client_socket.connect((ip_adress, port))
+                    server_module.check_connection[0] = True
+                    print(123)
+                    continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
                 server_module.check_connection[0] = False
+                # client_socket.close()
                 continue
           
             
@@ -166,11 +162,11 @@ def connect_user():
         while True:
             try:
                 time.sleep(0.1)  
-                client_socket.close()  # Закрываем сокет
-                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
-                client_socket.connect((ip_adress, port))
+                if server_module.check_connection[0] == False:
+                    # client_socket.close()     # Закрываем сокет
+                    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
+                    client_socket.connect((ip_adress, port))
                 server_module.check_connection[0] = True
-
                 if server_module.check_repeat[0] >= 2:
                     for ship in list_ships:
                         server_module.player_ships_coord_len.append((ship.X_COR, ship.Y_COR, ship.LENGHT, ship.ORIENTATION_SHIP))
@@ -303,17 +299,18 @@ def connect_user():
                     server_module.list_check_win[0] = server_data["check_end_game"]
                     print("end")
                     break
-            except TimeoutError:
-                print("Слишком долгое ожидание")
-                server_module.check_connection[0] = False
-                continue
-            except json.JSONDecodeError:
-                print("Не получилось декодировать данные/")
-                server_module.check_connection[0] = False
-                continue
+            # except TimeoutError:
+            #     print("Слишком долгое ожидание")
+            #     server_module.check_connection[0] = False
+            #     continue
+            # except json.JSONDecodeError:
+            #     print("Не получилось декодировать данные/")
+            #     server_module.check_connection[0] = False
+            #     continue
             except Exception as error:
                 print(f"Неизвестная ошибка: {error}")
                 server_module.check_connection[0] = False
+                client_socket.close()
                 continue
           
 
