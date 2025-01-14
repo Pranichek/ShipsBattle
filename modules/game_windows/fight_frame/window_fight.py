@@ -232,7 +232,7 @@ def fight_window():
 
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
-        if server_module.check_repeat[0] == 0:
+        if server_module.enemy_matrix[0] == "yes":
             if server_module.list_player_role[0] == "server_player":
                 server_module.enemy_matrix[0] = server_module.enemy_data[0]["client_matrix"]
             elif server_module.list_player_role[0] == "client_player":
@@ -283,8 +283,9 @@ def fight_window():
         if server_module.enemy_data[0]["row"] != 100:
             server_module.enemy_matrix[0][server_module.enemy_data[0]["row"]][server_module.enemy_data[0]["col"]] = server_module.enemy_data[0]["number"]
 
-        if server_module.check_repeat[0] >= 1:
-            server_module.enemy_balance[0] = server_module.enemy_matrix[0]["money_balance"]
+        if server_module.enemy_matrix[0] != "yes":
+            print(server_module.enemy_matrix[0])
+            server_module.enemy_balance[0] = server_module.enemy_data[0]["money_balance"]
             # координаты медалей врага
             for medal in server_module.enemy_data[0]["medals_coordinates"]:
                 if medal not in server_module.save_medals_coordinates:
