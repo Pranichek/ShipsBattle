@@ -1,4 +1,4 @@
-import socket ,threading, json, time
+import socket ,threading, json, time, pickle
 from .classes import input_port, input_ip_adress, input_nick ,list_ships
 from .json_functions import write_json , list_users , list_server_status
 from .json_functions.json_read import read_json
@@ -8,10 +8,10 @@ import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
 
+data_list = []
+
 # лист для клиента в котором храним надо ли что то изменять после его атаки
 list_check_need_send = ["no"]
-
-
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
 
@@ -163,10 +163,7 @@ def connect_user():
                 time.sleep(0.1)  
                 if server_module.check_connection[0] != False:
                     server_module.check_connection[0] = True
-                    # if server_module.check_repeat[0] >= 2:
-                    #     for ship in list_ships:
-                    #         server_module.player_ships_coord_len.append((ship.X_COR, ship.Y_COR, ship.LENGHT, ship.ORIENTATION_SHIP))
-            
+                
                     # Отримання всіх даних від серверу
                     # list_check_need_sen - список который хранит флаг , по которому мы понимаем атакавал клиент или нет
                     if list_check_need_send[0] == "no":
@@ -184,7 +181,9 @@ def connect_user():
                             "col":server_module.col_list[0],
                             "number":server_module.number_list[0],
                         }
-                        client_socket.sendall(json.dumps(client_dict).encode("utf-8"))
+                        data_list.clear()
+                        data_list.append(client_dict)
+                        client_socket.sendall(pickle.dumps(client_dict))
                     # якщо клієнт зробив постріл , то перевіряємо чи потрібо змінювати чергу , чи ні
                     elif list_check_need_send[0] == "yes":
                         # print(1)
@@ -206,7 +205,9 @@ def connect_user():
                                 "number":server_module.number_list[0],
                             }
                             # відправляємо дані , але перед цим словарь перетворюємо у строку за допомогою json.dumps
-                            client_socket.sendall(json.dumps(client_dict).encode("utf-8"))
+                            data_list.clear()
+                            data_list.append(client_dict)
+                            client_socket.sendall(pickle.dumps(client_dict))
                             list_check_need_send[0] = "no"
                             server_module.check_time[0] = 0
                             continue
@@ -226,82 +227,38 @@ def connect_user():
                                 "col":server_module.col_list[0],
                                 "number":server_module.number_list[0],
                             }
-                            client_socket.sendall(json.dumps(client_dict).encode("utf-8"))
+                            data_list.clear()
+                            data_list.clear()
+                            data_list.append(client_dict)
+                            client_socket.sendall(pickle.dumps(client_dict))                    # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
+
                             list_check_need_send[0] = "no"
                             server_module.check_time[0] = 0
                             continue
-                    client_socket.settimeout(3)
+                    # client_socket.settimeout(3)
                     try:
-                        data_turn = server_module.recv_all(client_socket).decode()
+                        data_turn = server_module.recv_all(client_socket)                # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
                     except socket.timeout:
                         print("Слишком долгое ожидание от сервера")
                         continue
-                    # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
-                    server_data = json.loads(data_turn)
+                    server_module.enemy_data[0] = pickle.loads(data_turn)                    # перетворбємо дані від сереру у формат словарю(перед перетворенням це було json строкою)
+                     
+                    # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
+                    server_module.turn[0] = server_module.enemy_data[0]['turn']
+                    server_module.check_repeat[0] += 1
 
-                    # server_module.enemy_ships[0] = server_data["player_ships"]
-
-                    # if server_data["row"] != 100:
-                    #     server_module.enemy_matrix[0][server_data["row"]][server_data["col"]] = server_data["number"]
-
-
-                    # server_module.enemy_balance[0] = server_data["money_balance"]
-                    
-                    # # у список для відслідження скільки час на ход залишилось , записуємо дані про час від сервера(оскільки сервер контролює скільки прошло часу)
-                    # server_module.check_time[0] = server_data['time']
-
-                    # if server_module.turn[0] == "server_turn" and server_module.check_time[0] == 1 and server_data["check_ten_times"] == 1:
-                    #     if shop.second_task.TEXT == shop.list_second_task[1]:
-                    #         shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
-
-                    # if server_module.turn[0] == "server_turn" and server_module.check_time[0] == 1 and server_data["check_ten_times"] == 1:
-                    #     achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
-
-                    
-
-                    # if server_module.check_repeat[0] == 0:
-                    #     # сохраняем матрицу сервера
-                    #     server_module.enemy_matrix[0] = server_data["server_matrix"]
-                    
-                    # # записуємо у список збереження черги , із даних , що підправив сервер(оскільки він керує чия зараз черга)
-                    # server_module.turn[0] = server_data['turn']
-
-                    # for medal in server_data["medals_coordinates"]:
-                    #     if medal not in server_module.save_medals_coordinates:
-                    #         server_module.save_medals_coordinates.append(medal)
-
-
-                    # # обновляем матрицу клиента , на матрицу с пострелами сервера
-                    # if server_module.check_repeat[0] >= 1:
-                    #     for row in range(len(server_data["new_for_client"])):
-                    #         for cell in range(len(server_data["new_for_client"][row])):
-                    #             list_grid[row][cell] = server_data["new_for_client"][row][cell]
-
-                    # server_module.check_repeat[0] += 1
-
-                    # achievement.opening_the_battle(grid = list_grid, enemy_grid = server_module.enemy_matrix)
-
-                    # if server_module.row_list[0] != 100 and server_module.check_send_data_health[0] > 9:
-                    #     server_module.row_list[0] = 100
-                    #     server_module.col_list[0] = 100
-                    #     server_module.number_list[0] = 100
-                    #     server_module.check_send_data_health[0] = 0
-                    # if server_module.row_list[0] != 100 and server_module.check_send_data_health[0] <= 9:
-                    #     server_module.check_send_data_health[0] += 1
-
-                    # # если кто то уже выиграл , то остонавливаем цикл игры
-                    # # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
-                    # if server_data["check_end_game"] != None:
-                    #     server_module.list_check_win[0] = server_data["check_end_game"]
-                    #     print("end")
-                    #     break
+                    if server_module.row_list[0] != 100 and server_module.check_send_data_health[0] <= 9:
+                        server_module.check_send_data_health[0] += 1
+                    # если кто то уже выиграл , то остонавливаем цикл игры
+                    # если в list_check_win[0] лежит пустота , то значит что еще никто не выиграл
+                    if server_module.enemy_data[0]["check_end_game"] != None:
+                        server_module.list_check_win[0] = server_module.enemy_data[0]["check_end_game"]
+                        break
                 else:
-                    print(78787878)
                     client_socket.close()     # Закрываем сокет
                     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Создаём новый
                     client_socket.connect((ip_adress, port))
                     server_module.check_connection[0] = True
-                    print(123)
                     continue
 
             except Exception as error:

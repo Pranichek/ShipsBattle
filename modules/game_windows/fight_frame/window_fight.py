@@ -230,6 +230,114 @@ def fight_window():
             elif server_module.save_medals_coordinates[medal] == 12:
                 class_medal.enemy_collector_medal = True
 
+        #----------------------------------------------------------------
+        # код который раньше был на серваке и клиенте , теперь тут
+        if server_module.check_repeat[0] == 0:
+            if server_module.list_player_role[0] == "server_player":
+                server_module.enemy_matrix[0] = server_module.enemy_data[0]["client_matrix"]
+            elif server_module.list_player_role[0] == "client_player":
+                server_module.enemy_matrix[0] = server_module.enemy_data[0]["server_matrix"]
+
+        if server_module.check_repeat[0] >= 2:
+            for ship in list_ships:
+                server_module.player_ships_coord_len.append((ship.X_COR, ship.Y_COR, ship.LENGHT, ship.ORIENTATION_SHIP))
+
+        # счетчик кораблей сервера
+        count_player_ships = 0
+        # счетчик кораблей клиента
+        count_enemy_ships = 0
+        # делаем перебор матриц сервера и клиента, чтобы проверять ввыиграл уже кто то или нет
+        for row_server in range(len(list_grid)):
+            for cell_server in range(len(list_grid[row_server])):
+                # 5 - по клетке уже стреляли
+                # 0 - кораблей просто нет
+                # 7 - уже потопленный корабль
+                if list_grid[row_server][cell_server] in [1, 2, 3, 4]:
+                    count_player_ships += 1
+
+        for row_client in range(len(server_module.enemy_matrix[0])):
+            for cell_client in range(len(server_module.enemy_matrix[0][row_client])):
+                # 5 - по клетке уже стреляли
+                # 0 - кораблей просто нет
+                # 7 - уже потопленный корабль
+                if server_module.enemy_matrix[0][row_client][cell_client] in [1, 2, 3,4]:
+                    count_enemy_ships += 1
+
+        # achievement.target_attack()
+        if count_player_ships == 0 and count_enemy_ships > 0:
+            if server_module.list_player_role[0] == "server_player":
+                # список для хранения кто выиграл
+                server_module.list_check_win[0] = "win_client"
+            elif server_module.list_player_role[0] == "player_client":
+                server_module.list_check_win[0] = "win_server"
+        elif count_enemy_ships == 0 and count_player_ships > 0:
+            if server_module.list_player_role[0] == "server_player":
+                # список для хранения кто выиграл
+                server_module.list_check_win[0] = "win_server"
+            elif server_module.list_player_role[0] == "player_client":
+                server_module.list_check_win[0] = "win_client"
+
+        server_module.enemy_ships[0] = server_module.enemy_data[0]["player_ships"]
+
+        # для восстановления клеточки
+        if server_module.enemy_data[0]["row"] != 100:
+            server_module.enemy_matrix[0][server_module.enemy_data[0]["row"]][server_module.enemy_data[0]["col"]] = server_module.enemy_data[0]["number"]
+
+        if server_module.check_repeat[0] >= 1:
+            server_module.enemy_balance[0] = server_module.enemy_matrix[0]["money_balance"]
+            # координаты медалей врага
+            for medal in server_module.enemy_data[0]["medals_coordinates"]:
+                if medal not in server_module.save_medals_coordinates:
+                    server_module.save_medals_coordinates.append(medal)
+
+            # обновляем матрицу сервера(ready_client_data["new_for_server"] - матрица в которой хранится пострелы клиента)
+            if server_module.check_repeat[0] >= 1:
+                if server_module.list_player_role[0] == "server_player":
+                    for row in range(len(server_module.enemy_data[0]["new_for_server"])):
+                        for cell in range(len(server_module.enemy_data[0]["new_for_server"][row])):
+                            list_grid[row][cell] = server_module.enemy_data[0]["new_for_server"][row][cell]
+                else:
+                    for row in range(len(server_module.enemy_data[0]["new_for_client"])):
+                        for cell in range(len(server_module.enemy_data[0]["new_for_client"][row])):
+                            list_grid[row][cell] = server_module.enemy_data[0]["new_for_client"][row][cell]
+
+
+            if server_module.list_player_role[0] == "server_player":
+                # проверяем стрелял ли клиент или нет
+                if server_module.enemy_data[0]["need"] == "no":
+                    # если нет , то ничего не делаем
+                    pass
+                # если клиент стерлял , записываем чья сейчас очерель(это зависит от того попал ли клиент или нет)
+                elif server_module.enemy_data[0]["need"] == "yes":
+                    print("зашло сюда")
+                    server_module.turn[0] = server_module.enemy_data[0]["turn"]
+                    server_module.check_time[0] = 0
+
+            if server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn":
+                if server_module.check_time[0] == 1 and server_module.check_ten_times.count(1) == 1:
+                    if shop.second_task.TEXT == shop.list_second_task[1]:
+                        shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+            elif server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn":
+                if server_module.check_time[0] == 1 and server_module.enemy_data[0]["check_ten_times"] == 1:
+                    if shop.second_task.TEXT == shop.list_second_task[1]:
+                        shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+
+            if server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn":
+                if server_module.check_time[0] == 1 and server_module.check_ten_times.count(1) == 1:
+                    achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
+            elif server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn":
+                if server_module.check_time[0] == 1 and server_module.enemy_data[0]["check_ten_times"] == 1:
+                    shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+
+            achievement.opening_the_battle(grid = list_grid , enemy_grid = server_module.enemy_matrix)
+
+            if server_module.row_list[0] != 100 and server_module.check_send_data_health[0] > 9:
+                server_module.row_list[0] = 100
+                server_module.col_list[0] = 100
+                server_module.number_list[0] = 100
+                server_module.check_send_data_health[0] = 0
+        #----------------------------------------------------------------
+
       
         # функция которая красиво добавляет/отнимает монетки
         count_money(
