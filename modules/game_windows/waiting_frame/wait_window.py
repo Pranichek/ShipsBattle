@@ -39,12 +39,13 @@ def waiting_window():
 
         waiting_background.draw_image(screen = main_screen)
 
-        if server_module.list_check_ready_to_fight[0] == None:
-            if status_server == "connect":
-                check_press_button[0] = None
-                run_game = False
-                apply_fade_effect(screen = main_screen)
-                change_scene(game_windows.ships_position_window())
+        data_ready = read_json(name_file = "utility.json")
+        status_from_file = data_ready["status"] 
+        if status_from_file == "connect":
+            apply_fade_effect(screen = module_screen.main_screen)
+            change_scene(game_windows.ships_position_window())
+            check_press_button[0] = None
+            run_game = False
                 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

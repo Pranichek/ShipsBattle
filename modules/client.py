@@ -51,7 +51,10 @@ def start_client():
         # Получение сообщения от сервера (роль клиента)
         role = client_socket.recv(1024).decode("utf-8")
         server_module.list_player_role[0] = role
-
+        list_connect_status = {
+                "status": "wait"
+            }
+        write_json(filename= "utility.json" , object_dict = list_connect_status)
         # Бесконечный цикл для отправки и получения данных
         while True:
             player_information = {
@@ -64,7 +67,7 @@ def start_client():
 
             enemy_data = client_socket.recv(1024).decode("utf-8")
             server_module.enemy_data[0] = json.loads(enemy_data)
-            
+            print(server_module.enemy_data[0])
             list_connect_status = {
                 "status": "connect"
             }

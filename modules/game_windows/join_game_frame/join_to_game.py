@@ -104,7 +104,12 @@ def join_game_window():
         data_ready = read_json(name_file = "utility.json")
         status_from_file = data_ready["status"] 
 
-        if status_from_file == "connect":
+        if status_from_file == "wait":
+            apply_fade_effect(screen = module_screen.main_screen)
+            change_scene(game_windows.waiting_window())
+            check_press_button[0] = None
+            run_game = False
+        elif status_from_file == "connect":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window())
             check_press_button[0] = None
