@@ -28,11 +28,13 @@ def waiting_window():
             status_server = "wait"
             continue
 
-        if server_module.list_check_ready_to_fight[0] == "fight":
+        if server_module.responce[0] == server_module.data_enemy[0] and server_module.responce[0] != "places ships":
+            server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)
-            check_press_button[0] = None
             run_game = False
+            change_scene(None)
             change_scene(game_windows.fight_window())
+            check_press_button[0] = None
             
 
         waiting_background.draw_image(screen = main_screen)

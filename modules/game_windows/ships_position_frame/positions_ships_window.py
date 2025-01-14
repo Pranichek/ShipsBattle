@@ -36,25 +36,35 @@ def ships_position_window():
 
     while run_game:
         module_screen.FPS.tick(60)
-        if server_module.list_check_ready_to_fight[0] == "fight":
+        # if server_module.list_check_ready_to_fight[0] == "fight":
+            # apply_fade_effect(screen = main_screen)
+            # run_game = False
+            # change_scene(None)
+            # change_scene(game_windows.fight_window())
+            # check_press_button[0] = None
+            
+        # elif list_check_ready_to_fight[0] == "wait":
+        #     apply_fade_effect(screen = main_screen)
+        #     run_game = False
+        #     change_scene(None)
+        #     change_scene(scene = game_windows.waiting_window())
+        #     check_press_button[0] = None
+
+        if server_module.responce[0] == server_module.data_enemy[0] and server_module.responce[0] != "places ships":
+            server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)
             run_game = False
             change_scene(None)
             change_scene(game_windows.fight_window())
             check_press_button[0] = None
             
-        elif list_check_ready_to_fight[0] == "wait":
+        elif server_module.responce[0] == "You can connect to the game":
+            server_module.list_check_ready_to_fight[0] = "wait"
             apply_fade_effect(screen = main_screen)
             run_game = False
             change_scene(None)
             change_scene(scene = game_windows.waiting_window())
             check_press_button[0] = None
-
-        if server_module.responce[0] == server_module.data_enemy[0] and server_module.responce[0] != "places ships":
-            server_module.list_check_ready_to_fight[0] = "fight"
-            break
-        elif server_module.responce[0] == "You can connect to the game":
-            server_module.list_check_ready_to_fight[0] = "wait"
 
             
         
