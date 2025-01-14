@@ -77,10 +77,8 @@ def create_game_window():
         wan_ip_button.draw(surface = module_screen.main_screen)
         lan_ip_button.draw(surface = module_screen.main_screen)
 
-        input_nick.draw_text()
         input_ip_adress.draw_text()
         input_port.draw_text()
-        input_password.draw_text()
 
         back_to_menu.draw(surface = module_screen.main_screen)
 
@@ -88,15 +86,6 @@ def create_game_window():
         fourth_cold_image.draw_image(screen = module_screen.main_screen)
         start_game_button.draw(surface =module_screen.main_screen)
 
-        if input_nick.active == True:
-            if input_nick.user_text == input_nick.base_text or input_nick.user_text == "":
-                input_nick.fade_out()
-            else:
-                input_nick.fade_in()
-        else:  # Если поле неактивно
-            if input_nick.user_text == "" or input_nick.user_text == input_nick.base_text:  # Если пользователь ничего не ввел
-                input_nick.user_text = input_nick.base_text  # Восстановление базового текста
-                input_nick.fade_in() 
             
         if input_ip_adress.active == True or flag_ip[0] == True:
             if input_ip_adress.VISIBLE >= 255:
@@ -121,15 +110,6 @@ def create_game_window():
                 input_port.user_text = input_port.base_text
                 input_port.fade_in()
 
-        if input_password.active == True:
-            if input_password.user_text == input_password.base_text or input_password.user_text == "":
-                input_password.fade_out()
-            else:
-                input_password.fade_in()
-        else:
-            if input_password.user_text == "" or input_password.user_text == input_password.base_text:
-                input_password.user_text = input_password.base_text
-                input_password.fade_in()
             
         #если попытались создать сервер кторый нельзя(например неправильны айпи) , то выводим предуприждение об этом
         if check_server_started[0] == "error_server":
@@ -138,13 +118,6 @@ def create_game_window():
             #когда игрок закрыл табличку записываем True в список , чтобы знали что уже пытались запустить сервер
             if fail_start_server.visible == False:
                 check_server_started[0] = True
-
-        #если запустили сервер но к нему еще никто не подлючился перекидываем на окно ожидания игрока
-        if status_server == "wait":
-            check_press_button[0] = None 
-            run_game = False
-            apply_fade_effect(screen = module_screen.main_screen)
-            change_scene(game_windows.waiting_window())
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

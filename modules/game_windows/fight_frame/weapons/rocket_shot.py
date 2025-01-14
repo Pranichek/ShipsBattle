@@ -57,14 +57,12 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
             if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                 shop.eight_hits_in_row(number_cell = 5)
             miss_water_sound.play2(loops = 1)
-
         # робимо умову для випадку коли по клітичнці вже били
         elif server_module.enemy_matrix[0][row][col] == 5 or server_module.enemy_matrix[0][row][col] == 7:
             print("Уже стреляли в эту клетку")
         # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
         # 7 - значить , що гравець зробив постріл і попав по кораблю
         elif server_module.enemy_matrix[0][row][col] != 0 and server_module.enemy_matrix[0][row][col] != 5 and server_module.enemy_matrix[0][row][col] != 7:
-            
             # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
             check_animation_rocket[0] = "start_animation"
             # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
