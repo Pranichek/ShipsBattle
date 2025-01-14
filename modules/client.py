@@ -59,7 +59,7 @@ def start_client():
         while True:
             player_information = {
                 "turn": role,
-                'client_matrix':list_grid,
+                'grid':list_grid,
                 "new_for_server" : server_module.enemy_matrix[0]
             }
             information_str = json.dumps(player_information)

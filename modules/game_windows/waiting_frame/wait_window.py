@@ -21,14 +21,10 @@ def waiting_window():
     music_load_waiting.play()
     while run_game:
         module_screen.FPS.tick(60)
-        try:
-            data = read_json(name_file = "utility.json")
-            status_server = data["status"]
-        except Exception as e:
-            status_server = "wait"
-            continue
+        data_ready = read_json(name_file = "status_connect_game.json")
+        status_rade_to_game = data_ready["status"] 
 
-        if server_module.responce[0] == server_module.data_enemy[0] and server_module.responce[0] != "places ships":
+        if status_rade_to_game == "fight":
             server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)
             run_game = False
@@ -36,7 +32,6 @@ def waiting_window():
             change_scene(game_windows.fight_window())
             check_press_button[0] = None
             
-
         waiting_background.draw_image(screen = main_screen)
 
         data_ready = read_json(name_file = "utility.json")
