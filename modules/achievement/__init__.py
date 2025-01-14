@@ -6,3 +6,4 @@ from .secrecy_ships import *
 from .piooner import *
 from .lone_hunter import *
 from .opening_the_battle import *
+from .collector import *

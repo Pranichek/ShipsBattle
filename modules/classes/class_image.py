@@ -1,5 +1,5 @@
 import pygame
-import os
+from os.path import abspath, join
 
 class DrawImage:
     def __init__(self, width: int, height: int, x_cor: int, y_cor: int, folder_name: str, image_name: str):
@@ -15,7 +15,8 @@ class DrawImage:
         self.load_image()
 
     def load_image(self):
-        image_path = os.path.abspath(__file__ + f"/../../../media/{self.folder_name}/{self.image_name}")
+        #"/../../../media/{self.folder_name}/{self.image_name}
+        image_path = abspath(join(__file__, "..", "..", "..", "media", f"{self.folder_name}", f"{self.image_name}"))
         load_image = pygame.image.load(image_path)
         transformed_image = pygame.transform.scale(load_image, (self.width, self.height))
         self.image = transformed_image

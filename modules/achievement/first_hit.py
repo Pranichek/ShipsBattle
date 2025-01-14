@@ -1,5 +1,7 @@
-from ..classes import DrawImage , first_hit_achievement 
+from ..classes import first_hit_achievement, first_hit_medal
 from .four_decker_sniper import list_save_coords_achiv 
+
+#4 медалька
 
 count_shot = [0]
 shoots = []
@@ -13,14 +15,6 @@ def first_shot(cell: int):
             if count_shot[0] == 1 and "True" not in shoots:
                 shoots.append("True")
                 first_hit_achievement.ACTIVE = True
-                medal_hit_shoot.y_cor = 24
-                list_save_coords_achiv.append((4 , medal_hit_shoot.x_cor , medal_hit_shoot.y_cor))
+                first_hit_medal.ACTIVE = True
+                list_save_coords_achiv.append(4)
 
-medal_hit_shoot = DrawImage(
-    x_cor = 800,
-    y_cor = -50,
-    width = 50,
-    height = 50,
-    folder_name = "achievement",
-    image_name = "first_hit_medal.png"
-)

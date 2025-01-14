@@ -1,67 +1,23 @@
-from ..classes import DrawImage , piooner_achievement 
-from .four_decker_sniper import list_save_coords_achiv
+from ..classes import piooner_achievement, pioneer_medal 
+from .four_decker_sniper import list_save_coords_achiv , enemy_dies_ships_for_ahiv , player_died_ships_for_achiv
 
-count_ships_achiv = []
-count_kill_achiv = [0]
-def piooner(cell: int , grid: list):#
-    if count_kill_achiv[0] != "You killes three ships in row":
-        count_ships_achiv.append(cell)
-        
-        player_once = 0
-        player_twice = 0
-        player_thirde = 0
-        player_four = 0
-        
-        for row in range(len(grid)):
-            for cell in range(len(grid[row])):
-                if grid[row][cell] == 1:
-                    player_once += 1
-                elif grid[row][cell] == 2:
-                    player_twice += 1
-                elif grid[row][cell] == 3:
-                    player_thirde += 1
-                elif grid[row][cell] == 4:
-                    player_four += 1
 
-        once = count_ships_achiv.count(1)
-        twice = count_ships_achiv.count(2)
-        thirde = count_ships_achiv.count(3)
-        four = count_ships_achiv.count(4)
 
-        if once >= 1:
-            for on in count_ships_achiv:
-                if on == 1:
-                    count_ships_achiv.remove(on)
-            count_kill_achiv[0] += 1
-        if twice >= 2:
-            for tw in count_ships_achiv:
-                if tw == 2:
-                    count_ships_achiv.remove(tw)
-            count_kill_achiv[0] += 1
-        if thirde >= 3:
-            for th in count_ships_achiv:
-                if th == 3:
-                    count_ships_achiv.remove(th)
-            count_kill_achiv[0] += 1
-        if four >= 4:
-            count_kill_achiv[0] += 1
-            for fr in count_ships_achiv:
-                if fr == 4:
-                    count_ships_achiv.remove(fr)
+count_player_ships_achiv = [0]
+count_enemy_kill_achiv = [0]
+def piooner():
+    if enemy_dies_ships_for_ahiv[0] != "":
+        if count_enemy_kill_achiv[0] != "task piooner is done":
+            print("3434343434")
+            if enemy_dies_ships_for_ahiv[0] != "":
+                count_player_ships_achiv[0] = len(enemy_dies_ships_for_ahiv[0])
+                count_enemy_kill_achiv[0] = len(player_died_ships_for_achiv[0])
 
-        if count_kill_achiv[0] >= 1 and player_once >= 4 and player_twice >= 5 and player_thirde >= 4 and player_four >= 1:
-            count_kill_achiv[0] = "You killes three ships in row"
-            piooner_achievement.ACTIVE = True
-            medal_fisr_kill_any_ship.y_cor = 24
-            list_save_coords_achiv.append((8 , medal_fisr_kill_any_ship.x_cor , medal_fisr_kill_any_ship.y_cor))
-            
+                if count_player_ships_achiv[0] >= 1 and count_enemy_kill_achiv[0] == 0 and count_enemy_kill_achiv[0] != "task piooner is done":
+                    count_enemy_kill_achiv[0] = "task piooner is done"
+                    piooner_achievement.ACTIVE = True
+                    pioneer_medal.ACTIVE = True
+                    list_save_coords_achiv.append(8)
+               
 
-medal_fisr_kill_any_ship = DrawImage(
-    x_cor = 950 ,
-    y_cor = -50,
-    width = 100,
-    height = 50,
-    folder_name = "achievement",
-    image_name = "pioneer_medal.png"
-)
 

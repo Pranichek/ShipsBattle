@@ -1,6 +1,11 @@
 import pygame
-import os
+from os.path import abspath, join
 from .shop_image import shop_item
+from .text_shop import money_list 
+from ..screens import FPS
+from os.path import abspath, join
+from ..screens import main_screen
+
 
 
 #класс для кнопки в магазині
@@ -12,15 +17,18 @@ class Button_Shop:
         self.Y_COR = y
         self.WIDTH = width
         self.HEIGHT = height
-        self.PTATH_IMAGE1 = os.path.abspath(__file__ + f"/../../../static/images_button/shop_buttons/{self.IMAGE_NAME}")
-        self.IMAGE = pygame.transform.scale(pygame.image.load(self.PTATH_IMAGE1), (self.WIDTH , self.HEIGHT))
+        #os.path.abspath(__file__ + f"/../../../static/images_button/shop_buttons/{self.IMAGE_NAME}")
+        self.PATH_IMAGE1 = abspath(join(__file__, "..", "..", "..", "static", "images_button", "shop_buttons", f"{self.IMAGE_NAME}"))
+        self.IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_IMAGE1), (self.WIDTH , self.HEIGHT))
         self.RECT = self.IMAGE.get_rect(topleft=(self.X_COR, self.Y_COR))
+        self.RECT.height -= 13
         self.ACTION = action
         self.ACTIVE = False 
         self.TURN = "Down"
         self.VISIBLE = 0
         self.TARGET_Y = target_y
-        self.SPEED = 10
+        self.SPEED = 13
+
 
     # створюємо метод кнопки , який буде перевиряти чи натиснута кнопка , якщо так , то виконуємо дії яка прив'язана до кнопки
     def check_click(self, event):
@@ -39,26 +47,36 @@ class Button_Shop:
             screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
     # Плавно змінює прозорість кнопки:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
         if self.VISIBLE < 255:
-            self.VISIBLE += 5  
+            self.VISIBLE += 5 * (60 / fps)
             if self.VISIBLE >= 255:
                 self.VISIBLE = 255
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
         if self.VISIBLE > 0:
-            self.VISIBLE -= 5  
+            self.VISIBLE -= 5 * (60 / fps)
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
     # Кнопка може плавно переміщатися вниз (до цільової позиції) і назад
     #Використовується прапорець turn, щоб визначити напрямок руху
     # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
     def move(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        current_speed = self.SPEED * (60 / fps)
         if self.ACTIVE:
             if self.TURN == "Down":
                 if self.Y_COR < self.TARGET_Y: 
-                    self.Y_COR += self.SPEED
-                    self.RECT.y += self.SPEED
                     self.fade_in()
+                    self.Y_COR += current_speed
+                    self.RECT.y += current_speed
                     if self.Y_COR >= self.TARGET_Y:  
                         self.Y_COR = self.TARGET_Y
                         self.RECT.y == self.TARGET_Y
@@ -66,8 +84,8 @@ class Button_Shop:
 
             elif self.TURN == "Up":
                 if self.Y_COR > -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
-                    self.Y_COR -= self.SPEED
-                    self.RECT.y -= self.SPEED
+                    self.Y_COR -= current_speed
+                    self.RECT.y -= current_speed
                     self.fade_out()
                     if self.Y_COR <= -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
                         self.Y_COR = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
@@ -81,6 +99,30 @@ class Button_Shop:
 
 def test():
     print("Hello world!") 
+
+# флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
+check_buy_bomb_attack = [False]
+def buy_bomb():
+    if money_list[0] >= 150:
+        if check_buy_bomb_attack[0] == False:
+            if money_list[0] >= 0:
+                check_buy_bomb_attack[0] = True
+
+flagbimb200=["no"]
+cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
+check_2= [11,12,13,14,15,16,17,18,19,20]
+def buy_auto_rocket():
+    if money_list[0] >= 200:
+        if flagbimb200[0] == "no":
+            flagbimb200[0] = "yes"
+   
+but_flag = [False]
+def buy_restore_cell():
+    if money_list[0] >= 50:
+        if but_flag[0] == False:
+            but_flag[0] = True
+
+
 
 # створюємо елементи від цього класу
 button_armor_for_ship = Button_Shop(
@@ -110,7 +152,7 @@ button_restores_cell = Button_Shop(
     height = 105 ,
     image_name = "restore_one_cell.png",
     target_y = 263,
-    action = test
+    action = buy_restore_cell
 )
 
 button_fire_rocket = Button_Shop(
@@ -130,7 +172,7 @@ button_bomb = Button_Shop(
     height = 97 ,
     image_name = "bomb.png",
     target_y = 263,
-    action = test
+    action = buy_bomb
 )
 
 button_auto_attack = Button_Shop(
@@ -140,7 +182,7 @@ button_auto_attack = Button_Shop(
     height = 105 ,
     image_name = "auto_rocket.png",
     target_y = 263,
-    action = test
+    action = buy_auto_rocket
 )
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати

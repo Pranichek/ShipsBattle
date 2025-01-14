@@ -1,9 +1,11 @@
 import pygame
-import os
+from os.path import abspath, join
+import modules.screens as screen_module
 
 
 class Animation():
-    def __init__(self, image_name: str , width: int , height: int , x_cor: int , y_cor: int , need_clear: bool , name_folder: str):
+    def __init__(self, image_name: str , width: int , height: int , x_cor: int , y_cor: int , need_clear: bool , name_folder: str ,animation_speed: int):
+        self.ANIMATION_SPEED = animation_speed
         self.IMAGE_NAME = image_name
         self.LIST_IMAGES = []
         self.COUNT_IMAGES = 0
@@ -18,15 +20,21 @@ class Animation():
         self.NAME_FOLDER = name_folder
 
     def load_images(self):
-        path = os.path.abspath(__file__ + f"{self.IMAGE_NAME}")
+        #os.path.abspath(__file__ + f"{self.IMAGE_NAME}")
+        path = abspath(join(__file__, f"{self.IMAGE_NAME}"))
         image = pygame.image.load(path)
         transformed_image = pygame.transform.scale(image, (self.WIDTH, self.HEIGHT))
         self.IMAGE = transformed_image
     
     def animation(self, count_image: int, main_screen: pygame.Surface):
+        fps = screen_module.FPS.get_fps()
+        if screen_module.FPS.get_fps() <= 0:
+            fps = 0.01
+        current_speed = self.ANIMATION_SPEED * ((fps + 10) / 60)
         if len(self.LIST_IMAGES) == 0:
             for number in range(count_image):
-                self.IMAGE_NAME = f'/../../../media/{self.NAME_FOLDER}/{number}.png'
+                #'/../../../media/{self.NAME_FOLDER}/{number}.png'
+                self.IMAGE_NAME = abspath(join(__file__, "..", "..", "..", "media", f"{self.NAME_FOLDER}", f"{number}.png"))
                 self.load_images()
                 self.LIST_IMAGES.append(self.IMAGE)
 
@@ -37,7 +45,7 @@ class Animation():
         self.IMAGE = self.LIST_IMAGES[self.COUNT_IMAGES]
         self.draw(screen=main_screen)
 
-        if self.COUNT_MAIN_LOOP >= 3:
+        if self.COUNT_MAIN_LOOP >= current_speed:
             if self.COUNT_IMAGES < count_image - 1:  # Проверяем, не конец ли анимации
                 self.COUNT_IMAGES += 1
             else:
@@ -56,22 +64,84 @@ class Animation():
         self.COUNT_MAIN_LOOP = 0
         self.IS_ANIMATION_DONE = False
 
-rocket_animation = Animation(
+# анимация промаха ракетой
+miss_rocket_animation = Animation(
     image_name = "0.png" , 
-    width = 311 , 
-    height = 100 , 
-    x_cor = 311 , 
-    y_cor = 311 , 
-    need_clear = True , 
-    name_folder = "animation_rocket"
+    width = 311, 
+    height = 100, 
+    x_cor = 311, 
+    y_cor = 311, 
+    need_clear = True, 
+    name_folder = "animation_rocket",
+    animation_speed = 3
 )
 
+#просто полет ракетой
+rocket_animation = Animation(
+    image_name = "0.png", 
+    width = 311, 
+    height = 100, 
+    x_cor = 311, 
+    y_cor = 311, 
+    need_clear = True,
+    name_folder = "animation_rocket",
+    animation_speed = 3
+)
+# анимация взрыва после ракеты
 animation_boom = Animation(
     image_name = "0.png" , 
-    width = 100 , 
-    height = 100 , 
-    x_cor = 500 , 
-    y_cor = 500 , 
-    need_clear = True , 
-    name_folder = "animation_boom"
+    width = 100, 
+    height = 100, 
+    x_cor = 500, 
+    y_cor = 500, 
+    need_clear = True, 
+    name_folder = "animation_boom",
+    animation_speed = 3
+)
+
+# анимация бомбы
+bomb_animation = Animation(
+    image_name = "0.png",
+    width = 321,
+    height = 120,
+    x_cor = 500,
+    y_cor = 500,
+    need_clear = True,
+    name_folder = "bomb_animation",
+    animation_speed = 3
+)
+# анимация взрыва после бомбы
+animation_bomb_boom = Animation(
+    image_name = "0.png" , 
+    width = 220, 
+    height = 220, 
+    x_cor = 500, 
+    y_cor = 500, 
+    need_clear = True, 
+    name_folder = "bomb_boom",
+    animation_speed = 4
+)
+
+# анимация аптечки
+animation_health = Animation(
+    image_name = "0.png",
+    width = 60,
+    height = 60,
+    x_cor = 500,
+    y_cor = 500,
+    need_clear = True,
+    name_folder = "animation_medical",
+    animation_speed = 4
+)
+
+# когда проблемы с соеденением
+animation_connection_problem = Animation(
+    image_name = "0.png",
+    width = 901,
+    height = 284,
+    x_cor = 210,
+    y_cor = 274,
+    need_clear = False,
+    name_folder = "error_connection_animation",
+    animation_speed = 31
 )

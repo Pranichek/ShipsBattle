@@ -1,4 +1,4 @@
-import os
+from os.path import abspath, join
 import pygame
 
 class Font:
@@ -6,7 +6,8 @@ class Font:
         self.color_text = text_color
         self.size = size
         self.name_font = name_font
-        self.path_to_font = os.path.abspath(__file__ + f"/../../../media/fonts/{self.name_font}")
+        #f"/../../../media/fonts/{self.name_font}"
+        self.path_to_font = abspath(join(__file__, "..", "..", "..", "media", "fonts", f"{self.name_font}"))
         self.text = text
         self.screen = screen
         self.x_cor = x_cor

@@ -1,5 +1,6 @@
 import pygame
-import os
+from os.path import abspath, join
+from ..screens import FPS
 
 
 
@@ -15,41 +16,51 @@ class Image_Shop:
         self.Y_COR = y_cor
         self.WIDTH = width
         self.HEIGHT = height
-        self.PATH = os.path.abspath(__file__ + f"/../../../media/{self.FOLDER_NAME}/{self.IMAGE_NAME}")
+        #"/../../../media/{self.FOLDER_NAME}/{self.IMAGE_NAME}"
+        self.PATH = abspath(join(__file__, "..", "..", "..", "media", f"{self.FOLDER_NAME}", f"{self.IMAGE_NAME}"))
         self.IMAGE = pygame.transform.scale(pygame.image.load(self.PATH), (self.WIDTH, self.HEIGHT)).convert_alpha()
-        self.SPEED = 10
+        self.SPEED = 13
         self.ACTIVE = False 
         self.TURN = "Down"
         self.TARGET_Y = target_y
-        self.visible = 0  
+        self.VISIBLE = 0 
 
     # Відображає зображення на екрані, враховуючи поточну прозорість (visible)
     def draw(self, screen: pygame.Surface):
-        self.IMAGE.set_alpha(self.visible)
+        self.IMAGE.set_alpha(self.VISIBLE)
         screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
 
     # Плавно змінює прозорість зображення:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
-        if self.visible < 255:
-            self.visible += 5  
-            if self.visible >= 255:
-                self.visible = 255
-     
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        if self.VISIBLE < 255:
+            self.VISIBLE += 5 * (60 / fps)
+            if self.VISIBLE >= 255:
+                self.VISIBLE = 255
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
-        if self.visible > 0:
-            self.visible -= 5  
-            if self.visible <= 0:
-                self.visible = 0
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        if self.VISIBLE > 0:
+            self.VISIBLE -= 5 * (60 / fps)
+            if self.VISIBLE <= 0:
+                self.VISIBLE = 0
        
     # Зображення може плавно переміщатися вниз (до цільової позиції) і назад
     #Використовується прапорець turn, щоб визначити напрямок руху
     # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
     def move(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        current_speed = self.SPEED * (60 / fps)
         if self.ACTIVE:
             if self.TURN == "Down":
                 if self.Y_COR < self.TARGET_Y: 
-                    self.Y_COR += self.SPEED
+                    self.Y_COR += current_speed
                     self.fade_in()
                     if self.Y_COR >= self.TARGET_Y:  
                         self.Y_COR = self.TARGET_Y
@@ -57,7 +68,7 @@ class Image_Shop:
 
             elif self.TURN == "Up":
                 if self.Y_COR > -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT))):  
-                    self.Y_COR -= self.SPEED
+                    self.Y_COR -= current_speed
                     self.fade_out()
                     if self.Y_COR <= -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT))):  
                         self.Y_COR = -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT)))
