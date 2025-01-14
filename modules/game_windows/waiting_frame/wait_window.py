@@ -5,7 +5,7 @@ import modules.server as server_module
 from ...screens import main_screen
 from ...classes.class_music import music_load_main, music_load_waiting
 from ...classes.class_image import DrawImage
-from ..change_window import change_scene
+from ..change_window import change_scene, list_current_scene
 from ..button_pressed import button_action, check_press_button
 from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
@@ -23,6 +23,7 @@ def waiting_window():
         module_screen.FPS.tick(60)
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
+        print(list_current_scene[0])
 
         if status_ready_to_game == "fight":
             server_module.list_check_ready_to_fight[0] = "fight"
@@ -36,7 +37,7 @@ def waiting_window():
 
         data_ready = read_json(name_file = "utility.json")
         status_from_file = data_ready["status"] 
-        if status_from_file == "connect":
+        if status_from_file == "connect" and status_ready_to_game == "places ships":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window())
             check_press_button[0] = None
