@@ -47,21 +47,42 @@ def start_client():
         ready_to_fight[0] = "wait"
         # Бесконечный цикл для отправки и получения данных
         while True:
+            data_ready = read_json(name_file = "status_connect_game.json")
+            status_ready_to_game = data_ready["status"] 
             try:
-                data_ready = read_json(name_file = "status_connect_game.json")
-                status_ready_to_game = data_ready["status"] 
-                player_information = {
-                    "turn": role,
-                    "ready_to_fight": status_ready_to_game
-                }
-                information_str = json.dumps(player_information)
-                client_socket.sendall(information_str.encode("utf-8"))
+                if status_ready_to_game != "fight":
+                    data_ready = read_json(name_file = "status_connect_game.json")
+                    status_ready_to_game = data_ready["status"] 
+                    player_information = {
+                        "player_role": role,
+                        "ready_to_fight": status_ready_to_game
+                    }
+                    information_str = json.dumps(player_information)
+                    client_socket.sendall(information_str.encode("utf-8"))
 
-                data_enemy = client_socket.recv(1024).decode("utf-8")
-                server_module.enemy_data[0] = json.loads(data_enemy)
-                ready_to_fight[0] = "connect"
-                print(server_module.enemy_data[0])
-                time.sleep(0.1)  
+                    data_enemy = client_socket.recv(1024).decode("utf-8")
+                    server_module.enemy_data[0] = json.loads(data_enemy)
+                    ready_to_fight[0] = "connect"
+                    print(server_module.enemy_data[0])
+                    time.sleep(0.1)  
+                elif status_ready_to_game == "fight":
+                    if server_module.list_player_role[0] == "server_player":
+                        server_module.check_time[0] += 1
+                    player_information = {
+                        "turn": role,
+                        "time": server_module.check_time[0]
+                    }
+                    information_str = json.dumps(player_information)
+                    client_socket.sendall(information_str.encode("utf-8"))
+
+                    data_enemy = client_socket.recv(1024).decode("utf-8")
+                    server_module.enemy_data[0] = json.loads(data_enemy)
+                    
+                    if server_module.list_player_role[0] == "client_player":
+                        server_module.check_time[0] += server_module.enemy_data[0]["time"]
+                    print(server_module.enemy_data[0])
+                    time.sleep(0.1)  
+
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
