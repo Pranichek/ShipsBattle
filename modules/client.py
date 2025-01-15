@@ -15,6 +15,7 @@ data_list = []
 list_check_need_send = ["no"]
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
+ready_to_fight = [False]
 
 
 
@@ -43,7 +44,7 @@ def start_client():
         # Получение сообщения от сервера (роль клиента)
         role = client_socket.recv(1024).decode("utf-8")
         server_module.list_player_role[0] = role
-        list_check_connection[0] = "wait"
+        ready_to_fight[0] = "wait"
         # Бесконечный цикл для отправки и получения данных
         while True:
             try:
@@ -58,7 +59,7 @@ def start_client():
 
                 data_enemy = client_socket.recv(1024).decode("utf-8")
                 server_module.enemy_data[0] = json.loads(data_enemy)
-                list_check_connection[0] = "connect"
+                ready_to_fight[0] = "connect"
                 print(server_module.enemy_data[0])
                 time.sleep(0.1)  
             except Exception as e:
