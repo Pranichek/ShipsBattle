@@ -285,9 +285,11 @@ class Server():
                 thread2.start()
                 print(3)
                 if self.RESTART:
+                    print("Server problemin")
                     self.RESTART = False
                     raise Exception("RESTART")
             except:
+                print("Exception server")
                 pass
 SERVER = Server()
 
