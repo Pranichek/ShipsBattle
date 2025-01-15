@@ -2,7 +2,7 @@ import pygame
 import modules.screens.screen as module_screen
 from ..create_game_frame import room_data, ip_room_text, port_room_text
 from ...server import SERVER
-from ...client import ready_to_fight
+from ...client import check_connection_users
 import modules.game_windows as game_windows
 from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
@@ -114,12 +114,12 @@ def join_game_window():
             if fail_connect.visible == False:
                 list_check_connection[0] = True
     
-        if ready_to_fight[0] == "wait":
+        if check_connection_users[0] == "wait":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.waiting_window())
             check_press_button[0] = None
             run_game = False
-        elif ready_to_fight[0] == "connect":
+        elif check_connection_users[0] == "connect":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window())
             check_press_button[0] = None

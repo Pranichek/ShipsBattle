@@ -40,20 +40,23 @@ def ships_position_window():
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
 
-        if status_ready_to_game == "fight" and server_module.enemy_data[0]["ready_to_fight"] == "fight":
-            server_module.list_check_ready_to_fight[0] = "fight"
-            apply_fade_effect(screen = main_screen)
-            run_game = False
-            change_scene(None)
-            change_scene(game_windows.fight_window())
-            check_press_button[0] = None
-        elif status_ready_to_game == "fight" and server_module.enemy_data[0]["ready_to_fight"] != "fight":
-            server_module.list_check_ready_to_fight[0] = "wait"
-            apply_fade_effect(screen = main_screen)
-            run_game = False
-            change_scene(None)
-            change_scene(scene = game_windows.waiting_window())
-            check_press_button[0] = None
+        try:
+            if status_ready_to_game == "fight" and server_module.enemy_data[0]["ready_to_fight"] == "fight":
+                server_module.list_check_ready_to_fight[0] = "fight"
+                apply_fade_effect(screen = main_screen)
+                run_game = False
+                change_scene(None)
+                change_scene(game_windows.fight_window())
+                check_press_button[0] = None
+            elif status_ready_to_game == "fight" and server_module.enemy_data[0]["ready_to_fight"] != "fight":
+                server_module.list_check_ready_to_fight[0] = "wait"
+                apply_fade_effect(screen = main_screen)
+                run_game = False
+                change_scene(None)
+                change_scene(scene = game_windows.waiting_window())
+                check_press_button[0] = None
+        except:
+            pass
 
         
         ships_position_bg.draw_image(screen = main_screen)

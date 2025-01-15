@@ -9,13 +9,12 @@ import modules.achievement as achievement
 from .classes.class_input_text import input_password
 from threading import Thread
 
-data_list = []
 
 # лист для клиента в котором храним надо ли что то изменять после его атаки
 list_check_need_send = ["no"]
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
-ready_to_fight = [False]
+check_connection_users = [False, False]
 
 
 
@@ -37,6 +36,13 @@ def recv_all(sock):
     return data
 
 def start_client():
+    if input_nick.user_text not in list_users:
+        #создаем игрока с его ником и даем базовое количество баллов
+        list_users[input_nick.user_text] = {"points": 0,
+                                            "password": input_password.user_text
+                                            }
+        #зберігаємо інформацію у json файл
+        write_json(filename = "data_base.json" , object_dict = list_users)
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         client_socket.connect((str(input_ip_adress.user_text), int(input_port.user_text)))  # Подключение к серверу
@@ -44,28 +50,30 @@ def start_client():
         # Получение сообщения от сервера (роль клиента)
         role = client_socket.recv(1024).decode("utf-8")
         server_module.list_player_role[0] = role
-        ready_to_fight[0] = "wait"
+        check_connection_users[0] = "wait"
         # Бесконечный цикл для отправки и получения данных
         while True:
             data_ready = read_json(name_file = "status_connect_game.json")
             status_ready_to_game = data_ready["status"] 
             try:
-                if status_ready_to_game != "fight":
+                if status_ready_to_game != "fight" and check_connection_users[1] != "fight":
                     data_ready = read_json(name_file = "status_connect_game.json")
                     status_ready_to_game = data_ready["status"] 
                     player_information = {
                         "player_role": role,
-                        "ready_to_fight": status_ready_to_game
+                        "check_connection_users": status_ready_to_game
                     }
                     information_str = json.dumps(player_information)
                     client_socket.sendall(information_str.encode("utf-8"))
 
                     data_enemy = client_socket.recv(1024).decode("utf-8")
                     server_module.enemy_data[0] = json.loads(data_enemy)
-                    ready_to_fight[0] = "connect"
+                    check_connection_users[0] = "connect"
+                    check_connection_users[1] = server_module.enemy_data[0]["check_connection_users"]
+
                     print(server_module.enemy_data[0])
                     time.sleep(0.1)  
-                elif status_ready_to_game == "fight":
+                elif status_ready_to_game == "fight" and check_connection_users[1] == "fight":
                     if server_module.list_player_role[0] == "server_player":
                         server_module.check_time[0] += 1
                     player_information = {
@@ -77,7 +85,7 @@ def start_client():
 
                     data_enemy = client_socket.recv(1024).decode("utf-8")
                     server_module.enemy_data[0] = json.loads(data_enemy)
-                    
+
                     if server_module.list_player_role[0] == "client_player":
                         server_module.check_time[0] += server_module.enemy_data[0]["time"]
                     print(server_module.enemy_data[0])
@@ -192,7 +200,7 @@ connect_to_game = Thread(target = start_client, daemon = True)
 #                     client_socket.settimeout(1)
 #                     server_module.data_enemy[0] = client_socket.recv(1024).decode()
 
-#                     if server_module.list_check_ready_to_fight[0] == "fight":
+#                     if server_module.list_check_check_connection_users[0] == "fight":
 #                         break
 #                 else:
 #                     print(78787878)
