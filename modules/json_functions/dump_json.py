@@ -4,15 +4,6 @@ from os.path import abspath , join
 #створюємо словарь для збереження нікнеймів та балів користувачів
 list_users = {}
 
-
-#створюємо словарь для збереження статусу сервера
-list_server_status = {}
-
-#__file__ + "/../../../static/json/utility.json")
-#отримуємо дані з бази даних, яка знаходиться в папці static та у файлі data_base.json
-with open(file = abspath(join(__file__, "..", "..", "..", "static", "json", "utility.json"))) as file:
-    #загружаємо дані з json-файла в наш словник list_users
-    list_server_status = json.load(file)
 #__file__ + "/../../../static/json/data_base.json"
 #отримуємо дані з бази даних, яка знаходиться в папці static та у файлі data_base.json
 with open(file = abspath(join(__file__, "..", "..", "..", "static", "json", "data_base.json"))) as file:

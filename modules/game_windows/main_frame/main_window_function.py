@@ -39,7 +39,6 @@ def main_window():
 
     while run_game:
         module_screen.FPS.tick(60)
-        print(module_screen.FPS.get_fps())
         mouse_x , mouse_y = pygame.mouse.get_pos()
         main_bg.draw_image(screen= main_screen)
 

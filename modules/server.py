@@ -1,12 +1,6 @@
 import socket 
-from .screens import list_grid
+import colorama
 # Импортируем классы
-from .classes import input_port , input_ip_adress, input_nick
-# Импортируем функцию записи в json файлы
-from .json_functions import write_json , list_server_status , list_users , read_json
-import modules.shop as shop
-import modules.achievement as achievement
-from .classes.class_input_text import input_password
 from threading import Thread
 
 
@@ -76,19 +70,17 @@ dict_save_information = {
     "enemy_points" : 0,
 }
 
-#ліст для перевірки чи зайшов користувач на сервер
-list_server_status = {
-    "status": None
-}
-#зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не запустили сервер
-write_json(filename= "utility.json" , object_dict =  list_server_status)
+# #ліст для перевірки чи зайшов користувач на сервер
+# list_server_status = {
+#     "status": None
+# }
+# #зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не запустили сервер
+# write_json(filename= "utility.json" , object_dict =  list_server_status)
 
-dict_status_game = {
-    "status" : "places ships"
-}
-write_json(filename= "status_connect_game.json" , object_dict =  dict_status_game)
-
-
+# dict_status_game = {
+#     "status" : "places ships"
+# }
+# write_json(filename= "status_connect_game.json" , object_dict =  dict_status_game)
 # #створємо функцію для запуску серверу
 # def start_server():
 #     #если игрок нажал запустить сервер и его еще нет в словаре игроков, то записываем его ник в джейсон
@@ -268,15 +260,17 @@ class Server():
         self.server_socket.bind((str(ip_adress), int(port)))
         while True:
             try:
-                print("Waiting clients")
+                print(f"Room ip_adress {colorama.Fore.GREEN} {ip_adress} {colorama.Style.RESET_ALL}")
+                print(f"Room Port:{colorama.Fore.GREEN} {port} {colorama.Style.RESET_ALL}")
                 self.server_socket.listen()
                 print("Server started working")
+                print("Waiting clients")
                 client_socket, addr = self.server_socket.accept()
                 client_socket.sendall("server_player".encode("utf-8"))
-                print(1)
+                print("First player is connected")
                 client_socket_second, addr_second = self.server_socket.accept()
                 client_socket_second.sendall("client_player".encode("utf-8"))
-                print(2)
+                print("Second player is connecter")
 
                 thread1 = Thread(target = listen_client, args = (client_socket, client_socket_second))
                 thread1.start()

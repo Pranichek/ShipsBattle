@@ -21,6 +21,7 @@ def waiting_window():
     music_load_waiting.play()
     while run_game:
         module_screen.FPS.tick(60)
+        waiting_background.draw_image(screen = main_screen)
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
 
@@ -31,11 +32,9 @@ def waiting_window():
             change_scene(None)
             change_scene(game_windows.fight_window())
             check_press_button[0] = None
-            
-        waiting_background.draw_image(screen = main_screen)
-
-        data_ready = read_json(name_file = "utility.json")
-        status_from_file = data_ready["status"] 
+        
+        data_status = read_json(name_file = "utility.json")
+        status_from_file = data_status["status"] 
         if status_from_file == "connect" and status_ready_to_game == "places ships":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window())
