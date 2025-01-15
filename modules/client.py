@@ -17,19 +17,11 @@ list_check_need_send = ["no"]
 list_check_connection = [False]
 
 
-#ліст для перевірки чи зайшов користувач на сервер
-list_server_status = {
-    "status": "open the game"
-}
-#зберігаємо інформацію про статус серверу у json файл , поки цей статус пустий тому що не під'єднуємося до серверу
-write_json(filename= "utility.json" , object_dict = list_server_status)
-
 
 dict_status_game = {
     "status" : "places ships"
 }
 write_json(filename= "status_connect_game.json" , object_dict =  dict_status_game)
-
 
 # Функция для получения всех данных
 def recv_all(sock):
@@ -51,10 +43,7 @@ def start_client():
         # Получение сообщения от сервера (роль клиента)
         role = client_socket.recv(1024).decode("utf-8")
         server_module.list_player_role[0] = role
-        list_connect_status = {
-                "status": "wait"
-            }
-        write_json(filename= "utility.json" , object_dict = list_connect_status)
+        list_check_connection[0] = "wait"
         # Бесконечный цикл для отправки и получения данных
         while True:
             try:
@@ -69,12 +58,10 @@ def start_client():
 
                 data_enemy = client_socket.recv(1024).decode("utf-8")
                 server_module.enemy_data[0] = json.loads(data_enemy)
-                list_connect_status = {
-                    "status": "connect"
-                }
-                write_json(filename= "utility.json" , object_dict = list_connect_status)
+                list_check_connection[0] = "connect"
+                print(server_module.enemy_data[0])
                 time.sleep(0.1)  
-            except:
+            except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
     except Exception as e:
