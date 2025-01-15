@@ -11,11 +11,20 @@ from threading import Thread
 
 
 # лист для клиента в котором храним надо ли что то изменять после его атаки
-list_check_need_send = ["no"]
+list_check_need_send = [False]
 #список для відслуджування чи підключився користувач до серверу чи ні
 list_check_connection = [False]
 check_connection_users = [False, False]
+# список в котором храним данные которые отправляем другому игроку
+data_player_shot = []
 
+
+def send_matrix():
+    list_check_need_send[0] = True
+    data_player_shot.append("enemy_matrix")
+    for row in list_grid:
+        for cell in row:
+            data_player_shot.append(str(cell))
 
 
 dict_status_game = {
@@ -78,23 +87,22 @@ def start_client():
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
+        send_matrix()
         while True:
             try:
                 print(2)
                 time.sleep(0.5)
-                player_information = {
-                    "turn": role,
-                    "time": server_module.check_time[0]
-                }
-                information_str = json.dumps(player_information)
-                client_socket.sendall(information_str.encode("utf-8"))
+                # Перевірка значення в списку перед відправкою даних
+                if list_check_need_send[0] == True:  # Перевірка на `True`
+                    client_socket.sendall(data_player_shot.encode("utf-8"))  # Відправка даних як список
+                    data_player_shot.clear()  # Очищаем список перед новым входом
+                    list_check_need_send[0] = False
 
-                data_enemy = client_socket.recv(1024).decode("utf-8")
-                server_module.enemy_data[0] = json.loads(data_enemy)
+                server_module.enemy_data.clear()
+                server_module.enemy_data[0] = [""]
+                server_module.enemy_data[0] = client_socket.recv(1024).decode("utf-8") 
+                print(server_module.enemy_data[0]) 
 
-                if server_module.list_player_role[0] == "client_player":
-                    server_module.check_time[0] += server_module.enemy_data[0]["time"]
-                print(server_module.enemy_data[0])
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass

@@ -48,7 +48,7 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
     # кастрированная матрица  до 5 на 5 клеток из enemy_matrix Центром является та клетка, в которую кликнул игрок. 
     trimmed_matrix = [
         rowf[cell_shot[1]:cell_shot5col]
-        for rowf in enemy_matrix[0][cell_shot[0]:cell_shot5row]
+        for rowf in enemy_matrix[cell_shot[0]:cell_shot5row]
     ]
 
     print ("#########################################################")
@@ -88,7 +88,7 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
         rowneig = rocket_coordinate[0]
         colneig =rocket_coordinate[1]
         # Находим все соседние клетки корабля
-        neighbors = find_all_neighbors([ rowneig [:] for rowneig  in enemy_matrix[0]], rowneig , colneig , ship_deck_number)
+        neighbors = find_all_neighbors([ rowneig [:] for rowneig  in enemy_matrix], rowneig , colneig , ship_deck_number)
         print ("neighbors: ",neighbors)
         return neighbors
     else :
