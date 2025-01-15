@@ -57,26 +57,22 @@ def start_client():
         write_json(filename= "utility.json" , object_dict = list_connect_status)
         # Бесконечный цикл для отправки и получения данных
         while True:
-            try:
-                player_information = {
-                    "turn": role,
-                    'grid':list_grid,
-                    "new_for_server" : server_module.enemy_matrix[0]
-                }
-                information_str = json.dumps(player_information)
-                client_socket.sendall(information_str.encode("utf-8"))
+            player_information = {
+                "turn": role,
+                'grid':list_grid,
+                "new_for_server" : server_module.enemy_matrix[0]
+            }
+            information_str = json.dumps(player_information)
+            client_socket.sendall(information_str.encode("utf-8"))
 
-                data_enemy = client_socket.recv(1024).decode("utf-8")
-                server_module.enemy_data[0] = json.loads(data_enemy)
-                print(server_module.enemy_data[0]["grid"])
-                list_connect_status = {
-                    "status": "connect"
-                }
-                write_json(filename= "utility.json" , object_dict = list_connect_status)
-                time.sleep(0.1)  
-            except:
-                print("Ошибка клиента:")
-                pass
+            data_enemy = client_socket.recv(1024).decode("utf-8")
+            server_module.enemy_data[0] = json.loads(data_enemy)
+            print(server_module.enemy_data[0]["grid"])
+            list_connect_status = {
+                "status": "connect"
+            }
+            write_json(filename= "utility.json" , object_dict = list_connect_status)
+            time.sleep(0.1)  
     except Exception as e:
         print(f"Ошибка клиента: {e}")
 

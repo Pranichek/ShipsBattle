@@ -9,18 +9,14 @@ def connect_to_fight():
             if cell == 0:
                 count_zero += 1
     enemy_zero = 0
-    for row in server_module.enemy_data[0]["grid"]:
-        for cell in row:
-            if cell == 0:
-                enemy_zero += 1
     print(count_zero, enemy_zero)
-    if count_zero == 80 and enemy_zero == 80:
+    if count_zero == 80:
         dict_game_status = {
                 "status": "fight"
             }
         write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
-    elif count_zero == 80:
+    elif count_zero >= 81:
         dict_game_status = {
-                "status": "wait window"
+                "status": "position ships"
             }
         write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
