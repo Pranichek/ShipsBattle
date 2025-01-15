@@ -27,14 +27,16 @@ def waiting_window():
         status_ready_to_game = data_ready["status"] 
 
         try:
-            if status_ready_to_game == "fight" and server_module.enemy_data[0]["check_connection_users"] == "fight":
+            if status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] == "fight":
                 check_connection_users[0] = "fight"
                 apply_fade_effect(screen = main_screen)
                 run_game = False
                 change_scene(None)
                 change_scene(game_windows.fight_window())
                 check_press_button[0] = None
+                print(311)
         except:
+            None
             pass
             
         if check_connection_users[0] == "connect" and status_ready_to_game == "places ships":

@@ -281,14 +281,15 @@ class Server():
                 thread2.start()
                 print(3)
                 if self.RESTART:
-                    print("Server problemin")
+                    print("Server problemn")
                     self.RESTART = False
-                    raise Exception("RESTART")
+                    # raise Exception("RESTART")
             except:
                 print("Exception server")
                 pass
 
 SERVER = Server()
+
 def run_server(input_ip_address, input_port):
     SERVER.start_server(input_ip_address, input_port)
 

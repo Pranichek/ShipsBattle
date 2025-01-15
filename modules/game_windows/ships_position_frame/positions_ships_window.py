@@ -41,14 +41,15 @@ def ships_position_window():
         status_ready_to_game = data_ready["status"] 
 
         try:
-            if status_ready_to_game == "fight" and server_module.enemy_data[0]["ready_to_fight"] == "fight":
+            if status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] == "fight":
                 server_module.list_check_ready_to_fight[0] = "fight"
                 apply_fade_effect(screen = main_screen)
                 run_game = False
                 change_scene(None)
                 change_scene(game_windows.fight_window())
                 check_press_button[0] = None
-            elif status_ready_to_game == "fight" and server_module.enemy_data[0]["ready_to_fight"] != "fight":
+                print(311)
+            elif status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] != "fight":
                 server_module.list_check_ready_to_fight[0] = "wait"
                 apply_fade_effect(screen = main_screen)
                 run_game = False
@@ -56,7 +57,7 @@ def ships_position_window():
                 change_scene(scene = game_windows.waiting_window())
                 check_press_button[0] = None
         except:
-            pass
+            None
 
         
         ships_position_bg.draw_image(screen = main_screen)
