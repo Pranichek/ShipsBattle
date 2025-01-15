@@ -255,7 +255,9 @@ def listen_client(client, second_client):
 class Server():
     def __init__(self):
         self.RESTART = False
+        self.START_CONNECT = False
     def start_server(self, ip_adress: str, port: int):
+        self.START_CONNECT = True
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.bind((str(ip_adress), int(port)))
         while True:
@@ -285,9 +287,8 @@ class Server():
             except:
                 print("Exception server")
                 pass
-SERVER = Server()
 
+SERVER = Server()
 def run_server(input_ip_address, input_port):
-    server = Server()
-    server.start_server(input_ip_address, input_port)
+    SERVER.start_server(input_ip_address, input_port)
 

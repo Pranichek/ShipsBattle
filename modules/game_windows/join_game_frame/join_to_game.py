@@ -1,6 +1,7 @@
 import pygame
 import modules.screens.screen as module_screen
-import modules.server as server_module
+from ..create_game_frame import room_data, ip_room_text, port_room_text
+from ...server import SERVER
 from ...client import ready_to_fight
 import modules.game_windows as game_windows
 from ...classes.class_image import DrawImage
@@ -29,6 +30,12 @@ def join_game_window():
     pygame.display.set_caption("Join to Game Window")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
+    
+    if SERVER.START_CONNECT == False:
+        ip_room_text.text = ""
+        ip_room_text.update_text()
+        port_room_text.text = ""
+        port_room_text.update_text()
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen.FPS.tick(60)
@@ -51,6 +58,10 @@ def join_game_window():
         third_cold_image.draw_image(screen= module_screen.main_screen)
         fourth_cold_image.draw_image(screen= module_screen.main_screen)
         join_game_button.draw(surface= module_screen.main_screen)
+
+        room_data.draw_image(screen= module_screen.main_screen)
+        ip_room_text.draw_font()
+        port_room_text.draw_font()
 
         if input_nick.active == True:
             if input_nick.user_text == input_nick.base_text or input_nick.user_text == "":
