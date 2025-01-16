@@ -149,6 +149,11 @@ count_5 = [0]
 old_killed_ships = [0]
 new_killed_ships = [0]
 check_bomb = [False]
+
+
+# для ачивок на выживвание раундов
+check_alive_ten = [0]
+check_alive_five = [0]
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -276,10 +281,6 @@ def fight_window():
             elif check_data[0] == "restore_cell":
                 enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
             
-        # print(list_grid)
-        # print(server_module.enemy_ships)
-        # print(server_module.turn[0], check_two_times, server_module.enemy_data[0])
-        print(enemy_matrix)
         if server_module.check_time[0] >= 30:
             server_module.check_time[0] = 0
             if server_module.list_player_role[0] == "server_player":
@@ -292,7 +293,24 @@ def fight_window():
                     server_module.turn[0] = "server_turn"
                 else:
                     server_module.turn[0] = "client_turn"
-           
+
+        achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
+
+        # if server_module.check_time[0] <= 0 and check_alive_ten[0] >= 1:
+        #     check_alive_ten[0] = 0
+        #     check_alive_five[0] = 0
+
+        # if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn"):
+        #     if server_module.check_time[0] == 1 and check_alive_ten[0] == 0:
+        #         if shop.second_task.TEXT == shop.list_second_task[1]:
+        #             shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+        #             check_alive_ten[0] += 1
+        # if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn"):
+        #     if server_module.check_time[0] == 1 and check_alive_five[0] == 0:
+        #         if shop.second_task.TEXT == shop.list_second_task[1]:
+        #             shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+        #             check_alive_five[0] += 1
+    
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
         # try:

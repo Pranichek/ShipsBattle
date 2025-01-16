@@ -10,7 +10,7 @@ from ..change_window import change_scene, list_current_scene
 from ..button_pressed import button_action, check_press_button
 from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
-from ...client import check_connection_users
+from ...client import check_connection_users, check_can_connect_to_fight
 
 #фон для очікування користувача
 waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "waiting_background.png")
@@ -28,7 +28,7 @@ def waiting_window():
         status_ready_to_game = data_ready["status"] 
 
    
-        if status_ready_to_game == "fight" and check_connection_users[1] == "fight":
+        if check_can_connect_to_fight[0] >= 3:
             check_connection_users[0] = "fight"
             apply_fade_effect(screen = main_screen)
             print(311131113111311131131)
