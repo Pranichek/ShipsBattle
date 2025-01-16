@@ -151,7 +151,6 @@ new_killed_ships = [0]
 check_bomb = [False]
 # функція для бою між гравцями
 def fight_window():
-    print("DAAAAAAAA")
     # зупиняємо музику яка грала перед боєм
     music_load_waiting.stop()
     # вмикаємо музику для бою
@@ -199,6 +198,7 @@ def fight_window():
     enemy_points.update_text()
 
     while run_game:
+        print("FIght window")
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
         ship_border()

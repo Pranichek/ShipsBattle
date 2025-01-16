@@ -38,6 +38,7 @@ def join_game_window():
         port_room_text.update_text()
     #основний цикл роботи вікна користувача
     while run_game:
+        print("Join window")
         module_screen.FPS.tick(60)
         try:
             data = read_json(name_file = "utility.json")

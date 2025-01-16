@@ -35,10 +35,10 @@ def ships_position_window():
     
     #generate grid with class
     grid_player.generate_grid()
-
+    print("Position window")
     while run_game:
+        
         module_screen.FPS.tick(60)
-        print(list_current_scene[0])
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
 

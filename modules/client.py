@@ -71,15 +71,10 @@ def start_client():
                     print(1)
                     data_ready = read_json(name_file = "status_connect_game.json")
                     status_ready_to_game = data_ready["status"] 
-                    player_information = {
-                        "player_role": role,
-                        "check_connection_users": status_ready_to_game
-                    }
-                    information_str = json.dumps(player_information)
-                    client_socket.sendall(information_str.encode("utf-8"))
+                    client_socket.sendall(status_ready_to_game.encode("utf-8"))
 
                     data_enemy = client_socket.recv(1024).decode("utf-8")
-                    server_module.enemy_data[0] = json.loads(data_enemy)
+                    check_connection_users[1] = data_enemy
                     check_connection_users[0] = "connect"
                     check_connection_users[1] = server_module.enemy_data[0]["check_connection_users"]
                     print(server_module.enemy_data[0])  

@@ -22,6 +22,7 @@ def waiting_window():
     music_load_main.stop()
     music_load_waiting.play()
     while run_game:
+        print("Waitiong window")
         module_screen.FPS.tick(60)
         waiting_background.draw_image(screen = main_screen)
         data_ready = read_json(name_file = "status_connect_game.json")
