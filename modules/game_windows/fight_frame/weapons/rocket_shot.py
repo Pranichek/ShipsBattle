@@ -37,8 +37,8 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         # 5 - значить , що гравець зробив постріл , але схибив його
         if enemy_matrix[row][col] == 0:
             data_player_shot.append("rocket_shot")
-            data_player_shot.append(row)
-            data_player_shot.append(col)
+            data_player_shot.append(str(row))
+            data_player_shot.append(str(col))
             list_check_need_send[0] = True
             # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
             flag_miss_rocket_animation[0] = "start_animation"
@@ -75,8 +75,8 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         # 7 - значить , що гравець зробив постріл і попав по кораблю
         elif enemy_matrix[row][col] != 0 and enemy_matrix[row][col] != 5 and enemy_matrix[row][col] != 7:
             data_player_shot.append("rocket_shot")
-            data_player_shot.append(row)
-            data_player_shot.append(col)
+            data_player_shot.append(str(row))
+            data_player_shot.append(str(col))
             list_check_need_send[0] = True
             # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
             check_animation_rocket[0] = "start_animation"

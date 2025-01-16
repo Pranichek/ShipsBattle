@@ -929,7 +929,7 @@ def fight_window():
                                                     
 
                         # перевіряємо за яку роль грає гравець                    
-                        if server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "server_turn" or server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "client_turn":
+                        if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "server_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "client_turn"):
                             if server_module.turn[0] == "server_turn":
                                 # перевіряємо щоб гравець натискав на сітку ворога
                                 if x_mouse >= 67 and x_mouse <= 67 + 550:
