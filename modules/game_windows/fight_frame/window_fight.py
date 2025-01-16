@@ -269,7 +269,7 @@ def fight_window():
                         server_module.turn[0] = "server_turn"
                     elif server_module.list_player_role[0] == "client_player":
                         server_module.turn[0] = "client_turn"
-
+            
         # print(list_grid)
 
         print(server_module.turn[0], check_two_times, server_module.enemy_data[0])
@@ -496,6 +496,7 @@ def fight_window():
 
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = module_screen.main_screen)
+
         
 
         #----------------------------------------------------------------
@@ -526,6 +527,9 @@ def fight_window():
                     if not exists:
                         list_animation_miss.append(miss_cell_animation)
         #----------------------------------------------------------------
+        # отрисовываем анимации зачерканных клеточек на своем поле, если враг промазал
+        for animation_miss in list_animation_miss:
+            animation_miss.animation(main_screen=module_screen.main_screen, count_image=29)
        
         #----------------------------------------------------------------
         # отрисовка зачеркнутых клеточек когда игрок промазал по полю
@@ -828,6 +832,7 @@ def fight_window():
                                                 )
                                                 active_product_shine.x_cor = -100
                                                 active_product_shine.y_cor = -100
+                                        
                 x_mouse, y_mouse = pygame.mouse.get_pos()                                           
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
