@@ -232,8 +232,8 @@ def fight_window():
                 class_medal.enemy_collector_medal = True
 
         if len(server_module.enemy_data) > 0:
-            check_matrix = server_module.enemy_data[0].split(' ')
-            if check_matrix[0] == "enemy_matrix":
+            check_data = server_module.enemy_data[0].split(' ')
+            if check_data[0] == "enemy_matrix":
                 check_list = server_module.enemy_data[0].split(' ')
                 print(check_list)
                 row = 0
@@ -246,6 +246,23 @@ def fight_window():
                     if column == 10:
                         row += 1
                         column = 0
+            elif check_data[0] == "rocket_shot":
+                if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4]:
+                    list_grid[int(check_data[1])][int(check_data[2])] = 7
+                    server_module.check_time[0] = 0
+                    if server_module.list_player_role[0] == "server_player":
+                        server_module.turn[0] = "client_turn"
+                    else:
+                        server_module.turn[0] = "server_turn"
+                else:
+                    list_grid[int(check_data[1])][int(check_data[2])] = 5
+                    server_module.check_time[0] = 0
+                    if server_module.list_player_role[0] == "server_player":
+                        server_module.turn[0] = "server_turn"
+                    else:
+                        server_module.turn[0] = "client_turn"
+
+
 
         if check_two_times.count(3) == 2:
             server_module.check_time[0] += 1
