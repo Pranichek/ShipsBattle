@@ -240,13 +240,12 @@ def fight_window():
                 column = 0
                 for str_number in check_list[1:-1]:
                     print(78)
+                    print(row, column)
                     enemy_matrix[row][column] = int(str_number)
-                    row += 1 
                     column += 1
-                    if column == 9:
+                    if column == 10:
                         row += 1
                         column = 0
-        print(enemy_matrix)
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
         # try:

@@ -28,19 +28,18 @@ def waiting_window():
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
 
-        try:
-            if status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] == "fight":
-                check_connection_users[0] = "fight"
-                apply_fade_effect(screen = main_screen)
-                print(311131113111311131131)
-                change_scene(fight_window())
-                run_game = False
-                check_press_button[0] = None
-                print(311)
-        except:
-            pass
+   
+        if status_ready_to_game == "fight" and check_connection_users[1] == "fight":
+            check_connection_users[0] = "fight"
+            apply_fade_effect(screen = main_screen)
+            print(311131113111311131131)
+            change_scene(fight_window())
+            run_game = False
+            check_press_button[0] = None
+            break
+
             
-        if check_connection_users[0] == "connect" and status_ready_to_game == "places ships":
+        if check_connection_users[0] != False and status_ready_to_game == "places ships":
             apply_fade_effect(screen = module_screen.main_screen)
             print(1111111111111111111111)
             change_scene(ships_position_window())

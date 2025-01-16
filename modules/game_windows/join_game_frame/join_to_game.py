@@ -1,5 +1,6 @@
 import pygame
 import modules.screens.screen as module_screen
+import modules.server as server_module
 from ..create_game_frame import room_data, ip_room_text, port_room_text
 from ...server import SERVER
 from ...client import check_connection_users
@@ -115,16 +116,17 @@ def join_game_window():
             if fail_connect.visible == False:
                 list_check_connection[0] = True
     
-        if check_connection_users[0] == "wait":
+        if server_module.list_player_role[0] == "server_player":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.waiting_window())
             check_press_button[0] = None
             run_game = False
-        elif check_connection_users[0] == "connect":
+        elif server_module.list_player_role[0] == "client_player":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window())
             check_press_button[0] = None
             run_game = False
+
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

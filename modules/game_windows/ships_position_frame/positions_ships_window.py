@@ -1,5 +1,6 @@
 import pygame
 import modules.screens as module_screen
+from ...client import check_connection_users
 from ..fight_frame import fight_window
 import modules.game_windows as game_windows
 import modules.server as server_module
@@ -42,25 +43,22 @@ def ships_position_window():
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
 
-        try:
-            if status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] == "fight":
-                server_module.list_check_ready_to_fight[0] = "fight"
-                apply_fade_effect(screen = main_screen)
-                print(8888888888888888)
-                change_scene(game_windows.fight_window())
-                run_game = False
-                check_press_button[0] = None
-                break
-            elif status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] != "fight":
-                server_module.list_check_ready_to_fight[0] = "wait"
-                apply_fade_effect(screen = main_screen)
-                print(9999999999999)
-                change_scene(game_windows.waiting_window())
-                run_game = False
-                check_press_button[0] = None
-                break
-        except:
-            pass
+   
+        if status_ready_to_game == "fight" and check_connection_users[1] == "fight":
+            server_module.list_check_ready_to_fight[0] = "fight"
+            apply_fade_effect(screen = main_screen)
+            change_scene(fight_window())
+            run_game = False
+            check_press_button[0] = None
+            break
+        elif status_ready_to_game == "fight" and check_connection_users[1] != "fight":
+            server_module.list_check_ready_to_fight[0] = "wait"
+            apply_fade_effect(screen = main_screen)
+            change_scene(game_windows.waiting_window())
+            run_game = False
+            check_press_button[0] = None
+            break
+     
 
         
         ships_position_bg.draw_image(screen = main_screen)

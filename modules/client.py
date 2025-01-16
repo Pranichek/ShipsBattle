@@ -21,8 +21,9 @@ data_player_shot = []
 
 def send_matrix():
     list_check_need_send[0] = True
+    data_player_shot.clear()  # Очищаем данные перед добавлением новых
     data_player_shot.append("enemy_matrix")
-    for row in list_grid:
+    for row in list_grid:  # Предполагается, что list_grid соответствует enemy_matrix
         for cell in row:
             data_player_shot.append(str(cell))
 
@@ -58,10 +59,9 @@ def start_client():
         # Получение сообщения от сервера (роль клиента)
         role = client_socket.recv(1024).decode("utf-8")
         server_module.list_player_role[0] = role
-        check_connection_users[0] = "wait"
+        # Бесконечный цикл для отправки и получения данных
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
-        # Бесконечный цикл для отправки и получения данных
         while status_ready_to_game != "fight" or check_connection_users[1] != 'fight':
             data_ready = read_json(name_file = "status_connect_game.json")
             status_ready_to_game = data_ready["status"] 
@@ -74,10 +74,9 @@ def start_client():
                     client_socket.sendall(status_ready_to_game.encode("utf-8"))
 
                     data_enemy = client_socket.recv(1024).decode("utf-8")
+                    check_connection_users[0] = status_ready_to_game
                     check_connection_users[1] = data_enemy
-                    check_connection_users[0] = "connect"
-                    check_connection_users[1] = server_module.enemy_data[0]["check_connection_users"]
-                    print(server_module.enemy_data[0])  
+                    
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
@@ -91,14 +90,14 @@ def start_client():
                     str_line = ""
                     for cell in data_player_shot:
                         str_line += str(cell) + " " # Переводимо список в строчку с пробелами
-                    client_socket.sendall(str_line.encode("utf-8"))  # Відправка даних як список
+                    client_socket.sendall(str_line.encode("utf-8") + b"END")  # Відправка даних як список
                     data_player_shot.clear()  # Очищаем список перед новым входом
                     list_check_need_send[0] = False
                 else:
-                    client_socket.sendall("keep-alive".encode("utf-8"))
+                    client_socket.sendall("keep-alive".encode("utf-8") + b"END")
 
         
-                enemy_data = client_socket.recv(1024)
+                enemy_data = recv_all(client_socket)
                 server_module.enemy_data[0] = enemy_data.decode("utf-8")
                 print(server_module.enemy_data, "enemy_data") 
 
