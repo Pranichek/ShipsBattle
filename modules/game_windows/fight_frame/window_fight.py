@@ -230,6 +230,21 @@ def fight_window():
             elif server_module.save_medals_coordinates[medal] == 12:
                 class_medal.enemy_collector_medal = True
 
+        if len(server_module.enemy_data) > 0:
+            print(34)
+            check_list = server_module.enemy_data[0].split(' ')
+            if check_list[0] == "enemy_matrix":
+                print(check_list)
+                row = 0
+                column = 0
+                for njd in check_list[1:-1]:
+                    print(78)
+                    enemy_matrix[row][column] = int(njd)
+                    row += 1 
+                    column += 1
+                    if column == 9:
+                        row += 1
+                        column = 0
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
         # try:

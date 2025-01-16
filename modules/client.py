@@ -37,11 +37,10 @@ def recv_all(sock):
     data = b""
     while True:
         part = sock.recv(1024)
-        if not part:
+        if not part or b"END" in part:  # Условие завершения передачи
+            data += part.split(b"END")[0]
             break
         data += part
-    if not data:
-        raise Exception("Нет данных от сервера")
     return data
 
 def start_client():
@@ -94,14 +93,19 @@ def start_client():
                 time.sleep(0.5)
                 # Перевірка значення в списку перед відправкою даних
                 if list_check_need_send[0] == True:  # Перевірка на `True`
-                    client_socket.sendall(data_player_shot.encode("utf-8"))  # Відправка даних як список
+                    str_line = ""
+                    for cell in data_player_shot:
+                        str_line += str(cell) + " " # Переводимо список в строчку с пробелами
+                    client_socket.sendall(str_line.encode("utf-8"))  # Відправка даних як список
                     data_player_shot.clear()  # Очищаем список перед новым входом
                     list_check_need_send[0] = False
+                else:
+                    client_socket.sendall("keep-alive".encode("utf-8"))
 
                 server_module.enemy_data.clear()
-                server_module.enemy_data[0] = [""]
-                server_module.enemy_data[0] = client_socket.recv(1024).decode("utf-8") 
-                print(server_module.enemy_data[0]) 
+                enemy_data = client_socket.recv(1024)
+                server_module.enemy_data.append(enemy_data.decode("utf-8"))
+                print(server_module.enemy_data, "enemy_data") 
 
             except Exception as e:
                 print("Ошибка клиента:", e)
