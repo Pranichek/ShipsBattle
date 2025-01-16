@@ -17,6 +17,9 @@ list_check_connection = [False]
 check_connection_users = [False, False]
 # список в котором храним данные которые отправляем другому игроку
 data_player_shot = []
+# список для того чтобы время было ровно по секундам
+check_two_times = []
+
 
 
 def send_matrix():
@@ -85,6 +88,7 @@ def start_client():
             try:
                 print(2)
                 time.sleep(0.5)
+                check_two_times.append(3)
                 # Перевірка значення в списку перед відправкою даних
                 if list_check_need_send[0] == True:  # Перевірка на `True`
                     str_line = ""

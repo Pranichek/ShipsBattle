@@ -36,7 +36,6 @@ def ships_position_window():
     
     #generate grid with class
     grid_player.generate_grid()
-    print("Position window")
     while run_game:
         
         module_screen.FPS.tick(60)

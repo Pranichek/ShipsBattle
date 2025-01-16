@@ -20,7 +20,7 @@ from ...classes.class_ship import list_ships
 from ..button_pressed import check_press_button
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack
 from ..change_window import change_scene, list_current_scene
-from ...client import list_check_need_send
+from ...client import list_check_need_send, check_two_times
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 
@@ -246,6 +246,24 @@ def fight_window():
                     if column == 10:
                         row += 1
                         column = 0
+
+        if check_two_times.count(3) == 2:
+            server_module.check_time[0] += 1
+            check_two_times.clear()
+
+        if server_module.check_time[0] >= 30:
+            server_module.check_time[0] = 0
+            if server_module.list_player_role[0] == "server_player":
+                if server_module.turn[0] == "server_turn":
+                    server_module.turn[0] = "client_turn"
+                else:
+                    server_module.turn[0] = "server_turn"
+            if server_module.list_player_role[0] == "client_player":
+                if server_module.turn[0] == "client_turn":
+                    server_module.turn[0] = "server_turn"
+                else:
+                    server_module.turn[0] = "client_turn"
+           
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
         # try:
@@ -286,13 +304,13 @@ def fight_window():
         #             if server_module.list_player_role[0] == "server_player":
         #                 # список для хранения кто выиграл
         #                 server_module.list_check_win[0] = "win_client"
-        #             elif server_module.list_player_role[0] == "player_client":
+        #             elif server_module.list_player_role[0] == "client_player":
         #                 server_module.list_check_win[0] = "win_server"
         #         elif count_enemy_ships == 0 and count_player_ships > 0:
         #             if server_module.list_player_role[0] == "server_player":
         #                 # список для хранения кто выиграл
         #                 server_module.list_check_win[0] = "win_server"
-        #             elif server_module.list_player_role[0] == "player_client":
+        #             elif server_module.list_player_role[0] == "client_player":
         #                 server_module.list_check_win[0] = "win_client"
 
         #     server_module.enemy_ships[0] = server_module.enemy_data[0]["player_ships"]
@@ -388,7 +406,7 @@ def fight_window():
             enemy_face.image_name = "not_active_enemy.png"
             player_face.load_image()
             enemy_face.load_image()
-        elif server_module.list_player_role[0] == "player_client" and server_module.turn[0] == "client_turn":
+        elif server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "client_turn":
             player_face.image_name = "active_player.png"
             enemy_face.image_name = "not_active_enemy.png"
             player_face.load_image()
@@ -792,7 +810,7 @@ def fight_window():
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
                         # нижче умови для атаки 
                         # # перевіряємо за яку роль грає гравець
-                        # if server_module.list_player_role[0] == "player_client":
+                        # if server_module.list_player_role[0] == "client_player":
                         #     if server_module.turn[0] == "client_turn":
                         #         # перевіряємо щоб гравець натискав на сітку ворога
                         #         if x_mouse >= 67 and x_mouse <= 67 + 550:

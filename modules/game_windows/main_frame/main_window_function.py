@@ -38,7 +38,6 @@ def main_window():
     once_play_music[0] += 1
 
     while run_game:
-        print("Main window")
         module_screen.FPS.tick(60)
         mouse_x , mouse_y = pygame.mouse.get_pos()
         main_bg.draw_image(screen= main_screen)
