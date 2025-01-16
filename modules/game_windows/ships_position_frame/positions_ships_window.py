@@ -1,5 +1,6 @@
 import pygame
 import modules.screens as module_screen
+from ..fight_frame import fight_window
 import modules.game_windows as game_windows
 import modules.server as server_module
 from ...classes.animation import animation_connection_problem
@@ -10,7 +11,7 @@ from ...classes.class_ship import list_ships
 from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
 from ...game_tools import apply_fade_effect
-from ..change_window import change_scene
+from ..change_window import change_scene, list_current_scene
 from ..button_pressed import check_press_button
 from .check_placing_ships import connect_to_fight
 from .random_placing import random_places_ships
@@ -37,6 +38,7 @@ def ships_position_window():
 
     while run_game:
         module_screen.FPS.tick(60)
+        print(list_current_scene[0])
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
 
@@ -44,20 +46,21 @@ def ships_position_window():
             if status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] == "fight":
                 server_module.list_check_ready_to_fight[0] = "fight"
                 apply_fade_effect(screen = main_screen)
-                run_game = False
-                change_scene(None)
+                print(8888888888888888)
                 change_scene(game_windows.fight_window())
+                run_game = False
                 check_press_button[0] = None
-                print(311)
+                break
             elif status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] != "fight":
                 server_module.list_check_ready_to_fight[0] = "wait"
                 apply_fade_effect(screen = main_screen)
+                print(9999999999999)
+                change_scene(game_windows.waiting_window())
                 run_game = False
-                change_scene(None)
-                change_scene(scene = game_windows.waiting_window())
                 check_press_button[0] = None
+                break
         except:
-            None
+            pass
 
         
         ships_position_bg.draw_image(screen = main_screen)

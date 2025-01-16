@@ -19,7 +19,7 @@ from ...classes.animation import Animation, rocket_animation, miss_rocket_animat
 from ...classes.class_ship import list_ships
 from ..button_pressed import check_press_button
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack
-from ..change_window import change_scene
+from ..change_window import change_scene, list_current_scene
 from ...client import list_check_need_send
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
@@ -151,6 +151,7 @@ new_killed_ships = [0]
 check_bomb = [False]
 # функція для бою між гравцями
 def fight_window():
+    print("DAAAAAAAA")
     # зупиняємо музику яка грала перед боєм
     music_load_waiting.stop()
     # вмикаємо музику для бою
@@ -231,20 +232,21 @@ def fight_window():
                 class_medal.enemy_collector_medal = True
 
         if len(server_module.enemy_data) > 0:
-            print(34)
-            check_list = server_module.enemy_data[0].split(' ')
-            if check_list[0] == "enemy_matrix":
+            check_matrix = server_module.enemy_data[0].split(' ')
+            if check_matrix[0] == "enemy_matrix":
+                check_list = server_module.enemy_data[0].split(' ')
                 print(check_list)
                 row = 0
                 column = 0
-                for njd in check_list[1:-1]:
+                for str_number in check_list[1:-1]:
                     print(78)
-                    enemy_matrix[row][column] = int(njd)
+                    enemy_matrix[row][column] = int(str_number)
                     row += 1 
                     column += 1
                     if column == 9:
                         row += 1
                         column = 0
+        print(enemy_matrix)
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
         # try:
@@ -702,6 +704,7 @@ def fight_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
+                print(8888)
                 change_scene(None)
             # перевіряємо чи натиснули на кнопку показу магазину 
             if list_check_shop[0] == True:
@@ -1018,15 +1021,15 @@ def fight_window():
 
           
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
-        if achievement.strategist_achievement.ACTIVE == False:
-            if server_module.list_check_win[0] != None:   
-                # якщо вже їтось виграв , то робимо ефект затемнення
-                apply_fade_effect(screen = module_screen.main_screen)
-                # зупиняємо цикл гри
-                run_game = False
-                # змінюємо фрейм бою , на фрейм показу результатів
-                change_scene(scene =game_windows.finish_window())
-                check_press_button[0] = None
+        # if achievement.strategist_achievement.ACTIVE == False:
+        #     if server_module.list_check_win[0] != None:   
+        #         # якщо вже їтось виграв , то робимо ефект затемнення
+        #         apply_fade_effect(screen = module_screen.main_screen)
+        #         # зупиняємо цикл гри
+        #         run_game = False
+        #         # змінюємо фрейм бою , на фрейм показу результатів
+        #         change_scene(scene =game_windows.finish_window())
+        #         check_press_button[0] = None
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1

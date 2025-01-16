@@ -1,11 +1,12 @@
 import pygame
-import modules.game_windows as game_windows
+from ..fight_frame import fight_window
+from ..ships_position_frame import ships_position_window
 import modules.screens.screen as module_screen
 import modules.server as server_module
 from ...screens import main_screen
 from ...classes.class_music import music_load_main, music_load_waiting
 from ...classes.class_image import DrawImage
-from ..change_window import change_scene
+from ..change_window import change_scene, list_current_scene
 from ..button_pressed import button_action, check_press_button
 from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
@@ -30,18 +31,18 @@ def waiting_window():
             if status_ready_to_game == "fight" and server_module.enemy_data[0]['check_connection_users'] == "fight":
                 check_connection_users[0] = "fight"
                 apply_fade_effect(screen = main_screen)
+                print(311131113111311131131)
+                change_scene(fight_window())
                 run_game = False
-                change_scene(None)
-                change_scene(game_windows.fight_window())
                 check_press_button[0] = None
                 print(311)
         except:
-            None
             pass
             
         if check_connection_users[0] == "connect" and status_ready_to_game == "places ships":
             apply_fade_effect(screen = module_screen.main_screen)
-            change_scene(game_windows.ships_position_window())
+            print(1111111111111111111111)
+            change_scene(ships_position_window())
             check_press_button[0] = None
             run_game = False
                 

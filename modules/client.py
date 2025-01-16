@@ -102,9 +102,9 @@ def start_client():
                 else:
                     client_socket.sendall("keep-alive".encode("utf-8"))
 
-                server_module.enemy_data.clear()
+        
                 enemy_data = client_socket.recv(1024)
-                server_module.enemy_data.append(enemy_data.decode("utf-8"))
+                server_module.enemy_data[0] = enemy_data.decode("utf-8")
                 print(server_module.enemy_data, "enemy_data") 
 
             except Exception as e:
