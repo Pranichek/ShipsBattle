@@ -39,14 +39,14 @@ def main_window():
 
     while run_game:
         module_screen.FPS.tick(60)
-        print(module_screen.FPS.get_fps())
         mouse_x , mouse_y = pygame.mouse.get_pos()
         main_bg.draw_image(screen= main_screen)
 
         cold_image.draw_image(screen= main_screen)  
         create_game_frame.draw(surface= main_screen)
         second_cold_image.draw_image(screen= main_screen)
-        join_game_frame.draw(surface= main_screen)        
+        join_game_frame.draw(surface= main_screen)  
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -55,7 +55,6 @@ def main_window():
                 create_game_frame.check_click(event = event)
                 join_game_frame.check_click(event = event)
 
-                
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
                 check_press_button[0] = None 

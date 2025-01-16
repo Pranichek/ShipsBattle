@@ -3,10 +3,11 @@ from ....screens import list_grid, list_object_map
 from ....classes.animation import animation_health
 from ....game_tools import check_number_cell
 import modules.shop as shop
+from ....screens import enemy_matrix
 
 def restore_part_of_ship(row:int, col: int, str_col: str, health_anim: list):
      # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
-    if server_module.enemy_matrix[0] != "yes":
+    if enemy_matrix != "yes":
         cltx = (row * 10) + int(str_col[-1])
 
         x_anim = list_object_map[cltx].x

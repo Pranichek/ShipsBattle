@@ -3,7 +3,7 @@ import modules.server as server_module
 import modules.client as client_module
 import modules.achievement as achievement
 from ....classes.class_ship import list_ships
-from ....server import enemy_matrix
+from ....screens import enemy_matrix
 
 
 def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list, count_5: int):
@@ -25,132 +25,132 @@ right_wall для правой стенки 3 на 3
             for index_col in range(0, 3):
                 current_row = row + row_offset
                 current_col = col - 1 + index_col
-                if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][current_col])
-                    enemy_matrix[0][current_row][current_col] = 7
+                if enemy_matrix[current_row][current_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][current_col])
+                    enemy_matrix[current_row][current_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 5:
+                elif enemy_matrix[current_row][current_col] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
+                elif enemy_matrix[current_row][current_col] == 0 or enemy_matrix[current_row][current_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][current_col] = 5
+                    enemy_matrix[current_row][current_col] = 5
                     
     if index == "top_left_corner":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
                 current_row = row + row_offset
-                if enemy_matrix[0][current_row][col + index_col] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][col + index_col])
-                    enemy_matrix[0][current_row][col  + index_col] = 7
+                if enemy_matrix[current_row][col + index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][col + index_col])
+                    enemy_matrix[current_row][col  + index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col] == 5:
+                elif enemy_matrix[current_row][col + index_col] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col] == 0 or enemy_matrix[0][current_row][col + index_col] == 5:
+                elif enemy_matrix[current_row][col + index_col] == 0 or enemy_matrix[current_row][col + index_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][col + index_col] = 5
+                    enemy_matrix[current_row][col + index_col] = 5
 
     if index == "bot_left_corner":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
                 current_row = row - row_offset
                 current_col = col + index_col
-                if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][current_col])
-                    enemy_matrix[0][current_row][current_col] = 7
+                if enemy_matrix[current_row][current_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][current_col])
+                    enemy_matrix[current_row][current_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 5:
+                elif enemy_matrix[current_row][current_col] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
+                elif enemy_matrix[current_row][current_col] == 0 or enemy_matrix[current_row][current_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][current_col] = 5
+                    enemy_matrix[current_row][current_col] = 5
     
     if index == "left_wall":
         for row_offset in range(-1, 2):
             for index_col in range(0, 3):
                 current_row = row + row_offset
                 current_col = col + index_col
-                if enemy_matrix[0][current_row][current_col] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][current_col])
-                    enemy_matrix[0][current_row][current_col] = 7
+                if enemy_matrix[current_row][current_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][current_col])
+                    enemy_matrix[current_row][current_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 5:
+                elif enemy_matrix[current_row][current_col] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][current_col] == 0 or enemy_matrix[0][current_row][current_col] == 5:
+                elif enemy_matrix[current_row][current_col] == 0 or enemy_matrix[current_row][current_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][current_col] = 5
+                    enemy_matrix[current_row][current_col] = 5
     
     if index == "top_right_corner":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
                 current_row = row + row_offset
 
-                if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][col - index_col])
-                    enemy_matrix[0][current_row][col  - index_col] = 7
+                if enemy_matrix[current_row][col - index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][col - index_col])
+                    enemy_matrix[current_row][col  - index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 5:
+                elif enemy_matrix[current_row][col - index_col] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
+                elif enemy_matrix[current_row][col - index_col] == 0 or enemy_matrix[current_row][col - index_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][col - index_col] = 5
+                    enemy_matrix[current_row][col - index_col] = 5
 
     if index == "bot_right_corner":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
                 current_row = row - row_offset
 
-                if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][col - index_col])
-                    enemy_matrix[0][current_row][col  - index_col] = 7
+                if enemy_matrix[current_row][col - index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][col - index_col])
+                    enemy_matrix[current_row][col  - index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 5:
+                elif enemy_matrix[current_row][col - index_col] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
+                elif enemy_matrix[current_row][col - index_col] == 0 or enemy_matrix[current_row][col - index_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][col - index_col] = 5                
+                    enemy_matrix[current_row][col - index_col] = 5                
 
     if index == "bot_wall":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
                 current_row = row - row_offset
-                if enemy_matrix[0][current_row][col + index_col - 1] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][col + index_col - 1])
-                    enemy_matrix[0][current_row][col + index_col - 1] = 7
+                if enemy_matrix[current_row][col + index_col - 1] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][col + index_col - 1])
+                    enemy_matrix[current_row][col + index_col - 1] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col - 1] == 5:
+                elif enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col - 1] == 0 or enemy_matrix[0][current_row][col + index_col - 1] == 5:
+                elif enemy_matrix[current_row][col + index_col - 1] == 0 or enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][col + index_col - 1] = 5
+                    enemy_matrix[current_row][col + index_col - 1] = 5
 
     if index == "top_wall":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
                 current_row = row + row_offset
-                if enemy_matrix[0][current_row][col + index_col - 1] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][col + index_col - 1])
-                    enemy_matrix[0][current_row][col + index_col - 1] = 7
+                if enemy_matrix[current_row][col + index_col - 1] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][col + index_col - 1])
+                    enemy_matrix[current_row][col + index_col - 1] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col - 1] == 5:
+                elif enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][col + index_col - 1] == 0 or enemy_matrix[0][current_row][col + index_col - 1] == 5:
+                elif enemy_matrix[current_row][col + index_col - 1] == 0 or enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][col + index_col - 1] = 5
+                    enemy_matrix[current_row][col + index_col - 1] = 5
     
     if index == "right_wall":
         for row_offset in range(-1, 2):
             for index_col in range(0, 3):
                 current_row = row + row_offset
 
-                if enemy_matrix[0][current_row][col - index_col] in [1, 2, 3, 4]:
-                    count_ships.append(enemy_matrix[0][current_row][col - index_col])
-                    enemy_matrix[0][current_row][col - index_col] = 7
+                if enemy_matrix[current_row][col - index_col] in [1, 2, 3, 4]:
+                    count_ships.append(enemy_matrix[current_row][col - index_col])
+                    enemy_matrix[current_row][col - index_col] = 7
                     count_7[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 5:
+                elif enemy_matrix[current_row][col - index_col] == 5:
                     count_5[0] += 1
-                elif enemy_matrix[0][current_row][col - index_col] == 0 or enemy_matrix[0][current_row][col - index_col] == 5:
+                elif enemy_matrix[current_row][col - index_col] == 0 or enemy_matrix[current_row][col - index_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[0][current_row][col - index_col] = 5
+                    enemy_matrix[current_row][col - index_col] = 5
 
   
 
@@ -160,7 +160,7 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
     """
     Ця функція для удару бомбою
     """
-    if server_module.enemy_matrix[0] != "yes":
+    if server_module.enemy_matrix != "yes":
         if row == 0 and col == 0:
             upgrade_attack(index = "top_left_corner", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
         elif 0 < row < 9 and 0 < col < 9:

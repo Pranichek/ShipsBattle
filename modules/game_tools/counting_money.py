@@ -4,6 +4,7 @@ from ..classes import Font
 from ..server import enemy_balance
 
 
+
 player_balance_in_jar = Font(
     x_cor = 1219 ,
     y_cor = 45 ,

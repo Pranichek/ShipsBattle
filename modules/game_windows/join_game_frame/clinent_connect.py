@@ -1,7 +1,7 @@
 from ...classes.class_input_text import input_ip_adress , input_port, input_nick, input_password
 from ...classes.class_image import DrawImage
 from ...classes.class_click import music_click
-from ...client import thread_connect , list_check_connection, list_users
+from ...client import connect_to_game , list_check_connection, list_users
 
 
 
@@ -111,6 +111,6 @@ def connect_to_server():
             return False
         # якщо усі перевірки пройдені і користувач вперше натиснув на цю кнопку то запускаємо підключення до серверу
         # if event_connect_to_server.is_set():
-        thread_connect.start()
+        connect_to_game.start()
         # якщо усі перевікри пройдені але це не перший запуск, наприклад перший раз увів айди сервера якого ще немає, а тепер такий сервер є 
         # то передаємо у  event_connect_to_server значення True за допомогою .set()

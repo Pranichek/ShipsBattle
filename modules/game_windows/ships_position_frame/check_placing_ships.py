@@ -1,5 +1,6 @@
 from ...screens import list_grid
 from ...json_functions import write_json
+import modules.server as server_module
 
 def connect_to_fight():
     count_zero = 0
@@ -7,15 +8,15 @@ def connect_to_fight():
         for cell in row:
             if cell == 0:
                 count_zero += 1
-
+    enemy_zero = 0
+    print(count_zero, enemy_zero)
     if count_zero == 80:
-        print("You can connect to the game")
         dict_game_status = {
-                "status": "You can connect to the game"
+                "status": "fight"
             }
-    else:
-        print("You can't connect to the game")
+        write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
+    elif count_zero >= 81:
         dict_game_status = {
-                "status": "You can't connect to the game"
+                "status": "position ships"
             }
-    write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
+        write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)

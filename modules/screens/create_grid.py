@@ -93,9 +93,6 @@ class Grid:
   
         return self.X_SCREEN + grid_x * 55, self.Y_SCREEN + grid_y * 55
     
-    """""
-    ****************************************************************************************
-    """""
     def cell_number_to_coordinates(self, cell_number):
         # Преобразуем номер клетки в экранные координаты
         # cell_number - это номер клетки, который начинается с 1 (например, 1, 2, 3,...)
@@ -112,10 +109,7 @@ class Grid:
         cell_number = grid_y * 10 + grid_x + 1  # Преобразуем в номер клетки
         return cell_number
     
-    """""
-    ****************************************************************************************
-    """""
-    
+
     
 grid_player = Grid(x_screen = 81 , y_screen = 76)
 enemy_grid = Grid(x_screen = 67 , y_screen = 257)

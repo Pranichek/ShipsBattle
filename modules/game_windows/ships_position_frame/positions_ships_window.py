@@ -1,5 +1,7 @@
 import pygame
 import modules.screens as module_screen
+from ...client import check_connection_users
+from ..fight_frame import fight_window
 import modules.game_windows as game_windows
 import modules.server as server_module
 from ...classes.animation import animation_connection_problem
@@ -10,10 +12,11 @@ from ...classes.class_ship import list_ships
 from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
 from ...game_tools import apply_fade_effect
-from ..change_window import change_scene
+from ..change_window import change_scene, list_current_scene
 from ..button_pressed import check_press_button
 from .check_placing_ships import connect_to_fight
 from .random_placing import random_places_ships
+from ...json_functions import read_json
 
 #images 
 ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 ,folder_name= "backgrounds" , image_name= "position_ships_bg.png")
@@ -33,40 +36,29 @@ def ships_position_window():
     
     #generate grid with class
     grid_player.generate_grid()
-
     while run_game:
+        
         module_screen.FPS.tick(60)
-        # if server_module.list_check_ready_to_fight[0] == "fight":
-            # apply_fade_effect(screen = main_screen)
-            # run_game = False
-            # change_scene(None)
-            # change_scene(game_windows.fight_window())
-            # check_press_button[0] = None
-            
-        # elif list_check_ready_to_fight[0] == "wait":
-        #     apply_fade_effect(screen = main_screen)
-        #     run_game = False
-        #     change_scene(None)
-        #     change_scene(scene = game_windows.waiting_window())
-        #     check_press_button[0] = None
+        data_ready = read_json(name_file = "status_connect_game.json")
+        status_ready_to_game = data_ready["status"] 
 
-        if server_module.responce[0] == server_module.data_enemy[0] and server_module.responce[0] != "places ships":
+   
+        if status_ready_to_game == "fight" and check_connection_users[1] == "fight":
             server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)
+            change_scene(fight_window())
             run_game = False
-            change_scene(None)
-            change_scene(game_windows.fight_window())
             check_press_button[0] = None
-            
-        elif server_module.responce[0] == "You can connect to the game":
+            break
+        elif status_ready_to_game == "fight" and check_connection_users[1] != "fight":
             server_module.list_check_ready_to_fight[0] = "wait"
             apply_fade_effect(screen = main_screen)
+            change_scene(game_windows.waiting_window())
             run_game = False
-            change_scene(None)
-            change_scene(scene = game_windows.waiting_window())
             check_press_button[0] = None
+            break
+     
 
-            
         
         ships_position_bg.draw_image(screen = main_screen)
         # прямокутник де стоять коряблі перед початком бою

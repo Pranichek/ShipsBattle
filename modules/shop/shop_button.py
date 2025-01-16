@@ -185,5 +185,9 @@ button_auto_attack = Button_Shop(
     action = buy_auto_rocket
 )
 
+
+
+
+
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
 shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire])

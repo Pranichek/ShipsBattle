@@ -1,6 +1,6 @@
-from ..screens import list_object_map_enemy 
+from ..screens import list_object_map_enemy, enemy_matrix
 from ..classes import Animation
-from ..server import enemy_died_ships , enemy_ships, enemy_matrix
+from ..server import enemy_died_ships , enemy_ships
 import modules.server as server_module
 
 # список в котором храним флаг выполнил ли игрок ачивку с названием target_attack
@@ -27,9 +27,9 @@ count_len_enemy = [1]
 count_five_around = [0]
 def kill_enemy_ships():
     if len(enemy_ships[0]) > 0:
-        for rowee in range(len(enemy_matrix[0])):
-            for cellee in range(len(enemy_matrix[0][rowee])):
-                if enemy_matrix[0][rowee][cellee] == 7:
+        for rowee in range(len(enemy_matrix)):
+            for cellee in range(len(enemy_matrix[rowee])):
+                if enemy_matrix[rowee][cellee] == 7:
                     if check_target_attack[0] == "None" and  check_kill_enemy[0] == True:
                         check_target_attack[0] = True
         
@@ -64,9 +64,9 @@ def kill_enemy_ships():
 
                         elif list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] != True:
                             for len_ship in range(1 , count_len_enemy[0]):
-                                if enemy_matrix[0][rowee][cellee + len_ship] == 7:
+                                if enemy_matrix[rowee][cellee + len_ship] == 7:
                                     pass
-                                elif enemy_matrix[0][rowee][cellee + len_ship]!= 7:
+                                elif enemy_matrix[rowee][cellee + len_ship]!= 7:
                                     break
                                 if len_ship == count_len_enemy[0] - 1:
                                     print("убили корабль" , count_len_enemy[0])
@@ -78,9 +78,9 @@ def kill_enemy_ships():
                                     
                         elif list_direction_enemy[0] == "vertical" and check_kill_enemy[0] != True:
                             for len_ship in range(1 , count_len_enemy[0]):
-                                if enemy_matrix[0][rowee + len_ship][cellee] == 7:
+                                if enemy_matrix[rowee + len_ship][cellee] == 7:
                                     pass
-                                elif enemy_matrix[0][rowee + len_ship][cellee]!= 7:
+                                elif enemy_matrix[rowee + len_ship][cellee]!= 7:
                                     break
                                 if len_ship == count_len_enemy[0] - 1:
                                     print("убили корабль" , count_len_enemy[0])
@@ -101,12 +101,12 @@ def kill_enemy_ships():
                                 if rowka <= 9 and cellka <= 9:
                                     cltka = (rowka * 10) + cellka
                                     if check_target_attack[0] != True:
-                                        if server_module.enemy_matrix[0][rowka][cellka] == 5:
+                                        if server_module.enemy_matrix[rowka][cellka] == 5:
                                             check_target_attack[0] = False
                                             count_five_around[0] += 1
 
-                                    if server_module.enemy_matrix[0][rowka][cellka] == 0:
-                                        server_module.enemy_matrix[0][rowka][cellka] = 5
+                                    if server_module.enemy_matrix[rowka][cellka] == 0:
+                                        server_module.enemy_matrix[rowka][cellka] = 5
 
                                 
 
@@ -119,12 +119,12 @@ def kill_enemy_ships():
                                 if rowka <= 9 and cellka <= 9:
                                     cltka = (rowka * 10) + cellka
                                     if check_target_attack[0] != True:
-                                        if server_module.enemy_matrix[0][rowka][cellka] == 5:
+                                        if server_module.enemy_matrix[rowka][cellka] == 5:
                                             check_target_attack[0] = False
                                             count_five_around[0] += 1
 
-                                    if server_module.enemy_matrix[0][rowka][cellka] == 0:
-                                        server_module.enemy_matrix[0][rowka][cellka] = 5
+                                    if server_module.enemy_matrix[rowka][cellka] == 0:
+                                        server_module.enemy_matrix[rowka][cellka] = 5
 
                                   
                                             
@@ -139,12 +139,12 @@ def kill_enemy_ships():
                                 if rowka <= 9 and cellka <= 9:
                                     cltka = (rowka * 10) + cellka
                                     if check_target_attack[0] != True:
-                                        if server_module.enemy_matrix[0][rowka][cellka] == 5:
+                                        if server_module.enemy_matrix[rowka][cellka] == 5:
                                             check_target_attack[0] = False
                                             count_five_around[0] += 1
                                     
-                                    if server_module.enemy_matrix[0][rowka][cellka] == 0:
-                                        server_module.enemy_matrix[0][rowka][cellka] = 5
+                                    if server_module.enemy_matrix[rowka][cellka] == 0:
+                                        server_module.enemy_matrix[rowka][cellka] = 5
                 
                                
                     if list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] == True:
@@ -158,12 +158,12 @@ def kill_enemy_ships():
                                     cltka = (rowka * 10) + cellka
 
                                     if check_target_attack[0] != True:
-                                        if server_module.enemy_matrix[0][rowka][cellka] == 5:
+                                        if server_module.enemy_matrix[rowka][cellka] == 5:
                                             check_target_attack[0] = False
                                             count_five_around[0] += 1
 
-                                    if server_module.enemy_matrix[0][rowka][cellka] == 0:
-                                        server_module.enemy_matrix[0][rowka][cellka] = 5
+                                    if server_module.enemy_matrix[rowka][cellka] == 0:
+                                        server_module.enemy_matrix[rowka][cellka] = 5
                                     
                                
                                
@@ -179,12 +179,12 @@ def kill_enemy_ships():
 
 
                                     if check_target_attack[0] != True:
-                                        if server_module.enemy_matrix[0][rowka][cellka] == 5:
+                                        if server_module.enemy_matrix[rowka][cellka] == 5:
                                             check_target_attack[0] = False
                                             count_five_around[0] += 1
 
-                                    if server_module.enemy_matrix[0][rowka][cellka] == 0:
-                                        server_module.enemy_matrix[0][rowka][cellka] = 5
+                                    if server_module.enemy_matrix[rowka][cellka] == 0:
+                                        server_module.enemy_matrix[rowka][cellka] = 5
                                     
                       
                                                
@@ -198,12 +198,12 @@ def kill_enemy_ships():
                                 if rowka <= 9 and cellka <= 9:
                                     cltka = (rowka * 10) + cellka
                                     if check_target_attack[0] != True:
-                                        if server_module.enemy_matrix[0][rowka][cellka] == 5:
+                                        if server_module.enemy_matrix[rowka][cellka] == 5:
                                             check_target_attack[0] = False
                                             count_five_around[0] += 1
                                     
-                                    if server_module.enemy_matrix[0][rowka][cellka] == 0:
-                                        server_module.enemy_matrix[0][rowka][cellka] = 5
+                                    if server_module.enemy_matrix[rowka][cellka] == 0:
+                                        server_module.enemy_matrix[rowka][cellka] = 5
                                     
                                 
                              
