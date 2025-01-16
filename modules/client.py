@@ -20,6 +20,8 @@ data_player_shot = []
 # список для того чтобы время было ровно по секундам
 check_two_times = []
 
+check_can_connect_to_fight = [0]
+
 
 
 def send_matrix():
@@ -67,11 +69,12 @@ def start_client():
         role = client_socket.recv(1024).decode("utf-8")
         server_module.list_player_role[0] = role
         # Бесконечный цикл для отправки и получения данных
-        data_ready = read_json(name_file = "status_connect_game.json")
-        status_ready_to_game = data_ready["status"] 
-        while status_ready_to_game != "fight" or check_connection_users[1] != 'fight':
-            data_ready = read_json(name_file = "status_connect_game.json")
-            status_ready_to_game = data_ready["status"] 
+        while check_can_connect_to_fight[0] <= 2:
+            try:
+                data_ready = read_json(name_file = "status_connect_game.json")
+                status_ready_to_game = data_ready["status"] 
+            except:
+                status_ready_to_game = "position ships"
             try:
                 if status_ready_to_game != "fight" or check_connection_users[1] != 'fight':
                     time.sleep(0.1)
@@ -83,7 +86,8 @@ def start_client():
                     data_enemy = client_socket.recv(1024).decode("utf-8")
                     check_connection_users[0] = status_ready_to_game
                     check_connection_users[1] = data_enemy
-                    
+                    if status_ready_to_game != "fight" or check_connection_users[1] != 'fight':
+                        check_can_connect_to_fight[0] += 1
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
