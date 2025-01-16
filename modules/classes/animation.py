@@ -13,19 +13,16 @@ class Animation():
         self.WIDTH = width
         self.HEIGHT = height  
         self.IMAGE = None
-        self.IS_ANIMATION_DONE = False  # Флаг который будет отслеживать завершение анимации
         self.X_COR = x_cor
         self.Y_COR = y_cor 
         self.NEED_CLEAR = need_clear  # Нужно ли очищать анимацию после ее проигрывания
         self.NAME_FOLDER = name_folder
-
+        self.IS_ANIMATION_DONE = False  # Флаг который будет отслеживать завершение анимации
     def load_images(self):
-        #os.path.abspath(__file__ + f"{self.IMAGE_NAME}")
         path = abspath(join(__file__, f"{self.IMAGE_NAME}"))
         image = pygame.image.load(path)
         transformed_image = pygame.transform.scale(image, (self.WIDTH, self.HEIGHT))
         self.IMAGE = transformed_image
-    
     def animation(self, count_image: int, main_screen: pygame.Surface):
         fps = screen_module.FPS.get_fps()
         if screen_module.FPS.get_fps() <= 0:
@@ -33,13 +30,12 @@ class Animation():
         current_speed = self.ANIMATION_SPEED * ((fps + 10) / 60)
         if len(self.LIST_IMAGES) == 0:
             for number in range(count_image):
-                #'/../../../media/{self.NAME_FOLDER}/{number}.png'
                 self.IMAGE_NAME = abspath(join(__file__, "..", "..", "..", "media", f"{self.NAME_FOLDER}", f"{number}.png"))
                 self.load_images()
                 self.LIST_IMAGES.append(self.IMAGE)
 
         if self.IS_ANIMATION_DONE and self.NEED_CLEAR == True:
-             # Если анимация закончена, ничего не рисуем   
+            # Если анимация закончена, ничего не рисуем   
             return True
 
         self.IMAGE = self.LIST_IMAGES[self.COUNT_IMAGES]
@@ -57,7 +53,6 @@ class Animation():
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.IMAGE, (self.X_COR, self.Y_COR))
-
     def clear_animation(self):
         self.LIST_IMAGES = []
         self.COUNT_IMAGES = 0

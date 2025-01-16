@@ -29,7 +29,11 @@ def send_matrix():
     for row in list_grid:  # Предполагается, что list_grid соответствует enemy_matrix
         for cell in row:
             data_player_shot.append(str(cell))
-
+    for ship in list_ships:
+        data_player_shot.append(str(ship.X_COR))
+        data_player_shot.append(str(ship.Y_COR))
+        data_player_shot.append(str(ship.LENGHT))
+        data_player_shot.append(str(ship.ORIENTATION_SHIP))
 
 dict_status_game = {
     "status" : "places ships"
@@ -83,7 +87,6 @@ def start_client():
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
-        send_matrix()
         while True:
             try:
                 print(2)

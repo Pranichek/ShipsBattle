@@ -51,6 +51,7 @@ def main_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
+                
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click(event = event)
                 join_game_frame.check_click(event = event)

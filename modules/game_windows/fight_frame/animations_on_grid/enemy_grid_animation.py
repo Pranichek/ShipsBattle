@@ -41,6 +41,7 @@ def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocke
                     if not exists:
                         list_cross.append(cross_animation)
                 elif enemy_matrix[row][cell] == 5:
+                    print("YUPIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
                     cltka = (row * 10) + cell
                     x_anim_miss = list_object_map_enemy[cltka].x
                     y_anim_miss = list_object_map_enemy[cltka].y

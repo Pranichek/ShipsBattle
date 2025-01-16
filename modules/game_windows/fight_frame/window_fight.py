@@ -20,7 +20,7 @@ from ...classes.class_ship import list_ships
 from ..button_pressed import check_press_button
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack
 from ..change_window import change_scene, list_current_scene
-from ...client import list_check_need_send, check_two_times
+from ...client import list_check_need_send, check_two_times, send_matrix
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 
@@ -196,9 +196,8 @@ def fight_window():
     enemy_nick.update_text()
     player_points.update_text()
     enemy_points.update_text()
-
+    send_matrix()
     while run_game:
-        print("FIght window")
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
         ship_border()
@@ -242,7 +241,7 @@ def fight_window():
                 print(check_list)
                 row = 0
                 column = 0
-                for str_number in check_list[1:-1]:
+                for str_number in check_list[1:101]:
                     print(78)
                     print(row, column)
                     enemy_matrix[row][column] = int(str_number)
@@ -250,6 +249,10 @@ def fight_window():
                     if column == 10:
                         row += 1
                         column = 0
+                for data_ship in range(101, len(check_list) - 1, 4):
+                    server_module.enemy_ships.append((int(check_list[data_ship]), int(check_list[data_ship + 1]), int(check_list[data_ship + 2]), (check_list[data_ship + 3])))
+                print(server_module.enemy_ships)
+
             elif check_data[0] == "rocket_shot":
                 if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4, 7]:
                     print('----------------------------------------------------------------')
@@ -271,9 +274,9 @@ def fight_window():
                         server_module.turn[0] = "client_turn"
             
         # print(list_grid)
-
-        print(server_module.turn[0], check_two_times, server_module.enemy_data[0])
-
+        # print(server_module.enemy_ships)
+        # print(server_module.turn[0], check_two_times, server_module.enemy_data[0])
+        print(enemy_matrix)
         if server_module.check_time[0] >= 30:
             server_module.check_time[0] = 0
             if server_module.list_player_role[0] == "server_player":
@@ -498,7 +501,6 @@ def fight_window():
         shop_and_tasks.draw(surface = module_screen.main_screen)
 
         
-
         #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
         for row in range(len(list_grid)):
@@ -526,15 +528,16 @@ def fight_window():
                             break
                     if not exists:
                         list_animation_miss.append(miss_cell_animation)
+
         #----------------------------------------------------------------
         # отрисовываем анимации зачерканных клеточек на своем поле, если враг промазал
         for animation_miss in list_animation_miss:
-            animation_miss.animation(main_screen=module_screen.main_screen, count_image=29)
+            animation_miss.animation(main_screen=module_screen.main_screen, count_image = 29)
        
         #----------------------------------------------------------------
-        # отрисовка зачеркнутых клеточек когда игрок промазал по полю
+        # отрисовка зачеркнутых клеточек когда игрок промазал по кораблю
         for anim_miss in our_miss_anim:
-            anim_miss.animation(main_screen=module_screen.main_screen, count_image=29)
+            anim_miss.animation(main_screen=module_screen.main_screen, count_image = 29)
         #----------------------------------------------------------------
         #----------------------------------------------------------------
         #перебор матрицы врага чтобы если что отрисовали не достающие крестики и зачеркнутые клеточки(матрица врага слева)

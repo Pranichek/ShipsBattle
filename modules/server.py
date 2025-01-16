@@ -19,7 +19,7 @@ def recv_all(sock):
 
 enemy_data = [""]
 #где стоят корабли соперника
-enemy_ships = [""]
+enemy_ships = []
 player_ships_coord_len = []
 # для восстановления клеточки
 number_list = [100]
