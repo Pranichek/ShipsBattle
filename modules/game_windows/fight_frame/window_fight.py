@@ -247,6 +247,7 @@ def fight_window():
                         row += 1
                         column = 0
             elif check_data[0] == "rocket_shot":
+                print("----------------------------------------------------------------")
                 if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4]:
                     list_grid[int(check_data[1])][int(check_data[2])] = 7
                     server_module.check_time[0] = 0
@@ -261,6 +262,8 @@ def fight_window():
                         server_module.turn[0] = "server_turn"
                     else:
                         server_module.turn[0] = "client_turn"
+
+        print(list_grid)
 
 
 
