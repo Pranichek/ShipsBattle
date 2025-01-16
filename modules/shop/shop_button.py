@@ -118,9 +118,9 @@ def buy_auto_rocket():
    
 but_flag = [False]
 def buy_restore_cell():
-    if money_list[0] >= 50:
-        if but_flag[0] == False:
-            but_flag[0] = True
+    # if money_list[0] >= 50:
+    #     if but_flag[0] == False:
+    but_flag[0] = True
 
 
 

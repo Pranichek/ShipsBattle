@@ -273,6 +273,9 @@ def fight_window():
                     elif server_module.list_player_role[0] == "client_player":
                         server_module.turn[0] = "client_turn"
             
+            elif check_data[0] == "restore_cell":
+                enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
+            
         # print(list_grid)
         # print(server_module.enemy_ships)
         # print(server_module.turn[0], check_two_times, server_module.enemy_data[0])
