@@ -60,12 +60,12 @@ check_connection = [True]
 
 
 # словарь для зберігання інформаці про гравців
-dict_save_information = {
-    "player_nick": "",
-    "player_points" : 0,
-    "enemy_nick" : "",
-    "enemy_points" : 0,
-}
+# dict_save_information = {
+#     "player_nick": "",
+#     "player_points" : 0,
+#     "enemy_nick" : "",
+#     "enemy_points" : 0,
+# }
 
 # #ліст для перевірки чи зайшов користувач на сервер
 # list_server_status = {

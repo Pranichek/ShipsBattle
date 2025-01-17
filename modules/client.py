@@ -19,9 +19,16 @@ check_connection_users = [False, False]
 data_player_shot = []
 # список для того чтобы время было ровно по секундам
 check_two_times = []
-
+# список для подсчета сколько времени оба игрока расставели корабли, чтобы точно все успели прдклюючиться к бою
 check_can_connect_to_fight = [0]
 
+
+dict_save_information = {
+    "player_nick": "",
+    "player_points" : 0,
+    "enemy_nick" : "",
+    "enemy_points" : 0,
+}
 
 
 def send_matrix():
@@ -75,21 +82,34 @@ def start_client():
                 status_ready_to_game = data_ready["status"] 
             except:
                 status_ready_to_game = "position ships"
+                print("pringles")
             try:
                 time.sleep(0.1)
                 print(1)
                 data_ready = read_json(name_file = "status_connect_game.json")
-                status_ready_to_game = data_ready["status"] 
+                status_ready_to_game = data_ready["status"] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
                 client_socket.sendall(status_ready_to_game.encode("utf-8"))
 
                 data_enemy = client_socket.recv(1024).decode("utf-8")
+                data = data_enemy.split(" ")
+                print(data[0])
                 check_connection_users[0] = status_ready_to_game
-                check_connection_users[1] = data_enemy
-                if status_ready_to_game == "fight" and check_connection_users[1] == 'fight':
+                if status_ready_to_game == "fight" and data[0] == 'fight':
                     check_can_connect_to_fight[0] += 1
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
+        if data[1] not in list_users:
+            list_users[data[1]] = {"points": data[3], "password": data[2]}
+            write_json(filename = "data_base.json" , object_dict = list_users)
+        #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+        elif data[1]  in list_users:
+            list_users[data[1]]["points"] = data[3]
+            write_json(filename = "data_base.json" , object_dict = list_users)
+        dict_save_information["player_nick"] = input_nick.user_text
+        dict_save_information["enemy_nick"] = data[1]
+        dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+        dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
         while True:
             try:
                 print(2)

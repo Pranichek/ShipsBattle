@@ -1,158 +1,38 @@
 {
-    "vnf": {
-        "points": 0,
-        "password": "vnfd"
-    },
-    "vndf": {
-        "points": 0,
-        "password": "vdfjk"
-    },
     "vova": {
         "points": 0,
         "password": "1234"
     },
-    "vndk": {
+    "vdk": {
         "points": 0,
-        "password": "vnkd"
-    },
-    "vdfk": {
-        "points": 0,
-        "password": "vndfkj"
-    },
-    "nfkd": {
-        "points": 0,
-        "password": "kdjf"
-    },
-    "nv": {
-        "points": 0,
-        "password": "dfkj"
-    },
-    "vknd": {
-        "points": 0,
-        "password": "vnfd"
-    },
-    "vnkf": {
-        "points": 0,
-        "password": "vndkf"
-    },
-    "ndfk": {
-        "points": 0,
-        "password": "fdkjv"
-    },
-    "nvke": {
-        "points": 0,
-        "password": "nfe"
-    },
-    "vdfnjk": {
-        "points": 0,
-        "password": "nkj"
-    },
-    "vnkdf": {
-        "points": 0,
-        "password": "nvfjdk"
-    },
-    "dfkjnv": {
-        "points": 0,
-        "password": "dfjnv"
-    },
-    "vndfk": {
-        "points": 0,
-        "password": "vndfk"
-    },
-    "kfjv": {
-        "points": 0,
-        "password": "kdfjv"
+        "password": "nfkj"
     },
     "kdfvn": {
         "points": 0,
-        "password": "fkjv"
+        "password": "kdjfnv"
     },
-    "dfvjnkdf": {
+    "nvfkdj": {
         "points": 0,
-        "password": "knvdf"
+        "password": "vfdjk"
     },
-    "vnkjdfd": {
+    "fndkjv": {
         "points": 0,
-        "password": "dkfjnv"
+        "password": "dnfjk"
     },
-    "ndkf": {
+    "jon": {
         "points": 0,
-        "password": "vndfjk"
+        "password": "fgkjnb"
     },
-    "kfnvj": {
+    "vndf": {
         "points": 0,
-        "password": "kfjnv"
+        "password": "vdf"
     },
-    "dfkjvn": {
+    "vfd": {
         "points": 0,
-        "password": "dkfjnv"
+        "password": "dkjvn"
     },
-    "jkndfv": {
+    "ndfjk": {
         "points": 0,
-        "password": "kjdfnv"
-    },
-    "kdjnv": {
-        "points": 0,
-        "password": "kdfnvj"
-    },
-    "rabotaet": {
-        "points": 0,
-        "password": "fvjkn"
-    },
-    "fkgjbn": {
-        "points": 0,
-        "password": "gkjnb"
-    },
-    "kjngf": {
-        "points": 0,
-        "password": "kfjbn"
-    },
-    "gkbjn": {
-        "points": 0,
-        "password": "gkbn"
-    },
-    "dkjfnv": {
-        "points": 0,
-        "password": "dfjnv"
-    },
-    "dvnk": {
-        "points": 0,
-        "password": "kdfnjv"
-    },
-    "fgkjb": {
-        "points": 0,
-        "password": "fgbj"
-    },
-    "kjgnfb": {
-        "points": 0,
-        "password": "fgkbj"
-    },
-    "ruti": {
-        "points": 0,
-        "password": "gjbn"
-    },
-    "kfjnv": {
-        "points": 0,
-        "password": "kdfjnv"
-    },
-    "gkjb": {
-        "points": 0,
-        "password": "kgjb"
-    },
-    "bnj": {
-        "points": 0,
-        "password": "fkgjnb"
-    },
-    "dfnv": {
-        "points": 0,
-        "password": "fjv"
-    },
-    "ldfgn": {
-        "points": 0,
-        "password": "kdf"
-    },
-    "fdkjfg": {
-        "points": 0,
-        "password": "djkfg"
+        "password": "kdfnv"
     }
 }

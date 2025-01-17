@@ -20,7 +20,7 @@ from ...classes.class_ship import list_ships
 from ..button_pressed import check_press_button
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack
 from ..change_window import change_scene, list_current_scene
-from ...client import list_check_need_send, check_two_times, send_matrix
+from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 
@@ -59,10 +59,10 @@ restore_cell_icon = DrawImage(x_cor = 1147, y_cor = 23, width = 31, height = 28.
 active_product_shine = DrawImage(x_cor = 1155, y_cor = 91, width = 60, height = 60, folder_name = "decorations", image_name = "shine_for_weapon.png")
 
 #fonts
-player_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = server_module.dict_save_information["player_nick"] , screen = module_screen.main_screen , x_cor = 914 , y_cor = 126, text_color = "White")
-enemy_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = server_module.dict_save_information["enemy_nick"] , screen = module_screen.main_screen , x_cor = 437 , y_cor = 126, text_color = "White")
-player_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(server_module.dict_save_information["player_points"]) , screen = module_screen.main_screen , x_cor = 743 , y_cor = 126, text_color = "White")
-enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(server_module.dict_save_information["enemy_points"]) , screen = module_screen.main_screen , x_cor = 270 , y_cor = 126, text_color = "White")
+player_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["player_nick"] , screen = module_screen.main_screen , x_cor = 914 , y_cor = 126, text_color = "White")
+enemy_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["enemy_nick"] , screen = module_screen.main_screen , x_cor = 437 , y_cor = 126, text_color = "White")
+player_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["player_points"]) , screen = module_screen.main_screen , x_cor = 743 , y_cor = 126, text_color = "White")
+enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["enemy_points"]) , screen = module_screen.main_screen , x_cor = 270 , y_cor = 126, text_color = "White")
 frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 
@@ -193,10 +193,10 @@ def fight_window():
     grid_image.load_image()
 
     # оновлюємо дані про ник та бали гравців
-    player_nick.text = server_module.dict_save_information["player_nick"]
-    enemy_nick.text = server_module.dict_save_information["enemy_nick"]
-    player_points.text = str(server_module.dict_save_information["player_points"])
-    enemy_points.text = str(server_module.dict_save_information["enemy_points"])
+    player_nick.text = dict_save_information["player_nick"]
+    enemy_nick.text = dict_save_information["enemy_nick"]
+    player_points.text = str(dict_save_information["player_points"])
+    enemy_points.text = str(dict_save_information["enemy_points"])
     player_nick.update_text()
     enemy_nick.update_text()
     player_points.update_text()
