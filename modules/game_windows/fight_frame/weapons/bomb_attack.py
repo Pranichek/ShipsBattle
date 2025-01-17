@@ -19,7 +19,6 @@ bot_wall для нижней стенки 3 на 3
 top_wall для верхней стенки 3 на 3 
 right_wall для правой стенки 3 на 3 
     """
-  
     if index == "entry_cell":
         for row_offset in range(-1, 2):
             for index_col in range(0, 3):
@@ -29,12 +28,13 @@ right_wall для правой стенки 3 на 3
                     count_ships.append(enemy_matrix[current_row][current_col])
                     enemy_matrix[current_row][current_col] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][current_col] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][current_col] == 0 or enemy_matrix[current_row][current_col] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][current_col] = 5
-                    
+                    client_module.data_player_shot.append(row,col)
     if index == "top_left_corner":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
@@ -43,11 +43,13 @@ right_wall для правой стенки 3 на 3
                     count_ships.append(enemy_matrix[current_row][col + index_col])
                     enemy_matrix[current_row][col  + index_col] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][col + index_col] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][col + index_col] == 0 or enemy_matrix[current_row][col + index_col] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][col + index_col] = 5
+                    client_module.data_player_shot.append(row,col)
 
     if index == "bot_left_corner":
         for row_offset in range(0, 3):
@@ -58,11 +60,13 @@ right_wall для правой стенки 3 на 3
                     count_ships.append(enemy_matrix[current_row][current_col])
                     enemy_matrix[current_row][current_col] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][current_col] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][current_col] == 0 or enemy_matrix[current_row][current_col] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][current_col] = 5
+                    client_module.data_player_shot.append(row,col)
     
     if index == "left_wall":
         for row_offset in range(-1, 2):
@@ -73,11 +77,13 @@ right_wall для правой стенки 3 на 3
                     count_ships.append(enemy_matrix[current_row][current_col])
                     enemy_matrix[current_row][current_col] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][current_col] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][current_col] == 0 or enemy_matrix[current_row][current_col] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][current_col] = 5
+                    client_module.data_player_shot.append(row,col)
     
     if index == "top_right_corner":
         for row_offset in range(0, 3):
@@ -88,26 +94,29 @@ right_wall для правой стенки 3 на 3
                     count_ships.append(enemy_matrix[current_row][col - index_col])
                     enemy_matrix[current_row][col  - index_col] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][col - index_col] == 5:
                     count_5[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][col - index_col] == 0 or enemy_matrix[current_row][col - index_col] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][col - index_col] = 5
-
+                    client_module.data_player_shot.append(row,col)
     if index == "bot_right_corner":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
                 current_row = row - row_offset
-
                 if enemy_matrix[current_row][col - index_col] in [1, 2, 3, 4]:
                     count_ships.append(enemy_matrix[current_row][col - index_col])
                     enemy_matrix[current_row][col  - index_col] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][col - index_col] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][col - index_col] == 0 or enemy_matrix[current_row][col - index_col] == 5:
                     count_misses.append(0)
-                    enemy_matrix[current_row][col - index_col] = 5                
+                    enemy_matrix[current_row][col - index_col] = 5  
+                    client_module.data_player_shot.append(row,col)              
 
     if index == "bot_wall":
         for row_offset in range(0, 3):
@@ -117,12 +126,13 @@ right_wall для правой стенки 3 на 3
                     count_ships.append(enemy_matrix[current_row][col + index_col - 1])
                     enemy_matrix[current_row][col + index_col - 1] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][col + index_col - 1] == 0 or enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][col + index_col - 1] = 5
-
+                    client_module.data_player_shot.append(row,col)
     if index == "top_wall":
         for row_offset in range(0, 3):
             for index_col in range(0, 3):
@@ -131,26 +141,34 @@ right_wall для правой стенки 3 на 3
                     count_ships.append(enemy_matrix[current_row][col + index_col - 1])
                     enemy_matrix[current_row][col + index_col - 1] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][col + index_col - 1] == 0 or enemy_matrix[current_row][col + index_col - 1] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][col + index_col - 1] = 5
+                    client_module.data_player_shot.append(row,col)
     
     if index == "right_wall":
         for row_offset in range(-1, 2):
             for index_col in range(0, 3):
                 current_row = row + row_offset
-
                 if enemy_matrix[current_row][col - index_col] in [1, 2, 3, 4]:
                     count_ships.append(enemy_matrix[current_row][col - index_col])
                     enemy_matrix[current_row][col - index_col] = 7
                     count_7[0] += 1
+                    client_module.data_player_shot.append(row,col)
                 elif enemy_matrix[current_row][col - index_col] == 5:
                     count_5[0] += 1
                 elif enemy_matrix[current_row][col - index_col] == 0 or enemy_matrix[current_row][col - index_col] == 5:
                     count_misses.append(0)
                     enemy_matrix[current_row][col - index_col] = 5
+                    client_module.data_player_shot.append(row,col)
+    
+    client_module.data_player_shot.append(count_7[0])
+    client_module.data_player_shot.append(count_5[0])
+    client_module.data_player_shot.append("bomb_shot")
+    client_module.list_check_need_send[0] = True
 
   
 
@@ -187,9 +205,7 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
                 server_module.turn[0] = "server_turn"
                 # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
             elif server_module.list_player_role[0] ==  "player_client":
-                client_module.list_check_need_send[0] = "yes"  # Готуємо дані для відправки
                 server_module.turn[0] = "client_turn"  # Передаємо хід серверу
-
             if shop.third_task.TEXT == shop.list_third_task[1]:
                 shop.single_ships.extend(count_ships)
             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
@@ -228,9 +244,7 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
             if server_module.list_player_role[0] == "server_player":
                 server_module.turn[0] = "client_turn"
             elif server_module.list_player_role[0] ==  "player_client":
-                client_module.list_check_need_send[0] = "yes"  # Готуємо дані для відправки
                 server_module.turn[0] = "server_turn"  # Передаємо хід серверу
-        
             if shop.third_task.TEXT == shop.list_third_task[1]:
                 shop.single_ships.extend(count_misses)
             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
