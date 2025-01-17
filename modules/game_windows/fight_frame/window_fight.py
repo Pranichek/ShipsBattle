@@ -279,17 +279,19 @@ def fight_window():
                         server_module.turn[0] = "client_turn"
             elif check_data[0] == "restore_cell":
                 enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
-            elif check_data[-1] == "bomb_shot":
-                for cell in range(0 , len(check_data) - 3, 2):
-                    if list_grid[int(check_data[cell])][int(check_data[cell + 1])] in [1, 2, 3, 4, 7]:
-                        if list_grid[int(check_data[1])][int(check_data[2])] == 7:
-                            pass
-                        else:
-                            list_grid[int(check_data[1])][int(check_data[2])] = 7
-                            server_module.check_time[0] = 0
-                    elif list_grid[int(check_data[cell])][int(check_data[cell + 1])] in [0, 5]:
-                        list_grid[int(check_data[1])][int(check_data[2])] = 5
-                if int(check_data[-2]) == 0:
+            elif check_data[0] == "bomb_shot":
+                print('----------------------------------------------------------------')
+                print(check_data)
+                for cell in range(1 , 19):
+                    if cell % 2 == 0:
+                        if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
+                            if list_grid[int(check_data[cell - 1])][int(check_data[cell])] == 7:
+                                pass
+                            else:
+                                list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 7
+                        elif list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [0, 5]:
+                            list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 5
+                if int(check_data[-3]) == 0:
                     if server_module.list_player_role[0] == "server_player":
                         server_module.turn[0] = "server_turn"
                     elif server_module.list_player_role[0] == "client_player":
@@ -299,6 +301,7 @@ def fight_window():
                         server_module.turn[0] = "client_turn"
                     elif server_module.list_player_role[0] == "client_player":
                         server_module.turn[0] = "server_turn"
+                server_module.check_time[0] = 0
 
 
 
