@@ -1,5 +1,6 @@
 import socket 
 import colorama
+import random
 # Импортируем классы
 from threading import Thread
 
@@ -249,6 +250,7 @@ def listen_client(client, second_client):
             SERVER.RESTART = True
             break
 
+players = ["server_player", "client_player"]
 class Server():
     def __init__(self):
         self.RESTART = False
@@ -259,16 +261,19 @@ class Server():
         self.server_socket.bind((str(ip_adress), int(port)))
         while True:
             try:
+                copy_list_player = players.copy()
+                player_one = random.choice(copy_list_player)
+                copy_list_player.remove(player_one)
+                player_two = copy_list_player[0]
                 print(f"Room ip_adress {colorama.Fore.GREEN} {ip_adress} {colorama.Style.RESET_ALL}")
                 print(f"Room Port:{colorama.Fore.GREEN} {port} {colorama.Style.RESET_ALL}")
                 self.server_socket.listen()
-                print("Server started working")
-                print("Waiting clients")
+
                 client_socket, addr = self.server_socket.accept()
-                client_socket.sendall("server_player".encode("utf-8"))
+                client_socket.sendall(player_one.encode("utf-8"))
                 print("First player is connected")
                 client_socket_second, addr_second = self.server_socket.accept()
-                client_socket_second.sendall("client_player".encode("utf-8"))
+                client_socket_second.sendall(player_two.encode("utf-8"))
                 print("Second player is connecter")
 
                 thread1 = Thread(target = listen_client, args = (client_socket, client_socket_second))

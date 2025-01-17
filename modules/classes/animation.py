@@ -140,3 +140,17 @@ animation_connection_problem = Animation(
     name_folder = "error_connection_animation",
     animation_speed = 31
 )
+
+
+# анимации типо рандомного выбора игрока кто первый ходит
+animation_random_player = Animation(
+    image_name = "0.png",
+    width = 414,
+    height = 118,
+    x_cor = 415,
+    y_cor = 185,
+    need_clear = True,
+    name_folder = "animation_choice",
+    animation_speed = 6
+)
+

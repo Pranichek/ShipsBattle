@@ -87,8 +87,11 @@ def start_client():
             try:
                 if check_can_connect_to_fight[2] != 'True':
                     time.sleep(0.1)
-                    status_game = save_data_posistion_ships[0] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}"  + f" {check_can_connect_to_fight[0]}"
-                    client_socket.sendall(status_game.encode("utf-8"))
+                    status_game = [save_data_posistion_ships[0], f"{input_nick.user_text}", {str(input_password.user_text)}, f"{str(list_users[input_nick.user_text]["points"])}", f"{check_can_connect_to_fight[0]}"]
+                    str_data = ""
+                    for data in status_game:
+                        str_data += f"{data} "
+                    client_socket.sendall(str_data.encode("utf-8"))
 
                     data_enemy = client_socket.recv(1024).decode("utf-8")
                     data = data_enemy.split(" ")

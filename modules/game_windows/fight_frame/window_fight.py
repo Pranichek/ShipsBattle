@@ -15,7 +15,7 @@ from ...classes.class_image import DrawImage
 from ...classes.achive_window import list_achieves, target_attack_achievement, destroyer_achievement
 from ...classes.class_button import Button
 from ...classes.class_text import Font
-from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem
+from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player
 from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit
 from ..change_window import change_scene
@@ -236,9 +236,23 @@ def fight_window():
             elif server_module.save_medals_coordinates[medal] == 12:
                 class_medal.enemy_collector_medal = True
 
-        if check_two_times.count(3) >= 2:
-            server_module.check_time[0] += 1
-            check_two_times.clear()
+        if animation_random_player.COUNT_IMAGES >= 5 and animation_random_player.COUNT_IMAGES <= 10:
+            animation_random_player.ANIMATION_SPEED = 20
+        elif animation_random_player.COUNT_IMAGES >= 11 and animation_random_player.COUNT_IMAGES <= 16:
+            animation_random_player.ANIMATION_SPEED = 15
+        elif animation_random_player.COUNT_IMAGES >= 17 and animation_random_player.COUNT_IMAGES <= 22:
+            animation_random_player.ANIMATION_SPEED = 13
+        elif animation_random_player.COUNT_IMAGES >= 23 and animation_random_player.COUNT_IMAGES <= 28:
+            animation_random_player.ANIMATION_SPEED = 10
+        elif animation_random_player.COUNT_IMAGES >= 29 and animation_random_player.COUNT_IMAGES <= 30:
+            animation_random_player.ANIMATION_SPEED = 100
+
+        
+        
+        if animation_random_player.IS_ANIMATION_DONE == True:
+            if check_two_times.count(3) >= 2:
+                server_module.check_time[0] += 1
+                check_two_times.clear()
 
         if len(server_module.enemy_data) > 0:
             check_data = server_module.enemy_data[0].split(' ')
@@ -785,7 +799,6 @@ def fight_window():
             shop.first_kill_three_decker()
 
 
-
         # destoyer achievement
         # для бомбы задание
         if check_bomb[0] == True and 9 not in achievement.list_save_coords_achiv:
@@ -821,6 +834,12 @@ def fight_window():
             target_attack_medal.ACTIVE = True
             achievement.list_save_coords_achiv.append(11)
             achievement.list_save_coords_achiv[0] = True
+
+        # аниамция рандомного выбиора
+        if server_module.list_player_role[0] == "server_player":
+            animation_random_player.animation(main_screen = main_screen, count_image = 29)
+        elif server_module.list_player_role[0] == "client_player":
+            animation_random_player.animation(main_screen = main_screen, count_image = 30)
         
 
         achievement.piooner() 
