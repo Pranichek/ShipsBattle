@@ -327,6 +327,7 @@ def fight_window():
                 server_module.check_time[0] = 0
             elif check_data[0] == "medal":
                 for medal in check_data[1:-1]:
+                    print(check_data[1:-1])
                     if int(medal) not in server_module.save_medals_coordinates:
                         server_module.save_medals_coordinates.append(int(medal))
 
@@ -365,7 +366,7 @@ def fight_window():
         # отправка полученных медалек врагу
         if achievement.list_save_coords_achiv[0] == True and len(data_player_shot) == 0:
             data_player_shot.append("medal")
-            for medals in achievement.list_save_coords_achiv[1:-1]:
+            for medals in achievement.list_save_coords_achiv[1:]:
                 data_player_shot.append(medals)
             list_check_need_send[0] = True
             achievement.list_save_coords_achiv[0] = False

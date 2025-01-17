@@ -104,7 +104,6 @@ def start_client():
                         write_json(filename = "data_base.json" , object_dict = list_users)
 
                     if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
-                        print(1)
                         check_can_connect_to_fight[0] = True
 
                     dict_save_information["player_nick"] = input_nick.user_text
