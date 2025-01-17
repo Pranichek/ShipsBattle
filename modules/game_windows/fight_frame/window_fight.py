@@ -17,9 +17,8 @@ from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem
 from ...classes.class_ship import list_ships
-from ..button_pressed import check_press_button
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, apply_fade_effect, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack
-from ..change_window import change_scene, list_current_scene
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit
+from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot 
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
@@ -40,6 +39,7 @@ def clear_weapon_function():
 # картинка курсора
 cursor_image = pygame.transform.scale(pygame.image.load(abspath(join(__file__, "..", "..", "..", "..", "media", "decorations", "cursor.png"))), (32, 32))
 cursor_img_rect = cursor_image.get_rect()
+
 #images
 grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , folder_name = "grid", image_name = "background_grid.png")
 player_face = DrawImage(width = 154 , height = 123 ,x_cor = 1104 , y_cor = 79 , folder_name = "decorations" , image_name = "active_player.png")
@@ -56,16 +56,15 @@ bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_
 auto_rocket_icon = DrawImage(x_cor = 1137, y_cor = 58, width = 45.54, height = 40.09, folder_name = "products_icons", image_name = "auto_rocket_icon.png")
 restore_cell_icon = DrawImage(x_cor = 1147, y_cor = 23, width = 31, height = 28.4, folder_name = "products_icons", image_name = "restore_cell_icon.png")
 # сияние которое подсвечивает активаное оружие
-active_product_shine = DrawImage(x_cor = 1155, y_cor = 91, width = 60, height = 60, folder_name = "decorations", image_name = "shine_for_weapon.png")
+active_product_shine = DrawImage(x_cor = -100, y_cor = -100, width = 60, height = 60, folder_name = "decorations", image_name = "shine_for_weapon.png")
+frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
+second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 
 #fonts
 player_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["player_nick"] , screen = module_screen.main_screen , x_cor = 914 , y_cor = 126, text_color = "White")
 enemy_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["enemy_nick"] , screen = module_screen.main_screen , x_cor = 437 , y_cor = 126, text_color = "White")
 player_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["player_points"]) , screen = module_screen.main_screen , x_cor = 743 , y_cor = 126, text_color = "White")
 enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save_information["enemy_points"]) , screen = module_screen.main_screen , x_cor = 270 , y_cor = 126, text_color = "White")
-frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
-second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
-
 #Buttons
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action = show_shop)
 clear_weapon = Button(x = 1064, y = 8, image_path = "clear_weapon.png" , image_hover_path = "clear_weapon_hover.png" , width = 109, height = 13, action = clear_weapon_function)
@@ -150,6 +149,8 @@ old_killed_ships = [0]
 new_killed_ships = [0]
 check_bomb = [False]
 
+# для сравнения изменился ли нашь баланс
+check_player_balance = [0]
 
 # для ачивок на выживвание раундов
 check_alive_ten = [False]
@@ -330,8 +331,11 @@ def fight_window():
                     print(check_data[1:-1])
                     if int(medal) not in server_module.save_medals_coordinates:
                         server_module.save_medals_coordinates.append(int(medal))
+            elif check_data[0] == "money":
+                server_module.enemy_balance[0] = int(check_data[1])
+                enemy_balance_in_jar.update_text()
 
-
+        
         # обнуление времени и хода, если игрок не походил
         if server_module.check_time[0] >= 30:
             server_module.check_time[0] = 0
@@ -483,13 +487,18 @@ def fight_window():
         # except:
         #     pass       
         #----------------------------------------------------------------
-        
+        check_player_balance[0] = shop.money_list[0]
         # функция которая красиво добавляет/отнимает монетки
         count_money(
             check_buy_bomb = shop.check_buy_bomb_attack[0], 
             check_buy_restorce = shop.but_flag[0],
             check_buy_auto_rocket = shop.flagbimb200[0]
             )
+        
+        if shop.money_list[0] - check_player_balance[0] > 0 and len(data_player_shot) == 0:
+            data_player_shot.append("money")
+            data_player_shot.append(shop.money_list[0])
+            list_check_need_send[0] = True
 
 
         # отримцємо координати курсору
@@ -943,6 +952,7 @@ def fight_window():
                                                         if kord[0][0] != "True":
                                                             data_player_shot.append("auto_rocket")
                                                             lenkord = len(kord)
+                                                            count_money_hit[0] += 10
                                                             for i in range(lenkord):
                                                                 # знаходим номер клетки 
                                                                 kletka = kord[i][0]*10 + kord[i][1]

@@ -6,6 +6,7 @@ from ....screens import list_object_map_enemy
 from ....classes.class_click import miss_water_sound, shot_sound
 from ....screens import enemy_matrix
 from ....client import list_check_need_send, data_player_shot
+from ....game_tools import count_money_hit
 
 
 def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_ship: list, flag_miss_rocket_animation: list, check_animation_rocket: list):
@@ -78,6 +79,7 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
             data_player_shot.append(str(row))
             data_player_shot.append(str(col))
             list_check_need_send[0] = True
+            count_money_hit[0] += 10
             # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
             check_animation_rocket[0] = "start_animation"
             # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию

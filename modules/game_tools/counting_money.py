@@ -56,6 +56,8 @@ check_money_eight_hits_in_row = [0]
 # убить три двухпалубных кораблей подряд
 check_three_2decker_ship_in_row = [0]
 
+# список при удачном выстреле
+count_money_hit = [0]
 
 # при покупке бомбы
 check_money_bomb = [0]
@@ -64,6 +66,14 @@ check_money_restoration = [0]
 # для покупки авто ракеты
 check_money_auto_rocket = [0]
 def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool):
+    if count_money_hit[0] > 0:
+        count_money_hit[0] -= 1
+        task_game.money_list[0] += 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+
     if check_buy_auto_rocket == "yes" and check_money_auto_rocket[0] == 0:
         check_money_auto_rocket[0] += 1
         task_game.money_list[0] -= 1
