@@ -150,7 +150,7 @@ new_killed_ships = [0]
 check_bomb = [False]
 
 # для сравнения изменился ли нашь баланс
-check_player_balance = [0]
+check_player_balance = [0, False]
 
 # для ачивок на выживвание раундов
 check_alive_ten = [False]
@@ -495,10 +495,15 @@ def fight_window():
             check_buy_auto_rocket = shop.flagbimb200[0]
             )
         
-        if shop.money_list[0] - check_player_balance[0] > 0 and len(data_player_shot) == 0:
-            data_player_shot.append("money")
-            data_player_shot.append(shop.money_list[0])
-            list_check_need_send[0] = True
+        if shop.money_list[0] - check_player_balance[0] > 0 or check_player_balance[1] == True:
+            if len(data_player_shot) == 0:
+                data_player_shot.append("money")
+                data_player_shot.append(shop.money_list[0])
+                list_check_need_send[0] = True
+                check_player_balance[1] = False
+            else:
+                check_player_balance[1] = True
+
 
 
         # отримцємо координати курсору
