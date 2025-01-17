@@ -21,7 +21,8 @@ data_player_shot = []
 check_two_times = []
 # список для подсчета сколько времени оба игрока расставели корабли, чтобы точно все успели прдклюючиться к бою
 check_can_connect_to_fight = [0]
-
+# список в котором сохраняем расставил ли игрок корабли
+save_data_posistion_ships = [""]
 TARGET_COUNT = 0
 
 
@@ -85,12 +86,6 @@ def start_client():
         # Бесконечный цикл для отправки и получения данных
         while check_can_connect_to_fight[0] <= TARGET_COUNT:
             try:
-                data_ready = read_json(name_file = "status_connect_game.json")
-                status_ready_to_game = data_ready["status"] 
-            except:
-                status_ready_to_game = "position ships"
-                print("pringles")
-            try:
                 time.sleep(0.1)
                 print(1)
                 data_ready = read_json(name_file = "status_connect_game.json")
@@ -100,8 +95,8 @@ def start_client():
                 data_enemy = client_socket.recv(1024).decode("utf-8")
                 data = data_enemy.split(" ")
                 print(data[0])
-                check_connection_users[0] = status_ready_to_game
-                if status_ready_to_game == "fight" and data[0] == 'fight':
+                check_connection_users[0] = save_data_posistion_ships[0]
+                if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
                     check_can_connect_to_fight[0] += 1
                     if data[1] not in list_users:
                         list_users[data[1]] = {"points": data[3], "password": data[2]}
