@@ -281,14 +281,17 @@ def fight_window():
                 enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
             elif check_data[0] == "bomb_shot":
                 for cell in range(1 , 19):
-                    if cell % 2 == 0:
-                        if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
-                            if list_grid[int(check_data[cell - 1])][int(check_data[cell])] == 7:
-                                pass
-                            else:
-                                list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 7
-                        elif list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [0, 5]:
-                            list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 5
+                    try:
+                        if cell % 2 == 0:
+                            if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
+                                if list_grid[int(check_data[cell - 1])][int(check_data[cell])] == 7:
+                                    pass
+                                else:
+                                    list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 7
+                            elif list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [0, 5]:
+                                list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 5
+                    except:
+                        continue
                 if int(check_data[-3]) == 0:
                     if server_module.list_player_role[0] == "server_player":
                         server_module.turn[0] = "server_turn"
@@ -313,12 +316,13 @@ def fight_window():
                                 list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 7
                         elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [0, 5]:
                             list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 5
+                    index_cell += 1
                 if count_hit == 0:
                     if server_module.list_player_role[0] == "server_player":
                         server_module.turn[0] = "server_turn"
                     elif server_module.list_player_role[0] == "client_player":
                         server_module.turn[0] = "client_turn"
-                else:
+                elif count_hit >= 1:
                     if server_module.list_player_role[0] == "server_player":
                         server_module.turn[0] = "client_turn"
                     elif server_module.list_player_role[0] == "client_player":
@@ -1046,7 +1050,10 @@ def fight_window():
                                                                 # обнуляємо час ходу
                                                                 server_module.check_time[0] = 0
                                                                 # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                                server_module.turn[0] = "server_turn"      
+                                                                if server_module.list_player_role[0] == "server_player":
+                                                                        server_module.turn[0] = "server_turn"
+                                                                elif server_module.list_player_role[0] == "client_player":
+                                                                    server_module.turn[0] = "client_turn"  
                                                                 shop.flagbimb200[0] = "no"
                                                                 activate_auto_rocket[0] = False
                                                                 active_product_shine.x_cor = -100
@@ -1066,11 +1073,16 @@ def fight_window():
                                                             # обнуляємо час ходу
                                                             server_module.check_time[0] = 0
                                                             # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                            server_module.turn[0] = "client_turn"      
+                                                            if server_module.list_player_role[0] == "client_player":
+                                                                server_module.turn[0] = "server_turn"
+                                                            elif server_module.list_player_role[0] == "server_player":
+                                                                server_module.turn[0] = "client_turn"
+
                                                             shop.flagbimb200[0] = "no"
                                                             activate_auto_rocket[0] = False
                                                             active_product_shine.x_cor = -100
                                                             active_product_shine.y_cor = -100
+                                                        list_check_need_send[0] = True
                                                 #бомба 3 на 3
                                                 elif shop.check_buy_bomb_attack[0] == True and activate_bomb[0] == True:
                                                     shop.check_buy_bomb_attack[0] = False
