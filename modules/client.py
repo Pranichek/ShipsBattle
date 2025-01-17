@@ -110,6 +110,7 @@ def start_client():
                     elif data[1]  in list_users:
                         list_users[data[1]]["points"] = data[3]
                         write_json(filename = "data_base.json" , object_dict = list_users)
+
                     dict_save_information["player_nick"] = input_nick.user_text
                     dict_save_information["enemy_nick"] = data[1]
                     dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
@@ -119,7 +120,6 @@ def start_client():
                 pass
         while True:
             try:
-                print(2)
                 time.sleep(0.5)
                 check_two_times.append(3)
                 # Перевірка значення в списку перед відправкою даних

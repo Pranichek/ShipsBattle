@@ -1,3 +1,7 @@
+r'''
+    У модулі створено клас ``Ship``, який відмальовує кораблі, відповідає за розтавлення, "прилипання" 
+    однопалубних, двопалубних, трьохбалубних та чотирьохпалубних кораблів .
+'''
 import pygame
 from os.path import abspath, join
 from ..screens import grid_player , list_grid , list_object_map 
@@ -7,6 +11,12 @@ check_for_shipsmoving = [0]
 
 class Ship:
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
+        r'''
+        :mod:`метод` ``__init__``, яка створює об'єкти класів, встановлює координати, розмір, позицію кораблів.
+
+        Приклад застосування: 
+        >>> self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
+        '''
         self.X_COR = x_cor#место где будет стоять корабыль по иксу
         self.Y_COR = y_cor#место где будет стоять корабль по игреку
         self.WIDTH = width#ширина корабля
@@ -37,6 +47,12 @@ class Ship:
     
     # Метод загрузки картинок кораблей
     def load_image(self):
+        r'''
+        :mod:`Метод` ``load_image``, яка завантажує зображення з абсолютним шляхом та перевіряє як корабель розташован, вертикально чи горизонтально.
+
+        Приклад застосування: 
+        >>> enemy_face.load_image()
+        '''
         # Переменная с абсолютным путём, до папки картинок кораблей ( абсолютный путь строится через модуль os.path.abspath()
         #"/../../../media/ships/{self.IMAGE_SHIP}"
         ship = abspath(join(__file__,"..", "..", "..", "media", "ships", f"{self.IMAGE_SHIP}"))
@@ -60,9 +76,19 @@ class Ship:
       
     # Создаём метод "прилепания" корабля к сетке 
     def snap_to_grid(self): 
+        r'''
+        :mod:`Метод` ``snap_to_grid``, за допомогою коорднинат прив'язуємо корабель дло сітки.
+        Приклад застосування: 
+        >>> snapped_x, snapped_y = grid.snap_to_grid(mouse_x, mouse_y)
+        '''       
         # Привязываем координаты к сетке, это что бы корабль не уходил на саму сетку
         self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
     def center_to_cell_number(self, x, y):
+        r'''
+        :mod:`Метод` ``center_to_cell_number``, яка розраховує індекс клітинки: Номер клітки = (строка * кількість стовбців) + (стовбець) + 1.
+        Приклад застосування: 
+        >>>  self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
+        '''        
         #Рассчитываем индекс столбца и строки, в которые попадает корабль.
         # grid_player.X_SCREEN - координаты сетки по иксу
         # grid_player.Y_SCREEN - координаты сетки по игреку
@@ -81,6 +107,11 @@ class Ship:
 
     # Cоздаём метод отрисовки корабля, параметр screen - там где он у нас будет отрисовываться 
     def draw_sheep(self, screen: pygame.Surface):
+        r'''
+        :mod:`Метод` ``draw_sheep``, який перевіряє як розташован корабель,а потім його відмальовує.
+        Приклад застосування: 
+        >>>  list_ships[num].draw_sheep(screen = module_screen.main_screen)
+        '''  
         # Отрисовываем корабль на экране, зависит от ориентации
         if self.ORIENTATION_SHIP == "horizontal":
             screen.blit(self.READY_IMAGE_SHIP, (self.X_COR, self.Y_COR))
@@ -89,6 +120,11 @@ class Ship:
             screen.blit(self.IMAGE_ROTATE_SHIP, (self.X_COR, self.Y_COR))
     # Создаём метод разворота корабля 
     def rotate_ship(self, event: pygame.event):
+        r'''
+        :mod:`Метод` ``rotate_ship``, повертає корабель горизонтально чи вертикально, натиснувши клавішу R  корабель повертається.
+        Приклад застосування: 
+        >>>  self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+        '''  
         self.RECT.topleft = (self.X_COR, self.Y_COR)
         # Создаём переменную мышки, и получаем координаты мышки игрока
         mouse = pygame.mouse.get_pos()
@@ -122,7 +158,14 @@ class Ship:
 
     # метод який чистить положення корабля на матриці якщо його передвинули
     def clear_matrix(self):
+        r'''
+        :mod:`Метод` ``clear_matrix``, який очищає попереденє розтавлення корабля.
+        Приклад застосування: 
+        >>>  self.clear_matrix()
+        '''  
+        # список для перевірки розтавленння кораблів
         if check_for_shipsmoving[0] == 0:
+            # список для перевірки попереднього розтавлення кораблів
             check_prev_pos = 0
 
             for index_col in range(0 , 2):
@@ -136,6 +179,7 @@ class Ship:
 
 
             if self.check_collision != True:
+                # перевірка чи очищений список
                 if check_prev_pos == 0:
                     print("clear col")
                     if list_grid[self.row][self.col] == 0:
@@ -144,6 +188,7 @@ class Ship:
                         for index_col in range(0 , self.LENGHT):
                             list_grid[self.row][self.col + index_col] = 0
                             # return False
+                # якщо список не очищенно, то очищаємо його
                 elif check_prev_pos > 0:
                     print("cler row")
                     if list_grid[self.row][self.col] == 0:
@@ -179,6 +224,10 @@ class Ship:
 
     # метод который телепортирует коарбль на начальную точку  и поворачивает в положение по горизонатали
     def return_start_code(self):
+        r'''
+        :mod:`Метод` ``return_start_code``, для повернення корабля на початкому точку, якщо корабель не відповідає потрібним координатам ,та повертає корабель в горизонтальнеп положення.
+        >>>  self.return_start_code()
+        '''  
         self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
         self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
         self.ORIENTATION_SHIP = "horizontal"
@@ -192,6 +241,10 @@ class Ship:
        
 
     def matrix_move(self, event: pygame.event, matrix_width: int, matrix_height: int, cell: int):
+        r'''
+        :mod:`Метод` ``matrix_move``, перевіряє, щоб кораблі не накладалися один на одний та щоб кораблі були щонайменше на одну клітинку один від одного.
+        >>>  ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
+        '''
         # Получаем текущие координаты мыши
         mouse = pygame.mouse.get_pos() 
 
@@ -506,6 +559,3 @@ list_ships.append(ship_four)
 list_ships.extend([ship_three , ship_three2])
 list_ships.extend([ship_two , ship_two2 , ship_two3])
 list_ships.extend([ship_one , ship_one2 , ship_one3, ship_one4])
-
-
-

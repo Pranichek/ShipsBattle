@@ -241,6 +241,8 @@ def fight_window():
 
         if len(server_module.enemy_data) > 0:
             check_data = server_module.enemy_data[0].split(' ')
+            #"rocket_shot 3 1"
+            #["rocket_shot", "3", "1" , " "]
             if check_data[0] == "enemy_matrix":
                 check_list = server_module.enemy_data[0].split(' ')
                 print(check_list)
