@@ -152,8 +152,8 @@ check_bomb = [False]
 
 
 # для ачивок на выживвание раундов
-check_alive_ten = [0]
-check_alive_five = [0]
+check_alive_ten = [False]
+check_alive_five = [False]
 # функція для бою між гравцями
 def fight_window():
     # зупиняємо музику яка грала перед боєм
@@ -296,20 +296,20 @@ def fight_window():
 
         achievement.opening_the_battle(grid = list_grid , enemy_grid = enemy_matrix)
 
-        # if server_module.check_time[0] <= 0 and check_alive_ten[0] >= 1:
-        #     check_alive_ten[0] = 0
-        #     check_alive_five[0] = 0
+        if server_module.check_time[0] == 0 and check_alive_ten[0] == True:
+            check_alive_ten[0] = False
+            check_alive_five[0] = False
 
-        # if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn"):
-        #     if server_module.check_time[0] == 1 and check_alive_ten[0] == 0:
-        #         if shop.second_task.TEXT == shop.list_second_task[1]:
-        #             shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
-        #             check_alive_ten[0] += 1
-        # if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn"):
-        #     if server_module.check_time[0] == 1 and check_alive_five[0] == 0:
-        #         if shop.second_task.TEXT == shop.list_second_task[1]:
-        #             shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
-        #             check_alive_five[0] += 1
+        if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn"):
+            if server_module.check_time[0] == 1 and not check_alive_ten[0]:
+                if shop.second_task.TEXT == shop.list_second_task[1]:
+                    achievement.kept_all_ships_alive_for_ten_turns(grid = list_grid)
+                    check_alive_ten[0] = True
+        if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "client_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "server_turn"):
+            if server_module.check_time[0] == 1 and not check_alive_five[0]:
+                if shop.second_task.TEXT == shop.list_second_task[1]:
+                    shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
+                    check_alive_five[0] = True
     
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
