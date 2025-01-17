@@ -18,7 +18,4 @@ def first_shot(cell: int):
                 first_hit_achievement.ACTIVE = True
                 first_hit_medal.ACTIVE = True
                 list_save_coords_achiv.append(4)
-                client_module.data_player_shot.append("medal")
-                client_module.data_player_shot.append(4)
-                client_module.list_check_need_send[0] = True
-
+                list_save_coords_achiv[0] = True

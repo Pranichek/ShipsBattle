@@ -22,9 +22,7 @@ def ten_shoot_in_row(cell: int):
         perfect_shooter_medal.ACTIVE = True
         list_save_coords_achiv.append(2)
         print("10 выстрелов по кораблям подряд")
-        client_module.data_player_shot.append("medal")
-        client_module.data_player_shot.append(2)
-        client_module.list_check_need_send[0] = True
+        list_save_coords_achiv[0] = True
 
 
 

@@ -362,7 +362,15 @@ def fight_window():
                 if shop.second_task.TEXT == shop.list_second_task[1]:
                     shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
                     check_alive_five[0] = True
-    
+
+        # отправка полученных медалек врагу
+        if achievement.list_save_coords_achiv[0] == True and len(data_player_shot):
+            for medals in achievement.list_save_coords_achiv[1:-1]:
+                data_player_shot.append(medals)
+            list_check_need_send[0] = True
+            achievement.list_save_coords_achiv[0] = False
+            
+
         #----------------------------------------------------------------
         # код который раньше был на серваке и клиенте , теперь тут
         # try:
@@ -774,9 +782,7 @@ def fight_window():
                 destroyer_medal.ACTIVE = True
                 destroyer_achievement.ACTIVE = True
                 achievement.list_save_coords_achiv.append(9)
-                data_player_shot.append("medal")
-                data_player_shot.append(9)
-                list_check_need_send[0] = True
+                achievement.list_save_coords_achiv[0] = True
 
         if check_bomb[0] == True and 11 not in achievement.list_save_coords_achiv:
             new_killed_ships[0] = len(server_module.enemy_died_ships)
@@ -787,9 +793,7 @@ def fight_window():
                         target_attack_achievement.ACTIVE = True
                         target_attack_medal.ACTIVE = True
                         achievement.list_save_coords_achiv.append(11)
-                        data_player_shot.append("medal")
-                        data_player_shot.append(11)
-                        list_check_need_send[0] = True
+                        achievement.list_save_coords_achiv[0] = True
                     else:
                         count_5[0] = 0
                 else:
@@ -805,6 +809,7 @@ def fight_window():
             target_attack_achievement.ACTIVE = True
             target_attack_medal.ACTIVE = True
             achievement.list_save_coords_achiv.append(11)
+            achievement.list_save_coords_achiv[0] = True
         
 
         achievement.piooner() 

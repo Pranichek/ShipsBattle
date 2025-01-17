@@ -22,8 +22,6 @@ def strategist(player_killed_ships: list, role: str, winner: str):
                         strategist_achievement.ACTIVE = True
                         strategist_medal.ACTIVE = True
                         check_end_game[0] = 13
-                        client_module.data_player_shot.append("medal")
-                        client_module.data_player_shot.append(3)
-                        client_module.list_check_need_send[0] = True
+                        list_save_coords_achiv[0] = True
 
 

@@ -41,9 +41,7 @@ def monster_of_perfictionists():
                             perfictionists_achiement.ACTIVE = True
                             collector_medal.ACTIVE = True
                             list_save_coords_achiv.append(12)
-                            client_module.data_player_shot.append("medal")
-                            client_module.data_player_shot.append(12)
-                            client_module.list_check_need_send[0] = True
+                            list_save_coords_achiv[0] = True
                         else:
                             index_killed_ships[0] += 3
                             list_hits_achiv.clear()

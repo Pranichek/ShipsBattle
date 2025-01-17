@@ -23,7 +23,5 @@ def opening_the_battle(grid: list , enemy_grid: list):
             opening_the_battle_achievement.ACTIVE = True
             opening_battle_medal.ACTIVE = True
             list_save_coords_achiv.append(10)
-            client_module.data_player_shot.append("medal")
-            client_module.data_player_shot.append(10)
-            client_module.list_check_need_send[0] = True
+            list_save_coords_achiv[0] = True
 

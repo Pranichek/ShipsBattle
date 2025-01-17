@@ -17,6 +17,4 @@ def kept_all_ships_alive_for_ten_turns(grid: object):
         master_of_disguist_achievement.ACTIVE = True
         master_of_disguist_medal.ACTIVE = True
         list_save_coords_achiv.append(6)
-        client_module.data_player_shot.append("medal")
-        client_module.data_player_shot.append(6)
-        client_module.list_check_need_send[0] = True
+        list_save_coords_achiv[0] = True

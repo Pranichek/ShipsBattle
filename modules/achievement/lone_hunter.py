@@ -48,9 +48,7 @@ def lone_hunter():
                 lone_hunter_achievement.ACTIVE = True
                 lone_hunter_medal.ACTIVE = True
                 list_save_coords_achiv.append(7)
-                client_module.data_player_shot.append("medal")
-                client_module.data_player_shot.append(7)
-                client_module.list_check_need_send[0] = True
+                list_save_coords_achiv[0] = True
         else:
             single_ships_achiv.clear()
             if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single_achiv[0]: 

@@ -1,8 +1,8 @@
 from ..classes import  first_four_decker_achivment , four_decker_sniper_medal
-import modules.client as client_module
+
 
 #1 медалька
-list_save_coords_achiv = []
+list_save_coords_achiv = [False]
 
 # хранятся наши умершие корабли
 player_died_ships_for_achiv = [""]
@@ -26,8 +26,6 @@ def first_kill_four_decker_achivment():
                         first_four_decker_achivment.ACTIVE = True
                         four_decker_sniper_medal.ACTIVE = True
                         list_save_coords_achiv.append(1)
-                        client_module.data_player_shot.append("medal")
-                        client_module.data_player_shot.append(1)
-                        client_module.list_check_need_send[0] = True
+                        list_save_coords_achiv[0] = True
                                     
 
