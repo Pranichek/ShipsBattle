@@ -1,7 +1,6 @@
 import socket, json, time, pickle
 from .classes import input_port, input_ip_adress, input_nick ,list_ships
 from .json_functions import write_json , list_users 
-from .json_functions.json_read import read_json
 import modules.server as server_module
 from .screens import list_grid
 import modules.shop as shop
@@ -88,8 +87,7 @@ def start_client():
             try:
                 time.sleep(0.1)
                 print(1)
-                data_ready = read_json(name_file = "status_connect_game.json")
-                status_game = data_ready["status"] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
+                status_game = save_data_posistion_ships[0] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
                 client_socket.sendall(status_game.encode("utf-8"))
 
                 data_enemy = client_socket.recv(1024).decode("utf-8")
