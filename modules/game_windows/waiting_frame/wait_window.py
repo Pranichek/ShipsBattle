@@ -28,7 +28,7 @@ def waiting_window():
         status_ready_to_game = data_ready["status"] 
 
    
-        if check_can_connect_to_fight[0] >= 1:
+        if check_can_connect_to_fight[0] >= 2:
             check_connection_users[0] = "fight"
             apply_fade_effect(screen = main_screen)
             print(311131113111311131131)

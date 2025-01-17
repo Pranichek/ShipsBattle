@@ -22,6 +22,8 @@ check_two_times = []
 # список для подсчета сколько времени оба игрока расставели корабли, чтобы точно все успели прдклюючиться к бою
 check_can_connect_to_fight = [0]
 
+TARGET_COUNT = 0
+
 
 dict_save_information = {
     "player_nick": "",
@@ -75,8 +77,13 @@ def start_client():
         # Получение сообщения от сервера (роль клиента)
         role = client_socket.recv(1024).decode("utf-8")
         server_module.list_player_role[0] = role
+
+        if server_module.list_player_role[0] == "server_player":
+            TARGET_COUNT = 1
+        elif server_module.list_player_role[0] == "client_player":
+            TARGET_COUNT = 2
         # Бесконечный цикл для отправки и получения данных
-        while check_can_connect_to_fight[0] < 3:
+        while check_can_connect_to_fight[0] <= TARGET_COUNT:
             try:
                 data_ready = read_json(name_file = "status_connect_game.json")
                 status_ready_to_game = data_ready["status"] 
@@ -87,8 +94,8 @@ def start_client():
                 time.sleep(0.1)
                 print(1)
                 data_ready = read_json(name_file = "status_connect_game.json")
-                status_ready_to_game = data_ready["status"] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
-                client_socket.sendall(status_ready_to_game.encode("utf-8"))
+                status_game = data_ready["status"] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
+                client_socket.sendall(status_game.encode("utf-8"))
 
                 data_enemy = client_socket.recv(1024).decode("utf-8")
                 data = data_enemy.split(" ")
@@ -96,20 +103,20 @@ def start_client():
                 check_connection_users[0] = status_ready_to_game
                 if status_ready_to_game == "fight" and data[0] == 'fight':
                     check_can_connect_to_fight[0] += 1
+                    if data[1] not in list_users:
+                        list_users[data[1]] = {"points": data[3], "password": data[2]}
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+                    #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+                    elif data[1]  in list_users:
+                        list_users[data[1]]["points"] = data[3]
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+                    dict_save_information["player_nick"] = input_nick.user_text
+                    dict_save_information["enemy_nick"] = data[1]
+                    dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+                    dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
-        if data[1] not in list_users:
-            list_users[data[1]] = {"points": data[3], "password": data[2]}
-            write_json(filename = "data_base.json" , object_dict = list_users)
-        #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
-        elif data[1]  in list_users:
-            list_users[data[1]]["points"] = data[3]
-            write_json(filename = "data_base.json" , object_dict = list_users)
-        dict_save_information["player_nick"] = input_nick.user_text
-        dict_save_information["enemy_nick"] = data[1]
-        dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
-        dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
         while True:
             try:
                 print(2)
@@ -126,11 +133,9 @@ def start_client():
                 else:
                     client_socket.sendall("keep-alive".encode("utf-8") + b"END")
 
-        
                 enemy_data = recv_all(client_socket)
                 server_module.enemy_data[0] = enemy_data.decode("utf-8")
                 print(server_module.enemy_data, "enemy_data") 
-
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
