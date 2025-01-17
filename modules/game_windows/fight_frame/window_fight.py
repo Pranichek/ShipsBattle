@@ -258,7 +258,6 @@ def fight_window():
 
             elif check_data[0] == "rocket_shot":
                 if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4, 7]:
-                    print('----------------------------------------------------------------')
                     if list_grid[int(check_data[1])][int(check_data[2])] == 7:
                         pass
                     else:
@@ -646,7 +645,6 @@ def fight_window():
                 if animation_boom.animation(main_screen = module_screen.main_screen , count_image = 7):
                     rocket_animation.clear_animation()
                     animation_boom.clear_animation()
-                    print("--------------------------------")
                     check_animation_rocket[0] = ""
 
 
@@ -776,10 +774,8 @@ def fight_window():
         # destoyer achievement
         # для бомбы задание
         if check_bomb[0] == True and 9 not in achievement.list_save_coords_achiv:
-            print(new_killed_ships[0], old_killed_ships[0])
             new_killed_ships[0] = len(server_module.enemy_died_ships)
             if new_killed_ships[0] - old_killed_ships[0] >= 2:
-                print(new_killed_ships[0], old_killed_ships[0])
                 destroyer_medal.ACTIVE = True
                 destroyer_achievement.ACTIVE = True
                 achievement.list_save_coords_achiv.append(9)
@@ -787,7 +783,6 @@ def fight_window():
 
         if check_bomb[0] == True and 11 not in achievement.list_save_coords_achiv:
             new_killed_ships[0] = len(server_module.enemy_died_ships)
-            print(new_killed_ships[0], old_killed_ships[0])
             if new_killed_ships[0] - old_killed_ships[0] >= 1:
                 if count_5[0] <= 0:
                     if 11 not in achievement.list_save_coords_achiv:
@@ -818,7 +813,6 @@ def fight_window():
         achievement.first_kill_four_decker_achivment()
         achievement.strategist(player_killed_ships = server_module.player_died_ships , role = server_module.list_player_role[0] , winner = server_module.list_check_win[0])
 
-        # print(screen_module.enemy_matrix)
         for button in shop.shop_item:
             try:
                 if button.ACTION:
@@ -835,7 +829,6 @@ def fight_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                print(8888)
                 change_scene(None)
             # перевіряємо чи натиснули на кнопку показу магазину 
             if list_check_shop[0] == True:

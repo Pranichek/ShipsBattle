@@ -9,7 +9,6 @@ def connect_to_fight():
             if cell == 0:
                 count_zero += 1
     enemy_zero = 0
-    print(count_zero, enemy_zero)
     if count_zero == 80:
         dict_game_status = {
                 "status": "fight"

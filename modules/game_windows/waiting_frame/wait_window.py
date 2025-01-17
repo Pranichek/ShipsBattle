@@ -24,11 +24,7 @@ def waiting_window():
     while run_game:
         module_screen.FPS.tick(60)
         waiting_background.draw_image(screen = main_screen)
-        data_ready = read_json(name_file = "status_connect_game.json")
-        status_ready_to_game = data_ready["status"] 
-
-   
-        if check_can_connect_to_fight[0] == True:
+        if check_can_connect_to_fight[2] == 'True':
             check_connection_users[0] = "fight"
             apply_fade_effect(screen = main_screen)
             change_scene(fight_window())

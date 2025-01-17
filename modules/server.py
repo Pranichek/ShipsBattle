@@ -276,11 +276,10 @@ class Server():
 
                 thread2 = Thread(target = listen_client, args = (client_socket_second, client_socket))
                 thread2.start()
-                print(3)
                 if self.RESTART:
                     print("Server problemn")
                     self.RESTART = False
-                    # raise Exception("RESTART")
+                    raise Exception("RESTART")
             except:
                 print("Exception server")
                 pass
