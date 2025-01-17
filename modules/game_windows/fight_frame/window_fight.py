@@ -245,12 +245,9 @@ def fight_window():
             #["rocket_shot", "3", "1" , " "]
             if check_data[0] == "enemy_matrix":
                 check_list = server_module.enemy_data[0].split(' ')
-                print(check_list)
                 row = 0
                 column = 0
                 for str_number in check_list[1:101]:
-                    print(78)
-                    print(row, column)
                     enemy_matrix[row][column] = int(str_number)
                     column += 1
                     if column == 10:
@@ -258,7 +255,6 @@ def fight_window():
                         column = 0
                 for data_ship in range(101, len(check_list) - 1, 4):
                     server_module.enemy_ships.append((int(check_list[data_ship]), int(check_list[data_ship + 1]), int(check_list[data_ship + 2]), (check_list[data_ship + 3])))
-                print(server_module.enemy_ships)
 
             elif check_data[0] == "rocket_shot":
                 if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4, 7]:

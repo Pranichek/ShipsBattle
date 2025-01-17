@@ -10,7 +10,7 @@ from ..change_window import change_scene, list_current_scene
 from ..button_pressed import button_action, check_press_button
 from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
-from ...client import check_connection_users, check_can_connect_to_fight
+from ...client import check_connection_users, check_can_connect_to_fight, save_data_posistion_ships
 
 #фон для очікування користувача
 waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "waiting_background.png")
@@ -28,19 +28,16 @@ def waiting_window():
         status_ready_to_game = data_ready["status"] 
 
    
-        if check_can_connect_to_fight[0] >= 2:
+        if check_can_connect_to_fight[0] == True:
             check_connection_users[0] = "fight"
             apply_fade_effect(screen = main_screen)
-            print(311131113111311131131)
             change_scene(fight_window())
             run_game = False
             check_press_button[0] = None
             break
 
-            
-        if check_connection_users[0] != False and status_ready_to_game == "places ships":
+        if check_connection_users[0] != False and save_data_posistion_ships[0]=="":
             apply_fade_effect(screen = module_screen.main_screen)
-            print(1111111111111111111111)
             change_scene(ships_position_window())
             check_press_button[0] = None
             run_game = False

@@ -19,7 +19,7 @@ data_player_shot = []
 # список для того чтобы время было ровно по секундам
 check_two_times = []
 # список для подсчета сколько времени оба игрока расставели корабли, чтобы точно все успели прдклюючиться к бою
-check_can_connect_to_fight = [0]
+check_can_connect_to_fight = [0, False]
 # список в котором сохраняем расставил ли игрок корабли
 save_data_posistion_ships = [""]
 TARGET_COUNT = 0
@@ -85,7 +85,7 @@ def start_client():
         # Бесконечный цикл для отправки и получения данных
         while True:
             try:
-                if check_can_connect_to_fight[0] <= 2:
+                if check_can_connect_to_fight[0] == False or check_can_connect_to_fight[0] <= 2:
                     time.sleep(0.1)
                     print(1)
                     status_game = save_data_posistion_ships[0] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
@@ -93,22 +93,24 @@ def start_client():
 
                     data_enemy = client_socket.recv(1024).decode("utf-8")
                     data = data_enemy.split(" ")
-                    print(data[0])
                     check_connection_users[0] = save_data_posistion_ships[0]
+
+                    if data[1] not in list_users:
+                        list_users[data[1]] = {"points": data[3], "password": data[2]}
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+                    #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+                    elif data[1]  in list_users:
+                        list_users[data[1]]["points"] = data[3]
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+
                     if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
                         check_can_connect_to_fight[0] += 1
-                        if data[1] not in list_users:
-                            list_users[data[1]] = {"points": data[3], "password": data[2]}
-                            write_json(filename = "data_base.json" , object_dict = list_users)
-                        #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
-                        elif data[1]  in list_users:
-                            list_users[data[1]]["points"] = data[3]
-                            write_json(filename = "data_base.json" , object_dict = list_users)
+                        check_can_connect_to_fight[0] == True
 
-                        dict_save_information["player_nick"] = input_nick.user_text
-                        dict_save_information["enemy_nick"] = data[1]
-                        dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
-                        dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
+                    dict_save_information["player_nick"] = input_nick.user_text
+                    dict_save_information["enemy_nick"] = data[1]
+                    dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+                    dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
                 else:
                     time.sleep(0.5)
                     check_two_times.append(3)
