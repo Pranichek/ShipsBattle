@@ -83,52 +83,49 @@ def start_client():
         elif server_module.list_player_role[0] == "client_player":
             TARGET_COUNT = 2
         # Бесконечный цикл для отправки и получения данных
-        while check_can_connect_to_fight[0] <= 1:
-            try:
-                time.sleep(0.1)
-                print(1)
-                status_game = save_data_posistion_ships[0] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
-                client_socket.sendall(status_game.encode("utf-8"))
-
-                data_enemy = client_socket.recv(1024).decode("utf-8")
-                data = data_enemy.split(" ")
-                print(data[0])
-                check_connection_users[0] = save_data_posistion_ships[0]
-                if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
-                    check_can_connect_to_fight[0] += 1
-                    if data[1] not in list_users:
-                        list_users[data[1]] = {"points": data[3], "password": data[2]}
-                        write_json(filename = "data_base.json" , object_dict = list_users)
-                    #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
-                    elif data[1]  in list_users:
-                        list_users[data[1]]["points"] = data[3]
-                        write_json(filename = "data_base.json" , object_dict = list_users)
-
-                    dict_save_information["player_nick"] = input_nick.user_text
-                    dict_save_information["enemy_nick"] = data[1]
-                    dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
-                    dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
-            except Exception as e:
-                print("Ошибка клиента:", e)
-                pass
         while True:
             try:
-                time.sleep(0.5)
-                check_two_times.append(3)
-                # Перевірка значення в списку перед відправкою даних
-                if list_check_need_send[0] == True:  # Перевірка на `True`
-                    str_line = ""
-                    for cell in data_player_shot:
-                        str_line += str(cell) + " " # Переводимо список в строчку с пробелами
-                    client_socket.sendall(str_line.encode("utf-8") + b"END")  # Відправка даних як список
-                    data_player_shot.clear()  # Очищаем список перед новым входом
-                    list_check_need_send[0] = False
-                else:
-                    client_socket.sendall("keep-alive".encode("utf-8") + b"END")
+                if check_can_connect_to_fight[0] <= 2:
+                    time.sleep(0.1)
+                    print(1)
+                    status_game = save_data_posistion_ships[0] + f" {input_nick.user_text}"  +  f" {str(input_password.user_text)}" +  f" {str(list_users[input_nick.user_text]["points"])}" 
+                    client_socket.sendall(status_game.encode("utf-8"))
 
-                enemy_data = recv_all(client_socket)
-                server_module.enemy_data[0] = enemy_data.decode("utf-8")
-                print(server_module.enemy_data, "enemy_data") 
+                    data_enemy = client_socket.recv(1024).decode("utf-8")
+                    data = data_enemy.split(" ")
+                    print(data[0])
+                    check_connection_users[0] = save_data_posistion_ships[0]
+                    if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
+                        check_can_connect_to_fight[0] += 1
+                        if data[1] not in list_users:
+                            list_users[data[1]] = {"points": data[3], "password": data[2]}
+                            write_json(filename = "data_base.json" , object_dict = list_users)
+                        #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+                        elif data[1]  in list_users:
+                            list_users[data[1]]["points"] = data[3]
+                            write_json(filename = "data_base.json" , object_dict = list_users)
+
+                        dict_save_information["player_nick"] = input_nick.user_text
+                        dict_save_information["enemy_nick"] = data[1]
+                        dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+                        dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
+                else:
+                    time.sleep(0.5)
+                    check_two_times.append(3)
+                    # Перевірка значення в списку перед відправкою даних
+                    if list_check_need_send[0] == True:  # Перевірка на `True`
+                        str_line = ""
+                        for cell in data_player_shot:
+                            str_line += str(cell) + " " # Переводимо список в строчку с пробелами
+                        client_socket.sendall(str_line.encode("utf-8") + b"END")  # Відправка даних як список
+                        data_player_shot.clear()  # Очищаем список перед новым входом
+                        list_check_need_send[0] = False
+                    else:
+                        client_socket.sendall("keep-alive".encode("utf-8") + b"END")
+
+                    enemy_data = recv_all(client_socket)
+                    server_module.enemy_data[0] = enemy_data.decode("utf-8")
+                    print(server_module.enemy_data, "enemy_data") 
             except Exception as e:
                 print("Ошибка клиента:", e)
                 pass
