@@ -1,5 +1,6 @@
 from ..classes import strategist_achievement , strategist_medal
 from .four_decker_sniper import list_save_coords_achiv 
+import modules.client as client_module
 
 #3 медалька
 
@@ -12,13 +13,17 @@ def strategist(player_killed_ships: list, role: str, winner: str):
                     if winner == "win_server":
                         strategist_achievement.ACTIVE = True
                         strategist_medal.ACTIVE = True
-                        list_save_coords_achiv.append((3))
                         check_end_game[0] = 13
+                        client_module.data_player_shot.append("medal")
+                        client_module.data_player_shot.append(3)
+                        client_module.list_check_need_send[0] = True
                 elif role == "player_client":
                     if winner == "win_client":
                         strategist_achievement.ACTIVE = True
                         strategist_medal.ACTIVE = True
-                        list_save_coords_achiv.append(3)
                         check_end_game[0] = 13
+                        client_module.data_player_shot.append("medal")
+                        client_module.data_player_shot.append(3)
+                        client_module.list_check_need_send[0] = True
 
 

@@ -328,6 +328,8 @@ def fight_window():
                     elif server_module.list_player_role[0] == "client_player":
                         server_module.turn[0] = "server_turn"
                 server_module.check_time[0] = 0
+            elif check_data[0] == "medal":
+                server_module.save_medals_coordinates.append(int(check_data[1]))
 
 
         # обнуление времени и хода, если игрок не походил
@@ -772,6 +774,9 @@ def fight_window():
                 destroyer_medal.ACTIVE = True
                 destroyer_achievement.ACTIVE = True
                 achievement.list_save_coords_achiv.append(9)
+                data_player_shot.append("medal")
+                data_player_shot.append(9)
+                list_check_need_send[0] = True
 
         if check_bomb[0] == True and 11 not in achievement.list_save_coords_achiv:
             new_killed_ships[0] = len(server_module.enemy_died_ships)
@@ -782,6 +787,9 @@ def fight_window():
                         target_attack_achievement.ACTIVE = True
                         target_attack_medal.ACTIVE = True
                         achievement.list_save_coords_achiv.append(11)
+                        data_player_shot.append("medal")
+                        data_player_shot.append(11)
+                        list_check_need_send[0] = True
                     else:
                         count_5[0] = 0
                 else:

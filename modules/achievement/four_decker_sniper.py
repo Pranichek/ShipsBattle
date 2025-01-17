@@ -1,4 +1,5 @@
 from ..classes import  first_four_decker_achivment , four_decker_sniper_medal
+import modules.client as client_module
 
 #1 медалька
 list_save_coords_achiv = []
@@ -24,10 +25,9 @@ def first_kill_four_decker_achivment():
                         enemy_ships_4decker_achiv[0] = "kill four-decker ship"
                         first_four_decker_achivment.ACTIVE = True
                         four_decker_sniper_medal.ACTIVE = True
-                        # 1 - номе задания
-                        # 2 - икс
-                        # 3 - игрек
                         list_save_coords_achiv.append(1)
-                        print("Ты убил четыреx палубный кораблик 777")
-                            
+                        client_module.data_player_shot.append("medal")
+                        client_module.data_player_shot.append(1)
+                        client_module.list_check_need_send[0] = True
+                                    
 

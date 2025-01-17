@@ -1,6 +1,7 @@
 from ..classes import lone_hunter_achievement, lone_hunter_medal
 from .four_decker_sniper import list_save_coords_achiv 
 from .four_decker_sniper import enemy_dies_ships_for_ahiv
+import modules.client as client_module
 
 
 # kill four single ships in a row
@@ -47,7 +48,9 @@ def lone_hunter():
                 lone_hunter_achievement.ACTIVE = True
                 lone_hunter_medal.ACTIVE = True
                 list_save_coords_achiv.append(7)
-                print("You are kill four single ships in a row")
+                client_module.data_player_shot.append("medal")
+                client_module.data_player_shot.append(7)
+                client_module.list_check_need_send[0] = True
         else:
             single_ships_achiv.clear()
             if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single_achiv[0]: 

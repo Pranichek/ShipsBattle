@@ -1,5 +1,6 @@
 from ..classes import piooner_achievement, pioneer_medal 
 from .four_decker_sniper import list_save_coords_achiv , enemy_dies_ships_for_ahiv , player_died_ships_for_achiv
+import modules.client as client_module
 
 
 
@@ -18,6 +19,9 @@ def piooner():
                     piooner_achievement.ACTIVE = True
                     pioneer_medal.ACTIVE = True
                     list_save_coords_achiv.append(8)
-               
+                    client_module.data_player_shot.append("medal")
+                    client_module.data_player_shot.append(8)
+                    client_module.list_check_need_send[0] = True
+                
 
 
