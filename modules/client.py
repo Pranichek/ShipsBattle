@@ -83,7 +83,7 @@ def start_client():
         elif server_module.list_player_role[0] == "client_player":
             TARGET_COUNT = 2
         # Бесконечный цикл для отправки и получения данных
-        while check_can_connect_to_fight[0] <= TARGET_COUNT:
+        while check_can_connect_to_fight[0] <= 1:
             try:
                 time.sleep(0.1)
                 print(1)

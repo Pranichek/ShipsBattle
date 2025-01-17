@@ -52,7 +52,7 @@
         "password": "dfjkv"
     },
     "dkfjnv": {
-        "points": 0,
+        "points": "0",
         "password": "kdfjnv"
     },
     "dkfv": {
@@ -302,5 +302,17 @@
     "fkjnv": {
         "points": 0,
         "password": "nvdfkjn"
+    },
+    "dfvjn": {
+        "points": 0,
+        "password": "kdfjnvf"
+    },
+    "dkndfv": {
+        "points": "0",
+        "password": "dkjfnv"
+    },
+    "dfvnfdjk": {
+        "points": 0,
+        "password": "dkfjnv"
     }
 }
