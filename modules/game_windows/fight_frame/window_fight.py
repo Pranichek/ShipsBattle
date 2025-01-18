@@ -1072,8 +1072,6 @@ def fight_window():
                                                     count_ships = []
                                                     count_misses = []
                                                     old_killed_ships[0] = len(server_module.enemy_died_ships)
-                                                    if magnat_medal.ACTIVE == True:
-                                                        count_money_hit[0] += 20
                                                     bomb_shot(
                                                         row = row,
                                                         col = col,
@@ -1087,8 +1085,6 @@ def fight_window():
                                                     active_product_shine.y_cor = -100
                                                 # простой удар
                                                 elif activate_bomb[0] == False and activate_auto_rocket[0] == False:
-                                                    if magnat_medal.ACTIVE == True:
-                                                        count_money_hit[0] += 20
                                                     simple_shot(
                                                         col = col, 
                                                         row = row, 
