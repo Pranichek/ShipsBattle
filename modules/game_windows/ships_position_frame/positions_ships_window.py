@@ -32,9 +32,9 @@ def ships_position_window():
     music_load_main.play()
     pygame.display.set_caption("Position Ships")
     run_game = True
-    
     #generate grid with class
     grid_player.generate_grid()
+    check_connect_fight = 0
     while run_game:
         
         module_screen.FPS.tick(60)
@@ -50,13 +50,15 @@ def ships_position_window():
             check_press_button[0] = None
             break
         elif status_ready_to_game == "fight" and check_connection_users[1] != "fight" and check_can_connect_to_fight[2] != 'True':
-            server_module.list_check_ready_to_fight[0] = "wait"
-            apply_fade_effect(screen = main_screen)
-            change_scene(game_windows.waiting_window())
-            run_game = False
-            check_press_button[0] = None
-            break
-     
+            check_connect_fight += 1
+            if check_connect_fight >= 31:
+                server_module.list_check_ready_to_fight[0] = "wait"
+                apply_fade_effect(screen = main_screen)
+                change_scene(game_windows.waiting_window())
+                run_game = False
+                check_press_button[0] = None
+                break
+        
 
         
         ships_position_bg.draw_image(screen = main_screen)

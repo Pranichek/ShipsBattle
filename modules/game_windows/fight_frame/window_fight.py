@@ -243,13 +243,13 @@ def fight_window():
                 class_medal.enemy_collector_medal = True
 
         if animation_random_player.COUNT_IMAGES >= 5 and animation_random_player.COUNT_IMAGES <= 10:
-            animation_random_player.ANIMATION_SPEED = 3
+            animation_random_player.ANIMATION_SPEED = 3.2
         elif animation_random_player.COUNT_IMAGES >= 11 and animation_random_player.COUNT_IMAGES <= 16:
-            animation_random_player.ANIMATION_SPEED = 4
+            animation_random_player.ANIMATION_SPEED = 4.2
         elif animation_random_player.COUNT_IMAGES >= 17 and animation_random_player.COUNT_IMAGES <= 22:
-            animation_random_player.ANIMATION_SPEED = 5
+            animation_random_player.ANIMATION_SPEED = 5.2
         elif animation_random_player.COUNT_IMAGES >= 23 and animation_random_player.COUNT_IMAGES <= 27:
-            animation_random_player.ANIMATION_SPEED = 8
+            animation_random_player.ANIMATION_SPEED = 8.2
         if server_module.list_player_role[0] == "server_player":
             if animation_random_player.COUNT_IMAGES >= 28 and animation_random_player.COUNT_IMAGES <= 31:
                 animation_random_player.ANIMATION_SPEED = 120

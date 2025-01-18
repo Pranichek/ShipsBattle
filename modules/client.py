@@ -98,7 +98,7 @@ def start_client():
                         list_users[data[1]] = {"points": data[3], "password": data[2]}
                         write_json(filename = "data_base.json" , object_dict = list_users)
                     #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
-                    elif data[1]  in list_users:
+                    elif data[1] in list_users:
                         list_users[data[1]]["points"] = data[3]
                         write_json(filename = "data_base.json" , object_dict = list_users)
 
