@@ -128,7 +128,7 @@ def start_client():
 
                 enemy_data = recv_all(client_socket)
                 server_module.enemy_data[0] = enemy_data.decode("utf-8")
-                print(server_module.enemy_data, "enemy_data") 
+                # print(server_module.enemy_data, "enemy_data") 
     #         except Exception as e:
     #             print("Ошибка клиента:", e)
     #             pass

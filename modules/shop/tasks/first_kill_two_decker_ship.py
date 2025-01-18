@@ -17,4 +17,4 @@ def first_kill_two_decker():
                     if our_ships_2decker[0] > enemy_ships_2decker[0] and enemy_ships_2decker[0] == 2 and enemy_ships_2decker[0]!= "kill two-decker ship":
                         enemy_ships_2decker[0] = "kill two-decker ship"
                         check_completed_tasks[0] += 1
-                        print("Ты первым убил четырехпалубный корабль")
+                        print("Ты первым убил двух палубный корабль")

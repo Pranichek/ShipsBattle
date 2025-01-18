@@ -5,7 +5,6 @@ from ....game_tools import count_money_hit
 import modules.achievement as achievement
 from ....classes.class_ship import list_ships
 from ....screens import enemy_matrix
-from ....classes.class_medal import magnat_medal
 
 
 def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list, count_5: int):
@@ -198,8 +197,6 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
         upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     
     if count_7[0] > 0:
-        if magnat_medal.ACTIVE == True:
-                count_money_hit[0] += 20
         count_money_hit[0] += 10
         check_bomb[0] = True
         server_module.check_time[0] = 0
@@ -211,7 +208,7 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
         if shop.third_task.TEXT == shop.list_third_task[1]:
             shop.single_ships.extend(count_ships)
         if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-            if 1 in list_ships:
+            if 1 in count_ships:
                 shop.first_shot_is_kill(1)
             else:
                 shop.first_shot_is_kill(2)
@@ -239,8 +236,8 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
         for hit in range(0, count_7[0]):
             achievement.ten_shoot_in_row(7)
         achievement.first_shot(7)
-        achievement.single_ships_achiv.extend(list_ships)
-        achievement.list_hits_achiv.extend(list_ships)
+        achievement.single_ships_achiv.extend(count_ships)
+        achievement.list_hits_achiv.extend(count_ships)
     else:
         server_module.check_time[0] = 0
         if server_module.list_player_role[0] == "server_player":
@@ -270,8 +267,8 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
         # ачивки
         achievement.ten_shoot_in_row(5)
         achievement.first_shot(0)
-        achievement.single_ships_achiv.extend(list_ships)
-        achievement.list_hits_achiv.extend(list_ships)
+        achievement.single_ships_achiv.extend(0)
+        achievement.list_hits_achiv.extend(0)
     count_7[0] = 0
     count_ships.clear()
     count_misses.clear()
