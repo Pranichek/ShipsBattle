@@ -1,7 +1,6 @@
 from ..classes import piooner_achievement, pioneer_medal 
 from .four_decker_sniper import list_save_coords_achiv , enemy_dies_ships_for_ahiv , player_died_ships_for_achiv
-import modules.client as client_module
-
+from ..game_tools import count_money_hit
 
 
 count_player_ships_achiv = [0]
@@ -20,6 +19,7 @@ def piooner():
                     pioneer_medal.ACTIVE = True
                     list_save_coords_achiv.append(8)
                     list_save_coords_achiv[0] = True
+                    count_money_hit[0] += 20
                 
 
 

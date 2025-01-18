@@ -1,7 +1,6 @@
 from ..classes import  ten_shoot_in_row_achievement , perfect_shooter_medal
 from .four_decker_sniper import list_save_coords_achiv
-import modules.client as client_module
-
+from ..game_tools import count_money_hit
 #2 задание
 
 shoots = []
@@ -23,6 +22,7 @@ def ten_shoot_in_row(cell: int):
         list_save_coords_achiv.append(2)
         print("10 выстрелов по кораблям подряд")
         list_save_coords_achiv[0] = True
+        count_money_hit[0] += 20
 
 
 

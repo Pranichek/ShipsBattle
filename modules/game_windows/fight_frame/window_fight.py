@@ -834,6 +834,7 @@ def fight_window():
             magnat_medal.ACTIVE = True
             achievement.list_save_coords_achiv.append(5)
             achievement.list_save_coords_achiv[0] = True
+            count_money_hit[0] += 20
         # destoyer achievement
         # для бомбы задание
         if check_bomb[0] == True and 9 not in achievement.list_save_coords_achiv:
@@ -843,6 +844,7 @@ def fight_window():
                 destroyer_achievement.ACTIVE = True
                 achievement.list_save_coords_achiv.append(9)
                 achievement.list_save_coords_achiv[0] = True
+                count_money_hit[0] += 20
 
         if check_bomb[0] == True and 11 not in achievement.list_save_coords_achiv:
             new_killed_ships[0] = len(server_module.enemy_died_ships)
@@ -853,6 +855,7 @@ def fight_window():
                         target_attack_medal.ACTIVE = True
                         achievement.list_save_coords_achiv.append(11)
                         achievement.list_save_coords_achiv[0] = True
+                        count_money_hit[0] += 20
                     else:
                         count_5[0] = 0
                 else:
@@ -869,6 +872,7 @@ def fight_window():
             target_attack_medal.ACTIVE = True
             achievement.list_save_coords_achiv.append(11)
             achievement.list_save_coords_achiv[0] = True
+            count_money_hit[0] += 20
 
         # аниамция рандомного выбиора
         if server_module.list_player_role[0] == "server_player":

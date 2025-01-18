@@ -1,7 +1,6 @@
 from ..classes import first_hit_achievement, first_hit_medal
 from .four_decker_sniper import list_save_coords_achiv 
-import modules.client as client_module
-
+from ..game_tools import count_money_hit
 #4 медалька
 
 count_shot = [0]
@@ -19,3 +18,4 @@ def first_shot(cell: int):
                 first_hit_medal.ACTIVE = True
                 list_save_coords_achiv.append(4)
                 list_save_coords_achiv[0] = True
+                count_money_hit[0] += 20

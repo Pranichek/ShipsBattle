@@ -1,7 +1,6 @@
 from ..classes import opening_the_battle_achievement, opening_battle_medal
 from .four_decker_sniper import list_save_coords_achiv
-import modules.client as client_module
-
+from ..game_tools import count_money_hit
 player_ships = [0]
 enemy_ships = [0]
 def opening_the_battle(grid: list , enemy_grid: list):
@@ -21,4 +20,5 @@ def opening_the_battle(grid: list , enemy_grid: list):
             opening_battle_medal.ACTIVE = True
             list_save_coords_achiv.append(10)
             list_save_coords_achiv[0] = True
+            count_money_hit[0] += 20
 

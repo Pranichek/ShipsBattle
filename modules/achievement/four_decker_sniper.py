@@ -1,5 +1,5 @@
 from ..classes import  first_four_decker_achivment , four_decker_sniper_medal
-
+from ..game_tools import count_money_hit
 
 #1 медалька
 list_save_coords_achiv = [False]
@@ -27,5 +27,6 @@ def first_kill_four_decker_achivment():
                         four_decker_sniper_medal.ACTIVE = True
                         list_save_coords_achiv.append(1)
                         list_save_coords_achiv[0] = True
+                        count_money_hit[0] += 20
                                     
 

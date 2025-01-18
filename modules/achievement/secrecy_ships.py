@@ -1,7 +1,6 @@
 from ..classes import master_of_disguist_achievement, master_of_disguist_medal
 from .four_decker_sniper import list_save_coords_achiv
-import modules.client as client_module
-
+from ..game_tools import count_money_hit
 count_turns_achiv = [0]
 save_sevens_achiv = []
 def kept_all_ships_alive_for_ten_turns(grid: object):
@@ -18,3 +17,4 @@ def kept_all_ships_alive_for_ten_turns(grid: object):
         master_of_disguist_medal.ACTIVE = True
         list_save_coords_achiv.append(6)
         list_save_coords_achiv[0] = True
+        count_money_hit[0] += 20

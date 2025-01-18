@@ -1,7 +1,7 @@
 from ..classes import perfictionists_achiement, collector_medal
 from .four_decker_sniper import list_save_coords_achiv 
 from .four_decker_sniper import enemy_dies_ships_for_ahiv
-import modules.client as client_module
+from ..game_tools import count_money_hit
 
 list_hits_achiv = []
 index_killed_ships = [0]
@@ -42,6 +42,7 @@ def monster_of_perfictionists():
                             collector_medal.ACTIVE = True
                             list_save_coords_achiv.append(12)
                             list_save_coords_achiv[0] = True
+                            count_money_hit[0] += 20
                         else:
                             index_killed_ships[0] += 3
                             list_hits_achiv.clear()
