@@ -111,7 +111,7 @@ list_first_task = [
     "3 hits in a row",
     ]
 list_second_task = [
-    "Buy one bonus from the store" , 
+    "The first to kill a 2 deck ship" , 
     "Survive 5 turns without losing a ship" , 
     "Kill two ships in a row" , 
     "The first to kill a 3 deck ship" 
@@ -152,7 +152,7 @@ second_task = Font_Shop(
     y_cor = -(25 + (832 - (192 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = list_second_task[1],
+    text = random.choice(list_second_task),
     target_y = 192 , 
     max_width = 220 ,
     max_height = 28 ,

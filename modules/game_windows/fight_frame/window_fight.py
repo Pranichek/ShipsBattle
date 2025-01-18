@@ -825,6 +825,8 @@ def fight_window():
         # первым убить трех палубный корабль
         if shop.second_task.TEXT == shop.list_second_task[-1]:
             shop.first_kill_three_decker()
+        if shop.second_task.TEXT == shop.list_second_task[0]:
+            shop.first_kill_two_decker()
 
         # magnat echievement
         if shop.waste_money[0] >= 350 and 5 not in achievement.list_save_coords_achiv:

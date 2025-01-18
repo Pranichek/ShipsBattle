@@ -29,6 +29,7 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
             shop.ship_hits.append(enemy_matrix[row][col])
         if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
             shop.ship_hits_three.append(enemy_matrix[row][col])
+
         # ачивки
         achievement.ten_shoot_in_row(cell = enemy_matrix[row][col])
         achievement.first_shot(cell = enemy_matrix[row][col])

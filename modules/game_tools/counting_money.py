@@ -55,6 +55,8 @@ check_first_kill_three_3dec = [0]
 check_money_eight_hits_in_row = [0]
 # убить три двухпалубных кораблей подряд
 check_three_2decker_ship_in_row = [0]
+# первый убил двухпалубный корабль
+check_first_kill_twodecker = [0]
 
 # список при удачном выстреле
 count_money_hit = [0]
@@ -144,6 +146,17 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
     if "True" in task_game.four_hits_in_a_row:
         if check_money_four_hits_in_row[0] != 30:
             check_money_four_hits_in_row[0] += 1 
+            task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.x_cor = 1219
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+
+    if "kill two-decker ship" == task_game.enemy_ships_2decker[0]:
+        if check_first_kill_twodecker[0] != 50:
+            check_first_kill_twodecker[0] += 1
             task_game.money_list[0] += 1
             get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
