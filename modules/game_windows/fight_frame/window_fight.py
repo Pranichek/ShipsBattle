@@ -10,9 +10,9 @@ import modules.classes.class_medal as class_medal
 from ...game_tools import count_money
 from ...screens import grid_player, list_object_map, list_object_map_enemy, enemy_grid, list_grid, enemy_matrix
 from ...classes.class_music import music_load_waiting, fight_music
-from ...classes.class_medal import player_medal, enemy_medals, target_attack_medal, destroyer_medal
+from ...classes.class_medal import player_medal, enemy_medals, target_attack_medal, destroyer_medal, magnat_medal
 from ...classes.class_image import DrawImage
-from ...classes.achive_window import list_achieves, target_attack_achievement, destroyer_achievement
+from ...classes.achive_window import list_achieves, target_attack_achievement, destroyer_achievement, magnate_achievement
 from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound
@@ -227,6 +227,8 @@ def fight_window():
                 class_medal.enemy_strategist_medal.ACTIVE = True
             elif server_module.save_medals_coordinates[medal] == 4:
                 class_medal.enemy_first_hit_medal.ACTIVE= True
+            elif server_module.save_medals_coordinates[medal] == 5:
+                class_medal.enemy_magnat_medal.ACTIVE = True
             elif server_module.save_medals_coordinates[medal] == 6:
                 class_medal.enemy_master_of_disguist_medal.ACTIVE = True
             elif server_module.save_medals_coordinates[medal] == 7:
@@ -824,7 +826,12 @@ def fight_window():
         if shop.second_task.TEXT == shop.list_second_task[-1]:
             shop.first_kill_three_decker()
 
-
+        # magnat echievement
+        if shop.waste_money[0] >= 350 and 5 not in achievement.list_save_coords_achiv:
+            magnate_achievement.ACTIVE = True
+            magnat_medal.ACTIVE = True
+            achievement.list_save_coords_achiv.append(5)
+            achievement.list_save_coords_achiv[0] = True
         # destoyer achievement
         # для бомбы задание
         if check_bomb[0] == True and 9 not in achievement.list_save_coords_achiv:

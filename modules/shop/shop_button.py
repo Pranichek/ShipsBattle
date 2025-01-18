@@ -98,9 +98,13 @@ class Button_Shop:
 def test():
     print("Hello world!") 
 
+# список в котором храним сколько потртили монет
+waste_money = [0]
+
 # флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
 check_buy_bomb_attack = [False]
 def buy_bomb():
+    waste_money[0] += 150
     # if money_list[0] >= 150:
     #     if check_buy_bomb_attack[0] == False:
     #         if money_list[0] >= 0:
@@ -113,6 +117,7 @@ flagbimb200=["no"]
 cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
 check_2= [11,12,13,14,15,16,17,18,19,20]
 def buy_auto_rocket():
+    waste_money[0] += 200
     # if money_list[0] >= 200:
     #     if flagbimb200[0] == "no":
     buy_product_sound.play2(loops = 1)
@@ -122,12 +127,11 @@ def buy_auto_rocket():
    
 but_flag = [False]
 def buy_restore_cell():
+    waste_money[0] += 50
     # if money_list[0] >= 50:
     buy_product_sound.play2(loops = 1)
     if but_flag[0] == False:
         but_flag[0] = True
-
-
 
 
 # створюємо елементи від цього класу
