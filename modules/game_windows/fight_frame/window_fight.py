@@ -7,7 +7,7 @@ import modules.screens.screen as module_screen
 import modules.server as server_module
 import modules.achievement as achievement
 import modules.classes.class_medal as class_medal
-from ...game_tools import count_money
+from ...game_tools import count_money, apply_fade_effect
 from ...screens import grid_player, list_object_map, list_object_map_enemy, enemy_grid, list_grid, enemy_matrix
 from ...classes.class_music import music_load_waiting, fight_music
 from ...classes.class_medal import player_medal, enemy_medals, target_attack_medal, destroyer_medal, magnat_medal
@@ -23,6 +23,7 @@ from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot 
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
+from ..button_pressed import check_press_button
 
 list_check_shop = [None]
 def show_shop():
@@ -409,6 +410,47 @@ def fight_window():
                 data_player_shot.append(medals)
             list_check_need_send[0] = True
             achievement.list_save_coords_achiv[0] = False
+
+
+        #----------------------------------------------------------------
+        # Проверка на победу/поражение 1
+        count_player_ships = 0
+        # счетчик кораблей клиента
+        count_enemy_ships = 0
+        count_enemy_zero = 0
+        # делаем перебор матриц сервера и клиента, чтобы проверять ввыиграл уже кто то или нет
+        for row in range(len(list_grid)):
+            for cell in range(len(list_grid[row])):
+                # 5 - по клетке уже стреляли
+                # 0 - кораблей просто нет
+                # 7 - уже потопленный корабль
+                if list_grid[row][cell] in [1, 2, 3, 4]:
+                    count_player_ships += 1
+
+        for row in range(len(enemy_matrix)):
+            for cell in range(len(enemy_matrix[row])):
+                # 5 - по клетке уже стреляли
+                # 0 - кораблей просто нет
+                # 7 - уже потопленный корабль
+                if enemy_matrix[row][cell] in [1, 2, 3,4]:
+                    count_enemy_ships += 1
+                elif enemy_matrix[row][cell] == 0:
+                    count_enemy_zero += 1
+        if count_enemy_zero != 100:
+            # achievement.target_attack()
+            if count_player_ships == 0 and count_enemy_ships > 0:
+                if server_module.list_player_role[0] == "server_player":
+                    # список для хранения кто выиграл
+                    server_module.list_check_win[0] = "win_client"
+                elif server_module.list_player_role[0] == "client_player":
+                    server_module.list_check_win[0] = "win_server"
+            elif count_enemy_ships == 0 and count_player_ships > 0:
+                if server_module.list_player_role[0] == "server_player":
+                    # список для хранения кто выиграл
+                    server_module.list_check_win[0] = "win_server"
+                elif server_module.list_player_role[0] == "client_player":
+                    server_module.list_check_win[0] = "win_client"
+        #----------------------------------------------------------------
             
 
         #----------------------------------------------------------------
@@ -986,6 +1028,7 @@ def fight_window():
                                                 active_product_shine.x_cor = -100
                                                 active_product_shine.y_cor = -100
                                         
+                                        
                 x_mouse, y_mouse = pygame.mouse.get_pos()                                           
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
@@ -1195,15 +1238,15 @@ def fight_window():
 
           
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
-        # if achievement.strategist_achievement.ACTIVE == False:
-        #     if server_module.list_check_win[0] != None:   
-        #         # якщо вже їтось виграв , то робимо ефект затемнення
-        #         apply_fade_effect(screen = module_screen.main_screen)
-        #         # зупиняємо цикл гри
-        #         run_game = False
-        #         # змінюємо фрейм бою , на фрейм показу результатів
-        #         change_scene(scene =game_windows.finish_window())
-        #         check_press_button[0] = None
+        if achievement.strategist_achievement.ACTIVE == False:
+            if server_module.list_check_win[0] != None:   
+                # якщо вже їтось виграв , то робимо ефект затемнення
+                apply_fade_effect(screen = module_screen.main_screen)
+                # зупиняємо цикл гри
+                run_game = False
+                # змінюємо фрейм бою , на фрейм показу результатів
+                change_scene(scene =game_windows.finish_window())
+                check_press_button[0] = None
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1
