@@ -1,5 +1,6 @@
 import pygame
 from os.path import abspath, join
+from .class_click import music_click
 
 # создаем класс кнопки
 class Button:
@@ -36,5 +37,6 @@ class Button:
             # если курсор мыши находится внутри области кнопки, запускаем функцию action, которая должна отрабатывать при нажатии на кнопку
             if self.rect.collidepoint(mouse):
                 if self.action:
+                    music_click.play2(loops = 1)
                     self.action()
                     
