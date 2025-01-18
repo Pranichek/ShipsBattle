@@ -3,7 +3,7 @@ import modules.screens.screen as module_screen
 import modules.server as server_module
 from ..create_game_frame import room_data, ip_room_text, port_room_text
 from ...server import SERVER
-from ...client import check_connection_users
+from ...client import check_can_connect_to_fight
 import modules.game_windows as game_windows
 from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
@@ -115,12 +115,12 @@ def join_game_window():
             if fail_connect.visible == False:
                 list_check_connection[0] = True
     
-        if server_module.list_player_role[0] == "server_player":
+        if server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] == False:
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.waiting_window())
             check_press_button[0] = None
             run_game = False
-        elif server_module.list_player_role[0] == "client_player":
+        elif server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] != False:
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window())
             check_press_button[0] = None

@@ -15,6 +15,7 @@ from ...classes.class_image import DrawImage
 from ...classes.achive_window import list_achieves, target_attack_achievement, destroyer_achievement
 from ...classes.class_button import Button
 from ...classes.class_text import Font
+from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player
 from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit
@@ -149,6 +150,9 @@ old_killed_ships = [0]
 new_killed_ships = [0]
 check_bomb = [False]
 
+# для того чтобы звук играл только один раз
+count_sound_time = [0]
+
 # для сравнения изменился ли нашь баланс
 check_player_balance = [0, False]
 
@@ -203,6 +207,7 @@ def fight_window():
     player_points.update_text()
     enemy_points.update_text()
     send_matrix()
+    random_first_choice_sound.play2(loops = 1)
     while run_game:
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
@@ -237,18 +242,31 @@ def fight_window():
                 class_medal.enemy_collector_medal = True
 
         if animation_random_player.COUNT_IMAGES >= 5 and animation_random_player.COUNT_IMAGES <= 10:
-            animation_random_player.ANIMATION_SPEED = 20
+            animation_random_player.ANIMATION_SPEED = 3
         elif animation_random_player.COUNT_IMAGES >= 11 and animation_random_player.COUNT_IMAGES <= 16:
-            animation_random_player.ANIMATION_SPEED = 15
+            animation_random_player.ANIMATION_SPEED = 4
         elif animation_random_player.COUNT_IMAGES >= 17 and animation_random_player.COUNT_IMAGES <= 22:
-            animation_random_player.ANIMATION_SPEED = 13
-        elif animation_random_player.COUNT_IMAGES >= 23 and animation_random_player.COUNT_IMAGES <= 28:
-            animation_random_player.ANIMATION_SPEED = 10
-        elif animation_random_player.COUNT_IMAGES >= 29 and animation_random_player.COUNT_IMAGES <= 30:
-            animation_random_player.ANIMATION_SPEED = 100
+            animation_random_player.ANIMATION_SPEED = 5
+        elif animation_random_player.COUNT_IMAGES >= 23 and animation_random_player.COUNT_IMAGES <= 27:
+            animation_random_player.ANIMATION_SPEED = 8
+        if server_module.list_player_role[0] == "server_player":
+            if animation_random_player.COUNT_IMAGES >= 28 and animation_random_player.COUNT_IMAGES <= 31:
+                animation_random_player.ANIMATION_SPEED = 120
+        elif server_module.list_player_role[0] == "client_player":
+             if animation_random_player.COUNT_IMAGES >= 29 and animation_random_player.COUNT_IMAGES <= 31:
+                animation_random_player.ANIMATION_SPEED = 120
 
-        
-        
+
+
+        if server_module.list_player_role[0] != "server_player" and animation_random_player.COUNT_IMAGES >= 29 and count_sound_time[0] == 0:
+            enemy_turn_sound.play2(loops = 1)
+            count_sound_time[0] = 1
+        elif animation_random_player.COUNT_IMAGES >= 28 and count_sound_time[0] == 0 and server_module.list_player_role[0] != "client_player":
+            player_turn_sound.play2(loops = 1)
+            count_sound_time[0] = 1
+    
+
+
         if animation_random_player.IS_ANIMATION_DONE == True:
             if check_two_times.count(3) >= 2:
                 server_module.check_time[0] += 1
@@ -885,14 +903,14 @@ def fight_window():
                         activate_restore_cell[0] = False
                         active_product_shine.x_cor = bomb_icon.x_cor - 17
                         active_product_shine.y_cor = bomb_icon.y_cor - 17
-                elif shop.flagbimb200[0] == "yes":
+                if shop.flagbimb200[0] == "yes":
                     if auto_rocket_icon.rect.collidepoint(mouse):
                         activate_auto_rocket[0] = True
                         activate_bomb[0] = False
                         activate_restore_cell[0] = False
                         active_product_shine.x_cor = auto_rocket_icon.x_cor - 13
                         active_product_shine.y_cor = auto_rocket_icon.y_cor - 10
-                elif shop.but_flag[0] == True:
+                if shop.but_flag[0] == True:
                     if restore_cell_icon.rect.collidepoint(mouse):
                         activate_restore_cell[0] = True
                         activate_bomb[0] = False

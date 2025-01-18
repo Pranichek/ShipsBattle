@@ -71,33 +71,29 @@ def start_client():
         #зберігаємо інформацію у json файл
         write_json(filename = "data_base.json" , object_dict = list_users)
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        client_socket.connect((str(input_ip_adress.user_text), int(input_port.user_text)))  # Подключение к серверу
-        print("Клиент подключён к серверу.")
-        # Получение сообщения от сервера (роль клиента)
-        role = client_socket.recv(1024).decode("utf-8")
-        server_module.list_player_role[0] = role
+    # try:
+    client_socket.connect((str(input_ip_adress.user_text), int(input_port.user_text)))  # Подключение к серверу
+    print("Клиент подключён к серверу.")
+    # Получение сообщения от сервера (роль клиента)
+    role = client_socket.recv(1024).decode("utf-8")
+    server_module.list_player_role[0] = role
 
-        if server_module.list_player_role[0] == "server_player":
-            TARGET_COUNT = 1
-        elif server_module.list_player_role[0] == "client_player":
-            TARGET_COUNT = 2
-        # Бесконечный цикл для отправки и получения данных
-        while True:
-            try:
-                if check_can_connect_to_fight[2] != 'True':
-                    time.sleep(0.1)
-                    status_game = [save_data_posistion_ships[0], f"{input_nick.user_text}", {str(input_password.user_text)}, f"{str(list_users[input_nick.user_text]["points"])}", f"{check_can_connect_to_fight[0]}"]
-                    str_data = ""
-                    for data in status_game:
-                        str_data += f"{data} "
-                    client_socket.sendall(str_data.encode("utf-8"))
+    # Бесконечный цикл для отправки и получения данных
+    while True:
+        # try:
+            if check_can_connect_to_fight[2] != 'True':
+                time.sleep(0.1)
+                status_game = [save_data_posistion_ships[0], input_nick.user_text, input_password.user_text, list_users[input_nick.user_text]["points"],check_can_connect_to_fight[0]]
+                str_data = ""
+                for data in status_game:
+                    str_data += f"{str(data)} "
+                client_socket.sendall(str_data.encode("utf-8"))
 
-                    data_enemy = client_socket.recv(1024).decode("utf-8")
-                    data = data_enemy.split(" ")
-                    check_connection_users[0] = save_data_posistion_ships[0]
+                data_enemy = client_socket.recv(1024).decode("utf-8")
+                data = data_enemy.split(" ")
+                check_connection_users[0] = save_data_posistion_ships[0]
+                if len(data) > 4:
                     check_can_connect_to_fight[2] = data[4]
-                    print(data)
                     if data[1] not in list_users:
                         list_users[data[1]] = {"points": data[3], "password": data[2]}
                         write_json(filename = "data_base.json" , object_dict = list_users)
@@ -114,27 +110,30 @@ def start_client():
                     dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
                     dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
                 else:
-                    time.sleep(0.5)
-                    check_two_times.append(3)
-                    # Перевірка значення в списку перед відправкою даних
-                    if list_check_need_send[0] == True:  # Перевірка на `True`
-                        str_line = ""
-                        for cell in data_player_shot:
-                            str_line += str(cell) + " " # Переводимо список в строчку с пробелами
-                        client_socket.sendall(str_line.encode("utf-8") + b"END")  # Відправка даних як список
-                        data_player_shot.clear()  # Очищаем список перед новым входом
-                        list_check_need_send[0] = False
-                    else:
-                        client_socket.sendall("keep-alive".encode("utf-8") + b"END")
+                    print("Index error")
+   
+            else:
+                time.sleep(0.5)
+                check_two_times.append(3)
+                # Перевірка значення в списку перед відправкою даних
+                if list_check_need_send[0] == True:  # Перевірка на `True`
+                    str_line = ""
+                    for cell in data_player_shot:
+                        str_line += str(cell) + " " # Переводимо список в строчку с пробелами
+                    client_socket.sendall(str_line.encode("utf-8") + b"END")  # Відправка даних як список
+                    data_player_shot.clear()  # Очищаем список перед новым входом
+                    list_check_need_send[0] = False
+                else:
+                    client_socket.sendall("keep-alive".encode("utf-8") + b"END")
 
-                    enemy_data = recv_all(client_socket)
-                    server_module.enemy_data[0] = enemy_data.decode("utf-8")
-                    print(server_module.enemy_data, "enemy_data") 
-            except Exception as e:
-                print("Ошибка клиента:", e)
-                pass
-    except Exception as e:
-        print(f"Ошибка клиента: {e}")
+                enemy_data = recv_all(client_socket)
+                server_module.enemy_data[0] = enemy_data.decode("utf-8")
+                print(server_module.enemy_data, "enemy_data") 
+    #         except Exception as e:
+    #             print("Ошибка клиента:", e)
+    #             pass
+    # except Exception as e:
+    #     print(f"Ошибка клиента: {e}")
 
 connect_to_game = Thread(target = start_client, daemon = True)
 
