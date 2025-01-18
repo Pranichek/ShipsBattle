@@ -45,6 +45,8 @@ cursor_img_rect = cursor_image.get_rect()
 grid_image = DrawImage(width = 662  , height = 662 , x_cor = 40 , y_cor = 37 , folder_name = "grid", image_name = "background_grid.png")
 player_face = DrawImage(width = 154 , height = 123 ,x_cor = 1104 , y_cor = 79 , folder_name = "decorations" , image_name = "active_player.png")
 enemy_face = DrawImage(width = 154 , height = 123  ,x_cor = 20 , y_cor = 79 , folder_name = "decorations" , image_name = "not_active_enemy.png")
+player_before_choice = DrawImage(width = 154 , height = 123, x_cor = 1104, y_cor = 79, folder_name = "decorations" , image_name = "before_choice_player.png")
+enemy_before_choice = DrawImage(width = 154 , height = 123 , x_cor = 20 , y_cor = 79 , folder_name = "decorations" , image_name = "before_choice_enemy.png")
 fight_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 , folder_name= "backgrounds" , image_name= "fight_background.png")
 shadow_data_user = DrawImage(x_cor = -28 , y_cor = -95 , width = 1351 , height = 236 , folder_name = "decorations" , image_name = "shadow_user_data.png")
 user_weapon = DrawImage(x_cor = 1046 , y_cor = -26 , width = 260 , height = 135 , folder_name = "backgrounds" , image_name = "user_weapon.png")
@@ -60,7 +62,6 @@ restore_cell_icon = DrawImage(x_cor = 1147, y_cor = 23, width = 31, height = 28.
 active_product_shine = DrawImage(x_cor = -100, y_cor = -100, width = 60, height = 60, folder_name = "decorations", image_name = "shine_for_weapon.png")
 frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
-
 #fonts
 player_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["player_nick"] , screen = module_screen.main_screen , x_cor = 914 , y_cor = 126, text_color = "White")
 enemy_nick = Font(size = 48 , name_font= "Jersey15.ttf" , text = dict_save_information["enemy_nick"] , screen = module_screen.main_screen , x_cor = 437 , y_cor = 126, text_color = "White")
@@ -594,8 +595,15 @@ def fight_window():
         second_frame_nick_player.draw_image(screen = module_screen.main_screen)
 
         # відмальовуємо зображення які вказують чиї зараз ход
-        player_face.draw_image(screen = module_screen.main_screen)
-        enemy_face.draw_image(screen = module_screen.main_screen)
+        if count_sound_time[0] >= 1:
+            player_face.draw_image(screen = module_screen.main_screen)
+            enemy_face.draw_image(screen = module_screen.main_screen)
+        enemy_before_choice.draw_image(screen = module_screen.main_screen)
+        player_before_choice.draw_image(screen = module_screen.main_screen)
+
+        if count_sound_time[0] >= 1:
+            enemy_before_choice.fade_out()
+            player_before_choice.fade_out()
 
         # выполнить первые три задания
         if shop.fourth_task.TEXT == shop.list_fourth_task[2]:
