@@ -80,7 +80,7 @@ def start_client():
 
     # Бесконечный цикл для отправки и получения данных
     while True:
-        # try:
+        try:
             if check_can_connect_to_fight[2] != 'True':
                 time.sleep(0.1)
                 status_game = [save_data_posistion_ships[0], input_nick.user_text, input_password.user_text, list_users[input_nick.user_text]["points"],check_can_connect_to_fight[0]]
@@ -129,7 +129,11 @@ def start_client():
                 enemy_data = recv_all(client_socket)
                 server_module.enemy_data[0] = enemy_data.decode("utf-8")
                 # print(server_module.enemy_data, "enemy_data") 
-    #         except Exception as e:
+        except Exception as e:
+            client_socket.close()
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client_socket.connect((str(input_ip_adress.user_text), int(input_port.user_text)))
+            continue
     #             print("Ошибка клиента:", e)
     #             pass
     # except Exception as e:
