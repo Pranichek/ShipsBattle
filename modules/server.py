@@ -239,15 +239,22 @@ check_connection = [True]
 def listen_client(client, second_client):
     while True:
         try:
+            if SERVER.clients == 2:
+                client.settimeout(5)
             data = client.recv(1024)
             if data:
                 second_client.sendall(data)
         except ConnectionResetError:
             SERVER.RESTART = True
+            SERVER.clients = 0
+            SERVER.server_socket.close()
+            client.close()
             break
         except Exception as error:
-            print("Error occurred:", error)
             SERVER.RESTART = True
+            SERVER.clients = 0
+            SERVER.server_socket.close()
+            client.close()
             break
 
 players = ["server_player", "client_player"]
@@ -255,38 +262,56 @@ class Server():
     def __init__(self):
         self.RESTART = False
         self.START_CONNECT = False
-    def start_server(self, ip_adress: str, port: int):
-        self.START_CONNECT = True
+        self.clients = 0
+        self.PORT = 0
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind((str(ip_adress), int(port)))
+
+    def start_server(self, ip_adress: str, port: int):
+        self.PORT = int(port) 
         while True:
             try:
-                copy_list_player = players.copy()
-                player_one = random.choice(copy_list_player)
-                copy_list_player.remove(player_one)
-                player_two = copy_list_player[0]
-                print(f"Room ip_adress {colorama.Fore.GREEN} {ip_adress} {colorama.Style.RESET_ALL}")
-                print(f"Room Port:{colorama.Fore.GREEN} {port} {colorama.Style.RESET_ALL}")
-                self.server_socket.listen()
+                if not self.RESTART:
+                    self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    self.server_socket.bind((str(ip_adress), self.PORT))
+                    copy_list_player = players.copy()
+                    player_one = random.choice(copy_list_player)
+                    copy_list_player.remove(player_one)
+                    player_two = copy_list_player[0]
+                    print(f"Room ip_adress {colorama.Fore.GREEN} {ip_adress} {colorama.Style.RESET_ALL}")
+                    print(f"Room Port:{colorama.Fore.GREEN} {self.PORT} {colorama.Style.RESET_ALL}")
+                    print(self.PORT)
+                    self.server_socket.listen()
 
-                client_socket, addr = self.server_socket.accept()
-                client_socket.sendall(player_one.encode("utf-8"))
-                print("First player is connected")
-                client_socket_second, addr_second = self.server_socket.accept()
-                client_socket_second.sendall(player_two.encode("utf-8"))
-                print("Second player is connecter")
-
-                thread1 = Thread(target = listen_client, args = (client_socket, client_socket_second))
-                thread1.start()
-
-                thread2 = Thread(target = listen_client, args = (client_socket_second, client_socket))
-                thread2.start()
-                if self.RESTART:
-                    print("Server problemn")
+                    client_socket, addr = self.server_socket.accept()
+                    client_socket.sendall(player_one.encode("utf-8"))
+                    print("First player is connected")
+                    client_socket_second, addr_second = self.server_socket.accept()
+                    client_socket_second.sendall(player_two.encode("utf-8"))
+                    print("Second player is connecter")
                     self.RESTART = False
-                    raise Exception("RESTART")
-            except:
-                print("Exception server")
+
+                    print(client_socket , client_socket_second)
+
+                    thread1 = Thread(target = listen_client, args = (client_socket, client_socket_second))
+                    thread1.start()
+                    self.clients += 1
+
+                    thread2 = Thread(target = listen_client, args = (client_socket_second, client_socket))
+                    thread2.start()
+                    self.clients += 1
+
+                    thread1.join()
+                    thread2.join()
+                    print("Congratulations")
+                    self.PORT += 1
+                if self.RESTART:
+                    self.server_socket.close()
+                    self.RESTART = False
+                    continue
+            except Exception as error:
+                self.server_socket.close()
+                client_socket.close()
+                client_socket_second.close()
                 pass
 
 SERVER = Server()
