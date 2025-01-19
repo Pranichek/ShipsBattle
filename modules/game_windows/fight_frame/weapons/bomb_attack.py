@@ -236,8 +236,8 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
         for hit in range(0, count_7[0]):
             achievement.ten_shoot_in_row(7)
         achievement.first_shot(7)
-        achievement.single_ships_achiv.extend(count_ships)
-        achievement.list_hits_achiv.extend(count_ships)
+        achievement.single_ships_achiv.append(count_ships)
+        achievement.list_hits_achiv.append(count_ships)
     else:
         server_module.check_time[0] = 0
         if server_module.list_player_role[0] == "server_player":
@@ -267,8 +267,8 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
         # ачивки
         achievement.ten_shoot_in_row(5)
         achievement.first_shot(0)
-        achievement.single_ships_achiv.extend(0)
-        achievement.list_hits_achiv.extend(0)
+        achievement.single_ships_achiv.append(0)
+        achievement.list_hits_achiv.append(0)
     count_7[0] = 0
     count_ships.clear()
     count_misses.clear()

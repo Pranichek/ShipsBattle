@@ -7,6 +7,7 @@ import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
 from threading import Thread
+from .server import SERVER
 
 
 # лист для клиента в котором храним надо ли что то изменять после его атаки
@@ -89,6 +90,8 @@ def start_client():
                         str_data += f"{str(data)} "
                     client_socket.sendall(str_data.encode("utf-8"))
                     try:
+                        if check_can_connect_to_fight[2] != False:
+                            client_socket.settimeout(0.5)
                         data_enemy = client_socket.recv(1024).decode("utf-8")
                     except:
                         raise Exception("Reconnect")
@@ -129,24 +132,25 @@ def start_client():
                         client_socket.settimeout(4.9)
                         client_socket.sendall("keep-alive".encode("utf-8") + b"END")
                     try:
+                        if server_module.enemy_data[0] != "":
+                            client_socket.settimeout(1)
                         enemy_data = recv_all(client_socket)
                     except:
                         raise Exception("Reconnect")
                     server_module.enemy_data[0] = enemy_data.decode("utf-8")
                     # print(server_module.enemy_data, "enemy_data") 
             except Exception as e:
-                print(1)
-                try:
-                    client_socket.close()
-                except:
-                    pass
-                print(2)
                 port_client += 1
-                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                print(3)
-                print(port_client)
                 while True:
                     try:
+                        try:
+                            client_socket.close()
+                        except:
+                            pass
+                        print(2)
+                        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        print(3)
+                        print(port_client)
                         client_socket.connect((str(input_ip_adress.user_text), port_client)) 
                         print(5)
                         break
