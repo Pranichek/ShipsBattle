@@ -8,6 +8,7 @@ from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
 from ..change_window import change_scene
 from ..button_pressed import button_action, check_press_button
+from ...volume_settings import off_sound_button, volume_up_button, volume_down_button
 
 
 #картинки
@@ -37,6 +38,12 @@ def main_window():
 
     once_play_music[0] += 1
 
+    volume_down_button.x = 113
+    volume_down_button.y = 14
+    volume_up_button.x = 21
+    volume_up_button.y = 14
+    off_sound_button.x = 205
+    off_sound_button.y = 14
     while run_game:
         module_screen.FPS.tick(60)
         mouse_x , mouse_y = pygame.mouse.get_pos()
@@ -47,13 +54,21 @@ def main_window():
         second_cold_image.draw_image(screen= main_screen)
         join_game_frame.draw(surface= main_screen)  
 
+        off_sound_button.draw(surface = main_screen)
+        volume_up_button.draw(surface = main_screen)
+        volume_down_button.draw(surface = main_screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
+                
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click(event = event)
                 join_game_frame.check_click(event = event)
+                off_sound_button.check_click(event = event)
+                volume_up_button.check_click(event = event)
+                volume_down_button.check_click(event = event)
 
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()

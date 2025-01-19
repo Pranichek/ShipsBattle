@@ -1,11 +1,11 @@
-import pygame
+import pygame, random
 from os.path import abspath, join
 from .shop_image import shop_item
-from .text_shop import money_list 
 from ..screens import FPS
 from os.path import abspath, join
-from ..screens import main_screen
-
+from ..classes import buy_product_sound
+from ..volume_settings import turn_off_volume_func, volume_up_func, volume_down_func
+from .text_shop import list_first_task, list_second_task, list_third_task, list_fourth_task, first_task, second_task, third_task,fourth_task
 
 
 #класс для кнопки в магазині
@@ -96,32 +96,61 @@ class Button_Shop:
         if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):
             self.ACTIVE = False
 
+# копии списков с задниями чтоюы моэно было брать новые
+first_tasks_copy = list_first_task.copy()
+second_tasks_copy = list_second_task.copy()
+third_tasks_copy = list_third_task.copy()
+fourth_tasks_copy = list_fourth_task.copy()
+def new_tasks():
+    print(938493434398489348934899)
+    first_task.TEXT = random.choice(first_tasks_copy)
+    first_task.update_text_for_task()
+    second_task.TEXT = random.choice(second_tasks_copy)
+    second_task.update_text_for_task()
+    third_task.TEXT = random.choice(third_tasks_copy)
+    third_task.update_text_for_task()
+    fourth_task.TEXT = random.choice(fourth_tasks_copy)
+    fourth_task.update_text_for_task()
+    print(8888888888888)
+
 
 def test():
     print("Hello world!") 
 
+# список в котором храним сколько потртили монет
+waste_money = [0]
+
 # флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
 check_buy_bomb_attack = [False]
 def buy_bomb():
-    if money_list[0] >= 150:
-        if check_buy_bomb_attack[0] == False:
-            if money_list[0] >= 0:
-                check_buy_bomb_attack[0] = True
+    waste_money[0] += 150
+    # if money_list[0] >= 150:
+    #     if check_buy_bomb_attack[0] == False:
+    #         if money_list[0] >= 0:
+    buy_product_sound.play2(loops = 1)
+    if check_buy_bomb_attack[0] == False:
+        check_buy_bomb_attack[0] = True
+    
 
 flagbimb200=["no"]
 cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
 check_2= [11,12,13,14,15,16,17,18,19,20]
 def buy_auto_rocket():
-    if money_list[0] >= 200:
-        if flagbimb200[0] == "no":
-            flagbimb200[0] = "yes"
+    waste_money[0] += 200
+    # if money_list[0] >= 200:
+    #     if flagbimb200[0] == "no":
+    buy_product_sound.play2(loops = 1)
+    if flagbimb200[0] == "no":
+        flagbimb200[0] = "yes"
+    
    
 but_flag = [False]
 def buy_restore_cell():
-    if money_list[0] >= 50:
-        if but_flag[0] == False:
-            but_flag[0] = True
-
+    waste_money[0] += 50
+    # if money_list[0] >= 50:
+    buy_product_sound.play2(loops = 1)
+    if but_flag[0] == False:
+        but_flag[0] = True
 
 
 # створюємо елементи від цього класу
@@ -185,9 +214,47 @@ button_auto_attack = Button_Shop(
     action = buy_auto_rocket
 )
 
+volume_up = Button_Shop(
+    x = 1007, 
+    y = -(71 + (832 - (8 + 71))), 
+    width = 74, 
+    height = 71, 
+    image_name = "button_volue_up.png", 
+    action = volume_up_func,
+    target_y = 8
+)
 
+volume_down = Button_Shop(
+    x = 1099, 
+    y = -(71 + (832 - (8 + 71))), 
+    width = 74, 
+    height = 71, 
+    image_name = "button_music_lower.png", 
+    action = volume_down_func,
+    target_y = 8
+)
+
+turn_off_button = Button_Shop(
+    x = 1191,
+    y = -(71 + (832 - (8 + 71))),
+    width = 74, 
+    height = 71, 
+    image_name = "off_music_hover.png", 
+    action = turn_off_volume_func,
+    target_y = 8
+)
+
+new_random_tasks = Button_Shop(
+    x = 331 ,
+    y = -(21 + (832 - (350 + 21))),
+    width = 80,
+    height = 21,
+    image_name = 'new_tasks.png',
+    target_y = 349,
+    action = new_tasks
+)
 
 
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
-shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire])
+shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, new_random_tasks])

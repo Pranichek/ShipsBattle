@@ -1,6 +1,6 @@
 import modules.shop as task_game
 from ..screens import main_screen
-from ..classes import Font
+from ..classes import Font, get_coin_sound
 from ..server import enemy_balance
 
 
@@ -55,7 +55,11 @@ check_first_kill_three_3dec = [0]
 check_money_eight_hits_in_row = [0]
 # убить три двухпалубных кораблей подряд
 check_three_2decker_ship_in_row = [0]
+# первый убил двухпалубный корабль
+check_first_kill_twodecker = [0]
 
+# список при удачном выстреле
+count_money_hit = [0]
 
 # при покупке бомбы
 check_money_bomb = [0]
@@ -64,6 +68,15 @@ check_money_restoration = [0]
 # для покупки авто ракеты
 check_money_auto_rocket = [0]
 def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool):
+    if count_money_hit[0] > 0:
+        count_money_hit[0] -= 1
+        task_game.money_list[0] += 1
+        get_coin_sound.play2(loops = 1)
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+
     if check_buy_auto_rocket == "yes" and check_money_auto_rocket[0] == 0:
         check_money_auto_rocket[0] += 1
         task_game.money_list[0] -= 1
@@ -124,6 +137,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_money_two_hits_in_row[0] != 30:
             check_money_two_hits_in_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.text = str(task_game.money_list[0])
@@ -133,6 +147,18 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_money_four_hits_in_row[0] != 30:
             check_money_four_hits_in_row[0] += 1 
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.x_cor = 1219
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+
+    if "kill two-decker ship" == task_game.enemy_ships_2decker[0]:
+        if check_first_kill_twodecker[0] != 50:
+            check_first_kill_twodecker[0] += 1
+            task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -143,6 +169,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_kill_one_3deck[0]!= 30:
             check_kill_one_3deck[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -153,6 +180,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_money_two_kill_in_a_row[0] != 50:
             check_money_two_kill_in_a_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -164,6 +192,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_three_2decker_ship_in_row[0] != 80:
             check_three_2decker_ship_in_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -174,6 +203,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_kill_first_four_deck[0] != 80:
             check_kill_first_four_deck[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -184,6 +214,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_2_kills_3deck_in_row[0] != 80:
             check_2_kills_3deck_in_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -194,6 +225,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_kill_four_1decker_in_row[0] != 80:
             check_kill_four_1decker_in_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -204,6 +236,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_kill_in_first_shot[0] != 100:
             check_kill_in_first_shot[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -214,6 +247,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_kept_alive_for_5_turns[0] != 50:
             check_kept_alive_for_5_turns[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -225,6 +259,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_kill_three_ships_in_row[0] != 100:
             check_kill_three_ships_in_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -235,6 +270,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_completed_three_tasks[0]!= 100:
             check_completed_three_tasks[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -245,6 +281,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_money_three_hits_in_row[0] != 30:
             check_money_three_hits_in_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -255,6 +292,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_first_kill_three_3dec[0]!= 50:
             check_first_kill_three_3dec[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219
@@ -266,6 +304,7 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         if check_money_eight_hits_in_row[0] != 100:
             check_money_eight_hits_in_row[0] += 1
             task_game.money_list[0] += 1
+            get_coin_sound.play2(loops = 1)
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.x_cor = 1219

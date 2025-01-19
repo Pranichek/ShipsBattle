@@ -1,4 +1,5 @@
 import modules.server as server_module
+from ....client import list_check_need_send, data_player_shot
 from ....screens import list_grid, list_object_map
 from ....classes.animation import animation_health
 from ....game_tools import check_number_cell
@@ -81,6 +82,12 @@ def restore_part_of_ship(row:int, col: int, str_col: str, health_anim: list):
             if list_grid[row][col] != 7:
                 health_anim[0] = True
                 shop.but_flag[0] = False
+                data_player_shot.append("restore_cell")
+                data_player_shot.append(str(list_grid[row][col]))
+                data_player_shot.append(str(row))
+                data_player_shot.append(str(col))
+                list_check_need_send[0] = True
+
             server_module.row_list[0] = row
             server_module.col_list[0] = col
             server_module.number_list[0] = list_grid[row][col]

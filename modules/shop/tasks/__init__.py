@@ -13,4 +13,5 @@ from .three_hits import *
 from .three_ships_in_row import *
 from .shot_two_hits_in_row import *
 from .two_three_decker_in_row import *
+from .first_kill_two_decker_ship import *
 

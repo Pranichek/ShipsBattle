@@ -559,6 +559,3 @@ list_ships.append(ship_four)
 list_ships.extend([ship_three , ship_three2])
 list_ships.extend([ship_two , ship_two2 , ship_two3])
 list_ships.extend([ship_one , ship_one2 , ship_one3, ship_one4])
-
-
-

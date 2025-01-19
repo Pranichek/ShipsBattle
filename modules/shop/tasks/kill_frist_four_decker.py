@@ -1,5 +1,6 @@
 from .did_three_tasks import check_completed_tasks
 from ...achievement import enemy_dies_ships_for_ahiv, player_died_ships_for_achiv
+from..shop_button import second_tasks_copy
 
 our_ships_4decker = [0]
 enemy_ships_4decker = [0]
@@ -18,3 +19,4 @@ def first_kill_four_decker():
                         enemy_ships_4decker[0] = "kill four-decker ship"
                         check_completed_tasks[0] += 1
                         print("Ты первым убил четырехпалубный корабль")
+                        del second_tasks_copy[0]

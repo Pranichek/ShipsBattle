@@ -1,7 +1,6 @@
 import socket, json, time, pickle
 from .classes import input_port, input_ip_adress, input_nick ,list_ships
 from .json_functions import write_json , list_users 
-from .json_functions.json_read import read_json
 import modules.server as server_module
 from .screens import list_grid
 import modules.shop as shop
@@ -19,7 +18,19 @@ check_connection_users = [False, False]
 data_player_shot = []
 # список для того чтобы время было ровно по секундам
 check_two_times = []
+# список для подсчета сколько времени оба игрока расставели корабли, чтобы точно все успели прдклюючиться к бою
+check_can_connect_to_fight = [0, False, False]
+# список в котором сохраняем расставил ли игрок корабли
+save_data_posistion_ships = [""]
+TARGET_COUNT = 0
 
+
+dict_save_information = {
+    "player_nick": "",
+    "player_points" : 0,
+    "enemy_nick" : "",
+    "enemy_points" : 0,
+}
 
 
 def send_matrix():
@@ -29,7 +40,11 @@ def send_matrix():
     for row in list_grid:  # Предполагается, что list_grid соответствует enemy_matrix
         for cell in row:
             data_player_shot.append(str(cell))
-
+    for ship in list_ships:
+        data_player_shot.append(str(ship.X_COR))
+        data_player_shot.append(str(ship.Y_COR))
+        data_player_shot.append(str(ship.LENGHT))
+        data_player_shot.append(str(ship.ORIENTATION_SHIP))
 
 dict_status_game = {
     "status" : "places ships"
@@ -56,37 +71,48 @@ def start_client():
         #зберігаємо інформацію у json файл
         write_json(filename = "data_base.json" , object_dict = list_users)
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        client_socket.connect((str(input_ip_adress.user_text), int(input_port.user_text)))  # Подключение к серверу
-        print("Клиент подключён к серверу.")
-        # Получение сообщения от сервера (роль клиента)
-        role = client_socket.recv(1024).decode("utf-8")
-        server_module.list_player_role[0] = role
-        # Бесконечный цикл для отправки и получения данных
-        data_ready = read_json(name_file = "status_connect_game.json")
-        status_ready_to_game = data_ready["status"] 
-        while status_ready_to_game != "fight" or check_connection_users[1] != 'fight':
-            data_ready = read_json(name_file = "status_connect_game.json")
-            status_ready_to_game = data_ready["status"] 
-            try:
-                if status_ready_to_game != "fight" or check_connection_users[1] != 'fight':
-                    time.sleep(0.1)
-                    print(1)
-                    data_ready = read_json(name_file = "status_connect_game.json")
-                    status_ready_to_game = data_ready["status"] 
-                    client_socket.sendall(status_ready_to_game.encode("utf-8"))
+    # try:
+    client_socket.connect((str(input_ip_adress.user_text), int(input_port.user_text)))  # Подключение к серверу
+    print("Клиент подключён к серверу.")
+    # Получение сообщения от сервера (роль клиента)
+    role = client_socket.recv(1024).decode("utf-8")
+    server_module.list_player_role[0] = role
 
-                    data_enemy = client_socket.recv(1024).decode("utf-8")
-                    check_connection_users[0] = status_ready_to_game
-                    check_connection_users[1] = data_enemy
-                    
-            except Exception as e:
-                print("Ошибка клиента:", e)
-                pass
-        send_matrix()
-        while True:
-            try:
-                print(2)
+    # Бесконечный цикл для отправки и получения данных
+    while True:
+        try:
+            if check_can_connect_to_fight[2] != 'True':
+                time.sleep(0.1)
+                status_game = [save_data_posistion_ships[0], input_nick.user_text, input_password.user_text, list_users[input_nick.user_text]["points"],check_can_connect_to_fight[0]]
+                str_data = ""
+                for data in status_game:
+                    str_data += f"{str(data)} "
+                client_socket.sendall(str_data.encode("utf-8"))
+
+                data_enemy = client_socket.recv(1024).decode("utf-8")
+                data = data_enemy.split(" ")
+                check_connection_users[0] = save_data_posistion_ships[0]
+                if len(data) > 4:
+                    check_can_connect_to_fight[2] = data[4]
+                    if data[1] not in list_users:
+                        list_users[data[1]] = {"points": data[3], "password": data[2]}
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+                    #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+                    elif data[1] in list_users:
+                        list_users[data[1]]["points"] = data[3]
+                        write_json(filename = "data_base.json" , object_dict = list_users)
+
+                    if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
+                        check_can_connect_to_fight[0] = True
+
+                    dict_save_information["player_nick"] = input_nick.user_text
+                    dict_save_information["enemy_nick"] = data[1]
+                    dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+                    dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
+                else:
+                    print("Index error")
+   
+            else:
                 time.sleep(0.5)
                 check_two_times.append(3)
                 # Перевірка значення в списку перед відправкою даних
@@ -100,16 +126,18 @@ def start_client():
                 else:
                     client_socket.sendall("keep-alive".encode("utf-8") + b"END")
 
-        
                 enemy_data = recv_all(client_socket)
                 server_module.enemy_data[0] = enemy_data.decode("utf-8")
-                print(server_module.enemy_data, "enemy_data") 
-
-            except Exception as e:
-                print("Ошибка клиента:", e)
-                pass
-    except Exception as e:
-        print(f"Ошибка клиента: {e}")
+                # print(server_module.enemy_data, "enemy_data") 
+        except Exception as e:
+            client_socket.close()
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client_socket.connect((str(input_ip_adress.user_text), int(input_port.user_text)))
+            continue
+    #             print("Ошибка клиента:", e)
+    #             pass
+    # except Exception as e:
+    #     print(f"Ошибка клиента: {e}")
 
 connect_to_game = Thread(target = start_client, daemon = True)
 

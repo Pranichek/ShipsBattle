@@ -42,7 +42,7 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
     cell_shot = [col-2,row-2]
     
        
-   # корди ограничители  col and row для обрезании матрици до 5на5
+    # корди ограничители  col and row для обрезании матрици до 5на5
     cell_shot5row=cell_shot[0]+5
     cell_shot5col=cell_shot[1]+5
     # кастрированная матрица  до 5 на 5 клеток из enemy_matrix Центром является та клетка, в которую кликнул игрок. 
@@ -80,7 +80,6 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
     
     rocket_coordinate=[real_row_enemy ,real_column_enemy]
     
-
 
     #Если одиночный кораблик, то нет необходимости искать его другую часть. 
     if ship_deck_number != 1:

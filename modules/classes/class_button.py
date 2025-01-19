@@ -1,5 +1,6 @@
 import pygame
 from os.path import abspath, join
+from .class_click import music_click
 
 # создаем класс кнопки
 class Button:
@@ -21,6 +22,7 @@ class Button:
     def draw(self, surface):
         # получаем текущую позицию мыши
         mouse_pos = pygame.mouse.get_pos()
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
         # если курсор мыши находится внутри области кнопки, отрисовываем кнопку с изображением наведения
         if self.rect.collidepoint(mouse_pos):
             surface.blit(self.image_hover, self.rect.topleft)
@@ -36,5 +38,6 @@ class Button:
             # если курсор мыши находится внутри области кнопки, запускаем функцию action, которая должна отрабатывать при нажатии на кнопку
             if self.rect.collidepoint(mouse):
                 if self.action:
+                    music_click.play2(loops = 1)
                     self.action()
                     

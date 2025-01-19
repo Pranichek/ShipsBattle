@@ -3,7 +3,7 @@ import modules.screens.screen as module_screen
 import modules.server as server_module
 from ..create_game_frame import room_data, ip_room_text, port_room_text
 from ...server import SERVER
-from ...client import check_connection_users
+from ...client import check_can_connect_to_fight
 import modules.game_windows as game_windows
 from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
@@ -13,6 +13,7 @@ from ..button_pressed import check_press_button, button_action
 from ..change_window import change_scene
 from ...game_tools import apply_fade_effect
 from ...json_functions import read_json
+from ...volume_settings import volume_down_button, off_sound_button, volume_up_button
 
 
 #images
@@ -31,7 +32,15 @@ def join_game_window():
     pygame.display.set_caption("Join to Game Window")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
+
+    volume_down_button.x = 1096
+    volume_down_button.y = 26
+    volume_up_button.x = 1004
+    volume_up_button.y = 26
+    off_sound_button.x = 1188
+    off_sound_button.y = 26
     
+    check_connect_to_game = 0
     if SERVER.START_CONNECT == False:
         ip_room_text.text = ""
         ip_room_text.update_text()
@@ -115,16 +124,22 @@ def join_game_window():
             if fail_connect.visible == False:
                 list_check_connection[0] = True
     
-        if server_module.list_player_role[0] == "server_player":
-            apply_fade_effect(screen = module_screen.main_screen)
-            change_scene(game_windows.waiting_window())
-            check_press_button[0] = None
-            run_game = False
-        elif server_module.list_player_role[0] == "client_player":
+        if server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] == False:
+            check_connect_to_game += 1
+            if check_connect_to_game >= 13:
+                apply_fade_effect(screen = module_screen.main_screen)
+                change_scene(game_windows.waiting_window())
+                check_press_button[0] = None
+                run_game = False
+        elif server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] != False:
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window())
             check_press_button[0] = None
             run_game = False
+
+        volume_up_button.draw(surface = module_screen.main_screen)
+        volume_down_button.draw(surface = module_screen.main_screen)
+        off_sound_button.draw(surface = module_screen.main_screen)
 
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
@@ -142,6 +157,9 @@ def join_game_window():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event= event)
                 join_game_button.check_click(event= event)
+                volume_up_button.check_click(event= event)
+                volume_down_button.check_click(event= event)
+                off_sound_button.check_click(event= event)
 
 
             input_nick.check_event(event)

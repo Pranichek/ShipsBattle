@@ -11,6 +11,7 @@ from .launch_server import check_server_started, fail_start_server, start_server
 from ..button_pressed import check_press_button, button_action
 from ..change_window import change_scene, list_current_scene
 from ...json_functions import read_json
+from ...volume_settings import off_sound_button, volume_down_button, volume_up_button
 
 
 flag_ip = [None]
@@ -78,6 +79,13 @@ def create_game_window():
         port_room_text.text = ""
         port_room_text.update_text()
 
+    volume_down_button.x = 1096
+    volume_down_button.y = 26
+    volume_up_button.x = 1004
+    volume_up_button.y = 26
+    off_sound_button.x = 1188
+    off_sound_button.y = 26
+
     #основний цикл роботи вікна користувача
     while run_game:
         if input_ip_adress.user_text != "ip adress":
@@ -108,6 +116,10 @@ def create_game_window():
         room_data.draw_image(screen = module_screen.main_screen)
         ip_room_text.draw_font()
         port_room_text.draw_font()
+
+        off_sound_button.draw(surface = module_screen.main_screen)
+        volume_down_button.draw(surface = module_screen.main_screen)
+        volume_up_button.draw(surface = module_screen.main_screen)
 
             
         if input_ip_adress.active == True or flag_ip[0] == True:
@@ -151,6 +163,9 @@ def create_game_window():
                 start_game_button.check_click(event = event)
                 lan_ip_button.check_click(event = event)
                 wan_ip_button.check_click(event = event)
+                off_sound_button.check_click(event = event)
+                volume_down_button.check_click(event = event)
+                volume_up_button.check_click(event = event)
 
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None

@@ -1,5 +1,6 @@
 from .did_three_tasks import check_completed_tasks
 from ...achievement import enemy_dies_ships_for_ahiv
+from ..shop_button import second_tasks_copy
 
 # kill two ships in a row
 ship_hits = []
@@ -20,3 +21,4 @@ def kill_two_ships_in_a_row():
                 kill_count[0] = "Kill two ships"
                 check_completed_tasks[0] += 1
                 print("Ты убил два корабля подряд")
+                del second_tasks_copy[2]

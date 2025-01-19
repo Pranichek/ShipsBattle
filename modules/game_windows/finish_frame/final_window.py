@@ -4,7 +4,8 @@ import modules.screens.screen as module_screen
 from ...classes.class_image import DrawImage
 from ...classes.class_text import Font
 from ...classes import input_nick
-from ...server import list_player_role, list_check_win, dict_save_information
+from ...client import dict_save_information
+from ...server import list_player_role, list_check_win
 from ..change_window import change_scene
 from ...json_functions import read_json, write_json, list_users
 
