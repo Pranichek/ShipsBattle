@@ -91,7 +91,7 @@ def start_client():
                     client_socket.sendall(str_data.encode("utf-8"))
                     try:
                         if check_can_connect_to_fight[2] != False:
-                            client_socket.settimeout(0.5)
+                            client_socket.settimeout(3)
                         data_enemy = client_socket.recv(1024).decode("utf-8")
                     except:
                         raise Exception("Reconnect")
@@ -129,11 +129,10 @@ def start_client():
                         data_player_shot.clear()  # Очищаем список перед новым входом
                         list_check_need_send[0] = False
                     else:
-                        client_socket.settimeout(4.9)
                         client_socket.sendall("keep-alive".encode("utf-8") + b"END")
                     try:
                         if server_module.enemy_data[0] != "":
-                            client_socket.settimeout(1)
+                            client_socket.settimeout(3)
                         enemy_data = recv_all(client_socket)
                     except:
                         raise Exception("Reconnect")
