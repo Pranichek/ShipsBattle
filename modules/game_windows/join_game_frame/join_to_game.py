@@ -126,7 +126,7 @@ def join_game_window():
     
         if server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] == False:
             check_connect_to_game += 1
-            if check_connect_to_game >= 31:
+            if check_connect_to_game >= 3:
                 apply_fade_effect(screen = module_screen.main_screen)
                 change_scene(game_windows.waiting_window())
                 check_press_button[0] = None
