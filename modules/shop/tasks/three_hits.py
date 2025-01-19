@@ -1,5 +1,5 @@
 from .did_three_tasks import check_completed_tasks
-
+from ..shop_button import first_tasks_copy
 
 three_hits_in_a_row = []
 def three_hits_in_row(cell: int):
@@ -17,3 +17,4 @@ def three_hits_in_row(cell: int):
             check_completed_tasks[0] += 1
             print("Three hits in a row")
             three_hits_in_a_row.append("True")
+            del first_tasks_copy[-1]

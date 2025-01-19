@@ -1,6 +1,6 @@
 from .did_three_tasks import check_completed_tasks
 from ...achievement import enemy_dies_ships_for_ahiv
-
+from ..shop_button import third_tasks_copy
 #3 kill two three-decker ships in a row
 count_three_ships = []
 check_killed_for_three_ships = []
@@ -47,6 +47,7 @@ def kill_two_three_decker_in_a_row():
                 check_completed_tasks[0] += 1
                 count_three_ships.append("Kill two three decker in a row")
                 print("Ты убил два трехпалубных кораблей подряд")
+                del third_tasks_copy[-1]
 
         else:
             count_three_ships.clear()

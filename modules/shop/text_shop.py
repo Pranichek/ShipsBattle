@@ -101,6 +101,13 @@ class Font_Shop:
         self.text_surface.set_alpha(self.VISIBLE)
         screen.blit(self.text_surface, (self.X_COR, self.Y_COR))
 
+    def update_text_for_task(self):
+        self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
+        self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
+        self.text_surface = pygame.transform.scale(self.text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
+
+
+
 
 
 # створюємо списки із завданнями , щоб кожен раз вони були рандомні

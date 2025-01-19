@@ -95,11 +95,11 @@ def start_client():
                 if len(data) > 4:
                     check_can_connect_to_fight[2] = data[4]
                     if data[1] not in list_users:
-                        list_users[data[1]] = {"points": data[3], "password": data[2]}
+                        list_users[data[1]] = {"points": int(data[3]), "password": data[2]}
                         write_json(filename = "data_base.json" , object_dict = list_users)
                     #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
                     elif data[1] in list_users:
-                        list_users[data[1]]["points"] = data[3]
+                        list_users[data[1]]["points"] = int(data[3])
                         write_json(filename = "data_base.json" , object_dict = list_users)
 
                     if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':

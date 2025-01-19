@@ -24,7 +24,6 @@ from ...client import list_check_need_send, check_two_times, send_matrix, dict_s
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 from ..button_pressed import check_press_button
-from .weapons.rocket_shot import test2_button, money_flag
 
 list_check_shop = [None]
 def show_shop():
@@ -818,7 +817,6 @@ def fight_window():
         #----------------------------------------------------------------
         # кнопка которая отчищает оружие
         clear_weapon.draw(surface = main_screen)
-        test2_button.draw(surface= main_screen)
 
         # подсвечивание товара(суперспособности) какой сейчас активен
         active_product_shine.draw_image(screen = main_screen)
@@ -954,7 +952,6 @@ def fight_window():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clear_weapon.check_click(event = event)
-                test2_button.check_click(event = event)
                 shop_and_tasks.check_click(event = event)
                 # активация суперспособностей
                 mouse = pygame.mouse.get_pos()

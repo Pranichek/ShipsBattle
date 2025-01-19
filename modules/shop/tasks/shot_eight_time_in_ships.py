@@ -1,4 +1,5 @@
 from .did_three_tasks import check_completed_tasks
+from ..shop_button import fourth_tasks_copy
 
 #4 8 hits in a row
 egight_hits_in_a_row = []
@@ -16,3 +17,4 @@ def eight_hits_in_row(number_cell: int):
         check_completed_tasks[0] += 1
         print("Eight hits in a row")
         egight_hits_in_a_row.append("True")
+        del fourth_tasks_copy[-1]
