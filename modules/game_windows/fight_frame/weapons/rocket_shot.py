@@ -3,7 +3,6 @@ import modules.server as server_module
 import modules.client as client_module
 import modules.achievement as achievement
 from ....screens import list_object_map_enemy
-from ....classes.class_click import miss_water_sound, shot_sound
 from ....screens import enemy_matrix
 from ....client import list_check_need_send, data_player_shot
 from ....game_tools import count_money_hit
@@ -73,7 +72,6 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
                 shop.four_hits_in_row(number_cell = 5)
             if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                 shop.eight_hits_in_row(number_cell = 5)
-            miss_water_sound.play2(loops = 1)
             if server_module.list_player_role[0] == "server_player":
                 server_module.turn[0] = "client_turn"
             else:
@@ -101,7 +99,6 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
             # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
             x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
             y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-            shot_sound.play2(loops = 1)
             # у матрицю ворога записуємо 7
             enemy_matrix[row][col] = 7
             # обнуляємо час для ходу

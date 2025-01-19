@@ -82,6 +82,17 @@ rocket_animation = Animation(
     name_folder = "animation_rocket",
     animation_speed = 3
 )
+# промах ракеты
+miss_rocket = Animation(
+    image_name = "0.png" , 
+    width = 270, 
+    height = 85, 
+    x_cor = 311, 
+    y_cor = 311, 
+    need_clear = True, 
+    name_folder = "animation_miss_rocket",
+    animation_speed = 4
+)
 # анимация взрыва после ракеты
 animation_boom = Animation(
     image_name = "0.png" , 
@@ -153,4 +164,29 @@ animation_random_player = Animation(
     name_folder = "animation_choice",
     animation_speed = 6
 )
+
+# анимация полета авторакеты
+animation_auto_rocket = Animation(
+    image_name = "0.png",
+    width = 250,
+    height = 70,
+    x_cor = 415,
+    y_cor = 185,
+    need_clear = True,
+    name_folder = "animation_auto_rocket",
+    animation_speed = 4
+)
+
+# промах авто ракетой
+miss_auto_rocket = Animation(
+    image_name = "0.png",
+    width = 250,
+    height = 70,
+    x_cor = 415,
+    y_cor = 185,
+    need_clear = True,
+    name_folder = "animation_miss_auto_rocket",
+    animation_speed = 4
+)
+
 
