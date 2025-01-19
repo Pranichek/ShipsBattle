@@ -4,6 +4,7 @@ from .shop_image import shop_item
 from ..screens import FPS
 from os.path import abspath, join
 from ..classes import buy_product_sound
+from ..volume_settings import turn_off_volume_func, volume_up_func, volume_down_func
 
 
 #класс для кнопки в магазині
@@ -195,9 +196,38 @@ button_auto_attack = Button_Shop(
     action = buy_auto_rocket
 )
 
+volume_up = Button_Shop(
+    x = 1007, 
+    y = -(71 + (832 - (8 + 71))), 
+    width = 74, 
+    height = 71, 
+    image_name = "button_volue_up.png", 
+    action = volume_up_func,
+    target_y = 8
+)
+
+volume_down = Button_Shop(
+    x = 1099, 
+    y = -(71 + (832 - (8 + 71))), 
+    width = 74, 
+    height = 71, 
+    image_name = "button_music_lower.png", 
+    action = volume_down_func,
+    target_y = 8
+)
+
+turn_off_button = Button_Shop(
+    x = 1191,
+    y = -(71 + (832 - (8 + 71))),
+    width = 74, 
+    height = 71, 
+    image_name = "off_music_hover.png", 
+    action = turn_off_volume_func,
+    target_y = 8
+)
 
 
 
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
-shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire])
+shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button])

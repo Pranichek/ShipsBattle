@@ -11,6 +11,7 @@ from ..button_pressed import button_action, check_press_button
 from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
 from ...client import check_connection_users, check_can_connect_to_fight, save_data_posistion_ships
+from ...volume_settings import volume_down_button, volume_up_button, off_sound_button
 
 #фон для очікування користувача
 waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "waiting_background.png")
@@ -21,9 +22,20 @@ def waiting_window():
     run_game = True
     music_load_main.stop()
     music_load_waiting.play()
+
+    volume_down_button.x = 1096
+    volume_down_button.y = 26
+    volume_up_button.x = 1004
+    volume_up_button.y = 26
+    off_sound_button.x = 1188
+    off_sound_button.y = 26
     while run_game:
         module_screen.FPS.tick(60)
         waiting_background.draw_image(screen = main_screen)
+
+        volume_up_button.draw(surface = main_screen)
+        volume_down_button.draw(surface = main_screen)
+        off_sound_button.draw(surface = main_screen)
         if check_can_connect_to_fight[2] == 'True':
             check_connection_users[0] = "fight"
             apply_fade_effect(screen = main_screen)
@@ -42,5 +54,9 @@ def waiting_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene(None)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                volume_up_button.check_click(event = event)
+                volume_down_button.check_click(event = event)
+                off_sound_button.check_click(event = event)
                  
         pygame.display.flip()

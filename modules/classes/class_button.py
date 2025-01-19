@@ -22,6 +22,7 @@ class Button:
     def draw(self, surface):
         # получаем текущую позицию мыши
         mouse_pos = pygame.mouse.get_pos()
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
         # если курсор мыши находится внутри области кнопки, отрисовываем кнопку с изображением наведения
         if self.rect.collidepoint(mouse_pos):
             surface.blit(self.image_hover, self.rect.topleft)

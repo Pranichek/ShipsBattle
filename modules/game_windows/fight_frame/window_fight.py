@@ -81,10 +81,6 @@ def show_shop():
         list_check_shop[0] = True
 
 
-flag_upgrade = [True]
-def upgrade_flag():
-    flag_upgrade[0] = True
-
 # функция которая отрисовывает сетку при авто-ударе
 def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5, grid_height=5, cell_size=55):
     # Привязываем центральную точку курсора к сетке
