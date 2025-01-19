@@ -1025,7 +1025,7 @@ def fight_window():
                                                             achievement.list_hits_achiv.extend(count_killed_ships)
                                                         else:
                                                             if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                                shop.single_ships.extend(0)
+                                                                shop.single_ships.append(0)
                                                             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                                                                 shop.first_shot_is_kill(0)
                                                             if shop.third_task.TEXT == shop.list_third_task[2]:
