@@ -189,4 +189,16 @@ miss_auto_rocket = Animation(
     animation_speed = 4
 )
 
+# анимация радара
+radar_animation = Animation(
+    image_name = "0.png",
+    width = 165,
+    height = 165,
+    x_cor = 415,
+    y_cor = 185,
+    need_clear = True,
+    name_folder = "animation_radar",
+    animation_speed = 4
+)
+
 

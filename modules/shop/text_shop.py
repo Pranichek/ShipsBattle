@@ -193,14 +193,14 @@ fourth_task = Font_Shop(
 )
 
 player_balance = Font_Shop(
-    x_cor = 475 ,
-    y_cor = - (96 + (832 - (190 + 96))),
+    x_cor = 469 ,
+    y_cor = - (96 + (832 - (299 + 96))),
     size = 96 ,
     name_font = "Jersey15.ttf",
     text = str(money_list[0]),
-    target_y = 190 ,
-    max_width = 62 ,
-    max_height = 105 , 
+    target_y = 299 ,
+    max_width = 81,
+    max_height = 90, 
     text_color = "Yellow"
 )
 

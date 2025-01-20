@@ -183,13 +183,13 @@ right_wall для правой стенки 3 на 3
         if server_module.list_player_role[0] == "server_player":
             server_module.turn[0] = "server_turn"
             # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
-        elif server_module.list_player_role[0] ==  "player_client":
+        elif server_module.list_player_role[0] ==  "client_player":
             server_module.turn[0] = "client_turn"  # Передаємо хід серверу
     elif count_7[0] <= 0:
         server_module.check_time[0] = 0
         if server_module.list_player_role[0] == "server_player":
             server_module.turn[0] = "client_turn"
-        elif server_module.list_player_role[0] ==  "player_client":
+        elif server_module.list_player_role[0] ==  "client_player":
             server_module.turn[0] = "server_turn"
     client_module.list_check_need_send[0] = True
 

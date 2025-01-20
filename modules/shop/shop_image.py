@@ -142,9 +142,9 @@ deer_img = Image_Shop(
 )
 
 items_bg = Image_Shop(
-    x_cor = 583 ,
+    x_cor = 452 ,
     y_cor = -(295 + (832 - (89 + 295))),
-    width = 682 ,
+    width = 812 ,
     height = 295 ,
     folder_name = "backgrounds" ,
     image_name = "shop_item_bg.png" ,
@@ -162,23 +162,23 @@ tasks_bg = Image_Shop(
 )
 
 price = Image_Shop(
-    x_cor = 612 ,
-    y_cor = -(152 + (832 - (100 + 152))),
-    width = 634,
+    x_cor = 488,
+    y_cor = -(152 + (832 - (90 + 152))),
+    width = 764,
     height = 152 ,
     folder_name = "prices",
     image_name = "price.png",
-    target_y = 100
+    target_y = 90
 )
 
 jar_coins = Image_Shop(
-    x_cor = 431 , 
-    y_cor = -(153 + (832 - (150 + 153))) ,
-    width = 154 ,
-    height = 153 ,
+    x_cor = 454 , 
+    y_cor = -(122 + (832 - (263 + 122))) ,
+    width = 115 ,
+    height = 122 ,
     folder_name = "decorations" ,
     image_name = "jar.png" ,
-    target_y = 150
+    target_y = 263
 )
 
 task_one = Image_Shop(

@@ -146,14 +146,30 @@ def buy_auto_rocket():
    
 but_flag = [False]
 def buy_restore_cell():
-    if money_list[0] >= 50:
+    if money_list[0] >= 75:
         buy_product_sound.play2(loops = 1)
         if but_flag[0] == False:
             waste_money[0] += 50
             but_flag[0] = True
+
+flag_radar = [False]
+def buy_radar():
+    if money_list[0] >= 20:
+        buy_product_sound.play2(loops = 1)
+        if flag_radar[0] == False:
+            waste_money[0] += 20
+            flag_radar[0] = True
             
 
-
+button_radar = Button_Shop(
+    x = 472,
+    y = -(35 + (832- (214 + 38))),
+    width = 103,
+    height = 38,
+    image_name = "radar.png",
+    action = buy_radar,
+    target_y = 214
+)
 # створюємо елементи від цього класу
 button_armor_for_ship = Button_Shop(
     x = 600 ,
@@ -258,4 +274,4 @@ new_random_tasks = Button_Shop(
 
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
-shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, new_random_tasks])
+shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, new_random_tasks, button_radar])

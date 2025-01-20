@@ -23,8 +23,7 @@ check_two_times = []
 check_can_connect_to_fight = [0, False, False]
 # список в котором сохраняем расставил ли игрок корабли
 save_data_posistion_ships = [""]
-TARGET_COUNT = 0
-
+connection = [True]
 
 dict_save_information = {
     "player_nick": "",
@@ -82,6 +81,7 @@ def start_client():
         # Бесконечный цикл для отправки и получения данных
         while True:
             try:
+                connection[0] = True
                 if check_can_connect_to_fight[2] != 'True':
                     time.sleep(0.1)
                     status_game = [save_data_posistion_ships[0], input_nick.user_text, input_password.user_text, list_users[input_nick.user_text]["points"],check_can_connect_to_fight[0]]
@@ -118,7 +118,7 @@ def start_client():
                     else:
                         print("Index error")
                 else:
-                    time.sleep(0.5)
+                    time.sleep(0.2)
                     check_two_times.append(3)
                     # Перевірка значення в списку перед відправкою даних
                     if list_check_need_send[0] == True:  # Перевірка на `True`
@@ -147,6 +147,7 @@ def start_client():
                         except:
                             pass
                         print(2)
+                        connection[0] = False
                         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                         print(3)
                         print(port_client)

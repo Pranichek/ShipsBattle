@@ -1,6 +1,6 @@
 import pygame
 import modules.screens as module_screen
-from ...client import check_connection_users, check_can_connect_to_fight
+from ...client import connection, check_can_connect_to_fight
 from ..fight_frame import fight_window
 import modules.game_windows as game_windows
 import modules.server as server_module
@@ -36,7 +36,6 @@ def ships_position_window():
     grid_player.generate_grid()
     check_connect_fight = 0
     while run_game:
-        
         module_screen.FPS.tick(60)
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
@@ -84,6 +83,9 @@ def ships_position_window():
             if animation_connection_problem.COUNT_IMAGES >= 4:
                 animation_connection_problem.clear_animation()
         #----------------------------------------------------------------
+
+        if connection[0] == False:
+            game_windows.fight_frame.reonnect_image.draw_image(screen = main_screen)
 
         for event in pygame.event.get():
             for ship in list_ships:

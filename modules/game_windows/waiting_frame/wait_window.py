@@ -2,7 +2,7 @@ import pygame
 from ..fight_frame import fight_window
 from ..ships_position_frame import ships_position_window
 import modules.screens.screen as module_screen
-import modules.server as server_module
+import modules.game_windows as game_windows
 from ...screens import main_screen
 from ...classes.class_music import music_load_main, music_load_waiting
 from ...classes.class_image import DrawImage
@@ -10,7 +10,7 @@ from ..change_window import change_scene, list_current_scene
 from ..button_pressed import button_action, check_press_button
 from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
-from ...client import check_connection_users, check_can_connect_to_fight, save_data_posistion_ships
+from ...client import check_connection_users, check_can_connect_to_fight, save_data_posistion_ships, connection
 from ...volume_settings import volume_down_button, volume_up_button, off_sound_button
 
 #фон для очікування користувача
@@ -49,6 +49,9 @@ def waiting_window():
             change_scene(ships_position_window())
             check_press_button[0] = None
             run_game = False
+
+        if connection[0] == False:
+            game_windows.fight_frame.reonnect_image.draw_image(screen = main_screen)
                 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
