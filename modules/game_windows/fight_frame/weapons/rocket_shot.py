@@ -44,9 +44,7 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
         # 5 - значить , що гравець зробив постріл , але схибив його
         if enemy_matrix[row][col] == 0:
-            data_player_shot.extend("shot",str(row),str(col))
-            data_player_shot.append(str(row))
-            data_player_shot.append(str(col))
+            data_player_shot.extend(["shot",str(row),str(col)])
             list_check_need_send[0] = True
             # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
             flag_miss_rocket_animation[0] = "start_animation"
@@ -81,7 +79,7 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
         # 7 - значить , що гравець зробив постріл і попав по кораблю
         elif enemy_matrix[row][col] != 0 and enemy_matrix[row][col] != 5 and enemy_matrix[row][col] != 7:
-            data_player_shot.extend("shot",str(row),str(col))
+            data_player_shot.extend(["shot",str(row),str(col)])
             list_check_need_send[0] = True
 
             if magnat_medal.ACTIVE == True:

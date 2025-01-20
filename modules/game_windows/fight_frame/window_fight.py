@@ -289,58 +289,109 @@ def fight_window():
                 for data_ship in range(101, len(check_list) - 1, 4):
                     server_module.enemy_ships.append((int(check_list[data_ship]), int(check_list[data_ship + 1]), int(check_list[data_ship + 2]), (check_list[data_ship + 3])))
             else:
-                for data_enemy in check_data:
-                    if data_enemy == "shot":
-                        if len(check_data) == 3:
-                            count_hit = 0
-                            row, column = int(check_data[1]), int(check_data[2])
-                            if list_grid[row][column] in [1, 2, 3, 4, 7]: 
-                                if list_grid[row][column] != 7:  # Avoid hitting already destroyed ships
-                                    list_grid[row][column] = 7
-                                server_module.check_time[0] = 0
-                                if server_module.list_player_role[0] == "server_player":
-                                    server_module.turn[0] = "client_turn"
-                                elif server_module.list_player_role[0] == "client_player":
-                                    server_module.turn[0] = "server_turn"
-                            else:
-                                list_grid[row][column] = 5
-                                server_module.check_time[0] = 0
-                                if server_module.list_player_role[0] == "server_player":
-                                    server_module.turn[0] = "server_turn"
-                                elif server_module.list_player_role[0] == "client_player":
-                                    server_module.turn[0] = "client_turn"
-                        elif len(check_data) > 3:
+                try:
+                    if check_data[0] == "enemy_turn":
+                        if server_module.list_player_role[0] == "server_player":
+                            server_module.turn[0] = "server_turn"
+                        elif server_module.list_player_role[0] == "client_player":
+                            server_module.turn[0] = "client_turn"
+                    if check_data[0] == "player_turn":
+                        if server_module.list_player_role[0] == "server_player":
+                            server_module.turn[0] = "client_turn"
+                        elif server_module.list_player_role[0] == "client_player":
+                            server_module.turn[0] = "server_turn"
+                    for data_enemy in check_data:
+                        if data_enemy == "shot":
+                            server_module.check_time[0] = 0
                             count_hit = 0
                             for data_enemy in range(1, len(check_data) - 1, 2): 
-                                row, column = int(check_data[data_enemy]), int(check_data[data_enemy + 1])
-                                if list_grid[row][column] in [1, 2, 3, 4, 7]:
-                                    if list_grid[row][column] != 7:
+                                if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4, 7]:
+                                    if list_grid[int(check_data[1])][int(check_data[2])] == 7:
+                                        pass
+                                    else:
+                                        list_grid[int(check_data[1])][int(check_data[2])] = 7
+                                        server_module.check_time[0] = 0
+                                    data_player_shot.append("enemy_turn")
+                                    list_check_need_send[0] = True
+                                    if server_module.list_player_role[0] == "server_player":
+                                        server_module.turn[0] = "client_turn"
+                                    elif server_module.list_player_role[0] == "client_player":
+                                        server_module.turn[0] = "server_turn"
+                                else:
+                                    list_grid[int(check_data[1])][int(check_data[2])] = 5
+                                    server_module.check_time[0] = 0
+                                    if server_module.list_player_role[0] == "server_player":
+                                        server_module.turn[0] = "server_turn"
+                                    elif server_module.list_player_role[0] == "client_player":
+                                        server_module.turn[0] = "client_turn"
+                        elif data_enemy == "auto_rocket":
+                            index_cell = 1
+                            count_hit = 0
+                            for cell in check_data[1:-1]:
+                                if index_cell % 2 == 0:
+                                    if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [1, 2, 3, 4, 7]:
                                         count_hit += 1
-                                        list_grid[row][column] = 7
-                                elif list_grid[row][column] in [0, 5]:
-                                    list_grid[row][column] = 5
-                            if count_hit == 0:  # No hits
+                                        if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] == 7:
+                                            pass
+                                        else:
+                                            list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 7
+                                    elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [0, 5]:
+                                        list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 5
+                                index_cell += 1
+                            if count_hit == 0:
                                 if server_module.list_player_role[0] == "server_player":
                                     server_module.turn[0] = "server_turn"
                                 elif server_module.list_player_role[0] == "client_player":
                                     server_module.turn[0] = "client_turn"
-                            elif count_hit >= 1:  # At least one hit
+                            elif count_hit >= 1:
+                                data_player_shot.append("enemy_turn")
+                                list_check_need_send[0] = True
                                 if server_module.list_player_role[0] == "server_player":
                                     server_module.turn[0] = "client_turn"
                                 elif server_module.list_player_role[0] == "client_player":
                                     server_module.turn[0] = "server_turn"
-                    if data_enemy == "restore_cell":
-                        enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
-                    if check_data == "medal":
-                        for medal in check_data[1:-1]:
-                            print(check_data[1:-1])
-                            if int(medal) not in server_module.save_medals_coordinates:
-                                server_module.save_medals_coordinates.append(int(medal))
-                    elif check_data == "money":
-                        server_module.enemy_balance[0] = int(check_data[1])
-                        enemy_balance_in_jar.update_text()
+                            server_module.check_time[0] = 0
+                        elif data_enemy == "bomb":
+                            for cell in range(1 , 19):
+                                print("bomb")
+                                try:
+                                    if cell % 2 == 0:
+                                        if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
+                                            if list_grid[int(check_data[cell - 1])][int(check_data[cell])] == 7:
+                                                pass
+                                            else:
+                                                list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 7
+                                        elif list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [0, 5]:
+                                            list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 5
+                                except:
+                                    continue
+                            if int(check_data[-3]) == 0:
+                                if server_module.list_player_role[0] == "server_player":
+                                    server_module.turn[0] = "server_turn"
+                                elif server_module.list_player_role[0] == "client_player":
+                                    server_module.turn[0] = "client_turn"
+                            else:
+                                data_player_shot.append("enemy_turn")
+                                list_check_need_send[0] = True
+                                if server_module.list_player_role[0] == "server_player":
+                                    server_module.turn[0] = "client_turn"
+                                elif server_module.list_player_role[0] == "client_player":
+                                    server_module.turn[0] = "server_turn"
+                            server_module.check_time[0] = 0
+                except:
+                    continue
+                if check_data[0] == "restore_cell":
+                    enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
+                if check_data[0] == "medal":
+                    for medal in check_data[1:-1]:
+                        print(check_data[1:-1])
+                        if int(medal) not in server_module.save_medals_coordinates:
+                            server_module.save_medals_coordinates.append(int(medal))
+                elif check_data[0] == "money":
+                    server_module.enemy_balance[0] = int(check_data[1])
+                    enemy_balance_in_jar.update_text()
 
-                                            
+    
 
             # elif check_data[0] == "rocket_shot":
             #     if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4, 7]:
@@ -1012,6 +1063,7 @@ def fight_window():
                                                     count_misses_ships = []
                                                     #если false flag  то бан клетка и если NOne значит нету корабликов 
                                                     if kord != "false" and kord != None :
+                                                        data_player_shot.append("auto_rocket")
                                                         if kord[0][0] != "True":
                                                             lenkord = len(kord)
                                                             count_money_hit[0] += 10
@@ -1028,10 +1080,8 @@ def fight_window():
                                                                 # у матрицю ворога записуємо 7
                                                                 count_killed_ships.append(enemy_matrix[kord[i][0]][kord[i][1]])
                                                                 enemy_matrix[kord[i][0]][kord[i][1]] = 7
-                                                                data_player_shot.append("auto_rocket")
-                                                                data_player_shot.append(kord[i][0])
-                                                                data_player_shot.append(kord[i][1])
-                                                                list_check_need_send[0] = True
+        
+                                                                data_player_shot.extend([kord[i][0], kord[i][1]])
                                                                 # обнуляємо час ходу
                                                                 server_module.check_time[0] = 0
                                                                 # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
@@ -1109,9 +1159,7 @@ def fight_window():
                                                             flag_miss_rocket_animation[0] = "miss_auto_rocket"
                                                             x_hit_the_ship[0] = x_y[0]
                                                             y_hit_the_ship[0] = x_y[1]
-                                                            data_player_shot.append("auto_rocket")
-                                                            data_player_shot.append(kord[0][1])
-                                                            data_player_shot.append(kord[0][2])
+                                                            data_player_shot.extend([kord[0][1], kord[0][2]])
                                                             list_check_need_send[0] = True
                                                             enemy_matrix[kord[0][1]][kord[0][2]] = 5 
                                                             # обнуляємо час ходу
@@ -1126,6 +1174,7 @@ def fight_window():
                                                             activate_auto_rocket[0] = False
                                                             active_product_shine.x_cor = -100
                                                             active_product_shine.y_cor = -100
+                                                        list_check_need_send[0] = True
                                                         
                                                 #бомба 3 на 3
                                                 elif shop.check_buy_bomb_attack[0] == True and activate_bomb[0] == True:
