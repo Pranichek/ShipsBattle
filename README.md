@@ -84,7 +84,7 @@ To join the game, you need:
 
 <a name="figma"><h1>Figma</h1></a>
 
-[https://www.figma.com/design/A9pJOVv6brCiSAgOAxhizL/Untitled?node-id=722-2&t=zHQJ3nDrGuaLgYEX-0]
+[https://www.figma.com/community/file/1463238329116517584]
 
 
 
