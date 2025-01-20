@@ -726,7 +726,7 @@ def fight_window():
             rocket_animation.Y_COR = y_hit_the_ship[0] - 23
             # проверка на окончание анимация полета ракеті 
             if rocket_animation.animation(main_screen = module_screen.main_screen , count_image = 7):
-                shot_sound.play2(loops = 1)
+                # shot_sound.play2(loops = 1)
                 animation_boom.X_COR = x_hit_the_ship[0] - 23
                 animation_boom.Y_COR = y_hit_the_ship[0] - 23
                 screen_shake[0] = 31
@@ -739,7 +739,7 @@ def fight_window():
             animation_auto_rocket.Y_COR = y_hit_the_ship[0] - 23
             screen_shake[0] = 31
             if animation_auto_rocket.animation(main_screen = module_screen.main_screen , count_image = 13):
-                shot_sound.play2(loops = 1)
+                # shot_sound.play2(loops = 1)
                 animation_auto_rocket.clear_animation()
                 check_animation_rocket[0] = ""
 
@@ -1039,7 +1039,7 @@ def fight_window():
                 if shop.shop_item[0].TURN != "Up":
                     if check_animation_rocket[0] == "" and flag_miss_rocket_animation[0] == "":
                         # перевіряємо за яку роль грає гравець                    
-                        if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "server_turn") or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "client_turn"):
+                        if (server_module.list_player_role[0] == "server_player" and server_module.turn[0] == "server_turn" and len(data_player_shot) == 0) or (server_module.list_player_role[0] == "client_player" and server_module.turn[0] == "client_turn" and len(data_player_shot) == 0) :
                             # перевіряємо щоб гравець натискав на сітку ворога
                             if x_mouse >= 67 and x_mouse <= 67 + 550:
                                 if y_mouse >= 257 and y_mouse <= 257 + 550:
@@ -1093,65 +1093,71 @@ def fight_window():
                                                                 activate_auto_rocket[0] = False
                                                                 active_product_shine.x_cor = -100
                                                                 active_product_shine.y_cor = -100 
-                                                            if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                                shop.single_ships.extend(count_killed_ships)
-                                                            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-                                                                if 1 in count_killed_ships:
-                                                                    shop.first_shot_is_kill(1)
-                                                                else:
-                                                                    shop.first_shot_is_kill(2)
-                                                            if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                                shop.check_three_2decker_ship_in_row.extend(count_killed_ships)
-                                                            if shop.first_task.TEXT == shop.list_first_task[-1]:
+                                                            try:
+                                                                if shop.third_task.TEXT == shop.list_third_task[1]:
+                                                                    shop.single_ships.extend(count_killed_ships)
+                                                                if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                                                                    if 1 in count_killed_ships:
+                                                                        shop.first_shot_is_kill(1)
+                                                                    else:
+                                                                        shop.first_shot_is_kill(2)
+                                                                if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                                    shop.check_three_2decker_ship_in_row.extend(count_killed_ships)
+                                                                if shop.first_task.TEXT == shop.list_first_task[-1]:
+                                                                    for hit in range(0, lenkord):
+                                                                        shop.three_hits_in_row(7)
+                                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                                    shop.count_three_ships.extend(count_killed_ships)
+                                                                if shop.second_task.TEXT == shop.list_second_task[2]:
+                                                                    shop.ship_hits.extend(count_killed_ships)
+                                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                                    shop.ship_hits_three.extend(count_killed_ships)
+                                                                if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                                    for hit in range(0, lenkord):
+                                                                        shop.two_hits_in_row(number_cell = 7)
+                                                                if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                                    for hit in range(0, lenkord):
+                                                                        shop.four_hits_in_row(number_cell = 7)
+                                                                if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                                    for hit in range(0, lenkord):
+                                                                        shop.eight_hits_in_row(number_cell = 7)
+                                                                # ачивки
                                                                 for hit in range(0, lenkord):
-                                                                    shop.three_hits_in_row(7)
-                                                            if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                                shop.count_three_ships.extend(count_killed_ships)
-                                                            if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                                shop.ship_hits.extend(count_killed_ships)
-                                                            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                                shop.ship_hits_three.extend(count_killed_ships)
-                                                            if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                                for hit in range(0, lenkord):
-                                                                    shop.two_hits_in_row(number_cell = 7)
-                                                            if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                                for hit in range(0, lenkord):
-                                                                    shop.four_hits_in_row(number_cell = 7)
-                                                            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                                for hit in range(0, lenkord):
-                                                                    shop.eight_hits_in_row(number_cell = 7)
-                                                            # ачивки
-                                                            for hit in range(0, lenkord):
-                                                                achievement.ten_shoot_in_row(7)
-                                                            achievement.first_shot(7)
-                                                            achievement.single_ships_achiv.extend(count_killed_ships)
-                                                            achievement.list_hits_achiv.extend(count_killed_ships)
+                                                                    achievement.ten_shoot_in_row(7)
+                                                                achievement.first_shot(7)
+                                                                achievement.single_ships_achiv.extend(count_killed_ships)
+                                                                achievement.list_hits_achiv.extend(count_killed_ships)
+                                                            except:
+                                                                pass
                                                         else:
-                                                            if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                                shop.single_ships.append(0)
-                                                            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-                                                                shop.first_shot_is_kill(0)
-                                                            if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                                shop.check_three_2decker_ship_in_row.append(0)
-                                                            if shop.first_task.TEXT == shop.list_first_task[-1]:
-                                                                shop.three_hits_in_row(0)
-                                                            if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                                shop.count_three_ships.append(0)
-                                                            if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                                shop.ship_hits.append(0)
-                                                            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                                shop.ship_hits_three.append(0)
-                                                            if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                                shop.two_hits_in_row(number_cell = 5)
-                                                            if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                                shop.four_hits_in_row(number_cell = 5)
-                                                            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                                shop.eight_hits_in_row(number_cell = 5)
-                                                            # ачивки
-                                                            achievement.ten_shoot_in_row(5)
-                                                            achievement.first_shot(0)
-                                                            achievement.single_ships_achiv.append(0)
-                                                            achievement.list_hits_achiv.append(0)
+                                                            try:
+                                                                if shop.third_task.TEXT == shop.list_third_task[1]:
+                                                                    shop.single_ships.append(0)
+                                                                if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                                                                    shop.first_shot_is_kill(0)
+                                                                if shop.third_task.TEXT == shop.list_third_task[2]:
+                                                                    shop.check_three_2decker_ship_in_row.append(0)
+                                                                if shop.first_task.TEXT == shop.list_first_task[-1]:
+                                                                    shop.three_hits_in_row(0)
+                                                                if shop.third_task.TEXT == shop.list_third_task[-1]:
+                                                                    shop.count_three_ships.append(0)
+                                                                if shop.second_task.TEXT == shop.list_second_task[2]:
+                                                                    shop.ship_hits.append(0)
+                                                                if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                                                                    shop.ship_hits_three.append(0)
+                                                                if shop.first_task.TEXT == shop.list_first_task[0]:
+                                                                    shop.two_hits_in_row(number_cell = 5)
+                                                                if shop.first_task.TEXT == shop.list_first_task[1]:
+                                                                    shop.four_hits_in_row(number_cell = 5)
+                                                                if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                                                                    shop.eight_hits_in_row(number_cell = 5)
+                                                                # ачивки
+                                                                achievement.ten_shoot_in_row(5)
+                                                                achievement.first_shot(0)
+                                                                achievement.single_ships_achiv.append(0)
+                                                                achievement.list_hits_achiv.append(0)
+                                                            except:
+                                                                pass
                                                             #знаходим номер клетки 
                                                             kletka= kord[0][1] * 10 + kord[0][2]
                                                             # cell_number_to_coordinates — новая функция, преобразующая номер клетки в координаты. Функция находится в screen.py, в create_grid.py.                         

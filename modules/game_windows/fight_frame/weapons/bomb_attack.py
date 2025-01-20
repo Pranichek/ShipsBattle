@@ -223,65 +223,71 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
     if count_7[0] >= 1:
         count_money_hit[0] += 10
         check_bomb[0] = True
-        if shop.third_task.TEXT == shop.list_third_task[1]:
-            shop.single_ships.extend(count_ships)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-            if 1 in count_ships:
-                shop.first_shot_is_kill(1)
-            else:
-                shop.first_shot_is_kill(2)
-        if shop.third_task.TEXT == shop.list_third_task[2]:
-            shop.check_three_2decker_ship_in_row.extend(count_ships)
-        if shop.first_task.TEXT == shop.list_first_task[-1]:
+        try:
+            if shop.third_task.TEXT == shop.list_third_task[1]:
+                shop.single_ships.extend(count_ships)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                if 1 in count_ships:
+                    shop.first_shot_is_kill(1)
+                else:
+                    shop.first_shot_is_kill(2)
+            if shop.third_task.TEXT == shop.list_third_task[2]:
+                shop.check_three_2decker_ship_in_row.extend(count_ships)
+            if shop.first_task.TEXT == shop.list_first_task[-1]:
+                for hit in range(0, count_7[0]):
+                    shop.three_hits_in_row(7)
+            if shop.third_task.TEXT == shop.list_third_task[-1]:
+                shop.count_three_ships.extend(count_ships)
+            if shop.second_task.TEXT == shop.list_second_task[2]:
+                shop.ship_hits.extend(count_ships)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                shop.ship_hits_three.extend(count_ships)
+            if shop.first_task.TEXT == shop.list_first_task[0]:
+                for hit in range(0, count_7[0]):
+                    shop.two_hits_in_row(number_cell = 7)
+            if shop.first_task.TEXT == shop.list_first_task[1]:
+                for hit in range(0, count_7[0]):
+                    shop.four_hits_in_row(number_cell = 7)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                for hit in range(0, count_7[0]):
+                    shop.eight_hits_in_row(number_cell = 7)
+            # ачивки
             for hit in range(0, count_7[0]):
-                shop.three_hits_in_row(7)
-        if shop.third_task.TEXT == shop.list_third_task[-1]:
-            shop.count_three_ships.extend(count_ships)
-        if shop.second_task.TEXT == shop.list_second_task[2]:
-            shop.ship_hits.extend(count_ships)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-            shop.ship_hits_three.extend(count_ships)
-        if shop.first_task.TEXT == shop.list_first_task[0]:
-            for hit in range(0, count_7[0]):
-                shop.two_hits_in_row(number_cell = 7)
-        if shop.first_task.TEXT == shop.list_first_task[1]:
-            for hit in range(0, count_7[0]):
-                shop.four_hits_in_row(number_cell = 7)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-            for hit in range(0, count_7[0]):
-                shop.eight_hits_in_row(number_cell = 7)
-        # ачивки
-        for hit in range(0, count_7[0]):
-            achievement.ten_shoot_in_row(7)
-        achievement.first_shot(7)
-        achievement.single_ships_achiv.append(count_ships)
-        achievement.list_hits_achiv.append(count_ships)
+                achievement.ten_shoot_in_row(7)
+            achievement.first_shot(7)
+            achievement.single_ships_achiv.append(count_ships)
+            achievement.list_hits_achiv.append(count_ships)
+        except:
+            pass
     elif count_7[0] <= 1:  # Передаємо хід серверу
-        if shop.third_task.TEXT == shop.list_third_task[1]:
-            shop.single_ships.extend(count_misses)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-            shop.first_shot_is_kill(0)
-        if shop.third_task.TEXT == shop.list_third_task[2]:
-            shop.check_three_2decker_ship_in_row.extend(count_misses)
-        if shop.first_task.TEXT == shop.list_first_task[-1]:
-            shop.three_hits_in_row(0)
-        if shop.third_task.TEXT == shop.list_third_task[-1]:
-            shop.count_three_ships.extend(count_misses)
-        if shop.second_task.TEXT == shop.list_second_task[2]:
-            shop.ship_hits.extend(count_misses)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-            shop.ship_hits_three.extend(count_misses)
-        if shop.first_task.TEXT == shop.list_first_task[0]:
-            shop.two_hits_in_row(number_cell = 5)
-        if shop.first_task.TEXT == shop.list_first_task[1]:
-            shop.four_hits_in_row(number_cell = 5)
-        if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-            shop.eight_hits_in_row(number_cell = 5)
-        # ачивки
-        achievement.ten_shoot_in_row(5)
-        achievement.first_shot(0)
-        achievement.single_ships_achiv.append(0)
-        achievement.list_hits_achiv.append(0)
+        try:
+            if shop.third_task.TEXT == shop.list_third_task[1]:
+                shop.single_ships.extend(count_misses)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
+                shop.first_shot_is_kill(0)
+            if shop.third_task.TEXT == shop.list_third_task[2]:
+                shop.check_three_2decker_ship_in_row.extend(count_misses)
+            if shop.first_task.TEXT == shop.list_first_task[-1]:
+                shop.three_hits_in_row(0)
+            if shop.third_task.TEXT == shop.list_third_task[-1]:
+                shop.count_three_ships.extend(count_misses)
+            if shop.second_task.TEXT == shop.list_second_task[2]:
+                shop.ship_hits.extend(count_misses)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
+                shop.ship_hits_three.extend(count_misses)
+            if shop.first_task.TEXT == shop.list_first_task[0]:
+                shop.two_hits_in_row(number_cell = 5)
+            if shop.first_task.TEXT == shop.list_first_task[1]:
+                shop.four_hits_in_row(number_cell = 5)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                shop.eight_hits_in_row(number_cell = 5)
+            # ачивки
+            achievement.ten_shoot_in_row(5)
+            achievement.first_shot(0)
+            achievement.single_ships_achiv.append(0)
+            achievement.list_hits_achiv.append(0)
+        except:
+            pass
     count_7[0] = 0
     count_ships.clear()
     count_misses.clear()

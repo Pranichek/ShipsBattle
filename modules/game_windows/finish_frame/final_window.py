@@ -36,7 +36,7 @@ def finish_window():
         module_screen.FPS.tick(60)
         module_screen.main_screen.fill((0, 0, 0))  # Очищення екрану чорним фоном
 
-        if list_player_role[0] == "player_client":
+        if list_player_role[0] == "client_player":
             #якщо клієнт виграв, відображається повідомлення про перемогу, бали гравця збільшуються на 100
             if list_check_win[0] == "win_client":
                 win_lose_text.text = dict_save_information["player_nick"] + " won"

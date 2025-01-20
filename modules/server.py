@@ -283,6 +283,7 @@ class Server():
                     print(f"Room Port:{colorama.Fore.GREEN} {self.PORT} {colorama.Style.RESET_ALL}")
                     print(self.PORT)
                     self.server_socket.listen()
+                    self.START_CONNECT = True
                     client_socket, addr = self.server_socket.accept()
                     client_socket.sendall(player_one.encode("utf-8"))
                     print("First player is connected")
