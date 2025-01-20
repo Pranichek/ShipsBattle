@@ -77,16 +77,16 @@ To join the game, you need:
 3. GitHub - [Nazar](https://github.com/Nazickj2023)
 4. GitHub - [Mykhailo](https://github.com/DeKlain4ik)
 4. GitHub - [Lena](https://github.com/LenaFedchenko)
-4. GitHub - [Kamilla](https://github.com/IWaithI)
+4. GitHub - [Kamilla](https://github.com/KamillaKrupina?tab=repositories)
+
 [⬆️Table of contents](#articles) 
 
 
 <a name="figma"><h1>Figma</h1></a>
 
-[https://www.figma.com/board/db61SCQLwAnOtFgqTjsIGn/Untitled?node-id=0-1&t=tG7hTz55wsvVlP7L-1]
+[https://www.figma.com/design/A9pJOVv6brCiSAgOAxhizL/Untitled?node-id=722-2&t=zHQJ3nDrGuaLgYEX-0]
 
 
-[⬆️Table of contents](#articles)
 
 <a name="structure"><h1>Structure of project</h1></a>
 
@@ -190,8 +190,8 @@ To join the game, you need:
 
 <a name="client"><h1>Client.py package modules</h1></a>
 
-    ```python
-            import socket, json, time, pickle
+```python
+    import socket, json, time, pickle
             from .classes import input_port, input_ip_adress, input_nick ,list_ships
             from .json_functions import write_json , list_users 
             import modules.server as server_module
@@ -433,13 +433,13 @@ To join the game, you need:
 
     def run_server(input_ip_address, input_port):
         SERVER.start_server(input_ip_address, input_port)
-        ```
-    [⬆️Table of contents](#articles)
+```
+[⬆️Table of contents](#articles)
 
-    <a name="server"><h1>Server.py package modules</h1></a>
+<a name="server"><h1>Server.py package modules</h1></a>
 
-        ```python
-            import socket 
+```python
+    import socket 
     import colorama
     import random
     # Импортируем классы
@@ -455,9 +455,6 @@ To join the game, you need:
                 break
             data += part
         return data
-
-
-
 
     enemy_data = [""]
     #где стоят корабли соперника
@@ -499,13 +496,96 @@ To join the game, you need:
     #------------------------------------------------------------------------------------------------
     # флаг в котором храним все ли впорядке с связью между игроками
     check_connection = [True]
-    ```
+    # #створюємо зміну потока, для запуску серверу
+    # server_thread = threading.Thread(target = start_server, daemon=True)
+    def listen_client(client, second_client):
+        while True:
+            try:
+                if SERVER.clients >= 1:
+                    client.settimeout(5)
+                data = client.recv(1024)
+                if data:
+                    second_client.sendall(data)
+            except ConnectionResetError:
+                SERVER.RESTART = True
+                SERVER.clients = 0
+                SERVER.server_socket.close()
+                client.close()
+                second_client.close()
+                break
+            except Exception as error:
+                SERVER.RESTART = True
+                SERVER.clients = 0
+                SERVER.server_socket.close()
+                client.close()
+                second_client.close()
+                break
+
+    players = ["server_player", "client_player"]
+    class Server():
+        def __init__(self):
+            self.RESTART = False
+            self.START_CONNECT = False
+            self.clients = 0
+            self.PORT = 0
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        def start_server(self, ip_adress: str, port: int):
+            self.PORT = int(port) 
+            while True:
+                try:
+                    if not self.RESTART:
+                        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        self.server_socket.bind((str(ip_adress), self.PORT))
+                        copy_list_player = players.copy()
+                        player_one = random.choice(copy_list_player)
+                        copy_list_player.remove(player_one)
+                        player_two = copy_list_player[0]
+                        print(f"Room ip_adress {colorama.Fore.GREEN} {ip_adress} {colorama.Style.RESET_ALL}")
+                        print(f"Room Port:{colorama.Fore.GREEN} {self.PORT} {colorama.Style.RESET_ALL}")
+                        print(self.PORT)
+                        self.server_socket.listen()
+                        self.START_CONNECT = True
+                        client_socket, addr = self.server_socket.accept()
+                        client_socket.sendall(player_one.encode("utf-8"))
+                        print("First player is connected")
+                        client_socket_second, addr_second = self.server_socket.accept()
+                        client_socket_second.sendall(player_two.encode("utf-8"))
+                        print("Second player is connecter")
+                        self.RESTART = False
+
+                        print(client_socket , client_socket_second)
+
+                        thread1 = Thread(target = listen_client, args = (client_socket, client_socket_second))
+                        thread1.start()
+                        self.clients += 1
+
+                        thread2 = Thread(target = listen_client, args = (client_socket_second, client_socket))
+                        thread2.start()
+                        self.clients += 1
+
+                        thread1.join()
+                        thread2.join()
+                        print("Congratulations")
+                        self.PORT += 1
+                    if self.RESTART:
+                        self.server_socket.close()
+                        self.RESTART = False
+                        continue
+                except Exception as error:
+                    pass
+
+    SERVER = Server()
+
+    def run_server(input_ip_address, input_port):
+        SERVER.start_server(input_ip_address, input_port)
+```
 [⬆️Table of contents](#articles)
 
 <a name="class_ship"><h1>Class_ship.py modules</h1></a>
 
-    ```python
-        r'''
+```python
+    r'''
             У модулі створено клас ``Ship``, який відмальовує кораблі, відповідає за розтавлення, "прилипання" 
             однопалубних, двопалубних, трьохбалубних та чотирьохпалубних кораблів .
         '''
@@ -1065,8 +1145,8 @@ To join the game, you need:
         list_ships.append(ship_four)
         list_ships.extend([ship_three , ship_three2])
         list_ships.extend([ship_two , ship_two2 , ship_two3])
-        list_ships.extend([ship_one , ship_one2 , ship_one3, ship_one4])
-    ```
+        list_ships.extend([ship_one , ship_one2 , ship_one3, ship_one4])    
+```
 [⬆️Table of contents](#articles)
 
 <a name="prbl_project"><h2>Problems during development</h2></a>
@@ -1093,3 +1173,5 @@ The freshmen also got acquainted with matrices, and the seniors deepened their k
 We understood the basics of data exchange between users using IP addresses and ports. We learned to solve problems related to this process, and also gained knowledge about the Internet protocols IPv4 and IPv6. We studied their main characteristics: the number of characters, the addressing system (32-bit for IPv4 and 128-bit for IPv6), and the purposes of application.
 Using the TCP transport protocol, we were able to ensure secure data exchange through encryption. We mastered working with the socket library to create and connect between the client and the server. While testing the game, we encountered problems and learned how to solve them (including connection problems). We concluded that thanks to the socket library, we have the ability to connect to another user's device without their knowledge.
 </details>
+ 
+[⬆️Table of contents](#articles)
