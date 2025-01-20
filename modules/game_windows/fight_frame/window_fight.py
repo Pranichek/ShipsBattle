@@ -288,84 +288,137 @@ def fight_window():
                         column = 0
                 for data_ship in range(101, len(check_list) - 1, 4):
                     server_module.enemy_ships.append((int(check_list[data_ship]), int(check_list[data_ship + 1]), int(check_list[data_ship + 2]), (check_list[data_ship + 3])))
-
-            elif check_data[0] == "rocket_shot":
-                if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4, 7]:
-                    if list_grid[int(check_data[1])][int(check_data[2])] == 7:
-                        pass
-                    else:
-                        list_grid[int(check_data[1])][int(check_data[2])] = 7
-                        server_module.check_time[0] = 0
-                    if server_module.list_player_role[0] == "server_player":
-                        server_module.turn[0] = "client_turn"
-                    elif server_module.list_player_role[0] == "client_player":
-                        server_module.turn[0] = "server_turn"
-                else:
-                    list_grid[int(check_data[1])][int(check_data[2])] = 5
-                    server_module.check_time[0] = 0
-                    if server_module.list_player_role[0] == "server_player":
-                        server_module.turn[0] = "server_turn"
-                    elif server_module.list_player_role[0] == "client_player":
-                        server_module.turn[0] = "client_turn"
-            elif check_data[0] == "restore_cell":
-                enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
-            elif check_data[0] == "bomb_shot":
-                for cell in range(1 , 19):
-                    try:
-                        if cell % 2 == 0:
-                            if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
-                                if list_grid[int(check_data[cell - 1])][int(check_data[cell])] == 7:
-                                    pass
-                                else:
-                                    list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 7
-                            elif list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [0, 5]:
-                                list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 5
-                    except:
-                        continue
-                if int(check_data[-3]) == 0:
-                    if server_module.list_player_role[0] == "server_player":
-                        server_module.turn[0] = "server_turn"
-                    elif server_module.list_player_role[0] == "client_player":
-                        server_module.turn[0] = "client_turn"
-                else:
-                    if server_module.list_player_role[0] == "server_player":
-                        server_module.turn[0] = "client_turn"
-                    elif server_module.list_player_role[0] == "client_player":
-                        server_module.turn[0] = "server_turn"
-                server_module.check_time[0] = 0
-            elif check_data[0] == "auto_rocket":
-                index_cell = 1
-                count_hit = 0
-                for cell in check_data[1:-1]:
-                    if index_cell % 2 == 0:
-                        if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [1, 2, 3, 4, 7]:
-                            if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] == 7:
-                                pass
+            else:
+                for data_enemy in check_data:
+                    if data_enemy == "shot":
+                        if len(check_data) == 3:
+                            count_hit = 0
+                            row, column = int(check_data[1]), int(check_data[2])
+                            if list_grid[row][column] in [1, 2, 3, 4, 7]: 
+                                if list_grid[row][column] != 7:  # Avoid hitting already destroyed ships
+                                    list_grid[row][column] = 7
+                                server_module.check_time[0] = 0
+                                if server_module.list_player_role[0] == "server_player":
+                                    server_module.turn[0] = "client_turn"
+                                elif server_module.list_player_role[0] == "client_player":
+                                    server_module.turn[0] = "server_turn"
                             else:
-                                count_hit += 1
-                                list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 7
-                        elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [0, 5]:
-                            list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 5
-                    index_cell += 1
-                if count_hit == 0:
-                    if server_module.list_player_role[0] == "server_player":
-                        server_module.turn[0] = "server_turn"
-                    elif server_module.list_player_role[0] == "client_player":
-                        server_module.turn[0] = "client_turn"
-                elif count_hit >= 1:
-                    if server_module.list_player_role[0] == "server_player":
-                        server_module.turn[0] = "client_turn"
-                    elif server_module.list_player_role[0] == "client_player":
-                        server_module.turn[0] = "server_turn"
-                server_module.check_time[0] = 0
-            elif check_data[0] == "medal":
-                for medal in check_data[1:-1]:
-                    print(check_data[1:-1])
-                    if int(medal) not in server_module.save_medals_coordinates:
-                        server_module.save_medals_coordinates.append(int(medal))
-            elif check_data[0] == "money":
-                server_module.enemy_balance[0] = int(check_data[1])
-                enemy_balance_in_jar.update_text()
+                                list_grid[row][column] = 5
+                                server_module.check_time[0] = 0
+                                if server_module.list_player_role[0] == "server_player":
+                                    server_module.turn[0] = "server_turn"
+                                elif server_module.list_player_role[0] == "client_player":
+                                    server_module.turn[0] = "client_turn"
+                        elif len(check_data) > 3:
+                            count_hit = 0
+                            for data_enemy in range(1, len(check_data) - 1, 2): 
+                                row, column = int(check_data[data_enemy]), int(check_data[data_enemy + 1])
+                                if list_grid[row][column] in [1, 2, 3, 4, 7]:
+                                    if list_grid[row][column] != 7:
+                                        count_hit += 1
+                                        list_grid[row][column] = 7
+                                elif list_grid[row][column] in [0, 5]:
+                                    list_grid[row][column] = 5
+                            if count_hit == 0:  # No hits
+                                if server_module.list_player_role[0] == "server_player":
+                                    server_module.turn[0] = "server_turn"
+                                elif server_module.list_player_role[0] == "client_player":
+                                    server_module.turn[0] = "client_turn"
+                            elif count_hit >= 1:  # At least one hit
+                                if server_module.list_player_role[0] == "server_player":
+                                    server_module.turn[0] = "client_turn"
+                                elif server_module.list_player_role[0] == "client_player":
+                                    server_module.turn[0] = "server_turn"
+                    if data_enemy == "restore_cell":
+                        enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
+                    if check_data == "medal":
+                        for medal in check_data[1:-1]:
+                            print(check_data[1:-1])
+                            if int(medal) not in server_module.save_medals_coordinates:
+                                server_module.save_medals_coordinates.append(int(medal))
+                    elif check_data == "money":
+                        server_module.enemy_balance[0] = int(check_data[1])
+                        enemy_balance_in_jar.update_text()
+
+                                            
+
+            # elif check_data[0] == "rocket_shot":
+            #     if list_grid[int(check_data[1])][int(check_data[2])] in [1, 2, 3, 4, 7]:
+            #         if list_grid[int(check_data[1])][int(check_data[2])] == 7:
+            #             pass
+            #         else:
+            #             list_grid[int(check_data[1])][int(check_data[2])] = 7
+            #             server_module.check_time[0] = 0
+            #         if server_module.list_player_role[0] == "server_player":
+            #             server_module.turn[0] = "client_turn"
+            #         elif server_module.list_player_role[0] == "client_player":
+            #             server_module.turn[0] = "server_turn"
+            #     else:
+            #         list_grid[int(check_data[1])][int(check_data[2])] = 5
+            #         server_module.check_time[0] = 0
+            #         if server_module.list_player_role[0] == "server_player":
+            #             server_module.turn[0] = "server_turn"
+            #         elif server_module.list_player_role[0] == "client_player":
+            #             server_module.turn[0] = "client_turn"
+            # elif check_data[0] == "restore_cell":
+            #     enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
+            # elif check_data[0] == "bomb_shot":
+            #     for cell in range(1 , 19):
+            #         try:
+            #             if cell % 2 == 0:
+            #                 if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
+            #                     if list_grid[int(check_data[cell - 1])][int(check_data[cell])] == 7:
+            #                         pass
+            #                     else:
+            #                         list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 7
+            #                 elif list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [0, 5]:
+            #                     list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 5
+            #         except:
+            #             continue
+            #     if int(check_data[-3]) == 0:
+            #         if server_module.list_player_role[0] == "server_player":
+            #             server_module.turn[0] = "server_turn"
+            #         elif server_module.list_player_role[0] == "client_player":
+            #             server_module.turn[0] = "client_turn"
+            #     else:
+            #         if server_module.list_player_role[0] == "server_player":
+            #             server_module.turn[0] = "client_turn"
+            #         elif server_module.list_player_role[0] == "client_player":
+            #             server_module.turn[0] = "server_turn"
+            #     server_module.check_time[0] = 0
+            # elif check_data[0] == "auto_rocket":
+            #     index_cell = 1
+            #     count_hit = 0
+            #     for cell in check_data[1:-1]:
+            #         if index_cell % 2 == 0:
+            #             if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [1, 2, 3, 4, 7]:
+            #                 if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] == 7:
+            #                     pass
+            #                 else:
+            #                     count_hit += 1
+            #                     list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 7
+            #             elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [0, 5]:
+            #                 list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 5
+            #         index_cell += 1
+            #     if count_hit == 0:
+            #         if server_module.list_player_role[0] == "server_player":
+            #             server_module.turn[0] = "server_turn"
+            #         elif server_module.list_player_role[0] == "client_player":
+            #             server_module.turn[0] = "client_turn"
+            #     elif count_hit >= 1:
+            #         if server_module.list_player_role[0] == "server_player":
+            #             server_module.turn[0] = "client_turn"
+            #         elif server_module.list_player_role[0] == "client_player":
+            #             server_module.turn[0] = "server_turn"
+            #     server_module.check_time[0] = 0
+            # elif check_data[0] == "medal":
+            #     for medal in check_data[1:-1]:
+            #         print(check_data[1:-1])
+            #         if int(medal) not in server_module.save_medals_coordinates:
+            #             server_module.save_medals_coordinates.append(int(medal))
+            # elif check_data[0] == "money":
+            #     server_module.enemy_balance[0] = int(check_data[1])
+            #     enemy_balance_in_jar.update_text()
 
         
         # обнуление времени и хода, если игрок не походил
