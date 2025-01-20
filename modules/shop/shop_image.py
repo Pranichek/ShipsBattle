@@ -78,6 +78,47 @@ class Image_Shop:
         if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT))):
             self.ACTIVE = False
 
+done_task_one = Image_Shop(
+    x_cor = 29,
+    y_cor = -(65 + (832 - (127 + 65))) ,
+    width = 376 ,
+    height = 65,
+    folder_name = "decorations" ,
+    image_name = "done_task_one.png" ,
+    target_y = 127
+)
+
+done_task_two = Image_Shop(
+    x_cor = 29 ,
+    y_cor = -(65 + (832 - (182 + 65))),
+    width = 376,
+    height = 65,
+    folder_name = "decorations",
+    image_name = "done_task_two.png",
+    target_y = 182
+)
+
+done_task_three = Image_Shop(
+    x_cor = 29 ,
+    y_cor = -(65 + (832 - (233 + 65))) ,
+    width = 376 ,
+    height = 65,
+    folder_name = "decorations",
+    image_name = "done_task_three.png",
+    target_y = 233
+)
+
+done_task_four = Image_Shop(
+    x_cor = 29,
+    y_cor = -(43 + (832 - (289 + 43))),
+    width = 376,
+    height = 43,
+    folder_name = "decorations",
+    image_name =  "done_task_four.png",
+    target_y = 289
+)
+
+
 
 
 # стовюємо об'єтки зображень від цього класу
@@ -180,19 +221,10 @@ task_four = Image_Shop(
     target_y = 293
 )
 
-# awars_description = Image_Shop(
-#     x_cor = 0 ,
-#     y_cor = -(357 + (832 - (431 + 357))),
-#     width = 1280 ,
-#     height = 357 ,
-#     folder_name = "backgrounds" ,
-#     image_name = "awars_description.png" ,
-#     target_y = 431
-# )
 
 
 shop_item = []
 
 # додаємо зображення до цього списку , щоб за допомогою циклу відмальовувати їх
-shop_item.extend([shop_bg , items_bg , tasks_bg , deer_img , price , jar_coins ,task_one ,task_two ,task_three , task_four])
+shop_item.extend([shop_bg , items_bg , tasks_bg , deer_img , price , jar_coins ,task_one ,task_two ,task_three , task_four, done_task_one, done_task_two, done_task_three, done_task_four])
 
