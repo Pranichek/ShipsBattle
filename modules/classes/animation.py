@@ -201,4 +201,37 @@ radar_animation = Animation(
     animation_speed = 4
 )
 
+# fire_rocket_animation
+fire_rocket_animation = Animation(
+    image_name = "0.png",
+    width = 250,
+    height = 70,
+    x_cor = 415,
+    y_cor = 185,
+    need_clear = True,
+    name_folder = "animation_fire_rocket",
+    animation_speed = 4
+)
+
+fire_fighter_animation = Animation(
+    image_name = "0.png",
+    width = 250,
+    height = 70,
+    x_cor = 415,
+    y_cor = 185,
+    need_clear = True,
+    name_folder = "fire_fighter_animation",
+    animation_speed = 4
+)
+
+fire_animation = Animation(
+    image_name = "0.png",
+    width = 250,
+    height = 70,
+    x_cor = 415,
+    y_cor = 185,
+    need_clear = True,
+    name_folder = "fire_animation",
+    animation_speed = 4
+)
 

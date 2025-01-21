@@ -17,7 +17,7 @@ from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.radar_class import radar
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound
-from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation
+from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation
 from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
 from ..change_window import change_scene
@@ -438,7 +438,6 @@ def fight_window():
         except:
             continue
 
-        
         # обнуление времени и хода, если игрок не походил
         if server_module.check_time[0] >= 30:
             server_module.check_time[0] = 0
@@ -620,16 +619,12 @@ def fight_window():
 
         if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
                 if server_module.check_time[0]==2:
-                    test_time[0]= 2
-            
-                if server_module.check_time[0]==1 and server_module.check_time[0] !=test_time[0] :
-                
+                    test_time[0] = 2
+                if server_module.check_time[0]==1 and server_module.check_time[0] !=test_time[0]:
                     for index, element in enumerate(Cordi_Burning_Ship):
                         if len(element) !=0:
                             if Cordi_Burning_Ship[index][0]!=0:
-
                                 save = Cordi_Burning_Ship[index][1]
-                            
                                 if Cordi_Burning_Ship[index][0]==4:
                                    ship_element=1
                                 elif Cordi_Burning_Ship[index][0]==3:
@@ -638,9 +633,7 @@ def fight_window():
                                     ship_element=3
                                 elif Cordi_Burning_Ship[index][0]==1:
                                     ship_element=4
-                                print (f"element {len(element)} , index{index},ship_element{ship_element} ,Cordi_Burning_Ship{Cordi_Burning_Ship} ")
                                 
-                                print 
                                 try:
                                     row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
                                 except IndexError:
@@ -648,9 +641,7 @@ def fight_window():
                                     row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
                                     
                                     Cordi_Burning_Ship[index][0]= 0
-                                   # так вот иза того что дание о том что горит опаздуют то я закомитил то что должно сверять с текушим горяшим 
                                 
-                                print ("stew_row[0]",stew_row,"row_fire" ,row_fire ,"stew_col[0]",stew_col ,"col_fire", col_fire )
                                 if  row_fire in stew_row  and  col_fire in stew_col :
                                     Cordi_Burning_Ship[index][0]= 0
                                     flagstop = True
@@ -670,23 +661,16 @@ def fight_window():
                                 if  row_fire in stew_row  and  (col_fire - 1) in stew_col :
                                     Cordi_Burning_Ship[index][0]= 0
                                     flagstop = True
-
                                 if flagstop != True:  
                                     enemy_matrix[row_fire][col_fire] = 7
-                                    print (f"data_player_shot do zagryzki {data_player_shot}")
-                                    data_player_shot.append ("fire")
+                                    data_player_shot.append("fire")
                                     data_player_shot.append(row_fire)
                                     data_player_shot.append(col_fire)
-                                    print (f"data_player_shot posle  zagryzki {data_player_shot}")
                                     if Cordi_Burning_Ship[index][0] <= 5 - len(element)-1:  
                                         Cordi_Burning_Ship[index][0]= 0
                                     else:
                                         Cordi_Burning_Ship[index][0] -=1
                                 flagstop= False 
-                                
-                    
-                    
-                    
                     list_check_need_send[0] = True
                     test_time[0] = server_module.check_time[0]
                             
@@ -1132,7 +1116,6 @@ def fight_window():
                                             if shop.flag_put_out_the_fire[0] == "yes" and activate_fire_fighter[0] == True:
                                                 shop.flag_put_out_the_fire[0] = "no"
                                                 activate_fire_fighter[0] = False
-                                                print ("горррррррррррррррррррри ")
                                                 # Узнаем номер клетки где стоит кораблик
                                                 number_cell_our = list_object_map.index(cell)
                                                 # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
@@ -1185,13 +1168,11 @@ def fight_window():
                                                             if number_of_decks not in  promah:
                                                                 xxxxx = find_all_neighbors(matrix=enemy_matrix,row =row,col =col,target_value=number_of_decks)
                                                                 colich = ((len (xxxxx)))
-                                                                print ("=================",colich)
                                                                 Cordi_Burning_Ship.append([])
                                                                 Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
                                                                 Cordi_Burning_Ship[number_of_ship_sonfire[0]].insert(0, 0)
                                                                 Cordi_Burning_Ship[number_of_ship_sonfire[0]][0] = 4
                                                                 number_of_ship_sonfire[0] += 1
-                                                                print ('промах')
                                                             shop.flag_arson[0] = "no"
                                                             activate_fire_rocket[0] = False
                                                             active_product_shine.x_cor = -100
@@ -1366,7 +1347,7 @@ def fight_window():
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
                                                 # простой удар
-                                                elif activate_bomb[0] == False and activate_auto_rocket[0] == False and activate_radar[0] == False:
+                                                elif activate_bomb[0] == False and activate_auto_rocket[0] == False and activate_radar[0] == False and activate_fire_fighter[0] == False:
                                                     simple_shot(
                                                         col = col, 
                                                         row = row, 
