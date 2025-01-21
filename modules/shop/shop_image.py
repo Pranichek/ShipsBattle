@@ -167,12 +167,12 @@ tasks_bg = Image_Shop(
 
 price = Image_Shop(
     x_cor = 488,
-    y_cor = -(152 + (832 - (90 + 152))),
+    y_cor = -(152 + (832 - (80 + 152))),
     width = 764,
     height = 152 ,
     folder_name = "prices",
     image_name = "price.png",
-    target_y = 90
+    target_y = 80
 )
 
 jar_coins = Image_Shop(

@@ -87,7 +87,8 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
 
             count_money_hit[0] += 3
             # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
-            check_animation_rocket[0] = "start_animation"
+            if check_animation_rocket[0] != "fire_rocket":
+                check_animation_rocket[0] = "start_animation"
             # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
             x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
             y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y

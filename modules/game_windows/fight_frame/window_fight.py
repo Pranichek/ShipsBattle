@@ -16,7 +16,7 @@ from ...classes.achive_window import list_achieves, target_attack_achievement, d
 from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.radar_class import radar
-from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound
+from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation
 from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
@@ -335,7 +335,6 @@ def fight_window():
                                         indices_fire.append(i)
                                 # Обрабатываем каждое вхождение "fire"
                                 for index_fire in indices_fire:
-                                    print (f"oopopopoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo{check_data}")
                                     pozhar_row.append(int(check_data[(index_fire +1)]))
                                     pozhar_col.append(int(check_data[(index_fire +2)]))
                                     list_grid[int(check_data[(index_fire +1)])][int(check_data[(index_fire +2)])] = 7
@@ -344,7 +343,6 @@ def fight_window():
                                 index_fire  = check_data.index("put_out_the_fire")
                                 stew_row.append(int(check_data[(index_fire +1)]))
                                 stew_col.append(int(check_data[(index_fire +2)]))
-                                print ("999999999999999999999999999",stew_row[0] , stew_col[0])
 
                             if data_enemy == "shot":
                                 server_module.check_time[0] = 0
@@ -633,7 +631,6 @@ def fight_window():
                                     ship_element=3
                                 elif Cordi_Burning_Ship[index][0]==1:
                                     ship_element=4
-                                
                                 try:
                                     row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
                                 except IndexError:
@@ -670,7 +667,7 @@ def fight_window():
                                         Cordi_Burning_Ship[index][0]= 0
                                     else:
                                         Cordi_Burning_Ship[index][0] -=1
-                                flagstop= False 
+                                flagstop = False 
                     list_check_need_send[0] = True
                     test_time[0] = server_module.check_time[0]
                             
@@ -748,6 +745,14 @@ def fight_window():
             if animation_auto_rocket.animation(main_screen = module_screen.main_screen , count_image = 13):
                 # shot_sound.play2(loops = 1)
                 animation_auto_rocket.clear_animation()
+                check_animation[0] = ""
+        elif check_animation[0] == "fire_rocket":
+            fire_rocket_animation.X_COR = x_hit_the_ship[0] - 170
+            fire_rocket_animation.Y_COR = y_hit_the_ship[0] - 70
+            screen_shake[0] = 31
+            if fire_rocket_animation.animation(main_screen = module_screen.main_screen , count_image = 20):
+                # shot_sound.play2(loops = 1)
+                fire_rocket_animation.clear_animation()
                 check_animation[0] = ""
         elif check_animation[0] == "radar_animation":
             radar_animation.X_COR = x_hit_the_ship[0] - 55
@@ -1127,7 +1132,6 @@ def fight_window():
                                                 col = int(str_col_our[-1])
                                                 if row in pozhar_row :
                                                     if col in pozhar_col  :
-                                                        print ("горрррррррррррррррррррииииииииииииииииии ясно и что б не погасло ", pozhar_row)
                                                         data_player_shot.append ("put_out_the_fire")
                                                         data_player_shot.append(row)
                                                         data_player_shot.append(col)
@@ -1161,8 +1165,11 @@ def fight_window():
                                                 col = int(str_col[-1])
                                                 if enemy_matrix[row][col] != 5 or enemy_matrix[row][col] != 7 or enemy_matrix[row][col] != 0 :
                                                     if shop.flag_arson[0] == "yes" and activate_fire_rocket[0] == True:
+                                                        check_animation[0] = "fire_rocket"
                                                         print (f"row col{row,col}")                                                  
                                                         number_of_decks=enemy_matrix[row][col]
+                                                        shop.flag_arson[0] = "no"
+                                                        activate_fire_rocket[0] = False
                                                         promah=[0,5,7,6]
                                                         if number_of_decks != 1:
                                                             if number_of_decks not in  promah:
@@ -1173,17 +1180,16 @@ def fight_window():
                                                                 Cordi_Burning_Ship[number_of_ship_sonfire[0]].insert(0, 0)
                                                                 Cordi_Burning_Ship[number_of_ship_sonfire[0]][0] = 4
                                                                 number_of_ship_sonfire[0] += 1
-                                                            shop.flag_arson[0] = "no"
-                                                            activate_fire_rocket[0] = False
                                                             active_product_shine.x_cor = -100
                                                             active_product_shine.y_cor = -100
-                                                else:
-                                                    shop.flag_arson[0] = "no"
+                                                # else:
+                                                    # shop.flag_arson[0] = "no"
 
                                                 if activate_radar[0] == True and shop.flag_radar[0] == True:
                                                     if row > 0 and row < 9:
                                                         if col > 0 and col < 9:
                                                             check_animation[0] = "radar_animation"
+                                                            radar_sound.play2(loops = 1)
                                                             x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
                                                             y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
                                                             radar.check_target_grid(enemy_matrix = enemy_matrix, row = row, column = col)
@@ -1347,7 +1353,7 @@ def fight_window():
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
                                                 # простой удар
-                                                elif activate_bomb[0] == False and activate_auto_rocket[0] == False and activate_radar[0] == False and activate_fire_fighter[0] == False:
+                                                elif activate_bomb[0] == False and activate_auto_rocket[0] == False and activate_radar[0] == False:
                                                     simple_shot(
                                                         col = col, 
                                                         row = row, 
@@ -1359,6 +1365,7 @@ def fight_window():
                                                     )
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
+                                                    
                                                     
 
 
