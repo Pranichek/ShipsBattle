@@ -479,7 +479,8 @@ def fight_window():
         count_money(
             check_buy_bomb = shop.check_buy_bomb_attack[0], 
             check_buy_restorce = shop.but_flag[0],
-            check_buy_auto_rocket = shop.flagbimb200[0]
+            check_buy_auto_rocket = shop.flagbimb200[0],
+            check_buy_radar = shop.flag_radar[0]
             )
         
         if shop.money_list[0] - check_player_balance[0] > 0 or check_player_balance[1] == True:

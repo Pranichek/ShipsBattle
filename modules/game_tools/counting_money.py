@@ -67,7 +67,9 @@ check_money_bomb = [0]
 check_money_restoration = [0]
 # для покупки авто ракеты
 check_money_auto_rocket = [0]
-def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool):
+# для покупки радар
+check_but_radar = [0]
+def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool, check_buy_radar: bool):
     if count_money_hit[0] > 0:
         count_money_hit[0] -= 1
         task_game.money_list[0] += 1
@@ -95,6 +97,24 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         elif check_buy_auto_rocket == "no" and check_money_auto_rocket[0] >= 200:
             check_money_auto_rocket[0] = 0
 
+    if check_buy_radar == True and check_but_radar[0] == 0:
+        check_but_radar[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    if check_but_radar[0] >= 1:
+        if check_but_radar[0]!= 20:
+            check_but_radar[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        elif check_buy_radar == False and check_but_radar[0] >= 20:
+            check_but_radar[0] = 0
+        
     if check_buy_restorce == True and check_money_restoration[0] == 0:
         check_money_restoration[0] += 1
         task_game.money_list[0] -= 1
