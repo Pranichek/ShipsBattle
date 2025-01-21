@@ -124,7 +124,6 @@ To join the game, you need:
         modules-->json_functions;
         modules-->screens;
         modules-->shop;
-        shop-->tasks;
         modules-->volume_settings;
         modules-->__init__.py;
         modules-->client.py;
@@ -239,6 +238,10 @@ To join the game, you need:
 
 <a name="achievment"><h1>describe achievment package</h1></a>
 У цій папці ми маємо файли, які відповідають за нагороди гравців, тут прораховуються усі можливі попадання по кораблям, наприклад, якщо гравець попав по кораблю за перший хід, то гравець отримує свою першу нагороду. Приклад коду за досягнення 'піонер'.
+
+Нагорода
+![achiv](readme_image/2.gif)
+
 <details>
 <summary>English version</summary>
 In this folder we have files that are responsible for player rewards, all possible hits on ships are calculated here, for example, if a player hits a ship on the first turn, then the player receives his first reward.Example code for "pioner".
@@ -364,6 +367,16 @@ The game_tools folder has files that we check for crashed ships, coins that can 
 
 <a name="game_windows"><h1>describe game_windows package</h1></a>
 У папці game_windows ми маємо файли, які відповідають за натискання кнопки та зміну вікна, а також папки з різними вікнами гри, такими як головне вікно(вікно створення гри), вікно доєднання до гри, розтавлення кораблів, саме вікно бою, частину коду якого можна побачити нижче, та вікно результату гри.
+
+Рандомне розташування
+![Random](readme_image/1.gif)
+
+Бій
+![Fight](readme_image/3.gif)
+
+Промах
+![Miss](readme_image/4.gif)
+
 
 Частина функції вікна бою
 <details>
