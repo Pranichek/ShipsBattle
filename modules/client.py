@@ -83,7 +83,7 @@ def start_client():
             try:
                 connection[0] = True
                 if check_can_connect_to_fight[2] != 'True':
-                    time.sleep(0.1)
+                    time.sleep(0.2)
                     status_game = [save_data_posistion_ships[0], input_nick.user_text, input_password.user_text, list_users[input_nick.user_text]["points"],check_can_connect_to_fight[0]]
                     str_data = ""
                     for data in status_game:
@@ -158,11 +158,6 @@ def start_client():
                         time.sleep(1)
                         continue
                 
-    #             print("Ошибка клиента:", e)
-    #             pass
-    # except Exception as e:
-    #     print(f"Ошибка клиента: {e}")
-
 connect_to_game = Thread(target = start_client, daemon = True)
 
 # def connect_user():

@@ -127,6 +127,13 @@ def test():
 # список в котором храним сколько потртили монет
 waste_money = [0]
 
+flag_arson =["no"]
+flag_put_out_the_fire = ["no"]
+def buy_fire_rocket():
+    flag_arson[0] = "yes"
+def buy_fire_fighter():
+    flag_put_out_the_fire[0] = "yes"
+
 # флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
 check_buy_bomb_attack = [False]
 def buy_bomb():
@@ -143,14 +150,12 @@ flagbimb200=["no"]
 cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
 check_2= [11,12,13,14,15,16,17,18,19,20]
 def buy_auto_rocket():
-    # if money_list[0] >= 200:
+    if flagbimb200[0] == "no":
+        buy_product_sound.play2(loops = 1)
         if flagbimb200[0] == "no":
-            buy_product_sound.play2(loops = 1)
-            if flagbimb200[0] == "no":
-                waste_money[0] += 200
-                flagbimb200[0] = "yes"
+            waste_money[0] += 200
+            flagbimb200[0] = "yes"
             
-   
 but_flag = [False]
 def buy_restore_cell():
     if money_list[0] >= 75:
@@ -195,7 +200,7 @@ button_stop_fire = Button_Shop(
     height = 98 ,
     image_name = "stop_fire.png",
     target_y = 263,
-    action = test
+    action = buy_fire_fighter
 )
 
 button_restores_cell = Button_Shop(
@@ -215,7 +220,7 @@ button_fire_rocket = Button_Shop(
     height = 98 ,
     image_name = "fire_rocket.png",
     target_y = 263,
-    action = test
+    action = buy_fire_rocket
 )
 
 button_bomb = Button_Shop(
