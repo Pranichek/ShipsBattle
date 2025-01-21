@@ -147,7 +147,7 @@ To join the game, you need:
  - Відкрийте його та виберіть опцію «Відкрити папку», щоб перейти та відкрити каталог, де було клоновано проект.
  - Натисніть Control + J або просто створіть новий термінал і напишіть це:
 ```python
-    git clone <repository_url>
+    git clone [https://github.com/Pranichek/ShipsBattle.git]
 ```
 3. Підготуйте проект до використання
  - Перейдіть до головної папки проекту
@@ -199,11 +199,36 @@ To join the game, you need:
 * **os** - searching absolute path
 
 <a name="achievment"><h1>describe achievment package</h1></a>
-У цій папці ми маємо файли, які відповідають за нагороди гравців, тут прораховуються усі можливі попадання по кораблям, наприклад, якщо гравець попав по кораблю за перший хід, то гравець отримує свою першу нагороду.
+У цій папці ми маємо файли, які відповідають за нагороди гравців, тут прораховуються усі можливі попадання по кораблям, наприклад, якщо гравець попав по кораблю за перший хід, то гравець отримує свою першу нагороду. Приклад коду за досягнення 'піонер'.
 <details>
 <summary>English version</summary>
-In this folder we have files that are responsible for player rewards, all possible hits on ships are calculated here, for example, if a player hits a ship on the first turn, then the player receives his first reward.
+In this folder we have files that are responsible for player rewards, all possible hits on ships are calculated here, for example, if a player hits a ship on the first turn, then the player receives his first reward.Example code for "pioner".
 </details>
+
+```python
+    # Функція opening_the_battle має на меті перевірити стан гри у "Морському бою" на основі переданих матриць grid (сітка 
+    # +гравця) та enemy_grid (сітка супротивника). Вона підраховує кількість кораблів у кожній сітці та визначає, чи виконано 
+    # певні умови для досягнення.
+    def opening_the_battle(grid: list , enemy_grid: list):
+    if player_ships[0] != 100:
+        player_ships[0] = 0
+        enemy_ships[0] = 0
+        for row in range(len(grid)):
+            for cell in range(len(grid[row])):
+                if grid[row][cell] in [1, 2, 3, 4]:
+                    player_ships[0] += 1
+                if enemy_grid[row][cell] in [1, 2, 3, 4]:
+                    enemy_ships[0] += 1
+
+        if player_ships[0] == 20 and enemy_ships[0] == 19:
+            player_ships[0] = 100
+            opening_the_battle_achievement.ACTIVE = True
+            opening_battle_medal.ACTIVE = True
+            list_save_coords_achiv.append(10)
+            list_save_coords_achiv[0] = True
+            count_money_hit[0] += 20
+
+```
 
 [⬆️Table of contents](#articles)
 
@@ -214,6 +239,29 @@ In this folder we have files that are responsible for player rewards, all possib
 In this folder we have files with classes such as, animation class, button class, image display class, text input class, awards class, two different music classes, one for background music MusicPlayer and another for different Sound clicks, and also a ship class in which we create and draw ships. In each class we create an object of the class and then use it.
 </details>
 
+```python
+    # Цей код реалізує клас Font, який відповідає за створення, відображення та оновлення тексту на екрані у додатках, що 
+    # використовують бібліотеку pygame.
+    class Font:
+    def __init__(self, size : int, name_font : str, text : str,x_cor : int, y_cor : int , text_color:str ,screen : pygame.Surface):
+        self.color_text = text_color
+        self.size = size
+        self.name_font = name_font
+        #f"/../../../media/fonts/{self.name_font}"
+        self.path_to_font = abspath(join(__file__, "..", "..", "..", "media", "fonts", f"{self.name_font}"))
+        self.text = text
+        self.screen = screen
+        self.x_cor = x_cor
+        self.y_cor = y_cor
+        self.font = pygame.font.Font(self.path_to_font, self.size)
+        self.text_surface = self.font.render(self.text, False, self.color_text)
+    def draw_font(self):
+        self.screen.blit(self.text_surface, (self.x_cor , self.y_cor))
+    def update_text(self):
+        self.text_surface = self.font.render(self.text, False, self.color_text)
+
+```
+
 [⬆️Table of contents](#articles)
 
 <a name="game_tools"><h1>describe game_tools package</h1></a>
@@ -222,6 +270,56 @@ In this folder we have files with classes such as, animation class, button class
 <summary>English version</summary>
 The game_tools folder has files that we check for crashed ships, coins that can be spent on armor, a darkening effect that we use to ensure that the screens switch smoothly, and also a file that Indicates the value between a disabled ship, adding animation of misses around a disabled ship, as well as the appearance of disabled ships.
 </details>
+
+```python
+    # Цей код реалізує функцію count_money, яка модифікує внутрішній баланс гравця та обробляє купівлю різних ігрових об'єктів: 
+    # бомб, авто-ракет та відновлювачів (restorers).
+    def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool):
+    if count_money_hit[0] > 0:
+        count_money_hit[0] -= 1
+        task_game.money_list[0] += 1
+        get_coin_sound.play2(loops = 1)
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+
+    if check_buy_auto_rocket == "yes" and check_money_auto_rocket[0] == 0:
+        check_money_auto_rocket[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    if check_money_auto_rocket[0] >= 1:
+        if check_money_auto_rocket[0] != 200:
+            check_money_auto_rocket[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        elif check_buy_auto_rocket == "no" and check_money_auto_rocket[0] >= 200:
+            check_money_auto_rocket[0] = 0
+
+    if check_buy_restorce == True and check_money_restoration[0] == 0:
+        check_money_restoration[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    if check_money_restoration[0] >= 1:
+        if check_money_restoration[0] != 50:
+            check_money_restoration[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        elif check_buy_restorce == False and check_money_restoration[0] >= 50:
+            check_money_restoration[0] = 0
+```
 
 [⬆️Table of contents](#articles)
 
@@ -490,6 +588,33 @@ Part of the functions in battle
 In this folder we have files that record the nickname and password of users.
 </details>
 
+```python
+    # реалізує функціональність для роботи з JSON-файлом, що містить базу даних користувачів.
+
+    #створюємо словарь для збереження нікнеймів та балів користувачів
+    list_users = {}
+
+    #__file__ + "/../../../static/json/data_base.json"
+    #отримуємо дані з бази даних, яка знаходиться в папці static та у файлі data_base.json
+    with open(file = abspath(join(__file__, "..", "..", "..", "static", "json", "data_base.json"))) as file:
+        #загружаємо дані з json-файла в наш словник list_users
+        list_users = json.load(file)
+
+    #os.path.abspath(__file__ + f"/../../../static/json/{filename}")
+    #функція для збереження даних  із словаря list_users у потрібний файл, у нашому випадку filename = "data_base.json"
+    def write_json(filename:str, object_dict: object) -> dict:
+        #Формуємо абсолютний шлях до файлу, який знаходиться в папці static
+        path_to_file = abspath(join(__file__, "..", "..", "..", "static", "json", f"{filename}"))
+        #Відкриваємо файл у режимі запису ("w"), щоб зберегти в нього дані
+        with open(path_to_file, "w") as file:
+            json.dump(
+                obj = object_dict,#Дані, які треба записати у нашому випадку, змінна словарь із користувачами list_users
+                fp = file,#файл, куди будуть записані дані
+                indent= 4, # Встановлюємо відступ у 4 пробіли для зручності читання у json файлі
+                ensure_ascii= False#робимо так щоб окрім англ літер , могли записувати кирилицю
+            )
+```
+
 [⬆️Table of contents](#articles)
 
 <a name="screens"><h1>describe screens package</h1></a>
@@ -621,6 +746,96 @@ We create in the screens folder, we draw the dimensions of the game screen, we a
 This folder contains the files responsible for the buttons in our store, all the images, and all the text from the store. There is also a folder with files for all the tasks that can be completed to get additional coins.
 </details>
 
+```python
+        #класс для кнопки в магазині
+    class Button_Shop:
+        #створюємо конструктор(__init__) кнопки
+        def __init__(self, x, y, image_name, height,width,  target_y: int ,action = None):
+            self.X_COR = x
+            self.IMAGE_NAME = image_name
+            self.Y_COR = y
+            self.WIDTH = width
+            self.HEIGHT = height
+            #os.path.abspath(__file__ + f"/../../../static/images_button/shop_buttons/{self.IMAGE_NAME}")
+            self.PATH_IMAGE1 = abspath(join(__file__, "..", "..", "..", "static", "images_button", "shop_buttons", f"{self.IMAGE_NAME}"))
+            self.IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_IMAGE1), (self.WIDTH , self.HEIGHT))
+            self.RECT = self.IMAGE.get_rect(topleft=(self.X_COR, self.Y_COR))
+            self.RECT.height -= 13
+            self.ACTION = action
+            self.ACTIVE = False 
+            self.TURN = "Down"
+            self.VISIBLE = 0
+            self.TARGET_Y = target_y
+            self.SPEED = 13
+
+
+        # створюємо метод кнопки , який буде перевиряти чи натиснута кнопка , якщо так , то виконуємо дії яка прив'язана до кнопки
+        def check_click(self, event):
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  
+                mouse = pygame.mouse.get_pos()
+                if self.RECT.collidepoint(mouse):
+                    if self.ACTION:
+                        self.ACTION()
+        
+        # Відображає кнопку на екрані , та змінюємо прозорість (visible) залежно від стану
+        def draw(self, screen: pygame.Surface):
+            self.IMAGE.set_alpha(self.VISIBLE)
+            screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
+            mouse_pos = pygame.mouse.get_pos()
+            if self.TURN == "Down":
+                screen.blit(self.IMAGE , (self.X_COR, self.Y_COR))
+        # Плавно змінює прозорість кнопки:fade_in() збільшує прозорість до 255 (повністю видимий стан)
+        def fade_in(self):
+            fps = FPS.get_fps()
+            if fps <= 0:
+                fps = 0.01
+            if self.VISIBLE < 255:
+                self.VISIBLE += 5 * (60 / fps)
+                if self.VISIBLE >= 255:
+                    self.VISIBLE = 255
+        # fade_out() зменшує прозорість до 0 (невидимий стан)
+        def fade_out(self):
+            fps = FPS.get_fps()
+            if fps <= 0:
+                fps = 0.01
+            if self.VISIBLE > 0:
+                self.VISIBLE -= 5 * (60 / fps)
+                if self.VISIBLE <= 0:
+                    self.VISIBLE = 0
+        # Кнопка може плавно переміщатися вниз (до цільової позиції) і назад
+        #Використовується прапорець turn, щоб визначити напрямок руху
+        # Викликається fade_in() і fade_out() для плавного з’явлення чи зникнення
+        def move(self):
+            fps = FPS.get_fps()
+            if fps <= 0:
+                fps = 0.01
+            current_speed = self.SPEED * (60 / fps)
+            if self.ACTIVE:
+                if self.TURN == "Down":
+                    if self.Y_COR < self.TARGET_Y: 
+                        self.fade_in()
+                        self.Y_COR += current_speed
+                        self.RECT.y += current_speed
+                        if self.Y_COR >= self.TARGET_Y:  
+                            self.Y_COR = self.TARGET_Y
+                            self.RECT.y == self.TARGET_Y
+                            self.TURN = "Up"  
+
+                elif self.TURN == "Up":
+                    if self.Y_COR > -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
+                        self.Y_COR -= current_speed
+                        self.RECT.y -= current_speed
+                        self.fade_out()
+                        if self.Y_COR <= -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
+                            self.Y_COR = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
+                            self.RECT.y = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
+                            self.TURN = "Down"  
+
+            # Сброс состояния только для завершенной анимации
+            if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):
+                self.ACTIVE = False
+```
+
 [⬆️Table of contents](#articles)
 
 <a name="volume_settings"><h1>describe volume_settings package</h1></a>
@@ -630,6 +845,25 @@ This folder contains the files responsible for the buttons in our store, all the
 In the volume_settings folder, there are files with functions that are responsible for the music volume, allowing us to adjust the volume or turn off the sound altogether.
 </details>
 
+```python
+    # Функція turn_off_volume_func та кнопка off_sound_button виконують важливу роль у керуванні звуком у грі, дозволяючи гравцю 
+    # вимкнути музику та звукові ефекти.
+        def turn_off_volume_func():
+        pygame.mixer.music.set_volume(0)
+        for sound_effects in all_sounds:
+            sound_effects.set_volume(pygame.mixer.music.get_volume())
+
+    off_sound_button = Button(
+        x = 205, 
+        y = 14, 
+        width = 74, 
+        height = 71, 
+        image_hover_path = "off_music.png", 
+        image_path = "off_music_hover.png", 
+        action = turn_off_volume_func
+        )
+```
+
 [⬆️Table of contents](#articles)
 
 
@@ -637,7 +871,9 @@ In the volume_settings folder, there are files with functions that are responsib
 Частина коду client, де ми віправляємо матрицю через список, отримуємо дані, а також цикл для безпреревного обміну даними.
 
 ```python
-        # Функція send_matrix готує та відправляє важливу інформацію для збереження поточного стану гри, включаючи матрицю позицій ворога та інформацію про кораблі. Після цього вона оновлює статус гри та зберігає його у JSON файл для подальшої обробки або передачі даних.
+        # Функція send_matrix готує та відправляє важливу інформацію для збереження поточного стану гри, включаючи матрицю 
+        # позицій ворога та інформацію про кораблі. Після цього вона оновлює статус гри та зберігає його у JSON файл для 
+        # подальшої обробки або передачі даних.
         def send_matrix():
         list_check_need_send[0] = True
         data_player_shot.clear()  # Очищаємо дані перед додаванням нових
@@ -667,7 +903,8 @@ In the volume_settings folder, there are files with functions that are responsib
             data += part
         return data
 
-    # Функція start_client є частиною клієнтської логіки для гри, яка реалізує підключення до сервера через сокети і взаємодію з ним, а також обробку стану користувача та даних гри.
+    # Функція start_client є частиною клієнтської логіки для гри, яка реалізує підключення до сервера через сокети і взаємодію з 
+    # ним, а також обробку стану користувача та даних гри.
     def start_client():
         if input_nick.user_text not in list_users:
             #створюємо гравця з його ніком та даємо базову кількість балів
@@ -802,7 +1039,8 @@ In the volume_settings folder, there are files with functions that are responsib
             self.PORT = 0
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # Функція start_server реалізує серверну частину для багатокористувацької гри, яка організовує підключення двох гравців, взаємодію з ними через сокети та обробку помилок і повторні з'єднання. 
+        # Функція start_server реалізує серверну частину для багатокористувацької гри, яка організовує підключення двох гравців, 
+        # взаємодію з ними через сокети та обробку помилок і повторні з'єднання. 
         def start_server(self, ip_adress: str, port: int):
             self.PORT = int(port) 
             while True:
@@ -990,7 +1228,9 @@ In the volume_settings folder, there are files with functions that are responsib
                 except Exception as e:
                     check_prev_pos = 1
 
-            # Цей код відповідає за очищення певної частини ігрового поля (матриці), зважаючи на певні умови. Код розрізняє два основні стани: коли колізій немає (чи self.check_collision != True), і коли вони є (якщо self.check_collision == True). Він також перевіряє, чи потрібно очищати стовпці чи рядки залежно від орієнтації корабля.
+            # Цей код відповідає за очищення певної частини ігрового поля (матриці), зважаючи на певні умови. Код розрізняє два 
+            # основні стани: коли колізій немає (чи self.check_collision != True), і коли вони є (якщо self.check_collision == 
+            # True). Він також перевіряє, чи потрібно очищати стовпці чи рядки залежно від орієнтації корабля.
             if self.check_collision != True:
                 # перевірка чи очищений список
                 if check_prev_pos == 0:
@@ -1126,7 +1366,9 @@ In the volume_settings folder, there are files with functions that are responsib
 
                     print(list_grid)
                     print("------------------------------------------------------------------------------------------------")
-                    # Цей фрагмент коду виконує перевірку на колізії між кораблем, який рухається, і іншими кораблями на ігровому полі. Основна мета — визначити, чи є зіткнення між двома кораблями або з іншими об'єктами, а також правильно оновити координати та стан корабля, якщо колізія відбулася
+                    # Цей фрагмент коду виконує перевірку на колізії між кораблем, який рухається, і іншими кораблями на 
+                    # ігровому полі. Основна мета — визначити, чи є зіткнення між двома кораблями або з іншими об'єктами, а 
+                    # також правильно оновити координати та стан корабля, якщо колізія відбулася
                     for cell in list_object_map: 
                             if cell.x <= self.X_COR and self.X_COR < cell.x + 62:
                                 if cell.y <= self.Y_COR and self.Y_COR < cell.y + 62:
@@ -1224,28 +1466,88 @@ In the volume_settings folder, there are files with functions that are responsib
 [⬆️Table of contents](#articles)
 
 <a name="prbl_project"><h2>Problems during development</h2></a>
-Під час написання коду, ми зіштовхнулись з деякими труднощами. Наприклад ми не можемо ще раз запускати сервер, якщо його вже запустили, на жаль цю проблему ми не змогли вирішити, але це в перспективі. Однією з наших проблем стало розташування кораблів, складно було зробити так, щоб не можна було ставити корабель один на інший, також треба було зробити так, щоб користувач міг ставити корабель лише через одну клітинку, як зазначено в правилах гри. Наразі цю проблему вирішено. 
-Найголовнішою проблемою було працювання з клієнтом та сервером, з самого початку ми мали іншу структуру коду, через що, згодом ми мали баг з перепідключенням клієнта та сервера, а також з обміном данних. Також через те, що ми відправляли усю матрицю одразу, були постійні перепідключення, що заважало грі, наразі ми змінили структуру, тепер інформація відправляється через список відразу та частково. Однією з проблем стало те, що не вся гра написана через класи, замість них ми маємо функції(наші вікна). 
-Під час напсиання коду, ми мали погану структуру коду, тому ми її змінили, розподілили файли по фреймам.
+Під час написання коду ми зіштовхнулися з низкою труднощів, які вплинули як на технічну реалізацію, так і на загальну структуру проєкту.
+Наприклад, ми виявили проблему з повторним запуском сервера. Якщо сервер вже було запущено, спроба повторного запуску викликала помилку. На жаль, це питання поки не вдалося вирішити, однак ми плануємо виправити його в майбутніх версіях, щоб забезпечити стабільність роботи програми.
+Складнощі виникли й під час реалізації механіки розташування кораблів. Було необхідно забезпечити, щоб:
+
+1 Кораблі не могли розташовуватися один на одному.
+2 Розміщення кораблів відповідало правилам гри, тобто вони мали стояти з відступом в одну клітинку від інших кораблів.
+
+Реалізація цієї логіки вимагала значного часу та зусиль, але на даний момент проблему вирішено, і розташування кораблів відповідає ігровим правилам.
+Найбільшою проблемою стала робота з клієнт-серверною системою. Початкова структура коду виявилася неефективною, що призвело до:
+
+1 Постійних багів із перепідключенням клієнта і сервера.
+2 Проблем із коректним обміном даними.
+Через те, що ми спочатку передавали всю матрицю даних одразу, з'єднання між клієнтом і сервером часто розривалося, що серйозно заважало ігровому процесу. Щоб розв’язати цю проблему, ми кардинально змінили підхід до передачі даних: тепер дані передаються частинами через список, що значно знизило навантаження на мережу і покращило стабільність гри.
+
+Ще одним викликом стало те, що не вся гра написана через класи. Багато функцій, зокрема вікна гри, були реалізовані у вигляді окремих функцій, а не класів. Це ускладнювало модифікацію коду, але в перспективі ми плануємо переписати основні елементи, використовуючи класи для підвищення гнучкості та читабельності програми.
+Окрім цього, початкова структура проєкту була досить хаотичною, через що ускладнювався процес навігації та внесення змін. Ми провели перегляд та впорядкування коду, організували файли за фреймами, що покращило структурованість проєкту та зробило його зручнішим для подальшого розвитку.
+
+Попри всі труднощі, ми впоралися з багами та маємо дану гру.
 <details>
 <summary>English version</summary>
-While writing the code, we encountered some difficulties. For example, we cannot restart the server if it has already been started, unfortunately we could not solve this problem, but it is in the future. One of our problems was the location of the ships, it was difficult to make it so that it was not possible to place a ship on top of another, it was also necessary to make it so that the user could place a ship only through one cell, as stated in the game rules. Currently, this problem has been solved.
-The most important problem was working with the client and server, from the very beginning we had a different code structure, because of which, later we had a bug with the client and server reconnecting, as well as with data exchange. Also, because we sent the entire matrix at once, there were constant reconnections, which interfered with the game, now we have changed the structure, now the information is sent through the list immediately and partially. One of the problems was that not the entire game is written through classes, instead we have functions (our windows).
-When writing the code, we had a bad code structure, so we changed it and distributed the files across frames.
+While writing the code, we encountered a number of difficulties that affected both the technical implementation and the overall structure of the project.
+For example, we discovered a problem with restarting the server. If the server was already running, an attempt to restart it caused an error. Unfortunately, this issue has not yet been resolved, but we plan to fix it in future versions to ensure the stability of the program.
+Difficulties also arose during the implementation of the ship placement mechanics. It was necessary to ensure that:
+
+1 Ships could not be placed on top of each other.
+2 The placement of ships corresponded to the rules of the game, that is, they had to be placed one cell apart from other ships.
+
+The implementation of this logic required considerable time and effort, but at the moment the problem has been resolved, and the placement of ships corresponds to the game rules.
+The biggest problem was working with the client-server system. The initial code structure turned out to be inefficient, which led to:
+
+1 Constant bugs with client and server reconnection.
+2 Problems with correct data exchange.
+Because we initially transferred the entire data matrix at once, the connection between the client and the server was often broken, which seriously interfered with the gameplay. To solve this problem, we radically changed the approach to data transfer: now data is transferred in parts via a list, which significantly reduced the load on the network and improved the stability of the game.
+
+Another challenge was that not the entire game was written in classes. Many functions, including the game windows, were implemented as separate functions, not classes. This made it difficult to modify the code, but in the future we plan to rewrite the main elements using classes to increase the flexibility and readability of the program.
+In addition, the initial project structure was quite chaotic, which complicated the process of navigation and making changes. We reviewed and organized the code, organized the files by frames, which improved the project's structure and made it more convenient for further development.
+
+Despite all the difficulties, we managed to overcome the bugs and have this game.
 </details>
 
 
 <a name="conclusions"><h2>Conclusion</h2></a>
-Під час реалізації проєкту ми отримали цінний досвід роботи в команді. Нам вдалося покращити свою дисципліну, організовуючи зустрічі для обговорення проблем та розподілу завдань. Ми вдосконалили навички роботи з модулем pygame, а першокурсники вперше ознайомилися з ним. Дійшли висновку, що це не найпростіший рушій для Python.
-Також першокурсники ознайомилися з матрицями, а старшокурсники поглибили свої знання в цій темі. Ми успішно освоїли роботу з Figma, зокрема створення анімацій та їх використання у грі. Навчилися правильно структурувати файли в проєкті й створювати віртуальне середовище.
-Ми розібралися в основах обміну даними між користувачами за допомогою IP-адрес та портів. Навчилися вирішувати проблеми, пов'язані з цим процесом, а також отримали знання про інтернет-протоколи IPv4 та IPv6. Вивчили їх основні характеристики: кількість символів, систему адресації (32-бітна для IPv4 та 128-бітна для IPv6) та цілі застосування.
-За допомогою транспортного протоколу TCP ми змогли забезпечити безпечний обмін даними завдяки шифруванню. Освоїли роботу з бібліотекою socket для створення та підключення між клієнтом і сервером. Під час тестування гри, зіштовхнулися з проблемами та навчились вирішувати їх(зокрема проблеми зі з'єднанням). Зробили висновки, що завдяки бібліотеки socket маємо можливість підключитись до пристрою іншного користувача, без його відома. 
+Під час реалізації цього проєкту ми отримали дуже цінний досвід роботи в команді. Це дало нам можливість краще організовувати свою діяльність, планувати зустрічі для обговорення проблем і чітко розподіляти завдання між учасниками. Ми навчилися краще організовувати свою роботу і ставати більш дисциплінованими, що є важливим аспектом у розробці програмного забезпечення.
+
+Під час розробки гри ми вдосконалили навички роботи з модулем **pygame**, що є потужним інструментом для створення ігор на Python. Це був чудовий досвід для тих, хто раніше не працював з цією бібліотекою, і першокурсники змогли ознайомитися з її основами. Разом із тим, ми зрозуміли, що **pygame** не є найпростішим рушієм для Python, і робота з ним потребує терпіння та уважності, оскільки часто виникають технічні труднощі, які треба вирішувати під час розробки.
+
+У процесі роботи над проєктом ми також працювали з **матрицями**, що допомогло першокурсникам краще зрозуміти цей важливий математичний інструмент. Для старшокурсників це стало можливістю поглибити свої знання. Матриці застосовуються для зберігання даних у грі, таких як розташування об'єктів або стан клітинок на полі. Таке вивчення допомогло краще структурувати дані та спростити деякі розрахунки.
+
+Ще однією корисною навичкою, яку ми освоїли, було використання **Figma** для створення анімацій і графічних елементів для гри. Це дозволило нам зробити гру більш цікавою та привабливою для користувачів, оскільки ми змогли застосувати анімації та інші візуальні ефекти, що підвищують взаємодію з гравцями.
+
+Також ми навчилися правильно **структурувати файли** у проєкті та організовувати роботу з **віртуальними середовищами**. Це дозволило нам уникнути багатьох помилок, пов'язаних з неузгодженістю версій бібліотек і зависанням програми.
+
+Одним з важливих аспектів роботи над цим проєктом було **розуміння обміну даними між користувачами** через **IP-адреси** та **порти**. Ми детально вивчали принципи роботи інтернет-протоколів **IPv4** та **IPv6**, їх особливості і відмінності. Ми дізналися про відмінності у кількості символів (32 біт для IPv4 і 128 біт для IPv6), а також про різні способи застосування цих протоколів в реальних умовах.
+
+Завдяки використанню **TCP** ми змогли забезпечити безпечний обмін даними між клієнтом та сервером. Цей транспортний протокол гарантує, що дані будуть доставлені без помилок і не будуть загублені в процесі передачі. Ми також працювали з бібліотекою **socket**, що дозволила нам створювати з'єднання між клієнтами та серверами. Це стало важливою частиною нашої гри, оскільки без цієї бібліотеки ми не змогли б реалізувати багатокористувацький режим.
+
+Під час тестування гри ми зіштовхнулися з проблемами з'єднання, що змусило нас шукати рішення для забезпечення стабільної роботи серверу та клієнтів. Ми навчилися працювати з багатьма аспектами зв'язку і оптимізувати процес підключення для уникнення постійних розривів з'єднання.
+
+Один з цікавих висновків, який ми зробили, полягає в тому, що завдяки бібліотеці **socket** ми маємо можливість підключатися до пристрою іншого користувача без його відома. Це викликає питання безпеки, і ми з'ясували, наскільки важливо правильно налаштовувати з'єднання, щоб не допустити несанкціонованого доступу. 
+
+Ці знання стануть в нагоді для майбутніх проєктів, адже ми не тільки розв'язали практичні проблеми, а й отримали теоретичні знання, які є основою для розуміння сучасних технологій обміну даними та їх безпеки.
 <details>
 <summary>English version</summary>
-During the project implementation, we gained valuable experience working in a team. We managed to improve our discipline by organizing meetings to discuss problems and distribute tasks. We improved our skills in working with the pygame module, and the freshmen got acquainted with it for the first time. We came to the conclusion that it is not the easiest engine for Python.
-The freshmen also got acquainted with matrices, and the seniors deepened their knowledge in this topic. We successfully mastered working with Figma, in particular, creating animations and using them in the game. We learned how to properly structure files in a project and create a virtual environment.
-We understood the basics of data exchange between users using IP addresses and ports. We learned to solve problems related to this process, and also gained knowledge about the Internet protocols IPv4 and IPv6. We studied their main characteristics: the number of characters, the addressing system (32-bit for IPv4 and 128-bit for IPv6), and the purposes of application.
-Using the TCP transport protocol, we were able to ensure secure data exchange through encryption. We mastered working with the socket library to create and connect between the client and the server. While testing the game, we encountered problems and learned how to solve them (including connection problems). We concluded that thanks to the socket library, we have the ability to connect to another user's device without their knowledge.
+During the implementation of this project, we gained very valuable experience working in a team. This gave us the opportunity to better organize our activities, plan meetings to discuss problems, and clearly distribute tasks among participants. We learned to better organize our work and become more disciplined, which is an important aspect in software development.
+
+During the development of the game, we improved our skills in working with the **pygame** module, which is a powerful tool for creating games in Python. It was a great experience for those who had not worked with this library before, and the first-year students were able to get acquainted with its basics. At the same time, we realized that **pygame** is not the easiest engine for Python, and working with it requires patience and attention, as technical difficulties often arise that need to be resolved during development.
+
+During the project, we also worked with **matrices**, which helped the first-year students better understand this important mathematical tool. For the senior students, it was an opportunity to deepen their knowledge. Matrices are used to store data in the game, such as the location of objects or the state of cells on the field. Such a study helped to better structure the data and simplify some calculations.
+
+Another useful skill that we mastered was using **Figma** to create animations and graphic elements for the game. This allowed us to make the game more interesting and attractive to users, as we were able to apply animations and other visual effects that increase interaction with players.
+
+We also learned how to **structure files** in the project correctly and organize work with **virtual environments**. This allowed us to avoid many errors related to library version inconsistencies and program hangs.
+
+One of the important aspects of working on this project was **understanding data exchange between users** via **IP addresses** and **ports**. We studied in detail the principles of operation of the **IPv4** and **IPv6** Internet protocols, their features and differences. We learned about the differences in the number of characters (32 bits for IPv4 and 128 bits for IPv6), as well as the different ways these protocols are used in real-world situations.
+
+Using **TCP**, we were able to ensure secure data exchange between the client and the server. This transport protocol ensures that data is delivered without errors and is not lost during transmission. We also worked with the **socket** library, which allowed us to create connections between clients and servers. This became an important part of our game, since without this library we would not have been able to implement a multiplayer mode.
+
+While testing the game, we encountered connection problems, which forced us to look for solutions to ensure stable operation of the server and clients. We learned to work with many aspects of communication and optimize the connection process to avoid constant connection drops.
+
+One of the interesting conclusions we made is that thanks to the **socket** library, we have the ability to connect to another user's device without their knowledge. This raises security issues, and we learned how important it is to properly configure the connection to prevent unauthorized access.
+
+This knowledge will be useful for future projects, because we not only solved practical problems, but also gained theoretical knowledge that is the basis for understanding modern data exchange technologies and their security.
 </details>
  
 [⬆️Table of contents](#articles)
