@@ -146,14 +146,14 @@ To join the game, you need:
  - Запустіть бажану IDE (Vscode, PyCharm або іншу)
  - Відкрийте його та виберіть опцію «Відкрити папку», щоб перейти та відкрити каталог, де було клоновано проект.
  - Натисніть Control + J або просто створіть новий термінал і напишіть це:
-    ```python
+```python
     git clone <repository_url>
-    ```
+```
 3. Підготуйте проект до використання
  - Перейдіть до головної папки проекту
-    ```python  
+```python  
     cd ShipsBattle
-    ```
+```
 4. Створіть віртуальне середовище
 
     Для macOS/Linux:
@@ -173,15 +173,15 @@ To join the game, you need:
 6. Встановити модулі проекту
  - Коли віртуальне середовище стане активним, інсталюйте необхідні бібліотеки, виконавши:
 
-        ```python 
-        pip install -r requirements.txt 
-        ```
+```python 
+    pip install -r requirements.txt 
+```
 7. Запуск програми
  - Щоб запустити музичний плеєр, використовуйте таку команду:
 
-        ```python
-        python main.py
-        ```
+```python
+    python main.py
+```
 
 
 [⬆️Table of contents](#articles)
@@ -274,7 +274,7 @@ Part of the functions in battle
     grid_image.y_cor = 211
     grid_image.load_image()
 
-    # оновлюємо дані про ник та бали гравців
+    # оновлюємо дані про нік та бали гравців
     player_nick.text = dict_save_information["player_nick"]
     enemy_nick.text = dict_save_information["enemy_nick"]
     player_points.text = str(dict_save_information["player_points"])
@@ -491,7 +491,7 @@ We create in the screens folder, we draw the dimensions of the game screen, we a
 </details>
 
 ```python
-    #класс для создания одной пустой клетки 
+    #класс для створення однієї порожньої клітинки
     class Cell:
         def __init__(self, x: int , y: int , width: int , height:int , image_name: str):
             self.x = x
@@ -511,13 +511,13 @@ We create in the screens folder, we draw the dimensions of the game screen, we a
             screen.blit(self.image, (self.x, self.y))
 
 
-    #список для хранения объектов клеток сетки
+    #список для зберігання об'єктів сітки
     list_object_map = []
 
     list_object_map_enemy = []
 
 
-    #класс для создания сетки
+    #класс для створення сітки
     class Grid:
         def __init__(self , x_screen: int , y_screen: int):
             self.X_SCREEN = x_screen
@@ -543,30 +543,30 @@ We create in the screens folder, we draw the dimensions of the game screen, we a
                 x_screen = self.X_SCREEN
 
         def snap_to_grid(self, x, y):
-        # Рассчитываем индекс столбца сетки (grid_x), в который попадает точка (x)-координата корабля.
-        # 1. Вычитаем координату начала сетки по X (self.X_SCREEN), чтобы получить относительное положение.
-        # 2. Делим на ширину ячейки (62), чтобы определить, в какой столбец попадает точка.
-        # 3. Округляем до ближайшего целого числа, чтобы привязать координату к ближайшему столбцу.
+        # Розраховуємо індекс стовпця сітки (grid_x), який потрапляє точка (x)-координата корабля.
+        # 1. Віднімаємо координату початку сітки по X (self.X_SCREEN), щоб отримати відносне положення.
+        # 2. Ділимо на ширину комірки (62), щоб визначити, в який стовпець потрапляє крапка.
+        # 3. Округлюємо до найближчого цілого числа, щоб прив'язати координату до найближчого стовпця.
             grid_x = round((x - self.X_SCREEN) / 62)  
         
-        # Рассчитываем индекс строки сетки (grid_y), в которую попадает точка (y)-координата корабля.
-        # 1. Вычитаем координату начала сетки по Y (self.Y_SCREEN), чтобы получить относительное положение.
-        # 2. Делим на высоту ячейки (62), чтобы определить, в какую строку попадает точка.
-        # 3. Округляем до ближайшего целого числа, чтобы привязать координату к ближайшей строке.
+        # Розраховуємо індекс рядка сітки (grid_y), до якого потрапляє точка (y)-координата корабля.
+        # 1. Віднімаємо координату початку сітки по Y (self.Y_SCREEN), щоб отримати відносне положення.
+        # 2. Ділимо на висоту комірки (62), щоб визначити, в який рядок потрапляє крапка.
+        # 3. Округлюємо до найближчого цілого числа, щоб прив'язати координату до найближчого рядка.
             grid_y = round((y - self.Y_SCREEN) / 62)  
         
-        # Ограничиваем индекс столбца (grid_x) в пределах от 0 до 8 (максимальное количество столбцов минус 1).
-        # Если координата выходит за пределы сетки, она будет приведена к ближайшей границе.
+        # Обмежуємо індекс стовпця (grid_x) у межах від 0 до 8 (максимальна кількість стовпців мінус 1).
+        # Якщо координата виходить за межі сітки, вона буде приведена до найближчого кордону.
             grid_x = max(0, min(10 - 1, grid_x))
         
-        # Ограничиваем индекс строки (grid_y) в пределах от 0 до 8 (максимальное количество строк минус 1).
-        # Если координата выходит за пределы сетки, она будет приведена к ближайшей границе.
+        # Обмежуємо індекс рядка (grid_y) у межах від 0 до 8 (максимальна кількість рядків мінус 1).
+        # Якщо координата виходить за межі сітки, вона буде приведена до найближчого кордону.
             grid_y = max(0, min(10 - 1, grid_y))
         
-        # Возвращаем координаты центра привязанной ячейки:
-        # 1. Рассчитываем экранные координаты центра ячейки по X:
-        #    - Умножаем индекс столбца (grid_x) на ширину ячейки (62) и добавляем смещение сетки (self.X_SCREEN).
-        # 2. Аналогично, рассчитываем экранные координаты центра ячейки по Y.
+        # Повертаємо координати центру прив'язаного осередку:
+        # 1. Розраховуємо екранні координати центру осередку по X:
+        # - Помножуємо індекс стовпця (grid_x) на ширину комірки (62) і додаємо усунення сітки (self.X_SCREEN).
+        # 2. Аналогічно, розраховуємо екранні координати центру осередку Y.
             return self.X_SCREEN + grid_x * 62, self.Y_SCREEN + grid_y * 62
         
         def snap_to_grid_enemy(self, x, y):
@@ -582,19 +582,19 @@ We create in the screens folder, we draw the dimensions of the game screen, we a
             return self.X_SCREEN + grid_x * 55, self.Y_SCREEN + grid_y * 55
         
         def cell_number_to_coordinates(self, cell_number):
-            # Преобразуем номер клетки в экранные координаты
-            # cell_number - это номер клетки, который начинается с 1 (например, 1, 2, 3,...)
-            grid_x = (cell_number ) % 10  # Преобразуем в столбец
-            grid_y = (cell_number ) // 10  # Преобразуем в строку
+            # Перетворимо номер клітини на екранні координати
+            # cell_number - це номер клітини, який починається з 1 (наприклад, 1, 2, 3,...)
+            grid_x = (cell_number ) % 10  # Перетворюємо у стовпець
+            grid_y = (cell_number ) // 10  # Перетворюємо у рядок
             x_coord = self.X_SCREEN + grid_x * 55
             y_coord = self.Y_SCREEN + grid_y * 55
             return x_coord, y_coord
         def coordinates_to_number(self, x_coord, y_coord):
-            # Преобразуем экранные координаты в номер клетки
-            # x_coord и y_coord - это экранные координаты точки
-            grid_x = (x_coord - self.X_SCREEN) // 55  # Вычисляем столбец
-            grid_y = (y_coord - self.Y_SCREEN) // 55  # Вычисляем строку
-            cell_number = grid_y * 10 + grid_x + 1  # Преобразуем в номер клетки
+            # Перетворимо екранні координати на номер клітини
+            # x_coord та y_coord - це екранні координати точки
+            grid_x = (x_coord - self.X_SCREEN) // 55  # Розраховуємо стовпець
+            grid_y = (y_coord - self.Y_SCREEN) // 55  # Розраховуємо рядок
+            cell_number = grid_y * 10 + grid_x + 1  # Перетворюємо в номер клітинки
             return cell_number
         
 
@@ -630,9 +630,9 @@ In the volume_settings folder, there are files with functions that are responsib
 ```python
         def send_matrix():
         list_check_need_send[0] = True
-        data_player_shot.clear()  # Очищаем данные перед добавлением новых
+        data_player_shot.clear()  # Очищаємо дані перед додаванням нових
         data_player_shot.append("enemy_matrix")
-        for row in list_grid:  # Предполагается, что list_grid соответствует enemy_matrix
+        for row in list_grid:  # Передбачається, що list_grid відповідає enemy_matrix
             for cell in row:
                 data_player_shot.append(str(cell))
         for ship in list_ships:
@@ -646,12 +646,12 @@ In the volume_settings folder, there are files with functions that are responsib
     }
     write_json(filename= "status_connect_game.json" , object_dict =  dict_status_game)
 
-    # Функция для получения всех данных
+    # Функція для отримання усіх данних
     def recv_all(sock):
         data = b""
         while True:
             part = sock.recv(1024)
-            if not part or b"END" in part:  # Условие завершения передачи
+            if not part or b"END" in part:  # Умова завершення передачі
                 data += part.split(b"END")[0]
                 break
             data += part
@@ -659,7 +659,7 @@ In the volume_settings folder, there are files with functions that are responsib
 
     def start_client():
         if input_nick.user_text not in list_users:
-            #создаем игрока с его ником и даем базовое количество баллов
+            #створюємо гравця з його ніком та даємо базову кількість балів
             list_users[input_nick.user_text] = {"points": 0,
                                                 "password": input_password.user_text
                                                 }
@@ -668,12 +668,12 @@ In the volume_settings folder, there are files with functions that are responsib
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
             # try:
             port_client = int(input_port.user_text)
-            client_socket.connect((str(input_ip_adress.user_text), port_client))  # Подключение к серверу
+            client_socket.connect((str(input_ip_adress.user_text), port_client))  # Підключення до серверу
             print("Клиент подключён к серверу.")
-            # Получение сообщения от сервера (роль клиента)
+            # Отримання повідомлення від сервера (роль клієнта)
             role = client_socket.recv(1024).decode("utf-8")
             server_module.list_player_role[0] = role
-            # Бесконечный цикл для отправки и получения данных
+            # Бескінечний цикл для відправки та отримання даних
             while True:
                 try:
                     if check_can_connect_to_fight[2] != 'True':
@@ -718,9 +718,9 @@ In the volume_settings folder, there are files with functions that are responsib
                         if list_check_need_send[0] == True:  # Перевірка на `True`
                             str_line = ""
                             for cell in data_player_shot:
-                                str_line += str(cell) + " " # Переводимо список в строчку с пробелами
+                                str_line += str(cell) + " " # Переводимо список в рядок з пробілами
                             client_socket.sendall(str_line.encode("utf-8") + b"END")  # Відправка даних як список
-                            data_player_shot.clear()  # Очищаем список перед новым входом
+                            data_player_shot.clear()  # Очищаєємо список перед новим входом
                             list_check_need_send[0] = False
                         else:
                             client_socket.sendall("keep-alive".encode("utf-8") + b"END")
@@ -855,31 +855,31 @@ In the volume_settings folder, there are files with functions that are responsib
         Приклад застосування: 
         >>> self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
         '''
-        self.X_COR = x_cor#место где будет стоять корабыль по иксу
-        self.Y_COR = y_cor#место где будет стоять корабль по игреку
+        self.X_COR = x_cor#місце де стоятиме корабель за іксом
+        self.Y_COR = y_cor#місце де стоятиме корабель за греком
         self.WIDTH = width#ширина корабля
-        self.HEIGHT = height#высота корабля
-        self.IMAGE_SHIP = image_ship#картинка обычного корабля
-        self.ROTATE_SHIP = image_rotate_ship#картинка повернутого корабля
-        self.LENGHT = length#длина корабля в клеточках
-        self.ORIENTATION_SHIP = position_ship#горизонтально или вертикально сейчас стоит корабль
-        self.CHEK_ROTATION = self.ORIENTATION_SHIP#для проверки оризонтально или вертикально сейчас стоит корабль
-        self.READY_IMAGE_SHIP = None#отмаштобированная и готовая кратинка норамльного корабля
-        self.IMAGE_ROTATE_SHIP = None#отмаштобированная и готовая кратинка повернутого корабля
-        self.load_image()#вызываем метод загрузки картинки
-        self.CHECK_MOVE = None # Флаг для проверки движений мыши
-        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))#прямоугольник для того чтобы могли отслеживать курсор ли на кораблике или нет
-        self.STASIC_X = self.X_COR # Static_x = это начальные координаты
-        self.STASIC_Y = self.Y_COR # Static_y = это начальные координаты
-        # это свйоство где хранится новая клетка где стоит корабль 
+        self.HEIGHT = height#висота корабля
+        self.IMAGE_SHIP = image_ship#картинка звичайного корабля
+        self.ROTATE_SHIP = image_rotate_ship#картинка поверненого корабля
+        self.LENGHT = length#довжина корабля у клітинах
+        self.ORIENTATION_SHIP = position_ship#горизонтально чи вертикально зараз стоїть корабель
+        self.CHEK_ROTATION = self.ORIENTATION_SHIP#для перевірки горизонтально чи вертикально зараз стоїть корабель
+        self.READY_IMAGE_SHIP = None#відмаштобована та готова картина нормального корабля
+        self.IMAGE_ROTATE_SHIP = None#відмаштобована та готова кратинка поверненого корабля
+        self.load_image()#викликаємо метод завантаження картинки
+        self.CHECK_MOVE = None # Прапор для перевірки рухів миші
+        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))#прямокутник для того, щоб могли відстежувати курсор чи на кораблику чи ні
+        self.STASIC_X = self.X_COR # Static_x = це початкові координати
+        self.STASIC_Y = self.Y_COR # Static_y = це початкові координати
+        # це світло де зберігається нова клітина де стоїть корабель
         self.number_cell = 0
-        # это свойство где хранится стараяя клетка где стоял корабль
+        # це властивість де зберігається стара клітина де стояв корабель
         self.number_ship_cell = 0
-        # номер рядка в матрице где он стоит
+        # номер рядка в матриці де він стоїть
         self.row = 0
-        # номер клетки где он стоит
+        # номер клітини де він стоїть
         self.col = 0
-        # флаг для проверки столкновения с кораблями(коллизиями)
+        # прапор для перевірки зіткнення з кораблями (колізії)
         self.check_collision = None
         self.check_after_random = None
 ```
@@ -893,7 +893,7 @@ In the volume_settings folder, there are files with functions that are responsib
         Приклад застосування: 
         >>> snapped_x, snapped_y = grid.snap_to_grid(mouse_x, mouse_y)
         '''       
-        # Привязываем координаты к сетке, это что бы корабль не уходил на саму сетку
+        # Прив'язати координати до сітки, щоб корабель не йшов на саму сітку
         self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
     def center_to_cell_number(self, x, y):
         r'''
@@ -901,19 +901,19 @@ In the volume_settings folder, there are files with functions that are responsib
         Приклад застосування: 
         >>>  self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
         '''        
-        #Рассчитываем индекс столбца и строки, в которые попадает корабль.
-        # grid_player.X_SCREEN - координаты сетки по иксу
-        # grid_player.Y_SCREEN - координаты сетки по игреку
-        # x - координаты кораблы по иску
-        # y - координаты корабля по игреку
+        #Розраховуємо індекс стовпця та рядки, в які потрапляє корабель.
+        # grid_player.X_SCREEN - координати сітки за іксом
+        # grid_player.Y_SCREEN - координати сітки за гріком
+        # x - координати корабли за позовом
+        # y - координати корабля за гріком
         col = (x - grid_player.X_SCREEN) // 62  # Индекс столбца 
         row = (y - grid_player.Y_SCREEN) // 62  # Индекс строки 
 
-        # Учитываем, что клетки нумеруются с 1, поэтому:
-        # Номер клетки = (строка * количество столбцов) + (столбец) + 1.
+        # Враховуємо, що клітини нумеруються з 1, тому:
+        # Номер клітини = (рядок * кількість стовпців) + (стовпець) + 1.
         cell_number = row * 10 + col + 1
 
-        # Возвращаем номер клетки
+        # Повертаємо номер клітинки
         return cell_number
 ```
 
@@ -927,22 +927,22 @@ In the volume_settings folder, there are files with functions that are responsib
         >>>  self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
         '''  
         self.RECT.topleft = (self.X_COR, self.Y_COR)
-        # Создаём переменную мышки, и получаем координаты мышки игрока
+        # Створюємо змінну мишки, і отримуємо координати мишки гравця
         mouse = pygame.mouse.get_pos()
-        # Если координаты мышки равняются координатам корабля
+        # Якщо координати мишки дорівнюють координатам корабля
         if self.RECT.collidepoint(mouse):
-            # И если клавиша отпущена 
+            # Якщо клавіша відпущена
             if event.type == pygame.KEYDOWN:
-                # И если клавиша R нажата
+                # якщо натиснуто R клавіша
                 if event.key == pygame.K_r and self.CHECK_MOVE == True: 
-                    # Если ориентация корабля horizontal
+                    # Якщо корабель horizontal
                     if self.CHEK_ROTATION == "horizontal":
                         self.ORIENTATION_SHIP = "vertical"
                         self.CHEK_ROTATION = self.ORIENTATION_SHIP
                         self.load_image()
                         self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
     
-                        # Обновляем прямоугольник только при движении
+                        # Обновляємо прямокутник
                     
                     elif self.CHEK_ROTATION == "vertical":
                         self.ORIENTATION_SHIP = "horizontal"
@@ -957,20 +957,20 @@ In the volume_settings folder, there are files with functions that are responsib
                     
                     
 
-    # метод який чистить положення корабля на матриці якщо його передвинули
+    # метод який чистити положення корабля на матриці якщо його пересунули
     def clear_matrix(self):
         r'''
         :mod:`Метод` ``clear_matrix``, який очищає попереденє розтавлення корабля.
         Приклад застосування: 
         >>>  self.clear_matrix()
         '''  
-        # список для перевірки розтавленння кораблів
+        # список для перевірки розставлення кораблів
         if check_for_shipsmoving[0] == 0:
             # список для перевірки попереднього розтавлення кораблів
             check_prev_pos = 0
 
             for index_col in range(0 , 2):
-                # Добалвяем к ячейке 
+                # Додавання до клітинки
                 try:
                     # print(list_grid[self.row][self.col + index_col])
                     if list_grid[self.row][self.col + index_col] == 0:
@@ -1023,7 +1023,7 @@ In the volume_settings folder, there are files with functions that are responsib
         check_for_shipsmoving[0] = 0
        
 
-    # метод который телепортирует коарбль на начальную точку  и поворачивает в положение по горизонатали
+    # метод, який телепортує корабель на початкову точку і повертається в положення по горизонталі
     def return_start_code(self):
         r'''
         :mod:`Метод` ``return_start_code``, для повернення корабля на початкому точку, якщо корабель не відповідає потрібним координатам ,та повертає корабель в горизонтальнеп положення.
@@ -1032,11 +1032,11 @@ In the volume_settings folder, there are files with functions that are responsib
         self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
         self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
         self.ORIENTATION_SHIP = "horizontal"
-        # Записываем в переменную для проверки
+        # Записуємо у змінну для перевірки
         self.CHEK_ROTATION = self.ORIENTATION_SHIP
-        # Отрисовываем изображение при помощи метода
+        # Малюємо зображення за допомогою методу
         self.load_image()
-        # Записываем в переменную изменённую позицию
+        # Записуємо в змінну змінену позицію
         self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
             
        
@@ -1046,24 +1046,24 @@ In the volume_settings folder, there are files with functions that are responsib
         :mod:`Метод` ``matrix_move``, перевіряє, щоб кораблі не накладалися один на одний та щоб кораблі були щонайменше на одну клітинку один від одного.
         >>>  ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
         '''
-        # Получаем текущие координаты мыши
+        # Отримуємо координати миші
         mouse = pygame.mouse.get_pos() 
 
         if event.type == pygame.MOUSEBUTTONDOWN and self.RECT.collidepoint(event.pos):
-            # Начало перемещения
+            # Початок переміщення
             self.CHECK_MOVE = True
 
-        # Если мы двигаем курсором по экрану , и уже нажимали на корабль
+        # Якщо ми рухаємо курсором по екрану і вже натискали на корабель
         elif event.type == pygame.MOUSEMOTION and self.CHECK_MOVE:
 
             self.X_COR = mouse[0] - self.RECT.width // 2
             self.Y_COR = mouse[1] - self.RECT.height // 2
 
 
-            # Ограничиваем движение корабля границами матрицы
+            # Обмежуємо рух корабля межами матриці
             self.X_COR = max(0, min(self.X_COR, matrix_width * cell - self.RECT.width))
             self.Y_COR = max(0, min(self.Y_COR, matrix_height * cell - self.RECT.height))
-            # Обновляем прямоугольник только при движении
+            # Обновляємопрямокутник тільки при русі
             self.RECT.topleft = (self.X_COR, self.Y_COR)
 
         elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
@@ -1077,18 +1077,18 @@ In the volume_settings folder, there are files with functions that are responsib
                 self.check_after_random = None
                 print(list_grid)
 
-            # Проверка пересечения с другими кораблями
-            # делаем перебор списка с кораблями , чтобы модно было проверять не пытается ли поставить пользователь корабль на корабль
+            # Перевірка перетину з іншими кораблями
+            # робимо перебір списку з кораблями, щоб модно було перевіряти чи не намагається поставити користувач корабель на корабель
             for ship in list_ships:
-                # Проверяем ship != self - это для того чтобы не проверять кораблик сам с собой
-                # self.RECT.colliderect(ship.RECT) - проверям каждый корабль из списка с текущим кораблем, если ихние прямоугольники(колизии) пересекаются то ставим кораблик на начальные координаты
+                # Перевіряємо ship != self - це щоб не перевіряти кораблик сам із собою
+                # self.RECT.colliderect(ship.RECT) - перевіримо кожен корабель зі списку з поточним кораблем, якщо їх прямокутники (колізії) перетинаються, то ставимо кораблик на початкові координати
                 if ship != self and self.RECT.colliderect(ship.RECT):
                     print("пересекается")
                     self.return_start_code()
                     # self.number_cell = self.number_ship_cell
-                    # # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
-                    # str_col = str(self.number_cell) 
-                    # # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                    # # Переробляємо значення клітини в рядок щоб можна було легко дізнатися в колонці він стоїть
+                    # str_col = str (self.number_cell)
+                    # # Обчислюємо номер рядка де стоїть корабель (наприклад 23, ділимо на 10 без залишку і отримуємо 2, ось наш стовпець)
                     # self.row = self.number_cell // 10  
                     if ship.col == self.col and ship.row == self.row:
                         check_for_shipsmoving[0] += 1
@@ -1108,7 +1108,7 @@ In the volume_settings folder, there are files with functions that are responsib
 
                     self.check_collision = None
 
-                    # Пересчитываем номер клетки где стоит корабль для старых координат
+                    # Перераховуємо номер клітини, де стоїть корабель для старих координат
                     self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
 
 
@@ -1117,17 +1117,17 @@ In the volume_settings folder, there are files with functions that are responsib
                     for cell in list_object_map: 
                             if cell.x <= self.X_COR and self.X_COR < cell.x + 62:
                                 if cell.y <= self.Y_COR and self.Y_COR < cell.y + 62:
-                                    # Узнаем номер клетки где стоит кораблик
+                                    # Дізнаємсь номер клітинки де стоїть корабель
                                     self.number_cell = list_object_map.index(cell)
-                                    # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                    # Перераховуємо номер клітини, де стоїть корабель для старих координат
                                     str_col = str(self.number_cell) 
-                                    # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                    # Обчислюємо номер рядка де стоїть корабель (наприклад 23, ділимо на 10 без залишку і отримуємо 2, ось наш стовпець)
                                     self.row = self.number_cell // 10  
-                                    #Колонку кораблика вычисляем по такому принципу
-                                    # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                    #Колонку кораблика обчислюємо за таким принципом
+                                    # Наприклад знову 23 число номер колонки де стоїть корабель , тоді за допомогою -1 ми беремо останнє число тобто трійку, і ось так отримуємо номер колонки
                                     self.col = int(str_col[-1])
 
-                                    # Устанавливаем значение где стоит корабль в матрице
+                                    # Встановлюємо значення де стоїть корабель у матриці
                                     if self.ORIENTATION_SHIP == "horizontal":
                                         for index_column in range(0 , self.LENGHT):
                                             list_grid[self.row][self.col + index_column] = self.LENGHT
@@ -1137,7 +1137,7 @@ In the volume_settings folder, there are files with functions that are responsib
                     
                      
                     for shiper in list_ships:
-                        # проверка чтобы корабль который двигаем не сравнивали с самим собой
+                        # перевірка щоб корабель який рухаємо не порівнювали із самим собою
                         if list_ships.index(shiper) != list_ships.index(self):
                             if shiper.ORIENTATION_SHIP == "horizontal":
                                 if self.X_COR >= shiper.X_COR - 62:
