@@ -221,7 +221,7 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
         upgrade_attack(index = "right_wall", col = col, row = row, count_7 = count_7, count_ships = count_ships, count_misses = count_misses, count_5 = count_5)
     
     if count_7[0] >= 1:
-        count_money_hit[0] += 10
+        count_money_hit[0] += 5
         check_bomb[0] = True
         try:
             if shop.third_task.TEXT == shop.list_third_task[1]:

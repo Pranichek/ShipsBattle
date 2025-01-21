@@ -840,7 +840,7 @@ def fight_window():
             magnat_medal.ACTIVE = True
             achievement.list_save_coords_achiv.append(5)
             achievement.list_save_coords_achiv[0] = True
-            count_money_hit[0] += 20
+            count_money_hit[0] += 7
         # destoyer achievement
         # для бомбы задание
         if check_bomb[0] == True and 9 not in achievement.list_save_coords_achiv:
@@ -850,7 +850,7 @@ def fight_window():
                 destroyer_achievement.ACTIVE = True
                 achievement.list_save_coords_achiv.append(9)
                 achievement.list_save_coords_achiv[0] = True
-                count_money_hit[0] += 20
+                count_money_hit[0] += 7
 
         if check_bomb[0] == True and 11 not in achievement.list_save_coords_achiv:
             new_killed_ships[0] = len(server_module.enemy_died_ships)
@@ -861,7 +861,7 @@ def fight_window():
                         target_attack_medal.ACTIVE = True
                         achievement.list_save_coords_achiv.append(11)
                         achievement.list_save_coords_achiv[0] = True
-                        count_money_hit[0] += 20
+                        count_money_hit[0] += 7
                     else:
                         count_5[0] = 0
                 else:
@@ -878,7 +878,7 @@ def fight_window():
             target_attack_medal.ACTIVE = True
             achievement.list_save_coords_achiv.append(11)
             achievement.list_save_coords_achiv[0] = True
-            count_money_hit[0] += 20
+            count_money_hit[0] += 7
 
         # аниамция рандомного выбиора
         if server_module.list_player_role[0] == "server_player":
@@ -1029,27 +1029,28 @@ def fight_window():
                                                 # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                 col = int(str_col[-1])
                                                 if activate_radar[0] == True and shop.flag_radar[0] == True:
-                                                    check_animation[0] = "radar_animation"
-                                                    x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
-                                                    y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-                                                    radar.check_target_grid(enemy_matrix = enemy_matrix, row = row, column = col)
-                                                    activate_radar[0] = False
-                                                    shop.flag_radar[0] = False
-                                                    active_product_shine.x_cor = -100
-                                                    active_product_shine.y_cor = -100
+                                                    if row > 0 and row < 9:
+                                                        if col > 0 and col < 9:
+                                                            check_animation[0] = "radar_animation"
+                                                            x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+                                                            y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+                                                            radar.check_target_grid(enemy_matrix = enemy_matrix, row = row, column = col)
+                                                            activate_radar[0] = False
+                                                            shop.flag_radar[0] = False
+                                                            active_product_shine.x_cor = -100
+                                                            active_product_shine.y_cor = -100
                                                 # автоудар
                                                 elif shop.flagbimb200[0] == "yes" and numberofbim[0] not in shop.cheak and activate_auto_rocket[0] == True: 
                                                     kord = Missile_200(row,col,enemy_matrix)
                                                     count_killed_ships = []
-                                                    count_misses_ships = []
                                                     #если false flag  то бан клетка и если NOne значит нету корабликов 
                                                     if kord != "false" and kord != None :
                                                         data_player_shot.append("auto_rocket")
                                                         if kord[0][0] != "True":
                                                             lenkord = len(kord)
-                                                            count_money_hit[0] += 10
+                                                            count_money_hit[0] += 3
                                                             if magnat_medal.ACTIVE == True:
-                                                                count_money_hit[0] += 20
+                                                                count_money_hit[0] += 3
                                                             for i in range(lenkord):
                                                                 # знаходим номер клетки 
                                                                 kletka = kord[i][0]*10 + kord[i][1]

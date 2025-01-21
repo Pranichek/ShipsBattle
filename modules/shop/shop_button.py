@@ -136,7 +136,7 @@ flagbimb200=["no"]
 cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
 check_2= [11,12,13,14,15,16,17,18,19,20]
 def buy_auto_rocket():
-    if money_list[0] >= 200:
+    # if money_list[0] >= 200:
         if flagbimb200[0] == "no":
             buy_product_sound.play2(loops = 1)
             if flagbimb200[0] == "no":

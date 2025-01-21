@@ -41,7 +41,6 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
     #корди col and row  левого верхнего  угла сетки 5x5
     cell_shot = [col-2,row-2]
     
-       
     # корди ограничители  col and row для обрезании матрици до 5на5
     cell_shot5row=cell_shot[0]+5
     cell_shot5col=cell_shot[1]+5
@@ -63,9 +62,8 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
        for  column, num in enumerate(roww):
            if num not in (0, 5, 7):  
                found_row = i
-               found_column =  column
-               ship_deck_number=num
-               
+               found_column = column
+               ship_deck_number = num
                break
         # если нашли то BAN
        if found_row != -1:  
@@ -75,22 +73,22 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
         
         return nema
     #Находим ряд и столбец нашего кораблика для основной матрицы, а не для 5 на 5.
-    real_column_enemy = found_column+cell_shot[1]
-    real_row_enemy=found_row+cell_shot[0]
+    real_column_enemy = found_column + cell_shot[1]
+    real_row_enemy=found_row + cell_shot[0]
     
-    rocket_coordinate=[real_row_enemy ,real_column_enemy]
+    rocket_coordinate = [real_row_enemy ,real_column_enemy]
     
 
     #Если одиночный кораблик, то нет необходимости искать его другую часть. 
     if ship_deck_number != 1:
-        print (rocket_coordinate)
+        print(rocket_coordinate)
         rowneig = rocket_coordinate[0]
         colneig =rocket_coordinate[1]
         # Находим все соседние клетки корабля
-        neighbors = find_all_neighbors([ rowneig [:] for rowneig  in enemy_matrix], rowneig , colneig , ship_deck_number)
+        neighbors = find_all_neighbors([rowneig [:] for rowneig  in enemy_matrix], rowneig , colneig , ship_deck_number)
         print ("neighbors: ",neighbors)
         return neighbors
-    else :
+    else:
         rocket_coordinatex=[rocket_coordinate]
         return rocket_coordinatex
 

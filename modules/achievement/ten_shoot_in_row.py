@@ -22,7 +22,7 @@ def ten_shoot_in_row(cell: int):
         list_save_coords_achiv.append(2)
         print("10 выстрелов по кораблям подряд")
         list_save_coords_achiv[0] = True
-        count_money_hit[0] += 20
+        count_money_hit[0] += 7
 
 
 

@@ -84,5 +84,4 @@ class Radar:
                 empty_cell.visible = 0
                 self.list_cells.append(empty_cell)
 
-
 radar = Radar()

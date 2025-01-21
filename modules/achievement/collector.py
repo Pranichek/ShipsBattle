@@ -40,7 +40,7 @@ def monster_of_perfictionists():
                             collector_medal.ACTIVE = True
                             list_save_coords_achiv.append(12)
                             list_save_coords_achiv[0] = True
-                            count_money_hit[0] += 20
+                            count_money_hit[0] += 7
                         else:
                             index_killed_ships[0] += 3
                             list_hits_achiv.clear()
