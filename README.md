@@ -243,6 +243,8 @@ To join the game, you need:
 
 ![achiv](readme_image/2.gif)
 
+![achiv](readme_image/achieve.gif)
+
 <details>
 <summary>English version</summary>
 In this folder we have files that are responsible for player rewards, all possible hits on ships are calculated here, for example, if a player hits a ship on the first turn, then the player receives his first reward.Example code for "pioner".
@@ -368,6 +370,9 @@ The game_tools folder has files that we check for crashed ships, coins that can 
 
 <a name="game_windows"><h1>describe game_windows package</h1></a>
 У папці game_windows ми маємо файли, які відповідають за натискання кнопки та зміну вікна, а також папки з різними вікнами гри, такими як головне вікно(вікно створення гри), вікно доєднання до гри, розтавлення кораблів, саме вікно бою, частину коду якого можна побачити нижче, та вікно результату гри.
+
+Для того, щоб повернути корабель, натисніть "R"
+![achiv](readme_image/position.gif)
 
 Рандомне розташування
 ![Random](readme_image/1.gif)
