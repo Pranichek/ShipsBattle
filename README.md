@@ -116,40 +116,11 @@ To join the game, you need:
 ```mermaid
     graph TD;
         ShipsBattle-->media;
-        media-->achievments;
-        media-->achievments;
-        media-->animation_auto_rocket;
-        media-->animation_boom;
-        media-->animation_choice;
-        media-->animation_clock;
-        media-->animation_cross;
-        media-->animation_medical;
-        media-->animation_miss;
-        media-->animation_miss_auto_rocket;
-        media-->animation_miss_rocket;
-        media-->animation_rocket;
-        media-->backgrounds;
-        media-->bomb_animation;
-        media-->bomb_boom;
-        media-->decorations;
-        media-->error_connection_animation;
-        media-->fonts;
-        media-->grid;
-        media-->prices;
-        media-->products_icons;
-        media-->ships;
         ShipsBattle-->modules;
         modules-->achievements;
         modules-->classes
         modules-->game_tools;
         modules-->game_windows;
-        game_windows-->create_game_frame;
-        game_windows-->fight_frame;
-        game_windows-->finish_frame;
-        game_windows-->join_game_frame;
-        game_windows-->main_frame;
-        game_windows-->ships_position_frame;
-        game_windows-->waiting_frame;
         modules-->json_functions;
         modules-->screens;
         modules-->shop;
@@ -161,7 +132,6 @@ To join the game, you need:
         ShipsBattle-->static;
         static-->icons;
         static-->images_button;
-        images_button-->shop_buttons;
         static-->json;
         static-->sounds;
         ShipsBattle-->main.py;
