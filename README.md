@@ -1,4 +1,4 @@
-<h1>Ships Battle</h1>
+<h1>GAME "Ships Battle"</h1>
 
 ---
 
@@ -50,29 +50,41 @@
 <a name="headers"><h1>Project description</h1></a>
 Основна мета цього проєкту - закріпити навички роботи з клієнтом, сервером та обміном данних. 
 Ships Battle - це гра морський бій для двох людей з можливістю підключитися віддалено або в одній мережі. 
-За допомогою введення ip адреса та порту ви можете підключитися та грати спільно з іншим гравцем. Під час гри ви маєте можливість отримати монети за попадання по кораблям, а потім витратити їх на зброю з магазину, але якщо ви хочете заробити більше монет можна виконати завдання, які є в магазині, а також, якщо заробити медаль "Магнат", то кількість монет за попадання по кораблю буде більшою. 
+За допомогою введення ip адреса та порту ви можете підключитися та грати спільно з іншим гравцем. 
+Ships Battle демонструє базові принципи роботи з клієнтом, сервером і обміном даними через мережу. Гра є чудовим прикладом для тих, хто хоче зрозуміти, як організувати підключення між пристроями за допомогою IP-адрес і портів. Проєкт також дає можливість навчитися працювати з бібліотеками Python, такими як socket і pygame. Ця гра показує, як можна реалізувати віддалений зв'язок у програмі, що буде корисним для розробників, які працюють над створенням багатокористувацьких ігор або додатків із мережевими функціями. Інші розробники можуть використовувати цей проєкт як приклад для створення своїх програм із підтримкою підключення через локальну мережу або інтернет. Завдяки можливості підключення як у межах локальної мережі, так і через інтернет, користувачі можуть легко зрозуміти різницю між цими типами з'єднань, що є важливим аспектом у створенні мережевих додатків. Отже, цей проєкт може бути корисним як для розробників-початківців, так і для тих, хто цікавиться мережею, іграми або програмуванням на Python. Він допоможе зрозуміти важливі технічні концепції та надасть натхнення для створення власних розробок.
+
+![GAME](ShipsBattle/readme_image/main.png)
 
 Щоб створити гру, потрібно:
  1. ip-адресу, яка приймає запрос від будь-якого користувача(0.0.0.0), або локальну адресу
  2. Ввести порт
  3. ввести пароль
  4. доєднатися до серверу
+
+![Create](ShipsBattle/readme_image/create.png)
+ 
 Щоб доєднатись до гри, потрібно:
  1. Ввести свій нікнейм 
  2. Публічну ip-адресу, яку ви можете дізнатись у свого провайдера
  3. Ввести порт
  4. ввести пароль
+
+ ![Join](ShipsBattle/readme_image/join.png)
+ 
 <details>
 <summary> English version </summary>
 The main goal of this project is to consolidate skills in working with the client, server and data exchange.
-Ships Battle is a naval battle game for two people with the ability to connect remotely or on the same network.
-By entering the IP address and port, you can connect and play together with another player. During the game, you have the opportunity to get coins for hitting ships, and then spend them on weapons from the store, but if you want to earn more coins, you can complete the tasks that are in the store, and also, if you earn the "Tycoon" medal, the number of coins for hitting the ship will be greater.
+Ships Battle is a sea battle game for two people with the ability to connect remotely or on the same network.
+By entering an IP address and port, you can connect and play together with another player.
+Ships Battle demonstrates the basic principles of working with the client, server and data exchange over the network. The game is an excellent example for those who want to understand how to organize connections between devices using IP addresses and ports. The project also provides an opportunity to learn how to work with Python libraries such as socket and pygame. This game shows how to implement remote communication in the program, which will be useful for developers working on creating multiplayer games or applications with network functions. Other developers can use this project as an example for creating their own programs with support for connecting via a local network or the Internet. With the ability to connect both within a local network and over the Internet, users can easily understand the difference between these types of connections, which is an important aspect in creating network applications. Therefore, this project can be useful for both novice developers and those interested in networking, gaming, or Python programming. It will help you understand important technical concepts and provide inspiration for creating your own developments.
+
 
 To create a game, you need:
  1. an ip address that accepts a request from any user (0.0.0.0), or a local address
  2. Enter the port
  3. enter the password
  4. join the server
+
 To join the game, you need:
  1. Enter your nickname
  2. Public IP address, which you can find out from your provider
@@ -100,6 +112,63 @@ To join the game, you need:
 
 
 <a name="structure"><h1>Structure of project</h1></a>
+
+```mermaid
+    graph TD;
+        ShipsBattle-->media;
+        media-->achievments;
+        media-->achievments;
+        media-->animation_auto_rocket;
+        media-->animation_boom;
+        media-->animation_choice;
+        media-->animation_clock;
+        media-->animation_cross;
+        media-->animation_medical;
+        media-->animation_miss;
+        media-->animation_miss_auto_rocket;
+        media-->animation_miss_rocket;
+        media-->animation_rocket;
+        media-->backgrounds;
+        media-->bomb_animation;
+        media-->bomb_boom;
+        media-->decorations;
+        media-->error_connection_animation;
+        media-->fonts;
+        media-->grid;
+        media-->prices;
+        media-->products_icons;
+        media-->ships;
+        ShipsBattle-->modules;
+        modules-->achievements;
+        modules-->classes
+        modules-->game_tools;
+        modules-->game_windows;
+        game_windows-->create_game_frame;
+        game_windows-->fight_frame;
+        game_windows-->finish_frame;
+        game_windows-->join_game_frame;
+        game_windows-->main_frame;
+        game_windows-->ships_position_frame;
+        game_windows-->waiting_frame;
+        modules-->json_functions;
+        modules-->screens;
+        modules-->shop;
+        shop-->tasks;
+        modules-->volume_settings;
+        modules-->__init__.py;
+        modules-->client.py;
+        modules-->server.py;
+        ShipsBattle-->static;
+        static-->icons;
+        static-->images_button;
+        images_button-->shop_buttons;
+        static-->json;
+        static-->sounds;
+        ShipsBattle-->main.py;
+        ShipsBattle-->README.md;
+        ShipsBattle-->requirements.txt;
+        ShipsBattle-->.gitignore;
+```
 
 [Link to project structure](https://www.figma.com/board/SnEIS3t6Ro3rcaxTK6nRDq/Untitled?node-id=0-1&p=f&t=8ecpCJNVmgIVfyh5-0)
 
@@ -166,7 +235,7 @@ To join the game, you need:
 
     На macOS/Linux:
 
-        source venv\Scripts\activate
+        source venv\bin\activate
     На Windows:
 
         venv\Scripts\activate
