@@ -372,9 +372,11 @@ The game_tools folder has files that we check for crashed ships, coins that can 
 ![Random](readme_image/1.gif)
 
 Бій
+
 ![Fight](readme_image/3.gif)
 
 Промах
+
 ![Miss](readme_image/4.gif)
 
 
