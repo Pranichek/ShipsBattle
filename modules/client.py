@@ -98,7 +98,7 @@ def start_client():
                     print(data_enemy)
                     data = data_enemy.split(" ")
                     check_connection_users[0] = save_data_posistion_ships[0]
-                    if len(data) > 4:
+                    if len(data) >= 4:
                         check_can_connect_to_fight[2] = data[4]
                         if data[1] not in list_users:
                             list_users[data[1]] = {"points": data[3], "password": data[2]}

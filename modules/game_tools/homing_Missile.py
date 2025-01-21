@@ -1,53 +1,65 @@
+# def find_all_neighbors(matrix, row, col, target_value):
+#     # Список для хранения всех соседей
+#     neighbors = []
+
+#     # Если клетка за пределами матрицы или ее значение не совпадает с target_value, выходим
+#     if row < 0 or col < 0 or row >= len(matrix) or col >= len(matrix[0]):
+#         return neighbors
+#     if matrix[row][col] != target_value:
+#         return neighbors
+
+#     # Помечаем текущую клетку как посещенную (ставим значение, которое невозможно найти в дальнейшем, например, None)
+#     matrix[row][col] = None  # Мы изменяем значение, чтобы избежать зацикливания
+
+#     # Соседние позиции (вверх, вниз, влево, вправо)
+#     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+#     # Добавляем текущую клетку в список соседей
+#     neighbors.append([row, col])
+
+#     # Рекурсивно проверяем соседей
+#     for dr, dc in directions:
+#         new_row, new_col = row + dr, col + dc
+#         neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
+
+#     return neighbors
 def find_all_neighbors(matrix, row, col, target_value):
     # Список для хранения всех соседей
     neighbors = []
 
-    # Если клетка за пределами матрицы или ее значение не совпадает с target_value, выходим
-    if row < 0 or col < 0 or row >= len(matrix) or col >= len(matrix[0]):
+    # Если клетка за пределами матрицы или уже была посещена, выходим
+    if row < 0 or col < 0 or row >= len(matrix) or col >= len(matrix[0]) or matrix[row][col] is None:
         return neighbors
+
+    # Если клетка имеет значение `7`, пропускаем её, но продолжаем поиск
+    if matrix[row][col] == 7:
+        # Соседние позиции (вверх, вниз, влево, вправо)
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        for dr, dc in directions:
+            new_row, new_col = row + dr, col + dc
+            # Рекурсивно проверяем соседей после клетки `7`
+            neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
+        return neighbors
+
+    # Если клетка не совпадает с target_value, выходим
     if matrix[row][col] != target_value:
         return neighbors
 
-    # Помечаем текущую клетку как посещенную (ставим значение, которое невозможно найти в дальнейшем, например, None)
-    matrix[row][col] = None  # Мы изменяем значение, чтобы избежать зацикливания
-
-    # Соседние позиции (вверх, вниз, влево, вправо)
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    # Помечаем текущую клетку как посещенную
+    matrix[row][col] = None  # Изменяем значение, чтобы избежать зацикливания
 
     # Добавляем текущую клетку в список соседей
     neighbors.append([row, col])
 
-    # Рекурсивно проверяем соседей
+    # Соседние позиции (вверх, вниз, влево, вправо)
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     for dr, dc in directions:
         new_row, new_col = row + dr, col + dc
         neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
 
-#     return neighbors
-# def find_all_neighbors(matrix, row, col, target_value):
-#    # Список для хранения всех соседей
-#    neighbors = []
+    return neighbors
 
-#    # Если клетка за пределами матрицы или ее значение не совпадает с target_value, выходим
-#    if row < 0 or col < 0 or row >= len(matrix) or col >= len(matrix[0]):
-#        return neighbors
-#    if matrix[row][col] != target_value:
-#        return neighbors
 
-#    # Помечаем текущую клетку как посещенную (ставим значение, которое невозможно найти в дальнейшем, например, None)
-#    matrix[row][col] = None  # Мы изменяем значение, чтобы избежать зацикливания
-
-#    # Соседние позиции (вверх, вниз, влево, вправо)
-#    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-
-#    # Добавляем текущую клетку в список соседей
-#    neighbors.append([row, col])
-
-#    # Рекурсивно проверяем соседей
-#    for dr, dc in directions:
-#        new_row, new_col = row + dr, col + dc
-#        neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
-
-#    return neighbors
 
 def Missile_200 (col:int  ,row:int,enemy_matrix):
     access_rights = None
@@ -102,7 +114,6 @@ def Missile_200 (col:int  ,row:int,enemy_matrix):
     
     rocket_coordinate = [real_row_enemy ,real_column_enemy]
     
-
     #Если одиночный кораблик, то нет необходимости искать его другую часть. 
     if ship_deck_number != 1:
         print(rocket_coordinate)

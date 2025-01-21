@@ -17,7 +17,7 @@ from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.radar_class import radar
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound
-from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation
+from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation
 from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
 from ..change_window import change_scene
@@ -122,7 +122,8 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
 
     return center_x, center_y
 
-
+# флаг для анимации огнетушителя
+fire_fighter_anim = [False]
 # флаг для анимации аптечки
 health_anim = [False]
 # списки в которых хранятся координаты крестиков , если враг попал по кораблю игрока
@@ -227,14 +228,12 @@ def fight_window():
     send_matrix()
     random_first_choice_sound.play2(loops = 1)
 
-    #((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
     test_time=[0]
     Cordi_Burning_Ship=[]
     stew_row = []
     stew_col =[]
     flagstop= False 
     shop.flag_arson[0] = ["no"]
-    #((((((((((((((((((((((((((((((((((((((((
     while run_game:
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
@@ -339,7 +338,6 @@ def fight_window():
                                     pozhar_col.append(int(check_data[(index_fire +2)]))
                                     list_grid[int(check_data[(index_fire +1)])][int(check_data[(index_fire +2)])] = 7
                             if "put_out_the_fire" in check_data:
-                                print ("туши туши плиз ",check_data)
                                 index_fire  = check_data.index("put_out_the_fire")
                                 stew_row.append(int(check_data[(index_fire +1)]))
                                 stew_col.append(int(check_data[(index_fire +2)]))
@@ -826,6 +824,11 @@ def fight_window():
                 health_anim[0] = False
                 animation_health.clear_animation()
 
+        if fire_fighter_anim[0] == True:
+            if fire_fighter_animation.animation(main_screen = module_screen.main_screen, count_image = 8):
+                fire_fighter_anim[0] = False
+                fire_fighter_animation.clear_animation()
+
 
         mouse_x , mouse_y = pygame.mouse.get_pos()
         # отрисовка сетки для прицеливания при авто-ударе
@@ -833,11 +836,9 @@ def fight_window():
             if shop.flagbimb200[0] == 'yes' and activate_auto_rocket[0] == True:
                 center_xy = draw_cursor(screen = module_screen.main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid = enemy_grid, color =colorsetka)
                 draw_cursor(screen = module_screen.main_screen, mouse_x=mouse_x, mouse_y=mouse_y,grid =enemy_grid, color = colorsetka)
-                
                 x_mouse=center_xy[0]
                 y_mouse=center_xy[1]
                 numberofbim[0] = enemy_grid.coordinates_to_number(x_mouse, y_mouse)
-    
             if x_mouse >= 182 and x_mouse <= 67 + 450:
                 if y_mouse >= 322 and y_mouse <= 257 + 450  and numberofbim[0] not in shop.check_2:
                     colorsetka=(0, 255, 0)    
@@ -1102,7 +1103,8 @@ def fight_window():
                                             col = int(str_col_our[-1])
 
                                             cltx = (row * 10) + int(str_col_our[-1])
-
+                                            x_animation = list_object_map[cltx].x
+                                            y_animation = list_object_map[cltx].y
                                             # номер клеточки
                                             if list_grid[row][col] == 7:
                                                 activate_restore_cell[0] = False
@@ -1119,6 +1121,19 @@ def fight_window():
 
                                         if pozhar_col !=  [] :
                                             if shop.flag_put_out_the_fire[0] == "yes" and activate_fire_fighter[0] == True:
+                                                # Узнаем номер клетки где стоит кораблик
+                                                number_cell_our = list_object_map.index(cell)
+                                                # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
+                                                str_col_our = str(number_cell_our) 
+                                                # Вычисляем номер рядка где стоит корабль(например 23 , делим на 10 без остатка и получаем 2 , вот нашь столбец)
+                                                row = number_cell_our // 10  
+                                                #Колонку кораблика вычисляем по такому принципу
+                                                # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
+                                                col = int(str_col_our[-1])
+
+                                                cltx = (row * 10) + int(str_col_our[-1])
+                                                x_animation = list_object_map[cltx].x
+                                                y_animation = list_object_map[cltx].y
                                                 shop.flag_put_out_the_fire[0] = "no"
                                                 activate_fire_fighter[0] = False
                                                 # Узнаем номер клетки где стоит кораблик
@@ -1130,8 +1145,11 @@ def fight_window():
                                                 #Колонку кораблика вычисляем по такому принципу
                                                 # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                 col = int(str_col_our[-1])
-                                                if row in pozhar_row :
-                                                    if col in pozhar_col  :
+                                                if row in pozhar_row:
+                                                    if col in pozhar_col:
+                                                        fire_fighter_anim[0] = True
+                                                        fire_fighter_animation.X_COR = x_animation
+                                                        fire_fighter_animation.Y_COR = y_animation
                                                         data_player_shot.append ("put_out_the_fire")
                                                         data_player_shot.append(row)
                                                         data_player_shot.append(col)
@@ -1163,28 +1181,26 @@ def fight_window():
                                                 #Колонку кораблика вычисляем по такому принципу
                                                 # Например опять 23 число номер колонки где стоит корабль , тогда с помощью -1 мы берем последнее число тоесть тройку, и вот так получаем номер колонки
                                                 col = int(str_col[-1])
-                                                if enemy_matrix[row][col] != 5 or enemy_matrix[row][col] != 7 or enemy_matrix[row][col] != 0 :
-                                                    if shop.flag_arson[0] == "yes" and activate_fire_rocket[0] == True:
+                                                if enemy_matrix[row][col] not in (5, 7, 0):
+                                                    if shop.flag_arson[0] == "yes" and activate_fire_rocket[0] is True:
                                                         check_animation[0] = "fire_rocket"
-                                                        print (f"row col{row,col}")                                                  
-                                                        number_of_decks=enemy_matrix[row][col]
+                                                        print(f"row col: {row, col}")
+                                                        number_of_decks = enemy_matrix[row][col]
                                                         shop.flag_arson[0] = "no"
                                                         activate_fire_rocket[0] = False
-                                                        promah=[0,5,7,6]
-                                                        if number_of_decks != 1:
-                                                            if number_of_decks not in  promah:
-                                                                xxxxx = find_all_neighbors(matrix=enemy_matrix,row =row,col =col,target_value=number_of_decks)
-                                                                colich = ((len (xxxxx)))
-                                                                Cordi_Burning_Ship.append([])
-                                                                Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
-                                                                Cordi_Burning_Ship[number_of_ship_sonfire[0]].insert(0, 0)
-                                                                Cordi_Burning_Ship[number_of_ship_sonfire[0]][0] = 4
-                                                                number_of_ship_sonfire[0] += 1
-                                                            active_product_shine.x_cor = -100
-                                                            active_product_shine.y_cor = -100
+                                                        promah = [0, 5, 7]
+                                                        if number_of_decks not in promah:
+                                                            xxxxx = find_all_neighbors(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
+                                                            colich = len(xxxxx)
+                                                            Cordi_Burning_Ship.append([])
+                                                            Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
+                                                            Cordi_Burning_Ship[number_of_ship_sonfire[0]].insert(0, 0)
+                                                            Cordi_Burning_Ship[number_of_ship_sonfire[0]][0] = 4
+                                                            number_of_ship_sonfire[0] += 1
+                                                        active_product_shine.x_cor = -100
+                                                        active_product_shine.y_cor = -100
                                                 # else:
                                                     # shop.flag_arson[0] = "no"
-
                                                 if activate_radar[0] == True and shop.flag_radar[0] == True:
                                                     if row > 0 and row < 9:
                                                         if col > 0 and col < 9:
