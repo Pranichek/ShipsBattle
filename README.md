@@ -291,6 +291,12 @@ Part of the functions in battle
         ship_border()
         #----------------------------------------------------------------
         kill_enemy_ships()
+
+        # Код реалізує логіку, пов'язану з обробкою ігрових досягнень, медалей та анімації, базуючись на внутрішніх станах модуля сервера та параметрах гравця. Його можна розділити на три основні частини:
+        # 1.Обробка знищених кораблів
+        # 2.активація медалей
+        # 3.Налаштування швидкості анімації
+
         if len(server_module.enemy_died_ships) > 0:
             achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
             achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships
@@ -350,6 +356,9 @@ Part of the functions in battle
             if check_two_times.count(3) >= 2:
                 server_module.check_time[0] += 1
                 check_two_times.clear()
+
+
+        # Цей фрагмент коду обробляє різні типи даних, що надходять від модуля сервера, і виконує відповідні дії, такі як оновлення матриці ворожих кораблів, управління чергою ходів, модифікація клітинок ігрового поля, активація медалей, а також взаємодія з іншими компонентами гри.
 
         if len(server_module.enemy_data) > 0:
             check_data = server_module.enemy_data[0].split(' ')
@@ -628,6 +637,7 @@ In the volume_settings folder, there are files with functions that are responsib
 Частина коду client, де ми віправляємо матрицю через список, отримуємо дані, а також цикл для безпреревного обміну даними.
 
 ```python
+        # Функція send_matrix готує та відправляє важливу інформацію для збереження поточного стану гри, включаючи матрицю позицій ворога та інформацію про кораблі. Після цього вона оновлює статус гри та зберігає його у JSON файл для подальшої обробки або передачі даних.
         def send_matrix():
         list_check_need_send[0] = True
         data_player_shot.clear()  # Очищаємо дані перед додаванням нових
@@ -657,6 +667,7 @@ In the volume_settings folder, there are files with functions that are responsib
             data += part
         return data
 
+    # Функція start_client є частиною клієнтської логіки для гри, яка реалізує підключення до сервера через сокети і взаємодію з ним, а також обробку стану користувача та даних гри.
     def start_client():
         if input_nick.user_text not in list_users:
             #створюємо гравця з його ніком та даємо базову кількість балів
@@ -757,7 +768,7 @@ In the volume_settings folder, there are files with functions that are responsib
 Частина коду server, де ми створюємо зміну потока, для запуску серверу.
 
 ```python
-        # #створюємо зміну потока, для запуску серверу
+    # #створюємо зміну потока, для запуску серверу
     # server_thread = threading.Thread(target = start_server, daemon=True)
     def listen_client(client, second_client):
         while True:
@@ -791,6 +802,7 @@ In the volume_settings folder, there are files with functions that are responsib
             self.PORT = 0
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+        # Функція start_server реалізує серверну частину для багатокористувацької гри, яка організовує підключення двох гравців, взаємодію з ними через сокети та обробку помилок і повторні з'єднання. 
         def start_server(self, ip_adress: str, port: int):
             self.PORT = int(port) 
             while True:
@@ -978,7 +990,7 @@ In the volume_settings folder, there are files with functions that are responsib
                 except Exception as e:
                     check_prev_pos = 1
 
-
+            # Цей код відповідає за очищення певної частини ігрового поля (матриці), зважаючи на певні умови. Код розрізняє два основні стани: коли колізій немає (чи self.check_collision != True), і коли вони є (якщо self.check_collision == True). Він також перевіряє, чи потрібно очищати стовпці чи рядки залежно від орієнтації корабля.
             if self.check_collision != True:
                 # перевірка чи очищений список
                 if check_prev_pos == 0:
@@ -1114,6 +1126,7 @@ In the volume_settings folder, there are files with functions that are responsib
 
                     print(list_grid)
                     print("------------------------------------------------------------------------------------------------")
+                    # Цей фрагмент коду виконує перевірку на колізії між кораблем, який рухається, і іншими кораблями на ігровому полі. Основна мета — визначити, чи є зіткнення між двома кораблями або з іншими об'єктами, а також правильно оновити координати та стан корабля, якщо колізія відбулася
                     for cell in list_object_map: 
                             if cell.x <= self.X_COR and self.X_COR < cell.x + 62:
                                 if cell.y <= self.Y_COR and self.Y_COR < cell.y + 62:
