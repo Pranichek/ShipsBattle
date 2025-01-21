@@ -101,7 +101,7 @@ To join the game, you need:
 
 <a name="structure"><h1>Structure of project</h1></a>
 
-[Link to project structure](https://www.figma.com/board/db61SCQLwAnOtFgqTjsIGn/Untitled?node-id=0-1&p=f&t=63Vl5Ibc18dUVsOJ-0)
+[Link to project structure](https://www.figma.com/board/SnEIS3t6Ro3rcaxTK6nRDq/Untitled?node-id=0-1&p=f&t=8ecpCJNVmgIVfyh5-0)
 
 [⬆️Table of contents](#articles)
 
