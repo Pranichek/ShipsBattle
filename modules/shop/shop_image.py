@@ -61,11 +61,11 @@ class Image_Shop:
             if self.TURN == "Down":
                 if self.Y_COR < self.TARGET_Y: 
                     self.Y_COR += current_speed
-                    self.fade_in()
+                    if self.IMAGE_NAME != "done_task_one.png" and self.IMAGE_NAME != "done_task_two.png" and self.IMAGE_NAME != "done_task_three.png" and self.IMAGE_NAME != "done_task_four.png":
+                        self.fade_in()
                     if self.Y_COR >= self.TARGET_Y:  
                         self.Y_COR = self.TARGET_Y
                         self.TURN = "Up"  
-
             elif self.TURN == "Up":
                 if self.Y_COR > -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT))):  
                     self.Y_COR -= current_speed
@@ -87,6 +87,7 @@ done_task_one = Image_Shop(
     image_name = "done_task_one.png" ,
     target_y = 127
 )
+done_task_one.VISIBLE = 0
 
 done_task_two = Image_Shop(
     x_cor = 29 ,
@@ -97,6 +98,7 @@ done_task_two = Image_Shop(
     image_name = "done_task_two.png",
     target_y = 182
 )
+done_task_two.VISIBLE = 0
 
 done_task_three = Image_Shop(
     x_cor = 29 ,
@@ -107,6 +109,7 @@ done_task_three = Image_Shop(
     image_name = "done_task_three.png",
     target_y = 233
 )
+done_task_three.VISIBLE = 0
 
 done_task_four = Image_Shop(
     x_cor = 29,
@@ -117,6 +120,7 @@ done_task_four = Image_Shop(
     image_name =  "done_task_four.png",
     target_y = 289
 )
+done_task_four.VISIBLE = 0
 
 
 
@@ -226,5 +230,5 @@ task_four = Image_Shop(
 shop_item = []
 
 # додаємо зображення до цього списку , щоб за допомогою циклу відмальовувати їх
-shop_item.extend([shop_bg , items_bg , tasks_bg , deer_img , price , jar_coins ,task_one ,task_two ,task_three , task_four, done_task_one, done_task_two, done_task_three, done_task_four])
+shop_item.extend([shop_bg , items_bg , tasks_bg , deer_img , price , jar_coins , done_task_one, done_task_two, done_task_three, done_task_four,task_one ,task_two ,task_three , task_four])
 

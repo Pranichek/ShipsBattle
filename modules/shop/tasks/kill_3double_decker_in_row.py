@@ -1,6 +1,7 @@
 from .did_three_tasks import check_completed_tasks
 from ...achievement import enemy_dies_ships_for_ahiv
 from ..shop_button import third_tasks_copy
+from ..shop_image import shop_item, done_task_three
 
 check_three_2decker_ship_in_row = []
 check_killed_for_double_ships = []
@@ -46,6 +47,11 @@ def kill_three_double_decker_in_a_row():
                     check_completed_tasks[0] += 1
                     print("Ты убил три двухпалубных кораблей подряд")
                     del third_tasks_copy[2]
+                    if done_task_three.VISIBLE <= 254:
+                        done_task_three.VISIBLE = 255
+                elif "You kill two three decker in row" in check_three_2decker_ship_in_row:
+                    if done_task_three.VISIBLE <= 254:
+                        done_task_three.VISIBLE = 255
         else:
             check_three_2decker_ship_in_row.clear()
             if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_two[0]:

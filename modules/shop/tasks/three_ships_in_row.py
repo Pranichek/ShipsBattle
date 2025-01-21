@@ -1,6 +1,8 @@
 from .did_three_tasks import check_completed_tasks
 from ...achievement import enemy_dies_ships_for_ahiv
 from ..shop_button import fourth_tasks_copy
+from ..shop_image import shop_item, done_task_four
+
 ship_hits_three = []
 count_zero_thrible = [0]
 count_kill_three = [0]
@@ -20,3 +22,8 @@ def kill_three_ships_in_a_row():
                 check_completed_tasks[0] += 1
                 print("Ты убил три корабля подряд")
                 del fourth_tasks_copy[1]
+                if done_task_four.VISIBLE <= 254:
+                    done_task_four.VISIBLE = 255
+        else:
+            if done_task_four.VISIBLE <= 254:
+                done_task_four.VISIBLE = 255

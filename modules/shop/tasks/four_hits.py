@@ -1,5 +1,6 @@
 from .did_three_tasks import check_completed_tasks
 from ..shop_button import first_tasks_copy
+from ..shop_image import shop_item, done_task_one
 
 four_hits_in_a_row = []
 def four_hits_in_row(number_cell: int):
@@ -18,3 +19,7 @@ def four_hits_in_row(number_cell: int):
             print("Four hits in a row")
             four_hits_in_a_row.append("True")
             del first_tasks_copy[1]
+            if "True" in four_hits_in_a_row and done_task_one.VISIBLE <= 254:
+                done_task_one.VISIBLE = 255
+        if "True" in four_hits_in_a_row and done_task_one.VISIBLE <= 254:
+            done_task_one.VISIBLE = 255

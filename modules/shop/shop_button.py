@@ -5,6 +5,7 @@ from ..screens import FPS
 from os.path import abspath, join
 from ..classes import buy_product_sound
 from ..volume_settings import turn_off_volume_func, volume_up_func, volume_down_func
+from .shop_image import done_task_four, done_task_one, done_task_two, done_task_three, shop_item
 from .text_shop import list_first_task, list_second_task, list_third_task, list_fourth_task, first_task, second_task, third_task,fourth_task, money_list
 
 
@@ -86,7 +87,7 @@ class Button_Shop:
                 if self.Y_COR > -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
                     self.Y_COR -= current_speed
                     self.RECT.y -= current_speed
-                    self.fade_out()
+                    self.VISIBLE = 0
                     if self.Y_COR <= -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
                         self.Y_COR = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
                         self.RECT.y = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
@@ -102,7 +103,14 @@ second_tasks_copy = list_second_task.copy()
 third_tasks_copy = list_third_task.copy()
 fourth_tasks_copy = list_fourth_task.copy()
 def new_tasks():
-    print(938493434398489348934899)
+    if done_task_three in shop_item:
+        done_task_three.VISIBLE = 0
+    if done_task_two in shop_item:
+        done_task_two.VISIBLE = 0
+    if done_task_one in shop_item:
+        done_task_one.VISIBLE = 0
+    if done_task_four in shop_item:
+        done_task_four.VISIBLE = 0
     first_task.TEXT = random.choice(first_tasks_copy)
     first_task.update_text_for_task()
     second_task.TEXT = random.choice(second_tasks_copy)
@@ -111,7 +119,6 @@ def new_tasks():
     third_task.update_text_for_task()
     fourth_task.TEXT = random.choice(fourth_tasks_copy)
     fourth_task.update_text_for_task()
-    print(8888888888888)
 
 
 def test():

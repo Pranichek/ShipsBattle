@@ -1,5 +1,6 @@
 from .did_three_tasks import check_completed_tasks
 from ..shop_button import fourth_tasks_copy
+from ..shop_image import shop_item, done_task_four
 
 #4 8 hits in a row
 egight_hits_in_a_row = []
@@ -18,3 +19,8 @@ def eight_hits_in_row(number_cell: int):
         print("Eight hits in a row")
         egight_hits_in_a_row.append("True")
         del fourth_tasks_copy[-1]
+        if done_task_four.VISIBLE <= 254:
+            done_task_four.VISIBLE = 255
+    if "True" in egight_hits_in_a_row:
+        if done_task_four.VISIBLE <= 254:
+            done_task_four.VISIBLE = 255

@@ -1,5 +1,6 @@
 from .did_three_tasks import check_completed_tasks
 from ..shop_button import second_tasks_copy
+from ..shop_image import shop_item, done_task_two
 
 #2  выжить 5 раз чтобы твои корабли не подбили ниразу
 count_turns = [0]
@@ -17,3 +18,7 @@ def kept_all_ships_alive_for_five_turns(grid: object):
         check_completed_tasks[0] += 1
         count_turns.append("True")
         del second_tasks_copy[1]
+        if done_task_two.VISIBLE <= 254 and "True" in count_turns:
+            done_task_two.VISIBLE = 255
+    if done_task_two.VISIBLE <= 254 and "True" in count_turns:
+        done_task_two.VISIBLE = 255

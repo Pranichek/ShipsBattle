@@ -1,6 +1,7 @@
 from .did_three_tasks import check_completed_tasks
 from ...achievement import enemy_dies_ships_for_ahiv
 from ..shop_button import third_tasks_copy
+from ..shop_image import shop_item, done_task_three
 
 single_ships = []
 check_killed_for_single_ships = []
@@ -45,6 +46,11 @@ def kill_four_single_ships_in_a_row():
                 check_completed_tasks[0] += 1
                 print("You are kill four single ships in a row")
                 del third_tasks_copy[1]
+                if done_task_three.VISIBLE <= 254:
+                    done_task_three.VISIBLE = 255
+            if "Kill four single ships in a row" in single_ships:
+                if done_task_three.VISIBLE <= 254:
+                    done_task_three.VISIBLE = 255
         else:
             single_ships.clear()
             if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single[0]: 
