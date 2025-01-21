@@ -36,6 +36,9 @@ def clear_weapon_function():
     activate_auto_rocket[0] = False
     activate_restore_cell[0] = False
     activate_bomb[0] = False
+    activate_fire_fighter[0] = False
+    activate_radar[0] = False
+    activate_fire_rocket[0] = False
     active_product_shine.x_cor = -100
     active_product_shine.y_cor = -100
 
@@ -234,6 +237,9 @@ def fight_window():
     stew_col =[]
     flagstop= False 
     shop.flag_arson[0] = ["no"]
+
+    Schechik_before_removeall = [0]
+    tsest = [False]
     while run_game:
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
@@ -519,6 +525,7 @@ def fight_window():
         # створюємо спсиок , завдяки якому будемо трясти екран при ударі
         render_offset = [0, 0]
 
+
         if screen_shake[0] > 0:
             # записуємо рандомні числа у список render_offset , щоб за ними трясти екран
             render_offset[0] = random.randint(-4, 4)
@@ -611,64 +618,70 @@ def fight_window():
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = module_screen.main_screen)
 
-
-
+        
         if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
                 if server_module.check_time[0]==2:
                     test_time[0] = 2
-                if server_module.check_time[0]==1 and server_module.check_time[0] !=test_time[0]:
+                if server_module.check_time[0]==1 and server_module.check_time[0] != test_time[0]:
                     for index, element in enumerate(Cordi_Burning_Ship):
-                        if len(element) !=0:
-                            if Cordi_Burning_Ship[index][0]!=0:
-                                save = Cordi_Burning_Ship[index][1]
-                                if Cordi_Burning_Ship[index][0]==4:
-                                   ship_element=1
-                                elif Cordi_Burning_Ship[index][0]==3:
-                                    ship_element=2
-                                elif Cordi_Burning_Ship[index][0]==2:
-                                    ship_element=3
-                                elif Cordi_Burning_Ship[index][0]==1:
-                                    ship_element=4
-                                try:
-                                    row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
-                                except IndexError:
-                                    ship_element -= 1
-                                    row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
-                                    
-                                    Cordi_Burning_Ship[index][0]= 0
-                                
-                                if  row_fire in stew_row  and  col_fire in stew_col :
-                                    Cordi_Burning_Ship[index][0]= 0
-                                    flagstop = True
-                                    
-                                if  (row_fire +1) in stew_row  and  col_fire in stew_col :
-                                    Cordi_Burning_Ship[index][0]= 0
-                                    flagstop = True
-                                                                    
-                                if  row_fire in stew_row  and  (col_fire + 1) in stew_col :
-                                    Cordi_Burning_Ship[index][0]= 0
-                                    flagstop = True
-                                    
-                                if  (row_fire -1) in stew_row  and  col_fire in stew_col :
-                                    Cordi_Burning_Ship[index][0]= 0
-                                    flagstop = True
-                                    
-                                if  row_fire in stew_row  and  (col_fire - 1) in stew_col :
-                                    Cordi_Burning_Ship[index][0]= 0
-                                    flagstop = True
-                                if flagstop != True:  
-                                    enemy_matrix[row_fire][col_fire] = 7
-                                    data_player_shot.append("fire")
-                                    data_player_shot.append(row_fire)
-                                    data_player_shot.append(col_fire)
-                                    if Cordi_Burning_Ship[index][0] <= 5 - len(element)-1:  
+                        print(element)
+                        try:
+                            if len(element) != 0:
+                                if Cordi_Burning_Ship[index][0] !=0 and  Cordi_Burning_Ship[index]:
+                                    if Cordi_Burning_Ship[index][0] == 4:
+                                        ship_element=1
+                                    elif Cordi_Burning_Ship[index][0] == 3:
+                                        ship_element=2
+                                    elif Cordi_Burning_Ship[index][0] == 2:
+                                        ship_element=3
+                                    elif Cordi_Burning_Ship[index][0] == 1:
+                                        ship_element=4
+
+                                    try:
+                                        row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
+                                    except IndexError:
+                                        ship_element -= 1
+                                        row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
                                         Cordi_Burning_Ship[index][0]= 0
-                                    else:
-                                        Cordi_Burning_Ship[index][0] -=1
-                                flagstop = False 
+                                    
+                                    if  row_fire in stew_row  and  col_fire in stew_col :
+                                        Cordi_Burning_Ship[index][0]= 0
+                                        flagstop = True
+                                        
+                                    if  (row_fire +1) in stew_row  and  col_fire in stew_col :
+                                        Cordi_Burning_Ship[index][0]= 0
+                                        flagstop = True
+                                                                        
+                                    if  row_fire in stew_row  and  (col_fire + 1) in stew_col :
+                                        Cordi_Burning_Ship[index][0]= 0
+                                        flagstop = True
+                                        
+                                    if  (row_fire -1) in stew_row  and  col_fire in stew_col :
+                                        Cordi_Burning_Ship[index][0]= 0
+                                        flagstop = True
+                                        
+                                    if  row_fire in stew_row  and  (col_fire - 1) in stew_col :
+                                        Cordi_Burning_Ship[index][0]= 0
+                                        flagstop = True
+                                    if flagstop != True:  
+                                        enemy_matrix[row_fire][col_fire] = 7
+                                        data_player_shot.append("fire")
+                                        data_player_shot.append(row_fire)
+                                        data_player_shot.append(col_fire)
+                                        if Cordi_Burning_Ship[index][0] <= 5 - len(element)-1:  
+                                            Cordi_Burning_Ship[index][0]= 0
+                                        else:
+                                            Cordi_Burning_Ship[index][0] -=1
+                                else:
+                                    # очищаем данные если потушили пожар
+                                    flagstop = False 
+                        except:
+                            del Cordi_Burning_Ship[index]
+                            continue
+                        
                     list_check_need_send[0] = True
                     test_time[0] = server_module.check_time[0]
-                            
+        print(Cordi_Burning_Ship)   
         #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
         for row in range(len(list_grid)):
@@ -825,6 +838,8 @@ def fight_window():
                 animation_health.clear_animation()
 
         if fire_fighter_anim[0] == True:
+            fire_fighter_animation.X_COR = x_hit_the_ship[0] - 31
+            fire_fighter_animation.Y_COR = y_hit_the_ship[0] - 26
             if fire_fighter_animation.animation(main_screen = module_screen.main_screen, count_image = 8):
                 fire_fighter_anim[0] = False
                 fire_fighter_animation.clear_animation()
@@ -1134,6 +1149,8 @@ def fight_window():
                                                 cltx = (row * 10) + int(str_col_our[-1])
                                                 x_animation = list_object_map[cltx].x
                                                 y_animation = list_object_map[cltx].y
+                                                x_hit_the_ship[0] = x_animation
+                                                y_hit_the_ship[0] = y_animation
                                                 shop.flag_put_out_the_fire[0] = "no"
                                                 activate_fire_fighter[0] = False
                                                 # Узнаем номер клетки где стоит кораблик
@@ -1150,7 +1167,7 @@ def fight_window():
                                                         fire_fighter_anim[0] = True
                                                         fire_fighter_animation.X_COR = x_animation
                                                         fire_fighter_animation.Y_COR = y_animation
-                                                        data_player_shot.append ("put_out_the_fire")
+                                                        data_player_shot.append("put_out_the_fire")
                                                         data_player_shot.append(row)
                                                         data_player_shot.append(col)
                                                         list_check_need_send[0] = True
@@ -1378,6 +1395,9 @@ def fight_window():
                                                         check_animation_rocket = check_animation,
                                                         cell = cell
                                                     )
+                                                    if activate_fire_rocket[0] == True:
+                                                        activate_fire_rocket[0] = False
+                                                        shop.flag_arson[0] = False
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
                                                     

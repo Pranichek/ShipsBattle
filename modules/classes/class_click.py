@@ -8,6 +8,7 @@ class Sound:
         #os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
         sound_path = abspath(join(__file__, "..", "..", "..", "static", "sounds", f"{self.NAME_SOUND}"))
         self.SOUND = pygame.mixer.Sound(sound_path)
+        self.SOUND.set_volume(0.2)
               
       def play2(self, loops):
          self.SOUND.play(loops=0, maxtime=0, fade_ms=0)

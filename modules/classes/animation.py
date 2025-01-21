@@ -215,8 +215,8 @@ fire_rocket_animation = Animation(
 
 fire_fighter_animation = Animation(
     image_name = "0.png",
-    width = 250,
-    height = 70,
+    width = 131,
+    height = 131,
     x_cor = 415,
     y_cor = 185,
     need_clear = True,
@@ -232,6 +232,6 @@ fire_animation = Animation(
     y_cor = 185,
     need_clear = True,
     name_folder = "fire_animation",
-    animation_speed = 4
+    animation_speed = 6
 )
 
