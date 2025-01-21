@@ -739,7 +739,7 @@ def fight_window():
                     animation_boom.clear_animation()
                     check_animation[0] = ""
         elif check_animation[0] == "auto_rocket":
-            animation_auto_rocket.X_COR = x_hit_the_ship[0] - 170
+            animation_auto_rocket.X_COR = x_hit_the_ship[0] - 150
             animation_auto_rocket.Y_COR = y_hit_the_ship[0] - 23
             screen_shake[0] = 31
             if animation_auto_rocket.animation(main_screen = module_screen.main_screen , count_image = 13):

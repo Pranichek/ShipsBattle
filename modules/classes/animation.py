@@ -168,7 +168,7 @@ animation_random_player = Animation(
 # анимация полета авторакеты
 animation_auto_rocket = Animation(
     image_name = "0.png",
-    width = 250,
+    width = 231,
     height = 70,
     x_cor = 415,
     y_cor = 185,
