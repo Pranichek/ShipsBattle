@@ -1228,7 +1228,6 @@ def fight_window():
                                                                 # у матрицю ворога записуємо 7
                                                                 count_killed_ships.append(enemy_matrix[kord[i][0]][kord[i][1]])
                                                                 enemy_matrix[kord[i][0]][kord[i][1]] = 7
-        
                                                                 data_player_shot.extend([kord[i][0], kord[i][1]])
                                                                 # обнуляємо час ходу
                                                                 server_module.check_time[0] = 0
