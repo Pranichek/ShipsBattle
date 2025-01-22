@@ -171,7 +171,14 @@ def buy_radar():
         if flag_radar[0] == False:
             waste_money[0] += 20
             flag_radar[0] = True
-            
+
+random_hits = [False]
+def buy_random_hits():
+    if money_list[0] >= 25:
+        buy_product_sound.play2(loops = 1)
+        if random_hits[0] == False:
+            waste_money[0] += 25
+            random_hits[0] = True
 
 button_radar = Button_Shop(
     x = 472,
@@ -183,14 +190,14 @@ button_radar = Button_Shop(
     target_y = 214
 )
 # створюємо елементи від цього класу
-button_armor_for_ship = Button_Shop(
+button_random_hits = Button_Shop(
     x = 600 ,
     y = -(98 + (832- (263 + 98))),
     width = 96 ,
     height = 98 ,
-    image_name = "armor_for_ship.png",
+    image_name = "random_hits.png",
     target_y = 263,
-    action = test,
+    action = buy_random_hits,
 )
 
 button_stop_fire = Button_Shop(
@@ -286,4 +293,4 @@ new_random_tasks = Button_Shop(
 
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
-shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, new_random_tasks, button_radar])
+shop_item.extend([button_restores_cell ,button_random_hits , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, new_random_tasks, button_radar])

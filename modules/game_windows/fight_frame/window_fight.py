@@ -17,12 +17,12 @@ from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.radar_class import radar
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound
-from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation
+from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_auto_rocket
 from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection
-from .weapons import simple_shot, bomb_shot, restore_part_of_ship
+from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 from ..button_pressed import check_press_button
 
@@ -39,6 +39,7 @@ def clear_weapon_function():
     activate_fire_fighter[0] = False
     activate_radar[0] = False
     activate_fire_rocket[0] = False
+    activate_random_hits[0] = False
     active_product_shine.x_cor = -100
     active_product_shine.y_cor = -100
 
@@ -74,13 +75,13 @@ reonnect_image = DrawImage(width = 200, height = 40, x_cor = 600, y_cor = -3, fo
 #products icons
 bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_name = "products_icons" , image_name = "bomb_icon.png")
 auto_rocket_icon = DrawImage(x_cor = 1137, y_cor = 58, width = 45.54, height = 40.09, folder_name = "products_icons", image_name = "auto_rocket_icon.png")
-restore_cell_icon = DrawImage(x_cor = 1147, y_cor = 23, width = 31, height = 28.4, folder_name = "products_icons", image_name = "restore_cell_icon.png")
-radar_icon = DrawImage(x_cor = 1065, y_cor = 23, width = 27.68, height = 26.74, folder_name = "products_icons", image_name = "radar_icon.png")
+restore_cell_icon = DrawImage(x_cor = 1165, y_cor = 24, width = 31, height = 28.4, folder_name = "products_icons", image_name = "restore_cell_icon.png")
+radar_icon = DrawImage(x_cor = 1100, y_cor = 23, width = 27.68, height = 26.74, folder_name = "products_icons", image_name = "radar_icon.png")
 fire_rocket_icon = DrawImage(x_cor = 1065, y_cor = 64, width = 40, height = 25, folder_name = "products_icons", image_name = "fire_rocket_icon.png")
-fire_fighter_icon = DrawImage(x_cor = 1107, y_cor = 24, width = 25.89 , height = 28.4, folder_name = "products_icons", image_name = "fire_fighter_icon.png")
+fire_fighter_icon = DrawImage(x_cor = 1134, y_cor = 24, width = 25.89 , height = 28.4, folder_name = "products_icons", image_name = "fire_fighter_icon.png")
+random_hits_icon = DrawImage(x_cor = 1050, y_cor = 24, width = 45, height = 27, folder_name = "products_icons", image_name = "random_hits_icon.png")
 # сияние которое подсвечивает активаное оружие
 active_product_shine = DrawImage(x_cor = -100, y_cor = -100, width = 60, height = 60, folder_name = "decorations", image_name = "shine_for_weapon.png")
-
 frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 222 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 second_frame_nick_player = DrawImage(width = 362 ,height = 69 , x_cor = 699 , y_cor = 116 , folder_name= "backgrounds" , image_name= "frame_nick.png")
 #fonts
@@ -125,6 +126,11 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
 
     return center_x, center_y
 
+# список в котором храним анимацию огня если игрок поджог корабль
+list_fire = []
+# список в котором храним анимацию огня если враг поджог корабль
+list_enemy_fire = []
+
 # флаг для анимации огнетушителя
 fire_fighter_anim = [False]
 # флаг для анимации аптечки
@@ -164,6 +170,7 @@ activate_bomb = [False]
 activate_radar = [False]
 activate_fire_rocket = [False]
 activate_fire_fighter = [False]
+activate_random_hits = [False]
 #----------------------------------------------------------------
 #для бомбы чтобы считать сколько клеточек в радиусе 3х3 было 5
 count_5 = [0]
@@ -427,6 +434,34 @@ def fight_window():
                                 server_module.check_time[0] = 0
                     except:
                         continue
+                    if check_data[0] == "random_hits":
+                        index_cell = 0
+                        count_hit = 0
+                        for cell in check_data[1:-1]:
+                            if index_cell % 2 == 0:
+                                if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [1, 2, 3, 4, 7]:
+                                    count_hit += 1
+                                    if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] == 7:
+                                        pass
+                                    else:
+                                        list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 7
+                                elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [0, 5]:
+                                    list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 5
+                            index_cell += 1
+                    
+                        if count_hit == 0:
+                            if server_module.list_player_role[0] == "server_player":
+                                server_module.turn[0] = "server_turn"
+                            elif server_module.list_player_role[0] == "client_player":
+                                server_module.turn[0] = "client_turn"
+                        elif count_hit >= 1:
+                            data_player_shot.append("enemy_turn")
+                            list_check_need_send[0] = True
+                            if server_module.list_player_role[0] == "server_player":
+                                server_module.turn[0] = "client_turn"
+                            elif server_module.list_player_role[0] == "client_player":
+                                server_module.turn[0] = "server_turn"
+                        server_module.check_time[0] = 0
                     if check_data[0] == "restore_cell":
                         enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
                     if check_data[0] == "medal":
@@ -470,9 +505,17 @@ def fight_window():
                 if shop.second_task.TEXT == shop.list_second_task[1]:
                     shop.kept_all_ships_alive_for_five_turns(grid = list_grid)
                     check_alive_five[0] = True
-
-
         #----------------------------------------------------------------
+        if tsest[0] == True:
+            if Schechik_before_removeall[0] < 1:
+                stew_row.clear()
+                stew_col.clear()
+                tsest[0]=False
+                print (stew_row, stew_col)
+            Schechik_before_removeall[0] -= 1
+
+
+
         # Проверка на победу/поражение 1
         count_player_ships = 0
         # счетчик кораблей клиента
@@ -624,7 +667,7 @@ def fight_window():
                     test_time[0] = 2
                 if server_module.check_time[0]==1 and server_module.check_time[0] != test_time[0]:
                     for index, element in enumerate(Cordi_Burning_Ship):
-                        print(element)
+                        #print(element)
                         try:
                             if len(element) != 0:
                                 if Cordi_Burning_Ship[index][0] !=0 and  Cordi_Burning_Ship[index]:
@@ -647,22 +690,41 @@ def fight_window():
                                     if  row_fire in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
+                
+            
                                         
                                     if  (row_fire +1) in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
                                                                         
                                     if  row_fire in stew_row  and  (col_fire + 1) in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
                                         
                                     if  (row_fire -1) in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
                                         
                                     if  row_fire in stew_row  and  (col_fire - 1) in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
+
+
                                     if flagstop != True:  
                                         enemy_matrix[row_fire][col_fire] = 7
                                         data_player_shot.append("fire")
@@ -681,7 +743,6 @@ def fight_window():
                         
                     list_check_need_send[0] = True
                     test_time[0] = server_module.check_time[0]
-        print(Cordi_Burning_Ship)   
         #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
         for row in range(len(list_grid)):
@@ -754,7 +815,7 @@ def fight_window():
             animation_auto_rocket.Y_COR = y_hit_the_ship[0] - 23
             screen_shake[0] = 31
             if animation_auto_rocket.animation(main_screen = module_screen.main_screen , count_image = 13):
-                # shot_sound.play2(loops = 1)
+
                 animation_auto_rocket.clear_animation()
                 check_animation[0] = ""
         elif check_animation[0] == "fire_rocket":
@@ -762,7 +823,6 @@ def fight_window():
             fire_rocket_animation.Y_COR = y_hit_the_ship[0] - 70
             screen_shake[0] = 31
             if fire_rocket_animation.animation(main_screen = module_screen.main_screen , count_image = 20):
-                # shot_sound.play2(loops = 1)
                 fire_rocket_animation.clear_animation()
                 check_animation[0] = ""
         elif check_animation[0] == "radar_animation":
@@ -896,6 +956,8 @@ def fight_window():
             fire_rocket_icon.draw_image(screen = module_screen.main_screen)
         if shop.flag_put_out_the_fire[0] == "yes":
             fire_fighter_icon.draw_image(screen = module_screen.main_screen)
+        if shop.random_hits[0] == True:
+            random_hits_icon.draw_image(screen = module_screen.main_screen)
 
         # відмаловуємо усі елементи які знаходяться у магазині 
         for item in shop.shop_item:
@@ -983,6 +1045,7 @@ def fight_window():
             animation_random_player.animation(main_screen = main_screen, count_image = 29)
         elif server_module.list_player_role[0] == "client_player":
             animation_random_player.animation(main_screen = main_screen, count_image = 30)
+
         
 
         achievement.piooner() 
@@ -1032,6 +1095,7 @@ def fight_window():
                         activate_radar[0] = False
                         activate_fire_fighter[0] = False
                         activate_fire_rocket[0] = False
+                        activate_random_hits[0] = False
                         active_product_shine.x_cor = bomb_icon.x_cor - 17
                         active_product_shine.y_cor = bomb_icon.y_cor - 17
                 if shop.flagbimb200[0] == "yes":
@@ -1042,6 +1106,7 @@ def fight_window():
                         activate_radar[0] = False
                         activate_fire_fighter[0] = False
                         activate_fire_rocket[0] = False
+                        activate_random_hits[0] = False
                         active_product_shine.x_cor = auto_rocket_icon.x_cor - 13
                         active_product_shine.y_cor = auto_rocket_icon.y_cor - 10
                 if shop.but_flag[0] == True:
@@ -1052,6 +1117,7 @@ def fight_window():
                         activate_radar[0] = False
                         activate_fire_fighter[0] = False
                         activate_fire_rocket[0] = False
+                        activate_random_hits[0] = False
                         active_product_shine.x_cor = restore_cell_icon.x_cor - 17
                         active_product_shine.y_cor = restore_cell_icon.y_cor - 20
                 if shop.flag_radar[0] == True:
@@ -1062,6 +1128,7 @@ def fight_window():
                         activate_restore_cell[0] = False
                         activate_fire_fighter[0] = False
                         activate_fire_rocket[0] = False
+                        activate_random_hits[0] = False
                         active_product_shine.x_cor = radar_icon.x_cor - 15
                         active_product_shine.y_cor = radar_icon.y_cor - 15
                 if shop.flag_arson[0] == "yes":
@@ -1072,6 +1139,7 @@ def fight_window():
                         activate_radar[0] = False
                         activate_fire_fighter[0] = False
                         activate_restore_cell[0] = False
+                        activate_random_hits[0] = False
                         active_product_shine.x_cor = fire_rocket_icon.x_cor - 15
                         active_product_shine.y_cor = fire_rocket_icon.y_cor - 15
                 if shop.flag_put_out_the_fire[0] == "yes":
@@ -1082,8 +1150,20 @@ def fight_window():
                         activate_radar[0] = False
                         activate_fire_rocket[0] = False
                         activate_restore_cell[0] = False
+                        activate_random_hits[0] = False
                         active_product_shine.x_cor = fire_fighter_icon.x_cor - 15
                         active_product_shine.y_cor = fire_fighter_icon.y_cor - 15
+                if shop.random_hits[0] == True:
+                    if random_hits_icon.rect.collidepoint(mouse):
+                        activate_random_hits[0] = True
+                        activate_bomb[0] = False
+                        activate_auto_rocket[0] = False
+                        activate_radar[0] = False
+                        activate_fire_fighter[0] = False
+                        activate_fire_rocket[0] = False
+                        activate_restore_cell[0] = False
+                        active_product_shine.x_cor = random_hits_icon.x_cor - 15
+                        active_product_shine.y_cor = random_hits_icon.y_cor - 15
 
                     
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
@@ -1207,7 +1287,7 @@ def fight_window():
                                                         activate_fire_rocket[0] = False
                                                         promah = [0, 5, 7]
                                                         if number_of_decks not in promah:
-                                                            xxxxx = find_all_neighbors(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
+                                                            xxxxx = find_all_auto_rocket(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
                                                             colich = len(xxxxx)
                                                             Cordi_Burning_Ship.append([])
                                                             Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
@@ -1238,6 +1318,12 @@ def fight_window():
                                                                 server_module.turn[0] = "client_turn"
                                                             data_player_shot.append("enemy_turn")
                                                             list_check_need_send[0] = True
+                                                elif activate_random_hits[0] == True:
+                                                    random_hits_matrix()
+                                                    activate_random_hits[0] = False
+                                                    shop.random_hits[0] = False
+                                                    active_product_shine.x_cor = -100
+                                                    active_product_shine.y_cor = -100
                                                 # автоудар
                                                 elif shop.flagbimb200[0] == "yes" and numberofbim[0] not in shop.cheak and activate_auto_rocket[0] == True: 
                                                     kord = Missile_200(row,col,enemy_matrix)
