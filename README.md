@@ -721,6 +721,39 @@ In this folder we have files with classes such as, animation class, button class
             screen.blit(self.MEDAL_DESDESCRIPTION_IMAGE , (self.X_COR - 60, self.Y_COR + 50))
 ```
 
+```python
+    # Клас відтворює основну музику гри
+    class MusicPlayer:
+     def __init__(self, name_sound):
+        pygame.mixer.init()
+        self.NAME_SOUND = name_sound  
+       
+     def play(self, loop=-1):
+        #os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
+        sound_path = abspath(join(__file__, "..", "..", "..", "static", "sounds", f"{self.NAME_SOUND}"))
+    # Відтворення музики. Параметр loop визначає кількість повторень (-1 - безперервно).
+        pygame.mixer.music.load(sound_path)
+        pygame.mixer.music.play(loop)
+        self.is_paused = False
+
+     def pause(self):
+    # Пауза музики.
+        if not self.is_paused:
+            pygame.mixer.music.pause()
+            self.is_paused = True
+
+     def unpause(self):
+    # Продовження відтворення з паузи.
+        if self.is_paused:
+            pygame.mixer.music.unpause()
+            self.is_paused = False
+
+     def stop(self):
+    # Зупинка музики.
+        pygame.mixer.music.stop()
+        self.is_paused = False
+```
+
 <h1>Анімація</h1>
 
 ```python
@@ -814,38 +847,9 @@ In this folder we have files with classes such as, animation class, button class
     )
 ```
 
-```python
-    # Клас відтворює основну музику гри
-    class MusicPlayer:
-     def __init__(self, name_sound):
-        pygame.mixer.init()
-        self.NAME_SOUND = name_sound  
-       
-     def play(self, loop=-1):
-        #os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
-        sound_path = abspath(join(__file__, "..", "..", "..", "static", "sounds", f"{self.NAME_SOUND}"))
-    # Відтворення музики. Параметр loop визначає кількість повторень (-1 - безперервно).
-        pygame.mixer.music.load(sound_path)
-        pygame.mixer.music.play(loop)
-        self.is_paused = False
+<h3>Маємо змогу побачити зникаючу анімацію (політ ракети) та анімацію, яка залишається</h3>
 
-     def pause(self):
-    # Пауза музики.
-        if not self.is_paused:
-            pygame.mixer.music.pause()
-            self.is_paused = True
-
-     def unpause(self):
-    # Продовження відтворення з паузи.
-        if self.is_paused:
-            pygame.mixer.music.unpause()
-            self.is_paused = False
-
-     def stop(self):
-    # Зупинка музики.
-        pygame.mixer.music.stop()
-        self.is_paused = False
-```
+![Miss](readme_image/4.gif)
 
 <a name="class_ship"><h1>Class_ship.py modules</h1></a>
 Головний клас кораблів, який створює об'єкти класів.
