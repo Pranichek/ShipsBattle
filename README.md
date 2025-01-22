@@ -721,6 +721,8 @@ In this folder we have files with classes such as, animation class, button class
             screen.blit(self.MEDAL_DESDESCRIPTION_IMAGE , (self.X_COR - 60, self.Y_COR + 50))
 ```
 
+<h1>Анімація</h1>
+
 ```python
     # Клас Animation реалізує анімацію, яка складається з набору зображень, що відтворюються в циклі. Він дозволяє завантажувати 
     # багато зображень, відтворювати анімацію.
@@ -779,6 +781,37 @@ In this folder we have files with classes such as, animation class, button class
         self.COUNT_IMAGES = 0
         self.COUNT_MAIN_LOOP = 0
         self.IS_ANIMATION_DONE = False
+```
+<h2>Анімація залишається</h2>
+
+```python
+    # Приклад анімації, де анімація залишається(промах по кораблю)
+    miss_cell_animation = Animation(
+                    image_name = "0.png", 
+                    width = 55, 
+                    height = 55, 
+                    x_cor = x_anim_miss, 
+                    y_cor = y_anim_miss, 
+                    need_clear = False , 
+                    name_folder = "animation_miss",
+                    animation_speed = 3
+                    )
+```
+
+<h2>Анімація зникає</h2>
+
+```python
+    # анімація, яка зникає (анімація бомби)
+    animation_boom = Animation(
+        image_name = "0.png" , 
+        width = 100, 
+        height = 100, 
+        x_cor = 500, 
+        y_cor = 500, 
+        need_clear = True, 
+        name_folder = "animation_boom",
+        animation_speed = 3
+    )
 ```
 
 ```python
