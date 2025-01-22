@@ -23,41 +23,101 @@
 #         neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
 
 #     return neighbors
-def find_all_neighbors(matrix, row, col, target_value):
-    # Список для хранения всех соседей
+
+
+
+#def find_all_neighbors(matrix, row, col, target_value):
+#    # Список для хранения всех соседей
+#    neighbors = []
+#
+#    # Если клетка за пределами матрицы или уже была посещена, выходим
+#    if row < 0 or col < 0 or row >= len(matrix) or col >= len(matrix[0]) or matrix[row][col] is None:
+#        return neighbors
+#
+#    # Если клетка имеет значение `7`, пропускаем её, но продолжаем поиск
+#    if matrix[row][col] == 7:
+#        # Соседние позиции (вверх, вниз, влево, вправо)
+#        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+#        for dr, dc in directions:
+#            new_row, new_col = row + dr, col + dc
+#            # Рекурсивно проверяем соседей после клетки `7`
+#            neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
+#        return neighbors
+#
+#    # Если клетка не совпадает с target_value, выходим
+#    if matrix[row][col] != target_value:
+#        return neighbors
+#
+#    # Помечаем текущую клетку как посещенную
+#    matrix[row][col] = None  # Изменяем значение, чтобы избежать зацикливания
+#
+#    # Добавляем текущую клетку в список соседей
+#    neighbors.append([row, col])
+#
+#    # Соседние позиции (вверх, вниз, влево, вправо)
+#    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+#    for dr, dc in directions:
+#        new_row, new_col = row + dr, col + dc
+#        neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
+#
+#    return neighbors
+
+
+
+
+def find_all_neighbors(matrix, row, col, target_value, visited=None):
+    # Initialize the visited matrix during the first call
+    if visited is None:
+        visited = [[False for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
+
+    # List for storing neighbors
     neighbors = []
 
-    # Если клетка за пределами матрицы или уже была посещена, выходим
-    if row < 0 or col < 0 or row >= len(matrix) or col >= len(matrix[0]) or matrix[row][col] is None:
+    # Base case: check if the cell is out of bounds or already visited
+    if (
+        row < 0 or col < 0 or
+        row >= len(matrix) or col >= len(matrix[0]) or
+        visited[row][col]
+    ):
         return neighbors
 
-    # Если клетка имеет значение `7`, пропускаем её, но продолжаем поиск
+    # Mark the cell as visited
+    visited[row][col] = True
+
+    # If the cell contains `7`, skip it but continue searching
     if matrix[row][col] == 7:
-        # Соседние позиции (вверх, вниз, влево, вправо)
+        # Directions for adjacent cells (up, down, left, right)
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
-            # Рекурсивно проверяем соседей после клетки `7`
-            neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
+            neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value, visited))
         return neighbors
 
-    # Если клетка не совпадает с target_value, выходим
+    # If the cell value doesn't match the target, stop recursion
     if matrix[row][col] != target_value:
         return neighbors
 
-    # Помечаем текущую клетку как посещенную
-    matrix[row][col] = None  # Изменяем значение, чтобы избежать зацикливания
-
-    # Добавляем текущую клетку в список соседей
+    # Add the cell to the neighbors list
     neighbors.append([row, col])
 
-    # Соседние позиции (вверх, вниз, влево, вправо)
+    # Directions for adjacent cells (up, down, left, right)
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     for dr, dc in directions:
         new_row, new_col = row + dr, col + dc
-        neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
+        neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value, visited))
 
     return neighbors
+
+
+
+
+
+
+
+
+
+
+
 
 
 

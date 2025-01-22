@@ -181,7 +181,20 @@ check_player_balance = [0, False]
 # для ачивок на выживвание раундов
 check_alive_ten = [False]
 check_alive_five = [False]
+
+
+
+
+
+
+
+
+
+
+
+
 # функція для бою між гравцями
+
 def fight_window():
     # зупиняємо музику яка грала перед боєм
     music_load_waiting.stop()
@@ -473,12 +486,41 @@ def fight_window():
 
 
         #----------------------------------------------------------------
+        
+        
+        
+        
+        
+        if tsest[0] == True:
+            if Schechik_before_removeall[0] < 1:
+                stew_row.clear()
+                stew_col.clear()
+                tsest[0]=False
+                print (stew_row, stew_col)
+            Schechik_before_removeall[0] -= 1
+        
+        
+       
+        
+        
+        
+        
+        
+        
+        
         # Проверка на победу/поражение 1
         count_player_ships = 0
         # счетчик кораблей клиента
         count_enemy_ships = 0
         count_enemy_zero = 0
         # делаем перебор матриц сервера и клиента, чтобы проверять ввыиграл уже кто то или нет
+
+
+
+
+
+
+
         for row in range(len(list_grid)):
             for cell in range(len(list_grid[row])):
                 # 5 - по клетке уже стреляли
@@ -624,7 +666,7 @@ def fight_window():
                     test_time[0] = 2
                 if server_module.check_time[0]==1 and server_module.check_time[0] != test_time[0]:
                     for index, element in enumerate(Cordi_Burning_Ship):
-                        print(element)
+                        #print(element)
                         try:
                             if len(element) != 0:
                                 if Cordi_Burning_Ship[index][0] !=0 and  Cordi_Burning_Ship[index]:
@@ -647,22 +689,41 @@ def fight_window():
                                     if  row_fire in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
+                
+            
                                         
                                     if  (row_fire +1) in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
                                                                         
                                     if  row_fire in stew_row  and  (col_fire + 1) in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
                                         
                                     if  (row_fire -1) in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
                                         
                                     if  row_fire in stew_row  and  (col_fire - 1) in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
+
+                                        tsest[0]=True
+                                        Schechik_before_removeall[0] = 40
+
+
                                     if flagstop != True:  
                                         enemy_matrix[row_fire][col_fire] = 7
                                         data_player_shot.append("fire")
@@ -681,7 +742,7 @@ def fight_window():
                         
                     list_check_need_send[0] = True
                     test_time[0] = server_module.check_time[0]
-        print(Cordi_Burning_Ship)   
+        #print(Cordi_Burning_Ship)   
         #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
         for row in range(len(list_grid)):
@@ -1207,13 +1268,14 @@ def fight_window():
                                                         activate_fire_rocket[0] = False
                                                         promah = [0, 5, 7]
                                                         if number_of_decks not in promah:
-                                                            xxxxx = find_all_neighbors(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
+                                                            xxxxx = find_all_neighbors(matrix=[row [:] for row  in enemy_matrix], row=row, col=col, target_value=number_of_decks)
                                                             colich = len(xxxxx)
                                                             Cordi_Burning_Ship.append([])
                                                             Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
                                                             Cordi_Burning_Ship[number_of_ship_sonfire[0]].insert(0, 0)
                                                             Cordi_Burning_Ship[number_of_ship_sonfire[0]][0] = 4
                                                             number_of_ship_sonfire[0] += 1
+                                                            print (Cordi_Burning_Ship)
                                                         active_product_shine.x_cor = -100
                                                         active_product_shine.y_cor = -100
                                                 # else:
