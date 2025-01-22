@@ -19,8 +19,5 @@ def eight_hits_in_row(number_cell: int):
         print("Eight hits in a row")
         egight_hits_in_a_row.append("True")
         del fourth_tasks_copy[-1]
-        if done_task_four.VISIBLE <= 254:
-            done_task_four.VISIBLE = 255
-    if "True" in egight_hits_in_a_row:
-        if done_task_four.VISIBLE <= 254:
+        if done_task_four.VISIBLE != 255:
             done_task_four.VISIBLE = 255

@@ -68,10 +68,10 @@ def join_game_window():
         third_cold_image.draw_image(screen= module_screen.main_screen)
         fourth_cold_image.draw_image(screen= module_screen.main_screen)
         join_game_button.draw(surface= module_screen.main_screen)
-
-        room_data.draw_image(screen= module_screen.main_screen)
-        ip_room_text.draw_font()
-        port_room_text.draw_font()
+        if SERVER.START_CONNECT == True:
+            room_data.draw_image(screen= module_screen.main_screen)
+            ip_room_text.draw_font()
+            port_room_text.draw_font()
 
         if input_nick.active == True:
             if input_nick.user_text == input_nick.base_text or input_nick.user_text == "":

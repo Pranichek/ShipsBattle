@@ -69,7 +69,8 @@ class Image_Shop:
             elif self.TURN == "Up":
                 if self.Y_COR > -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT))):  
                     self.Y_COR -= current_speed
-                    self.fade_out()
+                    if self.IMAGE_NAME != "done_task_one.png" and self.IMAGE_NAME != "done_task_two.png" and self.IMAGE_NAME != "done_task_three.png" and self.IMAGE_NAME != "done_task_four.png":
+                        self.fade_out()
                     if self.Y_COR <= -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT))):  
                         self.Y_COR = -(self.HEIGHT + (832 - (self.TARGET_Y + self.HEIGHT)))
                         self.TURN = "Down"  

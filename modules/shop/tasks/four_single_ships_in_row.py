@@ -46,10 +46,7 @@ def kill_four_single_ships_in_a_row():
                 check_completed_tasks[0] += 1
                 print("You are kill four single ships in a row")
                 del third_tasks_copy[1]
-                if done_task_three.VISIBLE <= 254:
-                    done_task_three.VISIBLE = 255
-            if "Kill four single ships in a row" in single_ships:
-                if done_task_three.VISIBLE <= 254:
+                if done_task_three.VISIBLE!= 255:
                     done_task_three.VISIBLE = 255
         else:
             single_ships.clear()

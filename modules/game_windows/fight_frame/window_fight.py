@@ -126,6 +126,10 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
 
     return center_x, center_y
 
+
+row_fire_col_anim = []
+col_fire_row_anim = []
+
 # список в котором храним анимацию огня если игрок поджог корабль
 list_fire = []
 # список в котором храним анимацию огня если враг поджог корабль
@@ -354,6 +358,17 @@ def fight_window():
                                 index_fire  = check_data.index("put_out_the_fire")
                                 stew_row.append(int(check_data[(index_fire +1)]))
                                 stew_col.append(int(check_data[(index_fire +2)]))
+
+                                if int(check_data[(index_fire +1)]) in row_fire_col_anim:
+                                    index = row_fire_col_anim.index(int(check_data[(index_fire + 1)]))
+                                    if col_fire_row_anim[index] == int(check_data[(index_fire +2)]):
+                                        for anima_fire in list_fire:
+                                            if anima_fire[0] == int(check_data[(index_fire +1)]) and anima_fire[1] == int(check_data[(index_fire +2)]):
+                                                list_fire.remove(anima_fire)
+                                                
+                                        del row_fire_col_anim[index]
+                                        del col_fire_row_anim[index]
+                                
 
                             if data_enemy == "shot":
                                 server_module.check_time[0] = 0
@@ -667,7 +682,6 @@ def fight_window():
                     test_time[0] = 2
                 if server_module.check_time[0]==1 and server_module.check_time[0] != test_time[0]:
                     for index, element in enumerate(Cordi_Burning_Ship):
-                        #print(element)
                         try:
                             if len(element) != 0:
                                 if Cordi_Burning_Ship[index][0] !=0 and  Cordi_Burning_Ship[index]:
@@ -690,46 +704,43 @@ def fight_window():
                                     if  row_fire in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
-
                                         tsest[0]=True
                                         Schechik_before_removeall[0] = 40
                 
-            
-                                        
                                     if  (row_fire +1) in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
-
                                         tsest[0]=True
                                         Schechik_before_removeall[0] = 40
                                                                         
                                     if  row_fire in stew_row  and  (col_fire + 1) in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
-
                                         tsest[0]=True
                                         Schechik_before_removeall[0] = 40
                                         
                                     if  (row_fire -1) in stew_row  and  col_fire in stew_col :
                                         Cordi_Burning_Ship[index][0]= 0
                                         flagstop = True
-
                                         tsest[0]=True
                                         Schechik_before_removeall[0] = 40
                                         
-                                    if  row_fire in stew_row  and  (col_fire - 1) in stew_col :
-                                        Cordi_Burning_Ship[index][0]= 0
+                                    if  row_fire in stew_row  and  (col_fire - 1) in stew_col:
+                                        Cordi_Burning_Ship[index][0] = 0
                                         flagstop = True
-
                                         tsest[0]=True
                                         Schechik_before_removeall[0] = 40
-
 
                                     if flagstop != True:  
                                         enemy_matrix[row_fire][col_fire] = 7
                                         data_player_shot.append("fire")
                                         data_player_shot.append(row_fire)
                                         data_player_shot.append(col_fire)
+                                
+                                        row_fire_col_anim.append(row_fire)
+                                        col_fire_row_anim.append(col_fire)
+
+
                                         if Cordi_Burning_Ship[index][0] <= 5 - len(element)-1:  
                                             Cordi_Burning_Ship[index][0]= 0
                                         else:
@@ -743,6 +754,34 @@ def fight_window():
                         
                     list_check_need_send[0] = True
                     test_time[0] = server_module.check_time[0]
+        
+        if len(row_fire_col_anim) > 0:
+            for i in range(0 , len(row_fire_col_anim)):
+                row_anim = row_fire_col_anim[i]
+                col_anim = col_fire_row_anim[i]
+                str_col_anima = str(col_anim)
+                cltx = (row_anim * 10) + int(str_col_anima[-1])
+                x = list_object_map_enemy[cltx].x
+                y = list_object_map_enemy[cltx].y
+
+                fire_animation = Animation(
+                    image_name = "0.png", 
+                    width = 55, 
+                    height = 50, 
+                    x_cor = x,
+                    y_cor = y + 5, 
+                    need_clear = False , 
+                    name_folder = "fire_animation",
+                    animation_speed = 6
+                    )
+                list_fire.append((row_anim, col_anim, fire_animation))
+                    
+        for fire_animation in list_fire:
+            fire_animation[2].animation(main_screen = module_screen.main_screen , count_image = 9)
+            if fire_animation[2].COUNT_IMAGES >= 8:
+                fire_animation[2].COUNT_IMAGES = 0
+                fire_animation[2].IS_ANIMATION_DONE = False
+
         #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
         for row in range(len(list_grid)):
@@ -789,7 +828,8 @@ def fight_window():
             check_animation_rocket = check_animation, 
             flag_miss_rocket_animation = flag_miss_rocket_animation, 
             list_cross = list_cross,
-            our_miss_anim = our_miss_anim
+            our_miss_anim = our_miss_anim,
+            list_fire = list_fire
         )
                            
         # отрисовка крестиков если игрок попал по кораблю(на поле врага , слева)
@@ -1520,14 +1560,15 @@ def fight_window():
           
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
         if achievement.strategist_achievement.ACTIVE == False:
-            if server_module.list_check_win[0] != None:   
-                # якщо вже їтось виграв , то робимо ефект затемнення
-                apply_fade_effect(screen = module_screen.main_screen)
-                # зупиняємо цикл гри
-                run_game = False
-                # змінюємо фрейм бою , на фрейм показу результатів
-                change_scene(scene =game_windows.finish_window())
-                check_press_button[0] = None
+            if server_module.list_check_win[0] != None:
+                if check_animation[0] == "" and flag_miss_rocket_animation[0] == "":   
+                    # якщо вже їтось виграв , то робимо ефект затемнення
+                    apply_fade_effect(screen = module_screen.main_screen)
+                    # зупиняємо цикл гри
+                    run_game = False
+                    # змінюємо фрейм бою , на фрейм показу результатів
+                    change_scene(scene =game_windows.finish_window())
+                    check_press_button[0] = None
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1

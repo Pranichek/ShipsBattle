@@ -11,7 +11,5 @@ def first_shot_is_kill(cell):
         count_shot.append("You are kill ship in one shot")
         check_completed_tasks[0] += 1
         print("You are first shot is kill")
-        if "You are kill ship in one shot" in count_shot and done_task_four.VISIBLE <= 254:
+        if "You are kill ship in one shot" in count_shot and done_task_four.VISIBLE != 255:
             done_task_four.VISIBLE = 255
-    if "You are kill ship in one shot" in count_shot and done_task_four.VISIBLE <= 254:
-        done_task_four.VISIBLE = 255

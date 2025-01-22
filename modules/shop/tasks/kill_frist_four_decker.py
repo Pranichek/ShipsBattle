@@ -20,9 +20,6 @@ def first_kill_four_decker():
                         check_completed_tasks[0] += 1
                         print("Ты первым убил четырехпалубный корабль")
                         del second_tasks_copy[0]
-                        if done_task_two.VISIBLE <= 254:
-                            done_task_two.VISIBLE = 255
-                elif enemy_ships_4decker[0] == "kill four-decker ship":
-                    if done_task_two.VISIBLE <= 254:
+                        if done_task_two.VISIBLE != 255:
                             done_task_two.VISIBLE = 255
 

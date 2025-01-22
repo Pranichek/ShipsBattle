@@ -49,12 +49,8 @@ def kill_two_three_decker_in_a_row():
                 count_three_ships.append("Kill two three decker in a row")
                 print("Ты убил два трехпалубных кораблей подряд")
                 del third_tasks_copy[-1]
-                if done_task_three.VISIBLE <= 254:
+                if done_task_three.VISIBLE != 255:
                     done_task_three.VISIBLE = 255
-            if "Kill two three decker in a row" in count_three_ships:
-                if done_task_three.VISIBLE <= 254:
-                    done_task_three.VISIBLE = 255
-
         else:
             count_three_ships.clear()
             if enemy_dies_ships_for_ahiv[0]!= "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index[0]:

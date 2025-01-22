@@ -102,23 +102,23 @@ first_tasks_copy = list_first_task.copy()
 second_tasks_copy = list_second_task.copy()
 third_tasks_copy = list_third_task.copy()
 fourth_tasks_copy = list_fourth_task.copy()
-def new_tasks():
-    if done_task_three in shop_item:
-        done_task_three.VISIBLE = 0
-    if done_task_two in shop_item:
-        done_task_two.VISIBLE = 0
-    if done_task_one in shop_item:
-        done_task_one.VISIBLE = 0
-    if done_task_four in shop_item:
-        done_task_four.VISIBLE = 0
-    first_task.TEXT = random.choice(first_tasks_copy)
-    first_task.update_text_for_task()
-    second_task.TEXT = random.choice(second_tasks_copy)
-    second_task.update_text_for_task()
-    third_task.TEXT = random.choice(third_tasks_copy)
-    third_task.update_text_for_task()
-    fourth_task.TEXT = random.choice(fourth_tasks_copy)
-    fourth_task.update_text_for_task()
+# def new_tasks():
+#     if done_task_three in shop_item:
+#         done_task_three.VISIBLE = 0
+#     if done_task_two in shop_item:
+#         done_task_two.VISIBLE = 0
+#     if done_task_one in shop_item:
+#         done_task_one.VISIBLE = 0
+#     if done_task_four in shop_item:
+#         done_task_four.VISIBLE = 0
+#     first_task.TEXT = random.choice(first_tasks_copy)
+#     first_task.update_text_for_task()
+#     second_task.TEXT = random.choice(second_tasks_copy)
+#     second_task.update_text_for_task()
+#     third_task.TEXT = random.choice(third_tasks_copy)
+#     third_task.update_text_for_task()
+#     fourth_task.TEXT = random.choice(fourth_tasks_copy)
+#     fourth_task.update_text_for_task()
 
 
 def test():
@@ -280,17 +280,17 @@ turn_off_button = Button_Shop(
     target_y = 8
 )
 
-new_random_tasks = Button_Shop(
-    x = 331 ,
-    y = -(21 + (832 - (350 + 21))),
-    width = 80,
-    height = 21,
-    image_name = 'new_tasks.png',
-    target_y = 349,
-    action = new_tasks
-)
+# new_random_tasks = Button_Shop(
+#     x = 331 ,
+#     y = -(21 + (832 - (350 + 21))),
+#     width = 80,
+#     height = 21,
+#     image_name = 'new_tasks.png',
+#     target_y = 349,
+#     action = new_tasks
+# )
 
 
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
-shop_item.extend([button_restores_cell ,button_random_hits , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, new_random_tasks, button_radar])
+shop_item.extend([button_restores_cell ,button_random_hits , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, button_radar])

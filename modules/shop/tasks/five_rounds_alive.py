@@ -18,7 +18,5 @@ def kept_all_ships_alive_for_five_turns(grid: object):
         check_completed_tasks[0] += 1
         count_turns.append("True")
         del second_tasks_copy[1]
-        if done_task_two.VISIBLE <= 254 and "True" in count_turns:
+        if done_task_two.VISIBLE != 255 and "True" in count_turns:
             done_task_two.VISIBLE = 255
-    if done_task_two.VISIBLE <= 254 and "True" in count_turns:
-        done_task_two.VISIBLE = 255

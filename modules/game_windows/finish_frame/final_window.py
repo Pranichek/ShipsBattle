@@ -1,5 +1,6 @@
 import pygame
 import modules.game_windows as game_windows
+
 import modules.screens.screen as module_screen
 from ...classes.class_image import DrawImage
 from ...classes.class_text import Font
@@ -8,6 +9,17 @@ from ...client import dict_save_information
 from ...server import list_player_role, list_check_win
 from ..change_window import change_scene
 from ...json_functions import read_json, write_json, list_users
+from ...game_tools import apply_fade_effect
+from ...classes import Button
+
+leave_game = [False]
+def back_to_main():
+    apply_fade_effect(screen = module_screen.main_screen)
+    change_scene(game_windows.main_window())
+    leave_game[0] = True
+
+#Button
+restart_button = Button(x = 436, y = 700, image_path = "restart_button_hover.png", image_hover_path = "restart_button_hover.png", width = 436, height = 68, action = back_to_main)
 
 # Images
 finish_bg = DrawImage(width=1280, height=832, x_cor=0, y_cor=0, folder_name="backgrounds", image_name="win_game_bg.png")
@@ -31,7 +43,7 @@ def finish_window():
     pygame.display.set_caption("Finish Window")
     run_game = True
     check_points[0] = 0
-
+    leave_game[0] = False
     while run_game:
         module_screen.FPS.tick(60)
         module_screen.main_screen.fill((0, 0, 0))  # Очищення екрану чорним фоном
@@ -200,9 +212,13 @@ def finish_window():
         enemy_points.update_text()
         enemy_points.draw_font()
 
+        restart_button.draw(surface = module_screen.main_screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False
                 change_scene(None)
-
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                restart_button.check_click(event = event)
+        if leave_game[0] == True:
+            run_game = False
         pygame.display.flip()

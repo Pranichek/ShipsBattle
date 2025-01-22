@@ -23,8 +23,5 @@ def kill_two_ships_in_a_row():
                 check_completed_tasks[0] += 1
                 print("Ты убил два корабля подряд")
                 del second_tasks_copy[2]
-                if done_task_two.VISIBLE <= 254:
-                    done_task_two.VISIBLE = 255
-        else:
-            if done_task_two.VISIBLE <= 254:
+                if done_task_two.VISIBLE != 255:
                     done_task_two.VISIBLE = 255
