@@ -135,6 +135,7 @@ def buy_fire_rocket():
         if flag_arson[0] == "no":
             waste_money[0] += 80
             flag_arson[0] = "yes"
+
 def buy_fire_fighter():
     if flag_put_out_the_fire[0] == "no":
         if money_list[0] >= 50:
@@ -147,11 +148,10 @@ check_buy_bomb_attack = [False]
 def buy_bomb():
     if money_list[0] >= 150:
         if check_buy_bomb_attack[0] == False:
-            if money_list[0] >= 0:
-                buy_product_sound.play2(loops = 1)
-                if check_buy_bomb_attack[0] == False:
-                    waste_money[0] += 150
-                    check_buy_bomb_attack[0] = True
+            buy_product_sound.play2(loops = 1)
+            if check_buy_bomb_attack[0] == False:
+                waste_money[0] += 150
+                check_buy_bomb_attack[0] = True
                 
 
 flagbimb200=["no"]
@@ -169,7 +169,7 @@ def buy_restore_cell():
     if money_list[0] >= 75:
         buy_product_sound.play2(loops = 1)
         if but_flag[0] == False:
-            waste_money[0] += 50
+            waste_money[0] += 75
             but_flag[0] = True
 
 flag_radar = [False]
@@ -187,6 +187,7 @@ def buy_random_hits():
         if random_hits[0] == False:
             waste_money[0] += 25
             random_hits[0] = True
+            
 
 button_radar = Button_Shop(
     x = 472,
