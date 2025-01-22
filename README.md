@@ -71,7 +71,7 @@ Ships Battle демонструє базові принципи роботи з 
 
  ![Join](readme_image/join.png)
 
- ![creat](readme_image/creat.mp4)
+ ![creat](readme_image/creat.gif)
  
 <details>
 <summary> English version </summary>
