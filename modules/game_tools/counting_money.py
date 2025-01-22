@@ -69,7 +69,70 @@ check_money_restoration = [0]
 check_money_auto_rocket = [0]
 # для покупки радар
 check_but_radar = [0]
-def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool, check_buy_radar: bool):
+# buy_random_hits
+buy_random_hit = [0]
+#dfv
+buy_fire_rocket = [0]
+#dfvfv
+buy_fire_fighter = [0]
+def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool, check_buy_radar: bool, check_buy_random_hits:bool, cehck_buy_fire_rocket:bool, check_buy_fire_fighter: bool):
+    if check_buy_random_hits == True and buy_random_hit[0] == 0:
+        buy_random_hit[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    elif buy_random_hit[0] >= 1:
+        if buy_random_hit[0] != 20:
+            buy_random_hit[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        else:
+            buy_random_hit[0] = 0
+    
+    if cehck_buy_fire_rocket == "yes" and buy_fire_rocket[0] == 0:
+        buy_fire_rocket[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    elif cehck_buy_fire_rocket == "yes" and buy_fire_rocket[0] >= 1:
+        if buy_fire_rocket[0]!= 80:
+            buy_fire_rocket[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        else:
+            buy_fire_rocket[0] = 0
+
+    if check_buy_fire_fighter[0] == "yes" and check_buy_fire_fighter[0] == 0:
+        check_buy_fire_fighter[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+    elif check_buy_fire_fighter[0] == "yes" and check_buy_fire_fighter[0] >= 1:
+        if check_buy_fire_fighter[0]!= 50:
+            check_buy_fire_fighter[0] += 1
+            task_game.money_list[0] -= 1
+            task_game.player_balance.TEXT = str(task_game.money_list[0])
+            task_game.player_balance.update_text()
+            player_balance_in_jar.text = str(task_game.money_list[0])
+            player_balance_in_jar.update_text()
+        else:
+            check_buy_fire_fighter[0] = 0
+
+
+    
+
     if count_money_hit[0] > 0:
         count_money_hit[0] -= 1
         task_game.money_list[0] += 1

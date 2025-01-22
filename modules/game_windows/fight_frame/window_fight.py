@@ -77,7 +77,7 @@ bomb_icon = DrawImage(x_cor = 1104, y_cor = 64, width = 27, height = 26, folder_
 auto_rocket_icon = DrawImage(x_cor = 1137, y_cor = 58, width = 45.54, height = 40.09, folder_name = "products_icons", image_name = "auto_rocket_icon.png")
 restore_cell_icon = DrawImage(x_cor = 1165, y_cor = 24, width = 31, height = 28.4, folder_name = "products_icons", image_name = "restore_cell_icon.png")
 radar_icon = DrawImage(x_cor = 1100, y_cor = 23, width = 27.68, height = 26.74, folder_name = "products_icons", image_name = "radar_icon.png")
-fire_rocket_icon = DrawImage(x_cor = 1065, y_cor = 64, width = 40, height = 25, folder_name = "products_icons", image_name = "fire_rocket_icon.png")
+fire_rocket_icon = DrawImage(x_cor = 1065, y_cor = 64, width = 34, height = 25, folder_name = "products_icons", image_name = "fire_rocket_icon.png")
 fire_fighter_icon = DrawImage(x_cor = 1134, y_cor = 24, width = 25.89 , height = 28.4, folder_name = "products_icons", image_name = "fire_fighter_icon.png")
 random_hits_icon = DrawImage(x_cor = 1050, y_cor = 24, width = 45, height = 27, folder_name = "products_icons", image_name = "random_hits_icon.png")
 # сияние которое подсвечивает активаное оружие
@@ -360,20 +360,11 @@ def fight_window():
                                     enemy_fire_col.append(int(check_data[(index_fire +2)]))
                                     enemy_fire_row.append(int(check_data[(index_fire +1)]))
                                     
-                            if "put_out_the_fire" in check_data:
+                            elif "put_out_the_fire" in check_data:
                                 index_fire  = check_data.index("put_out_the_fire")
                                 stew_row.append(int(check_data[(index_fire +1)]))
                                 stew_col.append(int(check_data[(index_fire +2)]))
-
-                                    # index = row_fire_col_anim.index(int(check_data[(index_fire + 1)]))
-                                    # if col_fire_row_anim[index] == int(check_data[(index_fire +2)]):
-                                        # for anima_fire in list_fire:
-                                        #     if anima_fire[0] == int(check_data[(index_fire +1)]) and anima_fire[1] == int(check_data[(index_fire +2)]):
-                                        #         list_fire.remove(anima_fire)
-
-                                        # del row_fire_col_anim[index]
-                                        # del col_fire_row_anim[index]
-                            if data_enemy == "shot":
+                            elif data_enemy == "shot":
                                 server_module.check_time[0] = 0
                                 count_hit = 0
                                 for data_enemy in range(1, len(check_data) - 1, 2): 
@@ -578,7 +569,10 @@ def fight_window():
             check_buy_bomb = shop.check_buy_bomb_attack[0], 
             check_buy_restorce = shop.but_flag[0],
             check_buy_auto_rocket = shop.flagbimb200[0],
-            check_buy_radar = shop.flag_radar[0]
+            check_buy_radar = shop.flag_radar[0],
+            check_buy_fire_fighter = shop.flag_put_out_the_fire[0],
+            check_buy_random_hits = shop.random_hits[0],
+            cehck_buy_fire_rocket = shop.flag_arson[0]
             )
         
         # отримцємо координати курсору
@@ -786,7 +780,7 @@ def fight_window():
                 if bolinka_enemy:
                     list_enemy_fire.append((row_anim_enemy, col_anim_enemy, fire_nemy_animation))
 
-        if len(row_fire_col_anim) > 0:
+        if len(row_fire_col_anim) > 0 and check_animation[0] == "":
             for i in range(0 , len(row_fire_col_anim)):
                 row_anim = row_fire_col_anim[i]
                 col_anim = col_fire_row_anim[i]
