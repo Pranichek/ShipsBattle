@@ -127,14 +127,15 @@ def test():
 # список в котором храним сколько потртили монет
 waste_money = [0]
 
-flag_arson =["no"]
+flag_arson = ["no"]
 flag_put_out_the_fire = ["no"]
 def buy_fire_rocket():
     if money_list[0] >= 80:
         buy_product_sound.play2(loops = 1)
-        if flag_arson[0] == "no":
-            waste_money[0] += 80
-            flag_arson[0] = "yes"
+        waste_money[0] += 80
+        print(4589948589498458948959584984598459458)
+        print(586985689564985469856)
+        flag_arson[0] = "yes"
 
 def buy_fire_fighter():
     if flag_put_out_the_fire[0] == "no":
