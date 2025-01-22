@@ -130,6 +130,8 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
 row_fire_col_anim = []
 col_fire_row_anim = []
 
+enemy_fire_col = []
+enemy_fire_row = []
 # список в котором храним анимацию огня если игрок поджог корабль
 list_fire = []
 # список в котором храним анимацию огня если враг поджог корабль
@@ -354,22 +356,23 @@ def fight_window():
                                     pozhar_row.append(int(check_data[(index_fire +1)]))
                                     pozhar_col.append(int(check_data[(index_fire +2)]))
                                     list_grid[int(check_data[(index_fire +1)])][int(check_data[(index_fire +2)])] = 7
+
+                                    enemy_fire_col.append(int(check_data[(index_fire +2)]))
+                                    enemy_fire_row.append(int(check_data[(index_fire +1)]))
+                                    
                             if "put_out_the_fire" in check_data:
                                 index_fire  = check_data.index("put_out_the_fire")
                                 stew_row.append(int(check_data[(index_fire +1)]))
                                 stew_col.append(int(check_data[(index_fire +2)]))
 
-                                if int(check_data[(index_fire +1)]) in row_fire_col_anim:
-                                    index = row_fire_col_anim.index(int(check_data[(index_fire + 1)]))
-                                    if col_fire_row_anim[index] == int(check_data[(index_fire +2)]):
-                                        for anima_fire in list_fire:
-                                            if anima_fire[0] == int(check_data[(index_fire +1)]) and anima_fire[1] == int(check_data[(index_fire +2)]):
-                                                list_fire.remove(anima_fire)
-                                                
-                                        del row_fire_col_anim[index]
-                                        del col_fire_row_anim[index]
-                                
+                                    # index = row_fire_col_anim.index(int(check_data[(index_fire + 1)]))
+                                    # if col_fire_row_anim[index] == int(check_data[(index_fire +2)]):
+                                        # for anima_fire in list_fire:
+                                        #     if anima_fire[0] == int(check_data[(index_fire +1)]) and anima_fire[1] == int(check_data[(index_fire +2)]):
+                                        #         list_fire.remove(anima_fire)
 
+                                        # del row_fire_col_anim[index]
+                                        # del col_fire_row_anim[index]
                             if data_enemy == "shot":
                                 server_module.check_time[0] = 0
                                 count_hit = 0
@@ -754,7 +757,35 @@ def fight_window():
                         
                     list_check_need_send[0] = True
                     test_time[0] = server_module.check_time[0]
-        
+
+        if len(enemy_fire_row) > 0:
+            for i in range(0, len(enemy_fire_row)):
+                row_anim_enemy = enemy_fire_row[i]
+                col_anim_enemy = enemy_fire_col[i]
+                str_col_anima_enemy = str(col_anim_enemy)
+                cltx = (row_anim_enemy * 10) + int(str_col_anima_enemy[-1])
+                x = list_object_map[cltx].x
+                y = list_object_map[cltx].y
+
+                print(row_anim_enemy, col_anim_enemy, "dfdfvkdfvldmdfkvdkffdkllkdf")
+
+                fire_nemy_animation = Animation(
+                    image_name = "0.png", 
+                    width = 55, 
+                    height = 50, 
+                    x_cor = x,
+                    y_cor = y, 
+                    need_clear = False , 
+                    name_folder = "fire_animation",
+                    animation_speed = 6
+                    )
+                bolinka_enemy = True
+                for fireok_enemy in list_enemy_fire:
+                    if fireok_enemy[0] == row_anim_enemy and fireok_enemy[1] == col_anim_enemy:
+                        bolinka_enemy = False
+                if bolinka_enemy:
+                    list_enemy_fire.append((row_anim_enemy, col_anim_enemy, fire_nemy_animation))
+
         if len(row_fire_col_anim) > 0:
             for i in range(0 , len(row_fire_col_anim)):
                 row_anim = row_fire_col_anim[i]
@@ -774,13 +805,24 @@ def fight_window():
                     name_folder = "fire_animation",
                     animation_speed = 6
                     )
-                list_fire.append((row_anim, col_anim, fire_animation))
+                bolinka = True
+                for fireok in list_fire:
+                    if fireok[0] == row_anim and fireok[1] == col_anim:
+                        bolinka = False
+                if bolinka:
+                    list_fire.append((row_anim, col_anim, fire_animation))
                     
         for fire_animation in list_fire:
             fire_animation[2].animation(main_screen = module_screen.main_screen , count_image = 9)
-            if fire_animation[2].COUNT_IMAGES >= 8:
+            if fire_animation[2].COUNT_IMAGES >= 7:
                 fire_animation[2].COUNT_IMAGES = 0
                 fire_animation[2].IS_ANIMATION_DONE = False
+
+        for enemy_fire in list_enemy_fire:
+            enemy_fire[2].animation(main_screen = module_screen.main_screen , count_image = 9)
+            if enemy_fire[2].COUNT_IMAGES >= 7:
+                enemy_fire[2].COUNT_IMAGES = 0
+                enemy_fire[2].IS_ANIMATION_DONE = False
 
         #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
@@ -925,6 +967,7 @@ def fight_window():
             x_enemy_cross = x_enemy_cross, 
             y_enemy_cross = y_enemy_cross, 
             list_cross_player = list_cross_player,
+            enemy_fire = list_enemy_fire
             
         )
 
