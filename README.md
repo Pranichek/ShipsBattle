@@ -541,62 +541,92 @@ In this folder we have files with classes such as, animation class, button class
     # Основна мета класу — управління анімацією досягнення (achievement), яка відображає зображення з досягненням з ефектами 
     # змінювання прозорості та руху.
     class Acievement:
+        #Створюємо метод-конструктор.
     def __init__(self , achievement_image_name: str):
+        # Назва картинки — це вказана властивість.
         self.IMAGE_NAME = achievement_image_name
+        # Х координата
         self.X_COR = 640
+        # Y координата
         self.Y_COR = 319
+        # Максимальна координата X (читайте далі в коді)
         self.X_MAX = 458
+        # Ширина
         self.WIDTH = 122
+        # Висота
         self.HEIGHT = 97
+        # Макс. Ширина
         self.MAX_WIDTH = 354
+        # Макс. Висота
         self.MAX_HEIGHT = 281
+        # Створюємо шлях до округлої картинки.
         self.PATH_BORDER_IMAGE = abspath(join(__file__, "..", "..", "..", "media", "achievement", "achievement_windows", f"{self.IMAGE_NAME}.png"))
+        # Трансформуємо картинку
         self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha()
-        # 
+        # Прапор, що картинка активна 
         self.ACTIVE = False 
-        #
+        # Прапор завершення анімації
         self.CHECK_END_ANIM = False
-        #
+        # Напрям картинки
         self.DIRECTION = None
+        # Її прозорість
         self.VISIBLE = 0 
+        Кількість повторень
         self.COUNT_REPEAT = 0 
+        # Кількість рухів
         self.COUNT_MOVE = 0
     # Плавно змінює прозорість зображення:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
+        # Отримуємо в змінну кількість кадрів за допомогою методу pygame
         fps = FPS.get_fps()
+        # Якщо кількість кадрів менша або дорівнює нулю, прискорюємо
         if fps <= 0:
+            # прискорюємо
             fps = 0.01
+        # Умова для прозорості картинки
         if self.VISIBLE < 255:
+            # Збільшуємо прозорість з урахуванням кількості кадрів в секунду
             self.VISIBLE += 5 * (60 / fps)
             if self.VISIBLE >= 255:
                 self.VISIBLE = 255
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
+        # Отримуємо в змінну кількість кадрів за допомогою методу pygame
         fps = FPS.get_fps()
+        # Якщо кількість кадрів менша або дорівнює нулю, прискорюємо
         if fps <= 0:
+            прискорюємо
             fps = 0.01
+        # Умова для прозорості картинки
         if self.VISIBLE > 0:
+            # Зменшуємо прозорість з урахуванням кількості кадрів в секунду
             self.VISIBLE -= 5 * (60 / fps)
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
+    # Метод скидання картинки 
     def reset(self):
         self.X_COR = 640
         self.Y_COR = 319
         self.MAX_WIDTH = 354
         self.MAX_HEIGHT = 281
+        # Прапор завершення анімації
         self.CHECK_END_ANIM = False
         self.DIRECTION = None
         self.VISIBLE = 0 
         self.COUNT_REPEAT = 0 
         self.COUNT_MOVE = 0
 
+    # Метод руху
     def move(self):
         fps = FPS.get_fps()
         if fps <= 0:
             fps = 0.01
         current_procent = 60 / (fps + 10)
+        # Якщо прапор активний
         if self.ACTIVE == True:
+            # Якщо кількість повторень = 0 
             if self.COUNT_REPEAT == 0:
+                # Включаємо музику
                 music_achieve.play2(loops = 1)
             if self.COUNT_MOVE >= 50: 
                     # Перевіряємо кількість повторів
@@ -609,11 +639,16 @@ In this folder we have files with classes such as, animation class, button class
                         self.WIDTH -= 5 * current_procent  
                     if self.HEIGHT > 97:
                         self.HEIGHT -= 4 * current_procent  
+                    # Трансформуємо картинку
                     self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha()
+                    # Включаємо метод появи
                     self.fade_out()
                     if self.X_COR >= 540:
+                        # Включаємо метод скидання
                         self.reset()
+                        # Обнуляем флаг
                         self.ACTIVE = False 
+                    # Завершуємо
                     return False
 
             if not self.CHECK_END_ANIM:
@@ -656,7 +691,7 @@ In this folder we have files with classes such as, animation class, button class
                     self.DIRECTION = "More"
             self.COUNT_REPEAT += 1
             self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha() 
-                    
+    # Створюємо метод відображення досягнення       
     def draw(self , screen: pygame.Surface):
         self.BORDER_IMAGE.set_alpha(self.VISIBLE)
         screen.blit(self.BORDER_IMAGE , (self.X_COR, self.Y_COR))
@@ -759,7 +794,12 @@ In this folder we have files with classes such as, animation class, button class
 ```python
     # Клас Animation реалізує анімацію, яка складається з набору зображень, що відтворюються в циклі. Він дозволяє завантажувати 
     # багато зображень, відтворювати анімацію.
-    class Animation():
+class Animation():
+    r'''Це клас анімації, який приймає властивості `image_name` = для запиту зображення, `width` = для довжини зображення, 
+    `height` = для ширини зображення, `x_cor` = для позиціювання по x координаті, `y_cor` = для позиціювання по y координаті, `need_clear` = для очищення зображення після закінчення відтворення,
+    `name_folder` = для папки, з якої ми будемо брати зображення, `animation_speed` = швидкість анімації.
+    '''
+    # Створюємо метод-конструктор
     def __init__(self, image_name: str , width: int , height: int , x_cor: int , y_cor: int , need_clear: bool , name_folder: str ,animation_speed: int):
         self.ANIMATION_SPEED = animation_speed
         self.IMAGE_NAME = image_name
@@ -771,49 +811,76 @@ In this folder we have files with classes such as, animation class, button class
         self.IMAGE = None
         self.X_COR = x_cor
         self.Y_COR = y_cor 
-        self.NEED_CLEAR = need_clear  # Нужно ли очищать анимацию после ее проигрывания
+        self.NEED_CLEAR = need_clear  # Потрібно чи очищати анімацію після її відтворення
         self.NAME_FOLDER = name_folder
-        self.IS_ANIMATION_DONE = False  # Флаг который будет отслеживать завершение анимации
+        self.IS_ANIMATION_DONE = False  # Прапор, який буде відслідковувати завершення анімації
+        
+        # Створюємо метод завантаження зображення за вказаною папкою
     def load_images(self):
+        # Створюємо змінну, в якій будемо мати абсолютний шлях
         path = abspath(join(__file__, f"{self.IMAGE_NAME}"))
+        # Завантажуємо зображення з вказаного шляху
         image = pygame.image.load(path)
+        # Трансформуємо зображення за вказаними шириною та висотою в класі
         transformed_image = pygame.transform.scale(image, (self.WIDTH, self.HEIGHT))
+        # Зберігаємо змінене зображення в класі
         self.IMAGE = transformed_image
+        
+        # Створюємо метод анімації зображення, який приймає кількість картинок, екран на якому буде сама анімація
     def animation(self, count_image: int, main_screen: pygame.Surface):
+        # Отримуємо кількість кадрів у змінну за допомогою методу pygame
         fps = screen_module.FPS.get_fps()
+        # Створюємо умову, щоб анімація не гальмувала
         if screen_module.FPS.get_fps() <= 0:
+            # Прискорюємо анімацію
             fps = 0.01
+        # Визначаємо швидкість анімації залежно від поточного FPS (чем менше FPS, тим швидше буде анімація)
         current_speed = self.ANIMATION_SPEED * ((fps + 10) / 60)
+        # Завантажуємо зображення в список, якщо він порожній
         if len(self.LIST_IMAGES) == 0:
+            # Завантажуємо зображення з вказаної папки в список, якщо він порожній
             for number in range(count_image):
                 self.IMAGE_NAME = abspath(join(__file__, "..", "..", "..", "media", f"{self.NAME_FOLDER}", f"{number}.png"))
                 self.load_images()
+                # Додаємо в кінець списку
                 self.LIST_IMAGES.append(self.IMAGE)
 
         if self.IS_ANIMATION_DONE and self.NEED_CLEAR == True:
-            # Если анимация закончена, ничего не рисуем   
+            # Якщо анімація завершена, нічого не малюємо   
             return True
 
+        # Відображаємо поточне зображення з списку, якщо він не порожній
         self.IMAGE = self.LIST_IMAGES[self.COUNT_IMAGES]
+        # Відображаємо
         self.draw(screen=main_screen)
 
+        # Якщо поточний час пройшов не менше, ніж потрібна швидкість анімації, збільшуємо лічильник
         if self.COUNT_MAIN_LOOP >= current_speed:
-            if self.COUNT_IMAGES < count_image - 1:  # Проверяем, не конец ли анимации
+            if self.COUNT_IMAGES < count_image - 1:  # Перевіряємо, чи не кінець анімації
+                # До кількості кадрів в зображенні додаємо по += 1, поки не закінчиться анімація
                 self.COUNT_IMAGES += 1
             else:
+                # Якщо анімація завершена, виходимо з методу
                 self.IS_ANIMATION_DONE = True
                 return True 
+            # Обнуляємо лічильник
             self.COUNT_MAIN_LOOP = 0
-
+        # Збільшуємо лічильник
         self.COUNT_MAIN_LOOP += 1
 
+    # Створюємо метод відображення зображення, приймає екран  
     def draw(self, screen: pygame.Surface):
+        # Відображаємо зображення на екрані на позиції x_cor, y_cor за допомогою методу в pygame blit()
         screen.blit(self.IMAGE, (self.X_COR, self.Y_COR))
+        
+    # Очищаємо анімацію
     def clear_animation(self):
+        # Скидаємо все
         self.LIST_IMAGES = []
         self.COUNT_IMAGES = 0
         self.COUNT_MAIN_LOOP = 0
         self.IS_ANIMATION_DONE = False
+
 ```
 <h2>Анімація залишається</h2>
 
@@ -1152,7 +1219,9 @@ In this folder we have files with classes such as, animation class, button class
                     for shiper in list_ships:
                         # перевірка щоб корабель який рухаємо не порівнювали із самим собою
                         if list_ships.index(shiper) != list_ships.index(self):
+                            # Перевірка на його орієнтацію
                             if shiper.ORIENTATION_SHIP == "horizontal":
+                                # Если координата x корабля, не равнется с другой координатой x корабля 
                                 if self.X_COR >= shiper.X_COR - 62:
                                     if self.X_COR < shiper.X_COR + shiper.RECT.width + 62:
                                         if self.Y_COR >= shiper.Y_COR - 62:
@@ -1161,11 +1230,13 @@ In this folder we have files with classes such as, animation class, button class
                                                 self.Y_COR = self.STASIC_Y
                                                 print(self.row , self.col)
                                                 self.check_collision = True
+                                                # Очищаємо матрицю
                                                 self.clear_matrix()
+                                                # Повертаємо на стартову позицію
                                                 self.return_start_code()
                                                 break
                                         
-                                
+                                # Такий самий код, тільки для горизонтальної орієнтації
                                 if self.X_COR + self.RECT.width > shiper.X_COR - 62:
                                     if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
                                             if self.ORIENTATION_SHIP == "horizontal":
@@ -1179,11 +1250,10 @@ In this folder we have files with classes such as, animation class, button class
                                                             self.clear_matrix()
                                                             self.return_start_code()
                                                             break
-                                                
+                                            # Такий самий код, тільки на Y координату
                                             elif self.ORIENTATION_SHIP == "vertical":
                                                 if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
                                                     if self.Y_COR + self.RECT.height <= shiper.Y_COR + 124:
-                                                            print("HAAHAHAHAHHAHA")
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
                                                             print(self.row , self.col)
@@ -1235,15 +1305,20 @@ The game_tools folder has files that we check for crashed ships, coins that can 
     # Цей код реалізує функцію count_money, яка обробляє купівлю різних ігрових об'єктів: 
     # бомб, авто-ракет та відновлювачів (restorers).
     def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool):
+    # Перевірка, що список має більше монеток, ніж 0
     if count_money_hit[0] > 0:
+        # Красиво віднімаємо по -1
         count_money_hit[0] -= 1
         task_game.money_list[0] += 1
+        # Отримуємо звук монет
         get_coin_sound.play2(loops = 1)
+        # Оновлюємо його баланс
         task_game.player_balance.TEXT = str(task_game.money_list[0])
         task_game.player_balance.update_text()
         player_balance_in_jar.text = str(task_game.money_list[0])
         player_balance_in_jar.update_text()
 
+    # Перевірка на те, що ми купили авторакету
     if check_buy_auto_rocket == "yes" and check_money_auto_rocket[0] == 0:
         check_money_auto_rocket[0] += 1
         task_game.money_list[0] -= 1
@@ -1261,7 +1336,7 @@ The game_tools folder has files that we check for crashed ships, coins that can 
             player_balance_in_jar.update_text()
         elif check_buy_auto_rocket == "no" and check_money_auto_rocket[0] >= 200:
             check_money_auto_rocket[0] = 0
-
+    # Перевірка на те, що ми купили відновлення 1 клітинки корабля
     if check_buy_restorce == True and check_money_restoration[0] == 0:
         check_money_restoration[0] += 1
         task_game.money_list[0] -= 1
@@ -1412,16 +1487,18 @@ Part of the functions in battle
                 animation_random_player.ANIMATION_SPEED = 120
 
 
-
+        # Перевірка на те, чия роль випала, залежно від випадання ролі створюємо звук
         if server_module.list_player_role[0] != "server_player" and animation_random_player.COUNT_IMAGES >= 29 and count_sound_time[0] == 0:
             enemy_turn_sound.play2(loops = 1)
+            # Обнуляємо час
             count_sound_time[0] = 1
+        # Теж саме 
         elif animation_random_player.COUNT_IMAGES >= 28 and count_sound_time[0] == 0 and server_module.list_player_role[0] != "client_player":
             player_turn_sound.play2(loops = 1)
             count_sound_time[0] = 1
     
 
-
+        # Перевiрка якщо анімація випадіння гравця закінчилась
         if animation_random_player.IS_ANIMATION_DONE == True:
             if check_two_times.count(3) >= 2:
                 server_module.check_time[0] += 1
@@ -1459,6 +1536,7 @@ Part of the functions in battle
                         elif server_module.list_player_role[0] == "client_player":
                             server_module.turn[0] = "server_turn"
                     for data_enemy in check_data:
+                        # Перевірка на те, що в типі даних є модифікатор 'shot'
                         if data_enemy == "shot":
                             server_module.check_time[0] = 0
                             count_hit = 0
@@ -1482,6 +1560,7 @@ Part of the functions in battle
                                         server_module.turn[0] = "server_turn"
                                     elif server_module.list_player_role[0] == "client_player":
                                         server_module.turn[0] = "client_turn"
+                        # Перевірка на те, що в типі даних є модифікатор атаки 'auto_rocket'
                         elif data_enemy == "auto_rocket":
                             index_cell = 1
                             count_hit = 0
@@ -1509,6 +1588,7 @@ Part of the functions in battle
                                 elif server_module.list_player_role[0] == "client_player":
                                     server_module.turn[0] = "server_turn"
                             server_module.check_time[0] = 0
+                        # Перевірка на те, що в типі даних є модифікатор атаки 'auto_rocket'
                         elif data_enemy == "bomb":
                             for cell in range(1 , 19):
                                 print("bomb")
@@ -1538,6 +1618,7 @@ Part of the functions in battle
                             server_module.check_time[0] = 0
                 except:
                     continue
+                # Перевірка на те, що в типі даних є модифікатор клітинки 'auto_rocket'
                 if check_data[0] == "restore_cell":
                     enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
                 if check_data[0] == "medal":
@@ -1619,21 +1700,23 @@ We create in the screens folder, we draw the dimensions of the game screen, we a
 
     #список для зберігання об'єктів сітки
     list_object_map = []
-
+    # список для зберігання об'єктів сітки ворога
     list_object_map_enemy = []
 
 
     #класс для створення сітки
     class Grid:
+        # Створюємо метод-конструктор
         def __init__(self , x_screen: int , y_screen: int):
             self.X_SCREEN = x_screen
             self.Y_SCREEN = y_screen
+        # Створюємо метод Метод генерації матриці
         def generate_grid(self , width_cell = 62 , height_cell = 62):
             if self.X_SCREEN == 67:
                         list_object_map_enemy.clear()
             else:
                 list_object_map.clear()
-        
+            
             x_screen , y_screen = self.X_SCREEN , self.Y_SCREEN
             for row in list_grid:
                 for cell in row:
@@ -1648,6 +1731,7 @@ We create in the screens folder, we draw the dimensions of the game screen, we a
                 y_screen += height_cell
                 x_screen = self.X_SCREEN
 
+        # Метод для намагнічування кораблика на полі
         def snap_to_grid(self, x, y):
         # Розраховуємо індекс стовпця сітки (grid_x), який потрапляє точка (x)-координата корабля.
         # 1. Віднімаємо координату початку сітки по X (self.X_SCREEN), щоб отримати відносне положення.
@@ -1956,10 +2040,12 @@ This folder contains the files responsible for the buttons in our store, all the
 
             if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.SIZE + (832 - (self.TARGET_Y + self.SIZE))):
                 self.ACTIVE = False
-
+        # Метод оновлення текст 
         def update_text(self):
             if int(self.TEXT) == 0:
+                # Створюємо шрифт
                 self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
+                # Рендеримо шрифт з вказаним кольором
                 self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
             elif int(self.TEXT) >= 100:
                 self.MAX_WIDTH = 100
@@ -1981,6 +2067,7 @@ This folder contains the files responsible for the buttons in our store, all the
             self.text_surface.set_alpha(self.VISIBLE)
             screen.blit(self.text_surface, (self.X_COR, self.Y_COR))
 
+        # Метод оновлення тексту для завдань
         def update_text_for_task(self):
             self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
             self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
@@ -2199,6 +2286,7 @@ In the volume_settings folder, there are files with functions that are responsib
             self.PORT = int(port) 
             while True:
                 try:
+                    # Умова, щоб не створювати 2 сервери
                     if not self.RESTART:
                         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                         self.server_socket.bind((str(ip_adress), self.PORT))
@@ -2233,15 +2321,17 @@ In the volume_settings folder, there are files with functions that are responsib
                         thread2.join()
                         print("Congratulations")
                         self.PORT += 1
+
                     if self.RESTART:
                         self.server_socket.close()
                         self.RESTART = False
                         continue
                 except Exception as error:
                     pass
-
+    # Створюємо об'єкт класу
     SERVER = Server()
-
+    
+    # Створюємо функцію запуску сервера при натисканні кнопки
     def run_server(input_ip_address, input_port):
         SERVER.start_server(input_ip_address, input_port)
 ```
