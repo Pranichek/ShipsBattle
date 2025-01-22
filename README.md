@@ -1195,7 +1195,7 @@ The game_tools folder has files that we check for crashed ships, coins that can 
 </details>
 
 ```python
-    # Цей код реалізує функцію count_money, яка модифікує внутрішній баланс гравця та обробляє купівлю різних ігрових об'єктів: 
+    # Цей код реалізує функцію count_money, яка обробляє купівлю різних ігрових об'єктів: 
     # бомб, авто-ракет та відновлювачів (restorers).
     def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_rocket: bool):
     if count_money_hit[0] > 0:
@@ -1391,7 +1391,7 @@ Part of the functions in battle
                 check_two_times.clear()
 
 
-        # Цей фрагмент коду обробляє різні типи даних, що надходять від модуля сервера, і виконує відповідні дії, такі як оновлення матриці ворожих кораблів, управління чергою ходів, модифікація клітинок ігрового поля, активація медалей, а також взаємодія з іншими компонентами гри.
+        # Цей фрагмент коду обробляє різні типи даних, що надходять від модуля сервера, і виконує відповідні дії, такі як оновлення матриці ворожих кораблів, управління чергою ходів
 
         if len(server_module.enemy_data) > 0:
             check_data = server_module.enemy_data[0].split(' ')
