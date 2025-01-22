@@ -70,6 +70,8 @@ Ships Battle демонструє базові принципи роботи з 
  4. ввести пароль
 
  ![Join](readme_image/join.png)
+
+ ![creat](readme_image/creat.mp4)
  
 <details>
 <summary> English version </summary>
@@ -185,7 +187,7 @@ To join the game, you need:
  - Відкрийте його та виберіть опцію «Відкрити папку», щоб перейти та відкрити каталог, де було клоновано проект.
  - Натисніть Control + J або просто створіть новий термінал і напишіть це:
 ```python
-    git clone [https://github.com/Pranichek/ShipsBattle.git]
+    git clone https://github.com/Pranichek/ShipsBattle.git
 ```
 3. Підготуйте проект до використання
  - Перейдіть до головної папки проекту
@@ -237,7 +239,7 @@ To join the game, you need:
 * **os** - searching absolute path
 
 <a name="achievment"><h1>describe achievment package</h1></a>
-У цій папці ми маємо файли, які відповідають за нагороди гравців, тут прораховуються усі можливі попадання по кораблям, наприклад, якщо гравець попав по кораблю за перший хід, то гравець отримує свою першу нагороду. Приклад коду за досягнення 'піонер'.
+У цій папці ми маємо файли, які відповідають за нагороди гравців, тут прораховуються усі можливі попадання по кораблям, наприклад, якщо гравець попав по кораблю за перший хід, то гравець отримує свою першу нагороду. Приклад коду за досягнення 'first hit'.
 
 Нагорода
 
@@ -275,6 +277,234 @@ In this folder we have files that are responsible for player rewards, all possib
 
 ```
 
+```python
+    # Ця функція реалізує перевірку і активацію спеціальних досягнень на основі знищення кораблів. Головна умова для активації 
+    # "Перфекціоніста" — знищити всі типи кораблів один раз без помилок.
+    def monster_of_perfictionists():
+    if True not in killed_ships:
+        if enemy_dies_ships_for_ahiv[0] != "":
+                # for killed_ship in enemy_dies_ships_for_ahiv[0]:
+            killed_ships[0] =  enemy_dies_ships_for_ahiv[0][index_killed_ships[0]:]
+
+            if 0 in list_hits_achiv or 5 in list_hits_achiv:
+                index_killed_ships[0] += 1
+                
+
+            if len(killed_ships[0]) == 2:
+                for indx , ship in enumerate(killed_ships[0]):
+                    if indx > 0:
+                        if killed_ships[0][indx - 1] == ship:
+                            index_killed_ships[0] += 1
+            if len(killed_ships[0]) >= 3:
+                if killed_ships[0].count(1) >= 2:
+                    index_killed_ships[0] += len(killed_ships[0]) - 1
+                elif killed_ships[0].count(2) >= 2:
+                    index_killed_ships[0] += len(killed_ships[0]) - 1
+                elif killed_ships[0].count(3) >= 2:
+                    index_killed_ships[0] += len(killed_ships[0]) - 1
+                elif killed_ships[0].count(4) >= 2:
+                    index_killed_ships[0] += len(killed_ships[0]) - 1
+            
+            if len(killed_ships[0]) >= 4:
+                if 0 not in list_hits_achiv and 5 not in list_hits_achiv:
+                    if 1 in killed_ships[0] and 2 in killed_ships[0] and 3 in killed_ships[0] and 4 in killed_ships[0]:
+                        if killed_ships[0].count(1) == 1 and killed_ships[0].count(2) == 1 and killed_ships[0].count(3) == 1 and killed_ships[0].count(4) == 1:
+                            killed_ships.append(True)
+                            perfictionists_achiement.ACTIVE = True
+                            collector_medal.ACTIVE = True
+                            list_save_coords_achiv.append(12)
+                            list_save_coords_achiv[0] = True
+                            count_money_hit[0] += 20
+                        else:
+                            index_killed_ships[0] += 3
+                            list_hits_achiv.clear()
+                else:
+                    index_killed_ships[0] += 3
+                    list_hits_achiv.clear()
+```
+
+```python
+    # Функція відповідає за перший постріл гравця, перевіряє його коректність і активує досягнення та нагороди, якщо перший 
+    # постріл успішний
+    def first_shot(cell: int):
+    count_shot[0] += 1
+    shoots.append(cell)
+    for shoot in shoots:
+        if shoot == 0 or shoot == 5:
+            return False
+        else:
+            if count_shot[0] == 1 and "True" not in shoots:
+                shoots.append("True")
+                first_hit_achievement.ACTIVE = True
+                first_hit_medal.ACTIVE = True
+                list_save_coords_achiv.append(4)
+                list_save_coords_achiv[0] = True
+                count_money_hit[0] += 20
+```
+
+```python
+    # Функція перевіряє, хто першим знищив чотирипалубний корабель, і активує досягнення та нагороди для гравця, якщо це зробив 
+    # він
+    def first_kill_four_decker_achivment():
+    if enemy_dies_ships_for_ahiv[0] != "":
+        if enemy_ships_4decker_achiv[0] != "kill four-decker ship":
+            our_ships_4decker_achiv[0] = 0
+            enemy_ships_4decker_achiv[0] = 0
+            if enemy_dies_ships_for_ahiv[0] != "":
+                our_ships_4decker_achiv[0] = 1 - player_died_ships_for_achiv[0].count(4)
+                enemy_ships_4decker_achiv[0] = 1 - enemy_dies_ships_for_ahiv[0].count(4)
+
+                if enemy_ships_4decker_achiv[0] != "kill four-decker ship":
+                    if our_ships_4decker_achiv[0] > enemy_ships_4decker_achiv[0] and enemy_ships_4decker_achiv[0] == 0 and enemy_ships_4decker_achiv[0]!= "kill four-decker ship":
+                        enemy_ships_4decker_achiv[0] = "kill four-decker ship"
+                        first_four_decker_achivment.ACTIVE = True
+                        four_decker_sniper_medal.ACTIVE = True
+                        list_save_coords_achiv.append(1)
+                        list_save_coords_achiv[0] = True
+                        count_money_hit[0] += 20
+```
+
+```python
+    # Функція відстежує послідовність знищення однопалубних кораблів. Якщо гравець знищує чотири однопалубні кораблі поспіль, 
+    # активуються досягнення "Одинокий мисливець", медаль та нагороди. У разі порушення послідовності функція анулює поточний 
+    # прогрес.
+    def lone_hunter():
+    if enemy_dies_ships_for_ahiv[0] != "":
+        one = single_ships_achiv.count(1)
+        check_killed_for_single_ships_achiv.clear()
+        check_killed_for_single_ships_achiv.extend(enemy_dies_ships_for_ahiv[0][start_index_single_achiv[0]:])
+        if one > 0:
+            if one <= 0:
+                check_killed_for_single_ships_achiv.clear()
+
+            if one <= 0:
+                if 0 in single_ships_achiv:
+                    for i in range(0 , len(single_ships_achiv)):
+                        if single_ships_achiv[i] == 0:
+                            del single_ships_achiv[i]
+
+            if single_ships_achiv.count(0) > 0 and one > 0:
+                single_ships_achiv.clear()
+                one = 0
+                return False
+                
+            if single_ships_achiv.count(2) >= 2 and one > 0 and 2 in check_killed_for_single_ships_achiv:
+                single_ships_achiv.clear()
+                one = 0
+                return False
+            
+            if single_ships_achiv.count(3) >= 3 and one > 0 and 3 in check_killed_for_single_ships_achiv:
+                single_ships_achiv.clear()
+                one = 0
+                return False
+            
+            if single_ships_achiv.count(4) >= 4 and one > 0 and 4 in check_killed_for_single_ships_achiv:
+                single_ships_achiv.clear()
+                one = 0
+                return False
+
+            if one == 4 and "Kill four single ships in a row" not in single_ships_achiv:
+                single_ships_achiv.append("Kill four single ships in a row")
+                lone_hunter_achievement.ACTIVE = True
+                lone_hunter_medal.ACTIVE = True
+                list_save_coords_achiv.append(7)
+                list_save_coords_achiv[0] = True
+                count_money_hit[0] += 20
+        else:
+            single_ships_achiv.clear()
+            if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single_achiv[0]: 
+                start_index_single_achiv[0] += 1
+```
+
+```python
+    # Функція активує досягнення "Піонер", якщо гравець першим знищив хоча б один корабель, не втративши при цьому жодного. 
+    # Гравець отримує медаль, нагороду і статус виконання завдання.
+    def piooner():
+    if enemy_dies_ships_for_ahiv[0] != "":
+        if count_enemy_kill_achiv[0] != "task piooner is done":
+            print("3434343434")
+            if enemy_dies_ships_for_ahiv[0] != "":
+                count_player_ships_achiv[0] = len(enemy_dies_ships_for_ahiv[0])
+                count_enemy_kill_achiv[0] = len(player_died_ships_for_achiv[0])
+
+                if count_player_ships_achiv[0] >= 1 and count_enemy_kill_achiv[0] == 0 and count_enemy_kill_achiv[0] != "task piooner is done":
+                    count_enemy_kill_achiv[0] = "task piooner is done"
+                    piooner_achievement.ACTIVE = True
+                    pioneer_medal.ACTIVE = True
+                    list_save_coords_achiv.append(8)
+                    list_save_coords_achiv[0] = True
+                    count_money_hit[0] += 20
+```
+
+```python
+    # Функція перевіряє, чи вдалося гравцю зберегти всі кораблі цілими протягом 10 ходів. У разі успіху активуються досягнення 
+    # "Майстер маскування", медаль та нагорода. Якщо будь-який корабель зазнає пошкодження, прогрес скидається.
+    def kept_all_ships_alive_for_ten_turns(grid: object):
+    count_turns_achiv[0] += 1
+    for row in range(len(grid)):
+        for cell in range(len(grid[row])):
+            if grid[row][cell] == 7 and (row * 10) + cell not in save_sevens_achiv:
+                count_turns_achiv[0] = 0
+                save_sevens_achiv.append((row * 10) + cell)
+
+    if count_turns_achiv[0] >= 10 and "True" not in count_turns_achiv:
+        count_turns_achiv.append("True")
+        master_of_disguist_achievement.ACTIVE = True
+        master_of_disguist_medal.ACTIVE = True
+        list_save_coords_achiv.append(6)
+        list_save_coords_achiv[0] = True
+        count_money_hit[0] += 20
+```
+
+```python
+    # Функція активує досягнення "Стратег", якщо гравець виграє гру, не втративши жодного корабля. Умови перевіряються залежно 
+    # від ролі гравця (сервер або клієнт). У разі виконання всіх умов гравець отримує досягнення, медаль і нагороду.
+    def strategist(player_killed_ships: list, role: str, winner: str):
+    if check_end_game[0] != 13:
+        if player_killed_ships != "yes":
+            if len(player_killed_ships) == 0:
+                if role == "server_player":
+                    if winner == "win_server":
+                        strategist_achievement.ACTIVE = True
+                        strategist_medal.ACTIVE = True
+                        check_end_game[0] = 13
+                        client_module.data_player_shot.append("medal")
+                        client_module.data_player_shot.append(3)
+                        client_module.list_check_need_send[0] = True
+                        count_money_hit[0] += 20
+                elif role == "player_client":
+                    if winner == "win_client":
+                        strategist_achievement.ACTIVE = True
+                        strategist_medal.ACTIVE = True
+                        check_end_game[0] = 13
+                        list_save_coords_achiv[0] = True
+                        count_money_hit[0] += 20
+```
+
+```python
+    # Функція відстежує серію з 10 влучних пострілів поспіль. Якщо гравець виконує цю умову, активуються досягнення "10 влучних 
+    # пострілів підряд", медаль і нагорода. Якщо відбувається промах або постріл у "захищену зону", серія скидається.
+    def ten_shoot_in_row(cell: int):
+    count_shoots = 0
+    shoots.append(cell)
+
+    for check_cell in shoots:
+        if check_cell != 0 and check_cell != 5:
+            count_shoots += 1
+        else:
+            shoots.clear()
+            return False
+    
+    if count_shoots >= 10 and "True" not in shoots:
+        shoots.append("True")
+        ten_shoot_in_row_achievement.ACTIVE = True
+        perfect_shooter_medal.ACTIVE = True
+        list_save_coords_achiv.append(2)
+        print("10 выстрелов по кораблям подряд")
+        list_save_coords_achiv[0] = True
+        count_money_hit[0] += 20
+```
+
 [⬆️Table of contents](#articles)
 
 <a name="classes"><h1>describe classes package</h1></a>
@@ -306,6 +536,654 @@ In this folder we have files with classes such as, animation class, button class
         self.text_surface = self.font.render(self.text, False, self.color_text)
 
 ```
+
+```python
+    # Основна мета класу — управління анімацією досягнення (achievement), яка відображає зображення з досягненням з ефектами 
+    # змінювання прозорості та руху.
+    class Acievement:
+    def __init__(self , achievement_image_name: str):
+        self.IMAGE_NAME = achievement_image_name
+        self.X_COR = 640
+        self.Y_COR = 319
+        self.X_MAX = 458
+        self.WIDTH = 122
+        self.HEIGHT = 97
+        self.MAX_WIDTH = 354
+        self.MAX_HEIGHT = 281
+        self.PATH_BORDER_IMAGE = abspath(join(__file__, "..", "..", "..", "media", "achievement", "achievement_windows", f"{self.IMAGE_NAME}.png"))
+        self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha()
+        # 
+        self.ACTIVE = False 
+        #
+        self.CHECK_END_ANIM = False
+        #
+        self.DIRECTION = None
+        self.VISIBLE = 0 
+        self.COUNT_REPEAT = 0 
+        self.COUNT_MOVE = 0
+    # Плавно змінює прозорість зображення:fade_in() збільшує прозорість до 255 (повністю видимий стан)
+    def fade_in(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        if self.VISIBLE < 255:
+            self.VISIBLE += 5 * (60 / fps)
+            if self.VISIBLE >= 255:
+                self.VISIBLE = 255
+    # fade_out() зменшує прозорість до 0 (невидимий стан)
+    def fade_out(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        if self.VISIBLE > 0:
+            self.VISIBLE -= 5 * (60 / fps)
+            if self.VISIBLE <= 0:
+                self.VISIBLE = 0
+    def reset(self):
+        self.X_COR = 640
+        self.Y_COR = 319
+        self.MAX_WIDTH = 354
+        self.MAX_HEIGHT = 281
+        self.CHECK_END_ANIM = False
+        self.DIRECTION = None
+        self.VISIBLE = 0 
+        self.COUNT_REPEAT = 0 
+        self.COUNT_MOVE = 0
+
+    def move(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        current_procent = 60 / (fps + 10)
+        if self.ACTIVE == True:
+            if self.COUNT_REPEAT == 0:
+                music_achieve.play2(loops = 1)
+            if self.COUNT_MOVE >= 50: 
+                    # Перевіряємо кількість повторів
+                    # Повертаємо вікно до початкової позиції
+                    if self.X_COR < 640:
+                        self.X_COR += 1 * current_procent  
+                    if self.Y_COR > 100:
+                        self.Y_COR -= 0.8 * current_procent  
+                    if self.WIDTH > 122:
+                        self.WIDTH -= 5 * current_procent  
+                    if self.HEIGHT > 97:
+                        self.HEIGHT -= 4 * current_procent  
+                    self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha()
+                    self.fade_out()
+                    if self.X_COR >= 540:
+                        self.reset()
+                        self.ACTIVE = False 
+                    return False
+
+            if not self.CHECK_END_ANIM:
+                # Рух до початкової позиції (вліво)
+                if self.X_COR > self.X_MAX:
+                    self.X_COR -= 3.4 * current_procent  
+                if self.WIDTH < self.MAX_WIDTH:
+                    self.WIDTH += 5 * current_procent  
+                    self.fade_in()
+                else:
+                    self.WIDTH = self.MAX_WIDTH
+                if self.HEIGHT < self.MAX_HEIGHT:
+                    self.HEIGHT += 4 * current_procent  
+                else:
+                    self.HEIGHT = self.MAX_HEIGHT
+                    self.CHECK_END_ANIM = True
+            elif self.CHECK_END_ANIM:
+                # Горизонтальний рух (вправо/вліво)
+                if self.DIRECTION == "More":
+                    if self.WIDTH > 337:
+                        self.WIDTH -= 0.7 * current_procent  
+                    if self.HEIGHT > 265:
+                        self.HEIGHT -= 0.7 * current_procent  
+                    if self.X_COR < self.X_MAX + 20:  # Рух вправо
+                        self.X_COR += 0.1 * current_procent  
+                    if self.WIDTH <= 337 and self.HEIGHT <= 265:
+                        self.DIRECTION = "Less"
+                        self.COUNT_MOVE += 1 
+                elif self.DIRECTION == "Less":
+                    if self.WIDTH < self.MAX_WIDTH:
+                        self.WIDTH += 0.7 * current_procent  
+                    if self.HEIGHT < self.MAX_HEIGHT:
+                        self.HEIGHT += 0.7 * current_procent  
+                    if self.X_COR > self.X_MAX:  # Рух вліво
+                        self.X_COR -= 0.1 * current_procent  
+                    if self.WIDTH >= self.MAX_WIDTH and self.HEIGHT >= self.MAX_HEIGHT:
+                        self.DIRECTION = "More"
+                    self.COUNT_MOVE += 1 
+                else:
+                    self.DIRECTION = "More"
+            self.COUNT_REPEAT += 1
+            self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha() 
+                    
+    def draw(self , screen: pygame.Surface):
+        self.BORDER_IMAGE.set_alpha(self.VISIBLE)
+        screen.blit(self.BORDER_IMAGE , (self.X_COR, self.Y_COR))
+```
+
+```python
+    # Клас Medal в коді реалізує медаль як об'єкт з певними характеристиками та анімацією. Він містить методи для відображення 
+    # медалі на екрані, а також для обробки анімаційних ефектів появи медалі та її опису.
+    class Medal:
+    def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_name: str , medal_image_description: str):
+        self.X_COR = x_cor
+        self.Y_COR = y_cor
+        self.WIDTH = width
+        self.HEIGHT = height
+        self.MEDAL_IMAGE_NAME = image_name
+        self.MEDAL_IMAGE_DESCRIPTION = medal_image_description
+        #__file__ - хранит до файла в котором она находится
+        # .. = ".."
+        self.PATH_IMAGE = abspath(join(__file__, "..", "..", "..", "media", "achievement", "medals", f"{self.MEDAL_IMAGE_NAME}.png"))
+        self.MEDAL_DESDESCRIPTION_PATH = abspath(join(__file__, "..", "..", "..", "media", "achievement", "description_medals",f"{self.MEDAL_IMAGE_DESCRIPTION}.png"))
+        self.MEDAL_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_IMAGE), (self.WIDTH, self.HEIGHT))
+        self.MEDAL_DESDESCRIPTION_IMAGE = pygame.transform.scale(pygame.image.load(self.MEDAL_DESDESCRIPTION_PATH), (self.WIDTH + 121, self.HEIGHT + 46))
+        self.ACTIVE = False
+        self.VISIBLE = 100
+        self.DESCRIPRION_VISIBLE = 0
+        self.RECT = self.MEDAL_IMAGE.get_rect(topleft=(self.X_COR - 10, self.Y_COR + 5))
+        self.RECT = self.RECT.inflate(-20, -20)
+    def draw_medals(self, screen: pygame.Surface):
+        self.MEDAL_IMAGE.set_alpha(self.VISIBLE)
+        screen.blit(self.MEDAL_IMAGE , (self.X_COR, self.Y_COR))
+    #для самой медали
+    def fade_in(self):
+        if self.VISIBLE < 255:
+            self.VISIBLE += 5  
+            if self.VISIBLE >= 255:
+                self.VISIBLE = 255  
+    # для окошка под медлью
+    def fade_in_descriprion(self):
+        if self.DESCRIPRION_VISIBLE < 255:
+            self.DESCRIPRION_VISIBLE += 20
+            if self.DESCRIPRION_VISIBLE >= 255:
+                self.DESCRIPRION_VISIBLE = 255  
+    def fade_out_description(self):
+        if self.DESCRIPRION_VISIBLE > 0:
+            self.DESCRIPRION_VISIBLE -= 20
+            if self.DESCRIPRION_VISIBLE <= 0:
+                self.DESCRIPRION_VISIBLE = 0
+
+    def completed_task(self):
+        if self.ACTIVE == True:
+            self.fade_in()
+            
+    def show_descriptions(self, screen: pygame.Surface):
+        mouse = pygame.mouse.get_pos()
+        if self.RECT.collidepoint(mouse):
+            self.fade_in_descriprion()
+            self.MEDAL_DESDESCRIPTION_IMAGE.set_alpha(self.DESCRIPRION_VISIBLE)
+            screen.blit(self.MEDAL_DESDESCRIPTION_IMAGE , (self.X_COR - 60, self.Y_COR + 50))
+        else:
+            self.fade_out_description()
+            self.MEDAL_DESDESCRIPTION_IMAGE.set_alpha(self.DESCRIPRION_VISIBLE)
+            screen.blit(self.MEDAL_DESDESCRIPTION_IMAGE , (self.X_COR - 60, self.Y_COR + 50))
+```
+
+```python
+    # Клас Animation реалізує анімацію, яка складається з набору зображень, що відтворюються в циклі. Він дозволяє завантажувати 
+    # багато зображень, відтворювати анімацію.
+    class Animation():
+    def __init__(self, image_name: str , width: int , height: int , x_cor: int , y_cor: int , need_clear: bool , name_folder: str ,animation_speed: int):
+        self.ANIMATION_SPEED = animation_speed
+        self.IMAGE_NAME = image_name
+        self.LIST_IMAGES = []
+        self.COUNT_IMAGES = 0
+        self.COUNT_MAIN_LOOP = 0
+        self.WIDTH = width
+        self.HEIGHT = height  
+        self.IMAGE = None
+        self.X_COR = x_cor
+        self.Y_COR = y_cor 
+        self.NEED_CLEAR = need_clear  # Нужно ли очищать анимацию после ее проигрывания
+        self.NAME_FOLDER = name_folder
+        self.IS_ANIMATION_DONE = False  # Флаг который будет отслеживать завершение анимации
+    def load_images(self):
+        path = abspath(join(__file__, f"{self.IMAGE_NAME}"))
+        image = pygame.image.load(path)
+        transformed_image = pygame.transform.scale(image, (self.WIDTH, self.HEIGHT))
+        self.IMAGE = transformed_image
+    def animation(self, count_image: int, main_screen: pygame.Surface):
+        fps = screen_module.FPS.get_fps()
+        if screen_module.FPS.get_fps() <= 0:
+            fps = 0.01
+        current_speed = self.ANIMATION_SPEED * ((fps + 10) / 60)
+        if len(self.LIST_IMAGES) == 0:
+            for number in range(count_image):
+                self.IMAGE_NAME = abspath(join(__file__, "..", "..", "..", "media", f"{self.NAME_FOLDER}", f"{number}.png"))
+                self.load_images()
+                self.LIST_IMAGES.append(self.IMAGE)
+
+        if self.IS_ANIMATION_DONE and self.NEED_CLEAR == True:
+            # Если анимация закончена, ничего не рисуем   
+            return True
+
+        self.IMAGE = self.LIST_IMAGES[self.COUNT_IMAGES]
+        self.draw(screen=main_screen)
+
+        if self.COUNT_MAIN_LOOP >= current_speed:
+            if self.COUNT_IMAGES < count_image - 1:  # Проверяем, не конец ли анимации
+                self.COUNT_IMAGES += 1
+            else:
+                self.IS_ANIMATION_DONE = True
+                return True 
+            self.COUNT_MAIN_LOOP = 0
+
+        self.COUNT_MAIN_LOOP += 1
+
+    def draw(self, screen: pygame.Surface):
+        screen.blit(self.IMAGE, (self.X_COR, self.Y_COR))
+    def clear_animation(self):
+        self.LIST_IMAGES = []
+        self.COUNT_IMAGES = 0
+        self.COUNT_MAIN_LOOP = 0
+        self.IS_ANIMATION_DONE = False
+```
+
+```python
+    # Клас відтворює основну музику гри
+    class MusicPlayer:
+     def __init__(self, name_sound):
+        pygame.mixer.init()
+        self.NAME_SOUND = name_sound  
+       
+     def play(self, loop=-1):
+        #os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
+        sound_path = abspath(join(__file__, "..", "..", "..", "static", "sounds", f"{self.NAME_SOUND}"))
+    # Відтворення музики. Параметр loop визначає кількість повторень (-1 - безперервно).
+        pygame.mixer.music.load(sound_path)
+        pygame.mixer.music.play(loop)
+        self.is_paused = False
+
+     def pause(self):
+    # Пауза музики.
+        if not self.is_paused:
+            pygame.mixer.music.pause()
+            self.is_paused = True
+
+     def unpause(self):
+    # Продовження відтворення з паузи.
+        if self.is_paused:
+            pygame.mixer.music.unpause()
+            self.is_paused = False
+
+     def stop(self):
+    # Зупинка музики.
+        pygame.mixer.music.stop()
+        self.is_paused = False
+```
+
+<a name="class_ship"><h1>Class_ship.py modules</h1></a>
+Головний клас кораблів, який створює об'єкти класів.
+
+```python
+    class Ship:
+    def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
+        r'''
+        :mod:`метод` ``__init__``, яка створює об'єкти класів, встановлює координати, розмір, позицію кораблів.
+
+        Приклад застосування: 
+        >>> self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
+        '''
+        self.X_COR = x_cor#місце де стоятиме корабель за іксом
+        self.Y_COR = y_cor#місце де стоятиме корабель за греком
+        self.WIDTH = width#ширина корабля
+        self.HEIGHT = height#висота корабля
+        self.IMAGE_SHIP = image_ship#картинка звичайного корабля
+        self.ROTATE_SHIP = image_rotate_ship#картинка поверненого корабля
+        self.LENGHT = length#довжина корабля у клітинах
+        self.ORIENTATION_SHIP = position_ship#горизонтально чи вертикально зараз стоїть корабель
+        self.CHEK_ROTATION = self.ORIENTATION_SHIP#для перевірки горизонтально чи вертикально зараз стоїть корабель
+        self.READY_IMAGE_SHIP = None#відмаштобована та готова картина нормального корабля
+        self.IMAGE_ROTATE_SHIP = None#відмаштобована та готова кратинка поверненого корабля
+        self.load_image()#викликаємо метод завантаження картинки
+        self.CHECK_MOVE = None # Прапор для перевірки рухів миші
+        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))#прямокутник для того, щоб могли відстежувати курсор чи на кораблику чи ні
+        self.STASIC_X = self.X_COR # Static_x = це початкові координати
+        self.STASIC_Y = self.Y_COR # Static_y = це початкові координати
+        # це світло де зберігається нова клітина де стоїть корабель
+        self.number_cell = 0
+        # це властивість де зберігається стара клітина де стояв корабель
+        self.number_ship_cell = 0
+        # номер рядка в матриці де він стоїть
+        self.row = 0
+        # номер клітини де він стоїть
+        self.col = 0
+        # прапор для перевірки зіткнення з кораблями (колізії)
+        self.check_collision = None
+        self.check_after_random = None
+```
+
+Функції, які создають прилипання та розраховує індекс клітинки.
+
+```python
+    def snap_to_grid(self): 
+        r'''
+        :mod:`Метод` ``snap_to_grid``, за допомогою коорднинат прив'язуємо корабель дло сітки.
+        Приклад застосування: 
+        >>> snapped_x, snapped_y = grid.snap_to_grid(mouse_x, mouse_y)
+        '''       
+        # Прив'язати координати до сітки, щоб корабель не йшов на саму сітку
+        self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
+    def center_to_cell_number(self, x, y):
+        r'''
+        :mod:`Метод` ``center_to_cell_number``, яка розраховує індекс клітинки: Номер клітки = (строка * кількість стовбців) + (стовбець) + 1.
+        Приклад застосування: 
+        >>>  self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
+        '''        
+        #Розраховуємо індекс стовпця та рядки, в які потрапляє корабель.
+        # grid_player.X_SCREEN - координати сітки за іксом
+        # grid_player.Y_SCREEN - координати сітки за гріком
+        # x - координати корабли за позовом
+        # y - координати корабля за гріком
+        col = (x - grid_player.X_SCREEN) // 62  # Индекс столбца 
+        row = (y - grid_player.Y_SCREEN) // 62  # Индекс строки 
+
+        # Враховуємо, що клітини нумеруються з 1, тому:
+        # Номер клітини = (рядок * кількість стовпців) + (стовпець) + 1.
+        cell_number = row * 10 + col + 1
+
+        # Повертаємо номер клітинки
+        return cell_number
+```
+
+Методи для розтавлення кораблів
+
+```python
+    def rotate_ship(self, event: pygame.event):
+        r'''
+        :mod:`Метод` ``rotate_ship``, повертає корабель горизонтально чи вертикально, натиснувши клавішу R  корабель повертається.
+        Приклад застосування: 
+        >>>  self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+        '''  
+        self.RECT.topleft = (self.X_COR, self.Y_COR)
+        # Створюємо змінну мишки, і отримуємо координати мишки гравця
+        mouse = pygame.mouse.get_pos()
+        # Якщо координати мишки дорівнюють координатам корабля
+        if self.RECT.collidepoint(mouse):
+            # Якщо клавіша відпущена
+            if event.type == pygame.KEYDOWN:
+                # якщо натиснуто R клавіша
+                if event.key == pygame.K_r and self.CHECK_MOVE == True: 
+                    # Якщо корабель horizontal
+                    if self.CHEK_ROTATION == "horizontal":
+                        self.ORIENTATION_SHIP = "vertical"
+                        self.CHEK_ROTATION = self.ORIENTATION_SHIP
+                        self.load_image()
+                        self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+    
+                        # Обновляємо прямокутник
+                    
+                    elif self.CHEK_ROTATION == "vertical":
+                        self.ORIENTATION_SHIP = "horizontal"
+                        self.CHEK_ROTATION = self.ORIENTATION_SHIP
+                        self.load_image()
+                        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+                        
+                        
+                    self.X_COR = mouse[0] - self.RECT.width // 2
+                    self.Y_COR = mouse[1] - self.RECT.height // 2
+
+                    
+                    
+
+    # метод який чистити положення корабля на матриці якщо його пересунули
+    def clear_matrix(self):
+        r'''
+        :mod:`Метод` ``clear_matrix``, який очищає попереденє розтавлення корабля.
+        Приклад застосування: 
+        >>>  self.clear_matrix()
+        '''  
+        # список для перевірки розставлення кораблів
+        if check_for_shipsmoving[0] == 0:
+            # список для перевірки попереднього розтавлення кораблів
+            check_prev_pos = 0
+
+            for index_col in range(0 , 2):
+                # Додавання до клітинки
+                try:
+                    # print(list_grid[self.row][self.col + index_col])
+                    if list_grid[self.row][self.col + index_col] == 0:
+                        check_prev_pos += 1
+                except Exception as e:
+                    check_prev_pos = 1
+
+            # Цей код відповідає за очищення певної частини ігрового поля (матриці), зважаючи на певні умови. Код розрізняє два 
+            # основні стани: коли колізій немає (чи self.check_collision != True), і коли вони є (якщо self.check_collision == 
+            # True). Він також перевіряє, чи потрібно очищати стовпці чи рядки залежно від орієнтації корабля.
+            if self.check_collision != True:
+                # перевірка чи очищений список
+                if check_prev_pos == 0:
+                    print("clear col")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        for index_col in range(0 , self.LENGHT):
+                            list_grid[self.row][self.col + index_col] = 0
+                            # return False
+                # якщо список не очищенно, то очищаємо його
+                elif check_prev_pos > 0:
+                    print("cler row")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        print(self.row , self.col)
+                        print(list_grid[self.row][self.col])
+                        for index_row in range(0 , self.LENGHT):
+                            print(self.LENGHT , "length")
+                            print(list_grid[self.row + index_row][self.col])
+                            list_grid[self.row + index_row][self.col] = 0
+                            # return False
+            elif self.check_collision == True:
+                print("banana")
+                if self.ORIENTATION_SHIP == "vertical":
+                    print("clean row")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        for index_row in range(0 , self.LENGHT):
+                            list_grid[self.row + index_row][self.col] = 0
+                            # return False
+                elif self.ORIENTATION_SHIP == "horizontal":
+                    print("clean col")
+                    if list_grid[self.row][self.col] == 0:
+                        print("already clear")
+                    else:
+                        for index_col in range(0 , self.LENGHT):
+                            list_grid[self.row][self.col + index_col] = 0
+                            # return False
+        check_for_shipsmoving[0] = 0
+       
+
+    # метод, який телепортує корабель на початкову точку і повертається в положення по горизонталі
+    def return_start_code(self):
+        r'''
+        :mod:`Метод` ``return_start_code``, для повернення корабля на початкому точку, якщо корабель не відповідає потрібним координатам ,та повертає корабель в горизонтальнеп положення.
+        >>>  self.return_start_code()
+        '''  
+        self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
+        self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+        self.ORIENTATION_SHIP = "horizontal"
+        # Записуємо у змінну для перевірки
+        self.CHEK_ROTATION = self.ORIENTATION_SHIP
+        # Малюємо зображення за допомогою методу
+        self.load_image()
+        # Записуємо в змінну змінену позицію
+        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
+            
+       
+
+    def matrix_move(self, event: pygame.event, matrix_width: int, matrix_height: int, cell: int):
+        r'''
+        :mod:`Метод` ``matrix_move``, перевіряє, щоб кораблі не накладалися один на одний та щоб кораблі були щонайменше на одну клітинку один від одного.
+        >>>  ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
+        '''
+        # Отримуємо координати миші
+        mouse = pygame.mouse.get_pos() 
+
+        if event.type == pygame.MOUSEBUTTONDOWN and self.RECT.collidepoint(event.pos):
+            # Початок переміщення
+            self.CHECK_MOVE = True
+
+        # Якщо ми рухаємо курсором по екрану і вже натискали на корабель
+        elif event.type == pygame.MOUSEMOTION and self.CHECK_MOVE:
+
+            self.X_COR = mouse[0] - self.RECT.width // 2
+            self.Y_COR = mouse[1] - self.RECT.height // 2
+
+
+            # Обмежуємо рух корабля межами матриці
+            self.X_COR = max(0, min(self.X_COR, matrix_width * cell - self.RECT.width))
+            self.Y_COR = max(0, min(self.Y_COR, matrix_height * cell - self.RECT.height))
+            # Обновляємопрямокутник тільки при русі
+            self.RECT.topleft = (self.X_COR, self.Y_COR)
+
+        elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
+            self.CHECK_MOVE = False
+            print(self.WIDTH , "self_width")
+            print(self.RECT.width , "self_rect")
+
+            if self.check_after_random == True:
+                print("Зашло")
+                self.clear_matrix()
+                self.check_after_random = None
+                print(list_grid)
+
+            # Перевірка перетину з іншими кораблями
+            # робимо перебір списку з кораблями, щоб модно було перевіряти чи не намагається поставити користувач корабель на корабель
+            for ship in list_ships:
+                # Перевіряємо ship != self - це щоб не перевіряти кораблик сам із собою
+                # self.RECT.colliderect(ship.RECT) - перевіримо кожен корабель зі списку з поточним кораблем, якщо їх прямокутники (колізії) перетинаються, то ставимо кораблик на початкові координати
+                if ship != self and self.RECT.colliderect(ship.RECT):
+                    print("пересекается")
+                    self.return_start_code()
+                    # self.number_cell = self.number_ship_cell
+                    # # Переробляємо значення клітини в рядок щоб можна було легко дізнатися в колонці він стоїть
+                    # str_col = str (self.number_cell)
+                    # # Обчислюємо номер рядка де стоїть корабель (наприклад 23, ділимо на 10 без залишку і отримуємо 2, ось наш стовпець)
+                    # self.row = self.number_cell // 10  
+                    if ship.col == self.col and ship.row == self.row:
+                        check_for_shipsmoving[0] += 1
+                    else:
+                        check_for_shipsmoving[0] = 0
+                    self.clear_matrix()
+                    print(list_grid)
+                    return False
+ 
+            if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
+                if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
+                    self.snap_to_grid()
+
+       
+                    if self.number_ship_cell != self.number_cell and self.check_collision != True:
+                        self.clear_matrix()
+
+                    self.check_collision = None
+
+                    # Перераховуємо номер клітини, де стоїть корабель для старих координат
+                    self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
+
+
+                    print(list_grid)
+                    print("------------------------------------------------------------------------------------------------")
+                    # Цей фрагмент коду виконує перевірку на колізії між кораблем, який рухається, і іншими кораблями на 
+                    # ігровому полі. Основна мета — визначити, чи є зіткнення між двома кораблями або з іншими об'єктами, а 
+                    # також правильно оновити координати та стан корабля, якщо колізія відбулася
+                    for cell in list_object_map: 
+                            if cell.x <= self.X_COR and self.X_COR < cell.x + 62:
+                                if cell.y <= self.Y_COR and self.Y_COR < cell.y + 62:
+                                    # Дізнаємсь номер клітинки де стоїть корабель
+                                    self.number_cell = list_object_map.index(cell)
+                                    # Перераховуємо номер клітини, де стоїть корабель для старих координат
+                                    str_col = str(self.number_cell) 
+                                    # Обчислюємо номер рядка де стоїть корабель (наприклад 23, ділимо на 10 без залишку і отримуємо 2, ось наш стовпець)
+                                    self.row = self.number_cell // 10  
+                                    #Колонку кораблика обчислюємо за таким принципом
+                                    # Наприклад знову 23 число номер колонки де стоїть корабель , тоді за допомогою -1 ми беремо останнє число тобто трійку, і ось так отримуємо номер колонки
+                                    self.col = int(str_col[-1])
+
+                                    # Встановлюємо значення де стоїть корабель у матриці
+                                    if self.ORIENTATION_SHIP == "horizontal":
+                                        for index_column in range(0 , self.LENGHT):
+                                            list_grid[self.row][self.col + index_column] = self.LENGHT
+                                    elif self.ORIENTATION_SHIP == "vertical":
+                                        for index_row in range(0 , self.LENGHT):
+                                            list_grid[self.row + index_row][self.col] = self.LENGHT
+                    
+                     
+                    for shiper in list_ships:
+                        # перевірка щоб корабель який рухаємо не порівнювали із самим собою
+                        if list_ships.index(shiper) != list_ships.index(self):
+                            if shiper.ORIENTATION_SHIP == "horizontal":
+                                if self.X_COR >= shiper.X_COR - 62:
+                                    if self.X_COR < shiper.X_COR + shiper.RECT.width + 62:
+                                        if self.Y_COR >= shiper.Y_COR - 62:
+                                            if self.Y_COR < shiper.Y_COR + 124:
+                                                self.X_COR = self.STASIC_X
+                                                self.Y_COR = self.STASIC_Y
+                                                print(self.row , self.col)
+                                                self.check_collision = True
+                                                self.clear_matrix()
+                                                self.return_start_code()
+                                                break
+                                        
+                                
+                                if self.X_COR + self.RECT.width > shiper.X_COR - 62:
+                                    if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
+                                            if self.ORIENTATION_SHIP == "horizontal":
+                                                if self.Y_COR >= shiper.Y_COR - 62:
+                                                    if self.Y_COR < shiper.Y_COR + 124:
+                                                            
+                                                            self.X_COR = self.STASIC_X
+                                                            self.Y_COR = self.STASIC_Y
+                                                            print(self.row , self.col)
+                                                            self.check_collision = True
+                                                            self.clear_matrix()
+                                                            self.return_start_code()
+                                                            break
+                                                
+                                            elif self.ORIENTATION_SHIP == "vertical":
+                                                if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
+                                                    if self.Y_COR + self.RECT.height <= shiper.Y_COR + 124:
+                                                            print("HAAHAHAHAHHAHA")
+                                                            self.X_COR = self.STASIC_X
+                                                            self.Y_COR = self.STASIC_Y
+                                                            print(self.row , self.col)
+                                                            self.check_collision = True
+                                                            self.clear_matrix()
+                                                            self.return_start_code()
+                                                            break
+                                                    
+
+                            elif shiper.ORIENTATION_SHIP == "vertical":
+                                if self.X_COR >= shiper.X_COR - 62:
+                                    if self.X_COR < shiper.X_COR + shiper.RECT.width + 62:
+                                        if self.Y_COR >= shiper.Y_COR - 62:
+                                            if self.Y_COR < shiper.Y_COR + shiper.RECT.height + 62:
+                                                    self.X_COR = self.STASIC_X
+                                                    self.Y_COR = self.STASIC_Y
+                                                    print(self.row , self.col)
+                                                    self.check_collision = True
+                                                    self.clear_matrix()
+                                                    self.return_start_code()
+                                                    break
+                                            
+
+                                if self.X_COR + self.RECT.width > shiper.X_COR - 62:
+                                    if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
+                                            if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
+                                                if self.Y_COR + self.RECT.height <= shiper.Y_COR + shiper.RECT.height + 62:
+                                                        self.X_COR = self.STASIC_X
+                                                        self.Y_COR = self.STASIC_Y
+                                                        print(self.row , self.col)
+                                                        self.check_collision = True
+                                                        self.clear_matrix()
+                                                        self.return_start_code()
+                                                        break
+                        
+```
+
 
 [⬆️Table of contents](#articles)
 
@@ -1032,6 +1910,7 @@ In the volume_settings folder, there are files with functions that are responsib
                             list_check_need_send[0] = False
                         else:
                             client_socket.sendall("keep-alive".encode("utf-8") + b"END")
+                        # Перепідключення, якщо відбулось відключення
                         try:
                             if server_module.enemy_data[0] != "":
                                 client_socket.settimeout(3)
@@ -1069,6 +1948,7 @@ In the volume_settings folder, there are files with functions that are responsib
     # server_thread = threading.Thread(target = start_server, daemon=True)
     def listen_client(client, second_client):
         while True:
+        # Якщо було роз'єднання, відбувається перепідключення
             try:
                 if SERVER.clients >= 1:
                     client.settimeout(5)
@@ -1089,7 +1969,7 @@ In the volume_settings folder, there are files with functions that are responsib
                 client.close()
                 second_client.close()
                 break
-
+    # Відправляємо гравцям сервер або клієнт
     players = ["server_player", "client_player"]
     class Server():
         def __init__(self):
@@ -1153,391 +2033,14 @@ In the volume_settings folder, there are files with functions that are responsib
 ```
 [⬆️Table of contents](#articles)
 
-<a name="class_ship"><h1>Class_ship.py modules</h1></a>
-Головний клас кораблів, який створює об'єкти класів.
-
-```python
-    class Ship:
-    def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
-        r'''
-        :mod:`метод` ``__init__``, яка створює об'єкти класів, встановлює координати, розмір, позицію кораблів.
-
-        Приклад застосування: 
-        >>> self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
-        '''
-        self.X_COR = x_cor#місце де стоятиме корабель за іксом
-        self.Y_COR = y_cor#місце де стоятиме корабель за греком
-        self.WIDTH = width#ширина корабля
-        self.HEIGHT = height#висота корабля
-        self.IMAGE_SHIP = image_ship#картинка звичайного корабля
-        self.ROTATE_SHIP = image_rotate_ship#картинка поверненого корабля
-        self.LENGHT = length#довжина корабля у клітинах
-        self.ORIENTATION_SHIP = position_ship#горизонтально чи вертикально зараз стоїть корабель
-        self.CHEK_ROTATION = self.ORIENTATION_SHIP#для перевірки горизонтально чи вертикально зараз стоїть корабель
-        self.READY_IMAGE_SHIP = None#відмаштобована та готова картина нормального корабля
-        self.IMAGE_ROTATE_SHIP = None#відмаштобована та готова кратинка поверненого корабля
-        self.load_image()#викликаємо метод завантаження картинки
-        self.CHECK_MOVE = None # Прапор для перевірки рухів миші
-        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))#прямокутник для того, щоб могли відстежувати курсор чи на кораблику чи ні
-        self.STASIC_X = self.X_COR # Static_x = це початкові координати
-        self.STASIC_Y = self.Y_COR # Static_y = це початкові координати
-        # це світло де зберігається нова клітина де стоїть корабель
-        self.number_cell = 0
-        # це властивість де зберігається стара клітина де стояв корабель
-        self.number_ship_cell = 0
-        # номер рядка в матриці де він стоїть
-        self.row = 0
-        # номер клітини де він стоїть
-        self.col = 0
-        # прапор для перевірки зіткнення з кораблями (колізії)
-        self.check_collision = None
-        self.check_after_random = None
-```
-
-Функції, які создають прилипання та розраховує індекс клітинки.
-
-```python
-    def snap_to_grid(self): 
-        r'''
-        :mod:`Метод` ``snap_to_grid``, за допомогою коорднинат прив'язуємо корабель дло сітки.
-        Приклад застосування: 
-        >>> snapped_x, snapped_y = grid.snap_to_grid(mouse_x, mouse_y)
-        '''       
-        # Прив'язати координати до сітки, щоб корабель не йшов на саму сітку
-        self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
-    def center_to_cell_number(self, x, y):
-        r'''
-        :mod:`Метод` ``center_to_cell_number``, яка розраховує індекс клітинки: Номер клітки = (строка * кількість стовбців) + (стовбець) + 1.
-        Приклад застосування: 
-        >>>  self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
-        '''        
-        #Розраховуємо індекс стовпця та рядки, в які потрапляє корабель.
-        # grid_player.X_SCREEN - координати сітки за іксом
-        # grid_player.Y_SCREEN - координати сітки за гріком
-        # x - координати корабли за позовом
-        # y - координати корабля за гріком
-        col = (x - grid_player.X_SCREEN) // 62  # Индекс столбца 
-        row = (y - grid_player.Y_SCREEN) // 62  # Индекс строки 
-
-        # Враховуємо, що клітини нумеруються з 1, тому:
-        # Номер клітини = (рядок * кількість стовпців) + (стовпець) + 1.
-        cell_number = row * 10 + col + 1
-
-        # Повертаємо номер клітинки
-        return cell_number
-```
-
-Методи для розтавлення кораблів
-
-```python
-    def rotate_ship(self, event: pygame.event):
-        r'''
-        :mod:`Метод` ``rotate_ship``, повертає корабель горизонтально чи вертикально, натиснувши клавішу R  корабель повертається.
-        Приклад застосування: 
-        >>>  self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-        '''  
-        self.RECT.topleft = (self.X_COR, self.Y_COR)
-        # Створюємо змінну мишки, і отримуємо координати мишки гравця
-        mouse = pygame.mouse.get_pos()
-        # Якщо координати мишки дорівнюють координатам корабля
-        if self.RECT.collidepoint(mouse):
-            # Якщо клавіша відпущена
-            if event.type == pygame.KEYDOWN:
-                # якщо натиснуто R клавіша
-                if event.key == pygame.K_r and self.CHECK_MOVE == True: 
-                    # Якщо корабель horizontal
-                    if self.CHEK_ROTATION == "horizontal":
-                        self.ORIENTATION_SHIP = "vertical"
-                        self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                        self.load_image()
-                        self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-    
-                        # Обновляємо прямокутник
-                    
-                    elif self.CHEK_ROTATION == "vertical":
-                        self.ORIENTATION_SHIP = "horizontal"
-                        self.CHEK_ROTATION = self.ORIENTATION_SHIP
-                        self.load_image()
-                        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-                        
-                        
-                    self.X_COR = mouse[0] - self.RECT.width // 2
-                    self.Y_COR = mouse[1] - self.RECT.height // 2
-
-                    
-                    
-
-    # метод який чистити положення корабля на матриці якщо його пересунули
-    def clear_matrix(self):
-        r'''
-        :mod:`Метод` ``clear_matrix``, який очищає попереденє розтавлення корабля.
-        Приклад застосування: 
-        >>>  self.clear_matrix()
-        '''  
-        # список для перевірки розставлення кораблів
-        if check_for_shipsmoving[0] == 0:
-            # список для перевірки попереднього розтавлення кораблів
-            check_prev_pos = 0
-
-            for index_col in range(0 , 2):
-                # Додавання до клітинки
-                try:
-                    # print(list_grid[self.row][self.col + index_col])
-                    if list_grid[self.row][self.col + index_col] == 0:
-                        check_prev_pos += 1
-                except Exception as e:
-                    check_prev_pos = 1
-
-            # Цей код відповідає за очищення певної частини ігрового поля (матриці), зважаючи на певні умови. Код розрізняє два 
-            # основні стани: коли колізій немає (чи self.check_collision != True), і коли вони є (якщо self.check_collision == 
-            # True). Він також перевіряє, чи потрібно очищати стовпці чи рядки залежно від орієнтації корабля.
-            if self.check_collision != True:
-                # перевірка чи очищений список
-                if check_prev_pos == 0:
-                    print("clear col")
-                    if list_grid[self.row][self.col] == 0:
-                        print("already clear")
-                    else:
-                        for index_col in range(0 , self.LENGHT):
-                            list_grid[self.row][self.col + index_col] = 0
-                            # return False
-                # якщо список не очищенно, то очищаємо його
-                elif check_prev_pos > 0:
-                    print("cler row")
-                    if list_grid[self.row][self.col] == 0:
-                        print("already clear")
-                    else:
-                        print(self.row , self.col)
-                        print(list_grid[self.row][self.col])
-                        for index_row in range(0 , self.LENGHT):
-                            print(self.LENGHT , "length")
-                            print(list_grid[self.row + index_row][self.col])
-                            list_grid[self.row + index_row][self.col] = 0
-                            # return False
-            elif self.check_collision == True:
-                print("banana")
-                if self.ORIENTATION_SHIP == "vertical":
-                    print("clean row")
-                    if list_grid[self.row][self.col] == 0:
-                        print("already clear")
-                    else:
-                        for index_row in range(0 , self.LENGHT):
-                            list_grid[self.row + index_row][self.col] = 0
-                            # return False
-                elif self.ORIENTATION_SHIP == "horizontal":
-                    print("clean col")
-                    if list_grid[self.row][self.col] == 0:
-                        print("already clear")
-                    else:
-                        for index_col in range(0 , self.LENGHT):
-                            list_grid[self.row][self.col + index_col] = 0
-                            # return False
-        check_for_shipsmoving[0] = 0
-       
-
-    # метод, який телепортує корабель на початкову точку і повертається в положення по горизонталі
-    def return_start_code(self):
-        r'''
-        :mod:`Метод` ``return_start_code``, для повернення корабля на початкому точку, якщо корабель не відповідає потрібним координатам ,та повертає корабель в горизонтальнеп положення.
-        >>>  self.return_start_code()
-        '''  
-        self.X_COR, self.Y_COR = self.STASIC_X, self.STASIC_Y
-        self.RECT = self.IMAGE_ROTATE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-        self.ORIENTATION_SHIP = "horizontal"
-        # Записуємо у змінну для перевірки
-        self.CHEK_ROTATION = self.ORIENTATION_SHIP
-        # Малюємо зображення за допомогою методу
-        self.load_image()
-        # Записуємо в змінну змінену позицію
-        self.RECT = self.READY_IMAGE_SHIP.get_rect(topleft=(self.X_COR, self.Y_COR))
-            
-       
-
-    def matrix_move(self, event: pygame.event, matrix_width: int, matrix_height: int, cell: int):
-        r'''
-        :mod:`Метод` ``matrix_move``, перевіряє, щоб кораблі не накладалися один на одний та щоб кораблі були щонайменше на одну клітинку один від одного.
-        >>>  ship.matrix_move(event = event, matrix_width = 620, matrix_height = 620, cell = 100)
-        '''
-        # Отримуємо координати миші
-        mouse = pygame.mouse.get_pos() 
-
-        if event.type == pygame.MOUSEBUTTONDOWN and self.RECT.collidepoint(event.pos):
-            # Початок переміщення
-            self.CHECK_MOVE = True
-
-        # Якщо ми рухаємо курсором по екрану і вже натискали на корабель
-        elif event.type == pygame.MOUSEMOTION and self.CHECK_MOVE:
-
-            self.X_COR = mouse[0] - self.RECT.width // 2
-            self.Y_COR = mouse[1] - self.RECT.height // 2
-
-
-            # Обмежуємо рух корабля межами матриці
-            self.X_COR = max(0, min(self.X_COR, matrix_width * cell - self.RECT.width))
-            self.Y_COR = max(0, min(self.Y_COR, matrix_height * cell - self.RECT.height))
-            # Обновляємопрямокутник тільки при русі
-            self.RECT.topleft = (self.X_COR, self.Y_COR)
-
-        elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
-            self.CHECK_MOVE = False
-            print(self.WIDTH , "self_width")
-            print(self.RECT.width , "self_rect")
-
-            if self.check_after_random == True:
-                print("Зашло")
-                self.clear_matrix()
-                self.check_after_random = None
-                print(list_grid)
-
-            # Перевірка перетину з іншими кораблями
-            # робимо перебір списку з кораблями, щоб модно було перевіряти чи не намагається поставити користувач корабель на корабель
-            for ship in list_ships:
-                # Перевіряємо ship != self - це щоб не перевіряти кораблик сам із собою
-                # self.RECT.colliderect(ship.RECT) - перевіримо кожен корабель зі списку з поточним кораблем, якщо їх прямокутники (колізії) перетинаються, то ставимо кораблик на початкові координати
-                if ship != self and self.RECT.colliderect(ship.RECT):
-                    print("пересекается")
-                    self.return_start_code()
-                    # self.number_cell = self.number_ship_cell
-                    # # Переробляємо значення клітини в рядок щоб можна було легко дізнатися в колонці він стоїть
-                    # str_col = str (self.number_cell)
-                    # # Обчислюємо номер рядка де стоїть корабель (наприклад 23, ділимо на 10 без залишку і отримуємо 2, ось наш стовпець)
-                    # self.row = self.number_cell // 10  
-                    if ship.col == self.col and ship.row == self.row:
-                        check_for_shipsmoving[0] += 1
-                    else:
-                        check_for_shipsmoving[0] = 0
-                    self.clear_matrix()
-                    print(list_grid)
-                    return False
- 
-            if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
-                if grid_player.Y_SCREEN - 30 <= self.Y_COR and self.Y_COR + self.RECT.height <= grid_player.Y_SCREEN + 650:
-                    self.snap_to_grid()
-
-       
-                    if self.number_ship_cell != self.number_cell and self.check_collision != True:
-                        self.clear_matrix()
-
-                    self.check_collision = None
-
-                    # Перераховуємо номер клітини, де стоїть корабель для старих координат
-                    self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
-
-
-                    print(list_grid)
-                    print("------------------------------------------------------------------------------------------------")
-                    # Цей фрагмент коду виконує перевірку на колізії між кораблем, який рухається, і іншими кораблями на 
-                    # ігровому полі. Основна мета — визначити, чи є зіткнення між двома кораблями або з іншими об'єктами, а 
-                    # також правильно оновити координати та стан корабля, якщо колізія відбулася
-                    for cell in list_object_map: 
-                            if cell.x <= self.X_COR and self.X_COR < cell.x + 62:
-                                if cell.y <= self.Y_COR and self.Y_COR < cell.y + 62:
-                                    # Дізнаємсь номер клітинки де стоїть корабель
-                                    self.number_cell = list_object_map.index(cell)
-                                    # Перераховуємо номер клітини, де стоїть корабель для старих координат
-                                    str_col = str(self.number_cell) 
-                                    # Обчислюємо номер рядка де стоїть корабель (наприклад 23, ділимо на 10 без залишку і отримуємо 2, ось наш стовпець)
-                                    self.row = self.number_cell // 10  
-                                    #Колонку кораблика обчислюємо за таким принципом
-                                    # Наприклад знову 23 число номер колонки де стоїть корабель , тоді за допомогою -1 ми беремо останнє число тобто трійку, і ось так отримуємо номер колонки
-                                    self.col = int(str_col[-1])
-
-                                    # Встановлюємо значення де стоїть корабель у матриці
-                                    if self.ORIENTATION_SHIP == "horizontal":
-                                        for index_column in range(0 , self.LENGHT):
-                                            list_grid[self.row][self.col + index_column] = self.LENGHT
-                                    elif self.ORIENTATION_SHIP == "vertical":
-                                        for index_row in range(0 , self.LENGHT):
-                                            list_grid[self.row + index_row][self.col] = self.LENGHT
-                    
-                     
-                    for shiper in list_ships:
-                        # перевірка щоб корабель який рухаємо не порівнювали із самим собою
-                        if list_ships.index(shiper) != list_ships.index(self):
-                            if shiper.ORIENTATION_SHIP == "horizontal":
-                                if self.X_COR >= shiper.X_COR - 62:
-                                    if self.X_COR < shiper.X_COR + shiper.RECT.width + 62:
-                                        if self.Y_COR >= shiper.Y_COR - 62:
-                                            if self.Y_COR < shiper.Y_COR + 124:
-                                                self.X_COR = self.STASIC_X
-                                                self.Y_COR = self.STASIC_Y
-                                                print(self.row , self.col)
-                                                self.check_collision = True
-                                                self.clear_matrix()
-                                                self.return_start_code()
-                                                break
-                                        
-                                
-                                if self.X_COR + self.RECT.width > shiper.X_COR - 62:
-                                    if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
-                                            if self.ORIENTATION_SHIP == "horizontal":
-                                                if self.Y_COR >= shiper.Y_COR - 62:
-                                                    if self.Y_COR < shiper.Y_COR + 124:
-                                                            
-                                                            self.X_COR = self.STASIC_X
-                                                            self.Y_COR = self.STASIC_Y
-                                                            print(self.row , self.col)
-                                                            self.check_collision = True
-                                                            self.clear_matrix()
-                                                            self.return_start_code()
-                                                            break
-                                                
-                                            elif self.ORIENTATION_SHIP == "vertical":
-                                                if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
-                                                    if self.Y_COR + self.RECT.height <= shiper.Y_COR + 124:
-                                                            print("HAAHAHAHAHHAHA")
-                                                            self.X_COR = self.STASIC_X
-                                                            self.Y_COR = self.STASIC_Y
-                                                            print(self.row , self.col)
-                                                            self.check_collision = True
-                                                            self.clear_matrix()
-                                                            self.return_start_code()
-                                                            break
-                                                    
-
-                            elif shiper.ORIENTATION_SHIP == "vertical":
-                                if self.X_COR >= shiper.X_COR - 62:
-                                    if self.X_COR < shiper.X_COR + shiper.RECT.width + 62:
-                                        if self.Y_COR >= shiper.Y_COR - 62:
-                                            if self.Y_COR < shiper.Y_COR + shiper.RECT.height + 62:
-                                                    self.X_COR = self.STASIC_X
-                                                    self.Y_COR = self.STASIC_Y
-                                                    print(self.row , self.col)
-                                                    self.check_collision = True
-                                                    self.clear_matrix()
-                                                    self.return_start_code()
-                                                    break
-                                            
-
-                                if self.X_COR + self.RECT.width > shiper.X_COR - 62:
-                                    if self.X_COR + self.RECT.width <= shiper.X_COR + shiper.RECT.width + 62:
-                                            if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
-                                                if self.Y_COR + self.RECT.height <= shiper.Y_COR + shiper.RECT.height + 62:
-                                                        self.X_COR = self.STASIC_X
-                                                        self.Y_COR = self.STASIC_Y
-                                                        print(self.row , self.col)
-                                                        self.check_collision = True
-                                                        self.clear_matrix()
-                                                        self.return_start_code()
-                                                        break
-                        
-```
-
-[⬆️Table of contents](#articles)
 
 <a name="prbl_project"><h2>Problems during development</h2></a>
 Під час написання коду ми зіштовхнулися з низкою труднощів, які вплинули як на технічну реалізацію, так і на загальну структуру проєкту.
 Наприклад, ми виявили проблему з повторним запуском сервера. Якщо сервер вже було запущено, спроба повторного запуску викликала помилку. На жаль, це питання поки не вдалося вирішити, однак ми плануємо виправити його в майбутніх версіях, щоб забезпечити стабільність роботи програми.
-Складнощі виникли й під час реалізації механіки розташування кораблів. Було необхідно забезпечити, щоб:
-
-1 Кораблі не могли розташовуватися один на одному.
-2 Розміщення кораблів відповідало правилам гри, тобто вони мали стояти з відступом в одну клітинку від інших кораблів.
+Складнощі виникли й під час реалізації розташування кораблів. Було необхідно забезпечити, щоб, кораблі не могли розташовуватися один на одному та зробити так, щоб розміщення кораблів відповідало правилам гри, тобто вони мали стояти з відступом в одну клітинку від інших кораблів.
 
 Реалізація цієї логіки вимагала значного часу та зусиль, але на даний момент проблему вирішено, і розташування кораблів відповідає ігровим правилам.
-Найбільшою проблемою стала робота з клієнт-серверною системою. Початкова структура коду виявилася неефективною, що призвело до:
-
-1 Постійних багів із перепідключенням клієнта і сервера.
-2 Проблем із коректним обміном даними.
+Найбільшою проблемою стала робота з клієнт-серверною системою. Початкова структура коду виявилася неефективною, що призвело до постійних багів із перепідключенням клієнта і сервера та проблем із коректним обміном даними.
 Через те, що ми спочатку передавали всю матрицю даних одразу, з'єднання між клієнтом і сервером часто розривалося, що серйозно заважало ігровому процесу. Щоб розв’язати цю проблему, ми кардинально змінили підхід до передачі даних: тепер дані передаються частинами через список, що значно знизило навантаження на мережу і покращило стабільність гри.
 
 Ще одним викликом стало те, що не вся гра написана через класи. Багато функцій, зокрема вікна гри, були реалізовані у вигляді окремих функцій, а не класів. Це ускладнювало модифікацію коду, але в перспективі ми плануємо переписати основні елементи, використовуючи класи для підвищення гнучкості та читабельності програми.
@@ -1548,16 +2051,10 @@ In the volume_settings folder, there are files with functions that are responsib
 <summary>English version</summary>
 While writing the code, we encountered a number of difficulties that affected both the technical implementation and the overall structure of the project.
 For example, we discovered a problem with restarting the server. If the server was already running, an attempt to restart it caused an error. Unfortunately, this issue has not yet been resolved, but we plan to fix it in future versions to ensure the stability of the program.
-Difficulties also arose during the implementation of the ship placement mechanics. It was necessary to ensure that:
-
-1 Ships could not be placed on top of each other.
-2 The placement of ships corresponded to the rules of the game, that is, they had to be placed one cell apart from other ships.
+Difficulties also arose during the implementation of the ship placement mechanics. It was necessary to ensure that Ships could not be placed on top of each other, The placement of ships corresponded to the rules of the game, that is, they had to be placed one cell apart from other ships.
 
 The implementation of this logic required considerable time and effort, but at the moment the problem has been resolved, and the placement of ships corresponds to the game rules.
-The biggest problem was working with the client-server system. The initial code structure turned out to be inefficient, which led to:
-
-1 Constant bugs with client and server reconnection.
-2 Problems with correct data exchange.
+The biggest problem was working with the client-server system. The initial code structure turned out to be inefficient, which led to, Constant bugs with client and server reconnection, Problems with correct data exchange.
 Because we initially transferred the entire data matrix at once, the connection between the client and the server was often broken, which seriously interfered with the gameplay. To solve this problem, we radically changed the approach to data transfer: now data is transferred in parts via a list, which significantly reduced the load on the network and improved the stability of the game.
 
 Another challenge was that not the entire game was written in classes. Many functions, including the game windows, were implemented as separate functions, not classes. This made it difficult to modify the code, but in the future we plan to rewrite the main elements using classes to increase the flexibility and readability of the program.
@@ -1578,7 +2075,7 @@ Despite all the difficulties, we managed to overcome the bugs and have this game
 
 Також ми навчилися правильно **структурувати файли** у проєкті та організовувати роботу з **віртуальними середовищами**. Це дозволило нам уникнути багатьох помилок, пов'язаних з неузгодженістю версій бібліотек і зависанням програми.
 
-Одним з важливих аспектів роботи над цим проєктом було **розуміння обміну даними між користувачами** через **IP-адреси** та **порти**. Ми детально вивчали принципи роботи інтернет-протоколів **IPv4** та **IPv6**, їх особливості і відмінності. Ми дізналися про відмінності у кількості символів (32 біт для IPv4 і 128 біт для IPv6), а також про різні способи застосування цих протоколів в реальних умовах.
+Одним з важливих аспектів роботи над цим проєктом було **розуміння обміну даними між користувачами** через **IP-адреси** та **порти**. Ми детально вивчали принципи роботи інтернет-протоколів **IPv4** та **IPv6**, їх особливості і відмінності. 
 
 Завдяки використанню **TCP** ми змогли забезпечити безпечний обмін даними між клієнтом та сервером. Цей транспортний протокол гарантує, що дані будуть доставлені без помилок і не будуть загублені в процесі передачі. Ми також працювали з бібліотекою **socket**, що дозволила нам створювати з'єднання між клієнтами та серверами. Це стало важливою частиною нашої гри, оскільки без цієї бібліотеки ми не змогли б реалізувати багатокористувацький режим.
 
@@ -1599,7 +2096,7 @@ Another useful skill that we mastered was using **Figma** to create animations a
 
 We also learned how to **structure files** in the project correctly and organize work with **virtual environments**. This allowed us to avoid many errors related to library version inconsistencies and program hangs.
 
-One of the important aspects of working on this project was **understanding data exchange between users** via **IP addresses** and **ports**. We studied in detail the principles of operation of the **IPv4** and **IPv6** Internet protocols, their features and differences. We learned about the differences in the number of characters (32 bits for IPv4 and 128 bits for IPv6), as well as the different ways these protocols are used in real-world situations.
+One of the important aspects of working on this project was **understanding data exchange between users** via **IP addresses** and **ports**. We studied in detail the principles of operation of the **IPv4** and **IPv6** Internet protocols, their features and differences. 
 
 Using **TCP**, we were able to ensure secure data exchange between the client and the server. This transport protocol ensures that data is delivered without errors and is not lost during transmission. We also worked with the **socket** library, which allowed us to create connections between clients and servers. This became an important part of our game, since without this library we would not have been able to implement a multiplayer mode.
 
