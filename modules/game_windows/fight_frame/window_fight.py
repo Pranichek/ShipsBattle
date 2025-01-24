@@ -254,7 +254,6 @@ def fight_window():
     Schechik_before_removeall = [0]
     tsest = [False]
     while run_game:
-        try:
             module_screen.FPS.tick(60)
             #----------------------------------------------------------------
             ship_border()
@@ -1309,8 +1308,6 @@ def fight_window():
                                                     y_animation = list_object_map[cltx].y
                                                     x_hit_the_ship[0] = x_animation
                                                     y_hit_the_ship[0] = y_animation
-                                                    shop.flag_put_out_the_fire[0] = "no"
-                                                    activate_fire_fighter[0] = False
                                                     # Узнаем номер клетки где стоит кораблик
                                                     number_cell_our = list_object_map.index(cell)
                                                     # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
@@ -1322,6 +1319,8 @@ def fight_window():
                                                     col = int(str_col_our[-1])
                                                     if row in pozhar_row:
                                                         if col in pozhar_col:
+                                                            shop.flag_put_out_the_fire[0] = "no"
+                                                            activate_fire_fighter[0] = False
                                                             fire_fighter_anim[0] = True
                                                             fire_fighter_animation.X_COR = x_animation
                                                             fire_fighter_animation.Y_COR = y_animation
@@ -1632,5 +1631,3 @@ def fight_window():
             module_screen.main_screen.blit(pygame.transform.scale(module_screen.main_screen, (1280 , 832)), render_offset)
             # оновлюємо екран
             pygame.display.flip()
-        except:
-            continue

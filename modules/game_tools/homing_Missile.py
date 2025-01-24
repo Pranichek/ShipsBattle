@@ -56,18 +56,16 @@ def find_all_auto_rocket(matrix, row, col, target_value):
     for dr, dc in directions:
         new_row, new_col = row + dr, col + dc
         neighbors.extend(find_all_neighbors(matrix, new_row, new_col, target_value))
-
+        
     return neighbors
 
 def find_all_neighbors(matrix, row, col, target_value, visited=None):
-    # Initialize the visited matrix during the first call
     if visited is None:
         visited = [[False for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
 
     # List for storing neighbors
     neighbors = []
 
-    # Base case: check if the cell is out of bounds or already visited
     if (
         row < 0 or col < 0 or
         row >= len(matrix) or col >= len(matrix[0]) or
@@ -75,7 +73,6 @@ def find_all_neighbors(matrix, row, col, target_value, visited=None):
     ):
         return neighbors
 
-    # Mark the cell as visited
     visited[row][col] = True
 
     # If the cell contains `7`, skip it but continue searching
