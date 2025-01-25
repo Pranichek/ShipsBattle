@@ -22,14 +22,16 @@ from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_auto_rocket
 from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection
-from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix
+from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix, shield_func
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 from ..button_pressed import check_press_button
+from ...json_functions import write_json, read_json
 
 list_check_shop = [None]
 def show_shop():
     if shop.shop_item[0].TURN == "Down": 
         list_check_shop[0] = True
+flag_func_shield = [True]
 
 # функция для отчистки активации оружия(того что кпуил пользователь)
 def clear_weapon_function():
@@ -54,6 +56,19 @@ pozhar_col =[]
 
 #((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
+#************************************************************************************************
+new_data = [""]
+data = [""]
+
+hit_shield =[False]
+
+
+
+def update_shield():
+    flag_func_shield[0] = False 
+
+count_turn_list = [0]
+#************************************************************************************************
 # картинка курсора
 cursor_image = pygame.transform.scale(pygame.image.load(abspath(join(__file__, "..", "..", "..", "..", "media", "decorations", "cursor.png"))), (32, 32))
 cursor_img_rect = cursor_image.get_rect()
@@ -254,6 +269,7 @@ def fight_window():
     Schechik_before_removeall = [0]
     tsest = [False]
     while run_game:
+            # print(f'{list_grid}')
             module_screen.FPS.tick(60)
             #----------------------------------------------------------------
             ship_border()
@@ -390,6 +406,7 @@ def fight_window():
                                 elif data_enemy == "auto_rocket":
                                     index_cell = 1
                                     count_hit = 0
+                                    flag_shield = [False]
                                     for cell in check_data[1:-1]:
                                         if index_cell % 2 == 0:
                                             if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [1, 2, 3, 4, 7]:
@@ -400,6 +417,14 @@ def fight_window():
                                                     list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 7
                                             elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [0, 5]:
                                                 list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 5
+                                            elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [6]:
+                                                flag_shield[0] = 'hit'
+                                                data_player_shot.append("shield")
+                                                data_player_shot.append(flag_shield)
+                                                data_player_shot.append(str(row))
+                                                data_player_shot.append(str(col))
+                                                list_check_need_send[0] = True
+                                                print('<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>')
                                         index_cell += 1
                                     if count_hit == 0:
                                         if server_module.list_player_role[0] == "server_player":
@@ -473,6 +498,44 @@ def fight_window():
                             server_module.check_time[0] = 0
                         if check_data[0] == "restore_cell":
                             enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
+#**************************************************************************************************************************
+                        
+                        if  'shield' in check_data:
+                            print('================================================================')
+                            if len(check_data) == 6 and 'place_shield' in check_data[1]:
+                                shipik = int(check_data[3])
+                                row = int(check_data[2])
+                                col = int(check_data[-2])
+                                json_data = {
+                                    "shipik" : shipik,
+                                    "row" : row,
+                                    "col" : col
+                                }
+                                write_json(filename = "shipik.json", object_dict = json_data)
+                            
+                        
+                            if 'place_shield' in check_data:
+                                print('6666666666666666666666666666666')
+                                row = int(check_data[2])
+                                col = int(check_data[-2])
+                                enemy_matrix[row][col] = 6
+
+                                
+                            elif 'hit' in check_data:
+                                data = read_json(name_file = "shipik.json")
+                                shipik = data["shipik"]
+                                row = data["row"]
+                                col = data["col"]
+                                list_grid[row][col] = shipik    
+
+                        elif count_turn_list[0] >= 3:
+                            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                            data = read_json(name_file = "shipik.json")
+                            shipik = data["shipik"]
+                            row = data["row"]
+                            col = data["col"]
+                            list_grid[row][col] = shipik    
+#******************************************************************************************
                         if check_data[0] == "medal":
                             for medal in check_data[1:-1]:
                                 print(check_data[1:-1])
@@ -1290,6 +1353,13 @@ def fight_window():
                                                     )
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
+
+                                            if flag_func_shield[0] == True:
+                                                number_cell_our = list_object_map.index(cell)
+                                                str_col_our = str(number_cell_our) 
+                                                row = number_cell_our // 10  
+                                                col = int(str_col_our[-1])
+                                                shield_func(row = row, col = col)
 
                                             if pozhar_col !=  [] :
                                                 if shop.flag_put_out_the_fire[0] == "yes" and activate_fire_fighter[0] == True:
