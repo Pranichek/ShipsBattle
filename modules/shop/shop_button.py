@@ -97,28 +97,28 @@ class Button_Shop:
         if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):
             self.ACTIVE = False
 
-# копии списков с задниями чтоюы моэно было брать новые
+# # копии списков с задниями чтоюы моэно было брать новые
 first_tasks_copy = list_first_task.copy()
 second_tasks_copy = list_second_task.copy()
 third_tasks_copy = list_third_task.copy()
 fourth_tasks_copy = list_fourth_task.copy()
-# def new_tasks():
-#     if done_task_three in shop_item:
-#         done_task_three.VISIBLE = 0
-#     if done_task_two in shop_item:
-#         done_task_two.VISIBLE = 0
-#     if done_task_one in shop_item:
-#         done_task_one.VISIBLE = 0
-#     if done_task_four in shop_item:
-#         done_task_four.VISIBLE = 0
-#     first_task.TEXT = random.choice(first_tasks_copy)
-#     first_task.update_text_for_task()
-#     second_task.TEXT = random.choice(second_tasks_copy)
-#     second_task.update_text_for_task()
-#     third_task.TEXT = random.choice(third_tasks_copy)
-#     third_task.update_text_for_task()
-#     fourth_task.TEXT = random.choice(fourth_tasks_copy)
-#     fourth_task.update_text_for_task()
+# # def new_tasks():
+# #     if done_task_three in shop_item:
+# #         done_task_three.VISIBLE = 0
+# #     if done_task_two in shop_item:
+# #         done_task_two.VISIBLE = 0
+# #     if done_task_one in shop_item:
+# #         done_task_one.VISIBLE = 0
+# #     if done_task_four in shop_item:
+# #         done_task_four.VISIBLE = 0
+# #     first_task.TEXT = random.choice(first_tasks_copy)
+# #     first_task.update_text_for_task()
+# #     second_task.TEXT = random.choice(second_tasks_copy)
+# #     second_task.update_text_for_task()
+# #     third_task.TEXT = random.choice(third_tasks_copy)
+# #     third_task.update_text_for_task()
+# #     fourth_task.TEXT = random.choice(fourth_tasks_copy)
+# #     fourth_task.update_text_for_task()
 
 
 def test():
@@ -130,12 +130,10 @@ waste_money = [0]
 flag_arson = ["no"]
 flag_put_out_the_fire = ["no"]
 def buy_fire_rocket():
-    if money_list[0] >= 80:
-        buy_product_sound.play2(loops = 1)
-        waste_money[0] += 80
-        print(4589948589498458948959584984598459458)
-        print(586985689564985469856)
-        flag_arson[0] = "yes"
+    # if money_list[0] >= 80:
+    buy_product_sound.play2(loops = 1)
+    waste_money[0] += 80
+    flag_arson[0] = "yes"
 
 def buy_fire_fighter():
     if flag_put_out_the_fire[0] == "no":

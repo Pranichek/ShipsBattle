@@ -674,15 +674,14 @@ def fight_window():
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = module_screen.main_screen)
 
-        
         if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
             if server_module.check_time[0]==2:
                 test_time[0] = 2
-            if server_module.check_time[0]==1 and server_module.check_time[0] != test_time[0]:
+            if server_module.check_time[0]== 1 and server_module.check_time[0] != test_time[0]:
                 for index, element in enumerate(Cordi_Burning_Ship):
                     try:
                         if len(element) != 0:
-                            if Cordi_Burning_Ship[index][0] !=0 and  Cordi_Burning_Ship[index]:
+                            if Cordi_Burning_Ship[index][0] != 0 and  Cordi_Burning_Ship[index]:
                                 if Cordi_Burning_Ship[index][0] == 4:
                                     ship_element = 1
                                 elif Cordi_Burning_Ship[index][0] == 3:
@@ -699,25 +698,25 @@ def fight_window():
                                     row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
                                     Cordi_Burning_Ship[index][0] = 0
                                 
-                                if  row_fire in stew_row  and  col_fire in stew_col :
+                                if  row_fire in stew_row  and  col_fire in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
                                     flagstop = True
-                                    tsest[0]=True
+                                    tsest[0]= True
                                     Schechik_before_removeall[0] = 40
             
-                                if  (row_fire +1) in stew_row  and  col_fire in stew_col :
+                                if  (row_fire +1) in stew_row  and  col_fire in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
                                     flagstop = True
                                     tsest[0] = True
                                     Schechik_before_removeall[0] = 40
                                                                     
-                                if  row_fire in stew_row  and  (col_fire + 1) in stew_col :
+                                if  row_fire in stew_row  and  (col_fire + 1) in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
                                     flagstop = True
                                     tsest[0] = True
                                     Schechik_before_removeall[0] = 40
                                     
-                                if  (row_fire -1) in stew_row  and  col_fire in stew_col :
+                                if  (row_fire -1) in stew_row  and  col_fire in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
                                     flagstop = True
                                     tsest[0]=True
@@ -729,18 +728,23 @@ def fight_window():
                                     tsest[0]=True
                                     Schechik_before_removeall[0] = 40
 
-                                if flagstop != True:  
+                                if flagstop != True: 
+                                    print(13) 
                                     enemy_matrix[row_fire][col_fire] = 7
                                     data_player_shot.append("fire")
                                     data_player_shot.append(row_fire)
                                     data_player_shot.append(col_fire)
-                            
-                                    row_fire_col_anim.append(row_fire)
-                                    col_fire_row_anim.append(col_fire)
+                                    if len(row_fire_col_anim) > 0:
+                                        for fire in list_fire:
+                                            fire[-1] += 1
 
-
+                                    row_fire_col_anim.append([row_fire, 0])
+                                    col_fire_row_anim.append([col_fire, 0])
                                     if Cordi_Burning_Ship[index][0] <= 5 - len(element)-1:  
                                         Cordi_Burning_Ship[index][0]= 0
+                                        for fire in list_fire:
+                                            if fire[0] == row_fire and fire[1] == col_fire:
+                                                fire[-1] += 1
                                     else:
                                         Cordi_Burning_Ship[index][0] -=1
                             else:
@@ -753,38 +757,11 @@ def fight_window():
                 list_check_need_send[0] = True
                 test_time[0] = server_module.check_time[0]
 
-        if len(enemy_fire_row) > 0:
-            for index_cell in range(0, len(enemy_fire_row)):
-                row_anim_enemy = enemy_fire_row[index_cell]
-                col_anim_enemy = enemy_fire_col[index_cell]
-                str_col_anima_enemy = str(col_anim_enemy)
-                cltx = (row_anim_enemy * 10) + int(str_col_anima_enemy[-1])
-                x = list_object_map[cltx].x
-                y = list_object_map[cltx].y
-
-                print(row_anim_enemy, col_anim_enemy, "dfdfvkdfvldmdfkvdkffdkllkdf")
-
-                fire_enemy_animation = Animation(
-                    image_name = "0.png", 
-                    width = 55, 
-                    height = 50, 
-                    x_cor = x,
-                    y_cor = y, 
-                    need_clear = False, 
-                    name_folder = "fire_animation",
-                    animation_speed = 6
-                    )
-                bolinka_enemy = True
-                for fireok_enemy in list_enemy_fire:
-                    if fireok_enemy[0] == row_anim_enemy and fireok_enemy[1] == col_anim_enemy:
-                        bolinka_enemy = False
-                if bolinka_enemy:
-                    list_enemy_fire.append((row_anim_enemy, col_anim_enemy, fire_enemy_animation))
 
         if len(row_fire_col_anim) > 0 and check_animation[0] == "":
             for i in range(0 , len(row_fire_col_anim)):
-                row_anim = row_fire_col_anim[i]
-                col_anim = col_fire_row_anim[i]
+                row_anim = row_fire_col_anim[i][0]
+                col_anim = col_fire_row_anim[i][0]
                 str_col_anima = str(col_anim)
                 cltx = (row_anim * 10) + int(str_col_anima[-1])
                 x = list_object_map_enemy[cltx].x
@@ -805,19 +782,17 @@ def fight_window():
                     if fireok[0] == row_anim and fireok[1] == col_anim:
                         bolinka = False
                 if bolinka:
-                    list_fire.append((row_anim, col_anim, fire_animation))
-                    
-        for fire_animation in list_fire:
-            fire_animation[2].animation(main_screen = module_screen.main_screen , count_image = 9)
-            if fire_animation[2].COUNT_IMAGES >= 7:
-                fire_animation[2].COUNT_IMAGES = 0
-                fire_animation[2].IS_ANIMATION_DONE = False
+                    print(4434)
+                    list_fire.append([row_anim, col_anim, fire_animation, 0])
 
-        for enemy_fire in list_enemy_fire:
-            enemy_fire[2].animation(main_screen = module_screen.main_screen , count_image = 9)
-            if enemy_fire[2].COUNT_IMAGES >= 7:
-                enemy_fire[2].COUNT_IMAGES = 0
-                enemy_fire[2].IS_ANIMATION_DONE = False
+        for fire_animation in list_fire:
+            if fire_animation[-1] == 0:
+                fire_animation[2].animation(main_screen = module_screen.main_screen , count_image = 9)
+                if fire_animation[2].COUNT_IMAGES >= 7:
+                    fire_animation[2].COUNT_IMAGES = 0
+                    fire_animation[2].IS_ANIMATION_DONE = False
+
+        
 
         #----------------------------------------------------------------
         #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
@@ -962,7 +937,7 @@ def fight_window():
             x_enemy_cross = x_enemy_cross, 
             y_enemy_cross = y_enemy_cross, 
             list_cross_player = list_cross_player,
-            enemy_fire = list_enemy_fire
+            list_fire = list_fire
             
         )
 
