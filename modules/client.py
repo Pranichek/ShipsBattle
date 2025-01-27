@@ -71,7 +71,6 @@ def start_client():
         #зберігаємо інформацію у json файл
         write_json(filename = "data_base.json" , object_dict = list_users)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
-        # try:
         port_client = int(input_port.user_text)
         client_socket.connect((str(input_ip_adress.user_text), port_client))  # Подключение к серверу
         print("Клиент подключён к серверу.")
