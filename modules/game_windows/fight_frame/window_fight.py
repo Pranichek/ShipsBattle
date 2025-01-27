@@ -128,15 +128,15 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
     return center_x, center_y
 
 
+# список в котором храним анимацию огня если игрок поджог корабль
+list_fire = []
 row_fire_col_anim = []
 col_fire_row_anim = []
 
-enemy_fire_col = []
-enemy_fire_row = []
-# список в котором храним анимацию огня если игрок поджог корабль
-list_fire = []
-# список в котором храним анимацию огня если враг поджог корабль
-list_enemy_fire = []
+enemy_col_fire = []
+enemy_row_fire = []
+enemy_list_fire =[]
+enemy_check_fire = [0]
 
 # флаг для анимации огнетушителя
 fire_fighter_anim = [False]
@@ -349,6 +349,12 @@ def fight_window():
                                 server_module.turn[0] = "server_turn"
                         for data_enemy in check_data:
                             if "fire" in check_data:
+                                if enemy_check_fire[0] == 0:
+                                    if len(enemy_row_fire) > 0:
+                                        for fire in enemy_list_fire:
+                                            fire[-1] += 1
+                                enemy_check_fire[0] += 1
+
                                 indices_fire = []
                                 for i, value in enumerate(check_data):
                                     if value == "fire":
@@ -359,9 +365,9 @@ def fight_window():
                                     pozhar_col.append(int(check_data[(index_fire +2)]))
                                     list_grid[int(check_data[(index_fire +1)])][int(check_data[(index_fire +2)])] = 7
 
-                                    enemy_fire_col.append(int(check_data[(index_fire +2)]))
-                                    enemy_fire_row.append(int(check_data[(index_fire +1)]))
-                                    
+                                    enemy_row_fire.append([int(check_data[(index_fire + 1)]), 0])
+                                    enemy_col_fire.append([int(check_data[(index_fire + 2)]), 0])
+                                
                             elif "put_out_the_fire" in check_data:
                                 index_fire  = check_data.index("put_out_the_fire")
                                 stew_row.append(int(check_data[(index_fire +1)]))
@@ -445,37 +451,39 @@ def fight_window():
                                 server_module.check_time[0] = 0
                     except:
                         continue
-                    if check_data[0] == "random_hits":
+                    if check_data[0] == 'random_hits':
+                        print(check_data)
                         index_cell = 0
                         count_hit = 0
-                        for cell in check_data[1:-1]:
-                            if index_cell % 2 == 0:
-                                if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [1, 2, 3, 4, 7]:
-                                    count_hit += 1
-                                    if list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] == 7:
-                                        pass
-                                    else:
-                                        list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 7
-                                elif list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] in [0, 5]:
-                                    list_grid[int(check_data[index_cell - 1])][int(check_data[index_cell])] = 5
-                            index_cell += 1
-                    
+                        for cell in range(1 , 7):
+                            print("bomb")
+                            try:
+                                if cell % 2 == 0:
+                                    if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
+                                        count_hit += 1
+                                        if list_grid[int(check_data[cell - 1])][int(check_data[cell])] == 7:
+                                            pass
+                                        else:
+                                            list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 7
+                                    elif list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [0, 5]:
+                                        list_grid[int(check_data[cell - 1])][int(check_data[cell])] = 5
+                            except:
+                                continue
+                        server_module.check_time[0] = 0
+                        print(server_module.check_time[0], "random hits time")
                         if count_hit == 0:
                             if server_module.list_player_role[0] == "server_player":
                                 server_module.turn[0] = "server_turn"
                             elif server_module.list_player_role[0] == "client_player":
                                 server_module.turn[0] = "client_turn"
-                        elif count_hit >= 1:
-                            data_player_shot.append("enemy_turn")
-                            list_check_need_send[0] = True
+                        else:
                             if server_module.list_player_role[0] == "server_player":
                                 server_module.turn[0] = "client_turn"
                             elif server_module.list_player_role[0] == "client_player":
                                 server_module.turn[0] = "server_turn"
-                        server_module.check_time[0] = 0
-                    if check_data[0] == "restore_cell":
+                    elif check_data[0] == "restore_cell":
                         enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
-                    if check_data[0] == "medal":
+                    elif check_data[0] == "medal":
                         for medal in check_data[1:-1]:
                             print(check_data[1:-1])
                             if int(medal) not in server_module.save_medals_coordinates:
@@ -483,9 +491,11 @@ def fight_window():
                     elif check_data[0] == "money":
                         server_module.enemy_balance[0] = int(check_data[1])
                         enemy_balance_in_jar.update_text()
+                    if check_data[0] == "keep-alive":
+                        enemy_check_fire[0] = 0
         except:
             continue
-
+        
         # обнуление времени и хода, если игрок не походил
         if server_module.check_time[0] >= 30:
             server_module.check_time[0] = 0
@@ -669,7 +679,24 @@ def fight_window():
             list_ships[num].draw_sheep(screen = module_screen.main_screen)
 
         for cross_animation in list_cross_player:
-            cross_animation.animation(main_screen = module_screen.main_screen , count_image = 13)
+            if len(enemy_list_fire) > 0:
+                for row_col in enemy_list_fire:
+                    exist = False
+                    for cltk in list_object_map:
+                        if cltk.x == cross_animation.X_COR and cltk.y == cross_animation.Y_COR:
+                            number_cell_cross = list_object_map.index(cltk)
+                    row_anim = number_cell_cross // 10
+                    col_anim = number_cell_cross % 10
+
+                    for row_col_enemy in enemy_list_fire:
+                        if row_col_enemy[0] == row_anim and row_col_enemy[1] == col_anim:
+                            check_time = row_col_enemy[-1]
+                    if check_time == 0:
+                        exist = True
+                    if exist == False:
+                        cross_animation.animation(main_screen = module_screen.main_screen , count_image = 13)
+            else:
+                cross_animation.animation(main_screen = module_screen.main_screen , count_image = 13)
 
         # кнопка для открытия магазина
         shop_and_tasks.draw(surface = module_screen.main_screen)
@@ -729,7 +756,6 @@ def fight_window():
                                     Schechik_before_removeall[0] = 40
 
                                 if flagstop != True: 
-                                    print(13) 
                                     enemy_matrix[row_fire][col_fire] = 7
                                     data_player_shot.append("fire")
                                     data_player_shot.append(row_fire)
@@ -756,8 +782,8 @@ def fight_window():
                     
                 list_check_need_send[0] = True
                 test_time[0] = server_module.check_time[0]
-
-
+        #----------------------------------------------------------------
+        # когда игрок стреляет огнем анимация
         if len(row_fire_col_anim) > 0 and check_animation[0] == "":
             for i in range(0 , len(row_fire_col_anim)):
                 row_anim = row_fire_col_anim[i][0]
@@ -791,6 +817,43 @@ def fight_window():
                 if fire_animation[2].COUNT_IMAGES >= 7:
                     fire_animation[2].COUNT_IMAGES = 0
                     fire_animation[2].IS_ANIMATION_DONE = False
+                
+        #----------------------------------------------------------------
+
+        #----------------------------------------------------------------
+        #огонь когда тсреляет соперник
+        if len(enemy_row_fire) > 0:
+            for i in range(0 , len(enemy_row_fire)):
+                row_anim = enemy_row_fire[i][0]
+                col_anim = enemy_col_fire[i][0]
+                str_col_anima = str(col_anim)
+                cltx = (row_anim * 10) + int(str_col_anima[-1])
+                x = list_object_map[cltx].x
+                y = list_object_map[cltx].y
+
+                fire_animation = Animation(
+                    image_name = "0.png", 
+                    width = 55, 
+                    height = 50, 
+                    x_cor = x,
+                    y_cor = y + 5, 
+                    need_clear = False, 
+                    name_folder = "fire_animation",
+                    animation_speed = 6
+                    )
+                bolinka = True
+                for fireok in enemy_list_fire:
+                    if fireok[0] == row_anim and fireok[1] == col_anim:
+                        bolinka = False
+                if bolinka:
+                    enemy_list_fire.append([row_anim, col_anim, fire_animation, 0])
+        #----------------------------------------------------------------
+        for enemy_fire in enemy_list_fire:
+            if enemy_fire[-1] == 0:
+                enemy_fire[2].animation(main_screen = module_screen.main_screen , count_image = 9)
+                if enemy_fire[2].COUNT_IMAGES >= 7:
+                    enemy_fire[2].COUNT_IMAGES = 0
+                    enemy_fire[2].IS_ANIMATION_DONE = False
 
         
 
@@ -933,13 +996,14 @@ def fight_window():
         shop.button_restores_cell.draw(screen = module_screen.main_screen)
 
         # эти функция для проверки , попал ли соперник по нашем кораблям
-        check_and_add_hit_markers(
-            x_enemy_cross = x_enemy_cross, 
-            y_enemy_cross = y_enemy_cross, 
-            list_cross_player = list_cross_player,
-            list_fire = list_fire
-            
-        )
+        check_fire = server_module.enemy_data[0].split(' ')
+        if check_fire[0] == "keep-alive":
+            check_and_add_hit_markers(
+                x_enemy_cross = x_enemy_cross, 
+                y_enemy_cross = y_enemy_cross, 
+                list_cross_player = list_cross_player,
+                enemy_list_fire = enemy_list_fire 
+            )
 
         # анимация использования аптечки
         if health_anim[0] == True:
@@ -1373,8 +1437,9 @@ def fight_window():
                                                             list_check_need_send[0] = True
                                                 elif activate_random_hits[0] == True:
                                                     random_hits_matrix()
-                                                    activate_random_hits[0] = False
+                                                    list_check_need_send[0] = True
                                                     shop.random_hits[0] = False
+                                                    activate_random_hits[0] = False
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
                                                 # автоудар
@@ -1524,7 +1589,7 @@ def fight_window():
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
                                                 # простой удар
-                                                elif activate_bomb[0] == False and activate_auto_rocket[0] == False and activate_radar[0] == False:
+                                                elif activate_bomb[0] == False and activate_auto_rocket[0] == False and activate_radar[0] == False and activate_random_hits[0] == False:
                                                     simple_shot(
                                                         col = col, 
                                                         row = row, 

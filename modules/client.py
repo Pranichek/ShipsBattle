@@ -117,6 +117,7 @@ def start_client():
                         dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
                     else:
                         print("Index error")
+                        check_can_connect_to_fight[0] = True
                 else:
                     time.sleep(0.2)
                     check_two_times.append(3)
