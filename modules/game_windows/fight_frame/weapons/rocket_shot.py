@@ -83,9 +83,9 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
             list_check_need_send[0] = True
 
             if magnat_medal.ACTIVE == True:
-                count_money_hit[0] += 3
+                count_money_hit[0] += 15
 
-            count_money_hit[0] += 3
+            count_money_hit[0] += 5
             # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
             if check_animation_rocket[0] != "fire_rocket":
                 check_animation_rocket[0] = "start_animation"

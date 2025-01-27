@@ -9,6 +9,7 @@ from ...classes.class_button import Button
 from ..change_window import change_scene
 from ..button_pressed import button_action, check_press_button
 from ...volume_settings import off_sound_button, volume_up_button, volume_down_button
+from ..waiting_frame import apply_fade_effect
 
 
 #картинки
@@ -21,6 +22,22 @@ second_cold_image = DrawImage(width= 152 , height= 68 , x_cor= 940, y_cor= 716 ,
 create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , image_hover_path= "create_button_hover.png" , width= 346 , height = 80 , action = button_action)
 #кнопка кторая перекидывает на фрейм по присоеденению к игре(серверу)
 join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_hover_path= "join_button_hover.png" , width= 346 , height = 80 , action = button_action)
+
+check_run_game = [False]
+def change_on_rules():
+    apply_fade_effect(screen = main_screen)
+    change_scene(game_windows.rules_window())
+    check_run_game[0] = True
+    
+rule_button = Button(
+    x = 1173,
+    y = 27,
+    width = 80,
+    height = 58,
+    image_path = "rules_button.png",
+    image_hover_path = "rules_button_hover.png",
+    action = change_on_rules
+)
 # список для того чтобы гланая музыка играла тоьлко один раз
 once_play_music = [0]
 
@@ -58,6 +75,8 @@ def main_window():
         volume_up_button.draw(surface = main_screen)
         volume_down_button.draw(surface = main_screen)
 
+        rule_button.draw(surface = main_screen)  # рисуем кнопку правил
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
@@ -69,6 +88,7 @@ def main_window():
                 off_sound_button.check_click(event = event)
                 volume_up_button.check_click(event = event)
                 volume_down_button.check_click(event = event)
+                rule_button.check_click(event = event)
 
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
@@ -86,4 +106,8 @@ def main_window():
                             if y_pos <= create_game_frame.y + create_game_frame.height:
                                 print("Create window")
                                 change_scene(game_windows.create_game_window())
+            
+            if check_run_game[0] == True:
+                check_run_game[0] = False
+                run_game = False
         pygame.display.flip()

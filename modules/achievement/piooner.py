@@ -19,7 +19,7 @@ def piooner():
                     pioneer_medal.ACTIVE = True
                     list_save_coords_achiv.append(8)
                     list_save_coords_achiv[0] = True
-                    count_money_hit[0] += 7
+                    count_money_hit[0] += 20
                 
 
 

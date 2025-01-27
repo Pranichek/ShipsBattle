@@ -17,4 +17,4 @@ def kept_all_ships_alive_for_ten_turns(grid: object):
         master_of_disguist_medal.ACTIVE = True
         list_save_coords_achiv.append(6)
         list_save_coords_achiv[0] = True
-        count_money_hit[0] += 7
+        count_money_hit[0] += 20

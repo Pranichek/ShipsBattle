@@ -2,7 +2,7 @@ from ...classes.class_click import music_click
 from ...classes.class_input_text import input_port, input_ip_adress
 from ...classes.class_image import DrawImage
 from threading import Thread
-from ...server import run_server
+from ...server import run_server, SERVER
 
 #список для відслуджування чи нажати кнопка заупску серверу чи ні
 check_server_started = [False]
@@ -78,5 +78,6 @@ def start_server():
             # return False - означає що сталася помилка ,та код не буде далі рухатися
             return False
     print(113)
-    server_thread = Thread(target=run_server, args=(str(input_ip_adress.user_text), (input_port.user_text)), daemon = True)
-    server_thread.start()
+    if int(input_port.user_text) != SERVER.PORT:
+        server_thread = Thread(target=run_server, args=(str(input_ip_adress.user_text), (input_port.user_text)), daemon = True)
+        server_thread.start()

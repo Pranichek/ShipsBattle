@@ -5,6 +5,7 @@ from ....game_tools import count_money_hit
 import modules.achievement as achievement
 from ....classes.class_ship import list_ships
 from ....screens import enemy_matrix
+from ....classes.class_medal import magnat_medal
 
 check_need_change_turn = [True]
 
@@ -223,6 +224,8 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
     if count_7[0] >= 1:
         count_money_hit[0] += 5
         check_bomb[0] = True
+        if magnat_medal.ACTIVE == True:
+            count_money_hit[0] += 15
         try:
             if shop.third_task.TEXT == shop.list_third_task[1]:
                 shop.single_ships.extend(count_ships)

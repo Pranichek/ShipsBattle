@@ -20,5 +20,5 @@ def opening_the_battle(grid: list , enemy_grid: list):
             opening_battle_medal.ACTIVE = True
             list_save_coords_achiv.append(10)
             list_save_coords_achiv[0] = True
-            count_money_hit[0] += 7
+            count_money_hit[0] += 20
 

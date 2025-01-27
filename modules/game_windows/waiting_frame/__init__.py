@@ -1,1 +1,1 @@
-from .wait_window import waiting_window
+from .wait_window import waiting_window, apply_fade_effect
