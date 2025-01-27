@@ -321,6 +321,7 @@ def fight_window():
                 check_two_times.clear()
         try:
             if len(server_module.enemy_data) > 0:
+
                 check_data = server_module.enemy_data[0].split(' ')
                 if check_data[0] == "enemy_matrix":
                     check_list = server_module.enemy_data[0].split(' ')
@@ -537,43 +538,20 @@ def fight_window():
 
 
 
-        # Проверка на победу/поражение 1
-        count_player_ships = 0
-        # счетчик кораблей клиента
-        count_enemy_ships = 0
-        count_enemy_zero = 0
-        # делаем перебор матриц сервера и клиента, чтобы проверять ввыиграл уже кто то или нет
-        for row in range(len(list_grid)):
-            for cell in range(len(list_grid[row])):
-                # 5 - по клетке уже стреляли
-                # 0 - кораблей просто нет
-                # 7 - уже потопленный корабль
-                if list_grid[row][cell] in [1, 2, 3, 4]:
-                    count_player_ships += 1
-
-        for row in range(len(enemy_matrix)):
-            for cell in range(len(enemy_matrix[row])):
-                # 5 - по клетке уже стреляли
-                # 0 - кораблей просто нет
-                # 7 - уже потопленный корабль
-                if enemy_matrix[row][cell] in [1, 2, 3,4]:
-                    count_enemy_ships += 1
-                elif enemy_matrix[row][cell] == 0:
-                    count_enemy_zero += 1
-        if count_enemy_zero != 100:
-            # achievement.target_attack()
-            if count_player_ships == 0 and count_enemy_ships > 0:
-                if server_module.list_player_role[0] == "server_player":
-                    # список для хранения кто выиграл
-                    server_module.list_check_win[0] = "win_client"
-                elif server_module.list_player_role[0] == "client_player":
-                    server_module.list_check_win[0] = "win_server"
-            elif count_enemy_ships == 0 and count_player_ships > 0:
-                if server_module.list_player_role[0] == "server_player":
-                    # список для хранения кто выиграл
-                    server_module.list_check_win[0] = "win_server"
-                elif server_module.list_player_role[0] == "client_player":
-                    server_module.list_check_win[0] = "win_client"
+        server_module.player_died_ships
+        server_module.enemy_died_ships
+        if len(server_module.player_died_ships) >= 10 and len(server_module.enemy_died_ships) <= 9:
+            if server_module.list_player_role[0] == "server_player":
+                # список для хранения кто выиграл
+                server_module.list_check_win[0] = "win_client"
+            elif server_module.list_player_role[0] == "client_player":
+                server_module.list_check_win[0] = "win_server"
+        elif len(server_module.player_died_ships) <= 9 and len(server_module.enemy_died_ships) >= 10:
+            if server_module.list_player_role[0] == "server_player":
+                # список для хранения кто выиграл
+                server_module.list_check_win[0] = "win_server"
+            elif server_module.list_player_role[0] == "client_player":
+                server_module.list_check_win[0] = "win_client"
         #----------------------------------------------------------------
         check_player_balance[0] = shop.money_list[0]
         # функция которая красиво добавляет/отнимает монетки
