@@ -5,7 +5,7 @@ from ..classes.class_click import all_sounds
 pygame.init()
 
 def volume_down_func():
-    pygame.mixer.music.set_volume(pygame.mixer.music.get_volume() - 0.1)
+    pygame.mixer.music.set_volume(pygame.mixer.music.get_volume() - 0.05)
     if pygame.mixer.music.get_volume() < 0.1:
         pygame.mixer.music.set_volume(0)
     for sound_effects in all_sounds:

@@ -48,7 +48,7 @@ def lone_hunter():
                 lone_hunter_medal.ACTIVE = True
                 list_save_coords_achiv.append(7)
                 list_save_coords_achiv[0] = True
-                count_money_hit[0] += 20
+                count_money_hit[0] += 7
         else:
             single_ships_achiv.clear()
             if enemy_dies_ships_for_ahiv[0] != "" and len(enemy_dies_ships_for_ahiv[0]) >= start_index_single_achiv[0]: 

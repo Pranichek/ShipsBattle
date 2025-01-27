@@ -239,7 +239,7 @@ check_connection = [True]
 def listen_client(client, second_client):
     while True:
         try:
-            if SERVER.clients == 2:
+            if SERVER.clients >= 1:
                 client.settimeout(5)
             data = client.recv(1024)
             if data:
@@ -249,12 +249,14 @@ def listen_client(client, second_client):
             SERVER.clients = 0
             SERVER.server_socket.close()
             client.close()
+            second_client.close()
             break
         except Exception as error:
             SERVER.RESTART = True
             SERVER.clients = 0
             SERVER.server_socket.close()
             client.close()
+            second_client.close()
             break
 
 players = ["server_player", "client_player"]
@@ -281,7 +283,7 @@ class Server():
                     print(f"Room Port:{colorama.Fore.GREEN} {self.PORT} {colorama.Style.RESET_ALL}")
                     print(self.PORT)
                     self.server_socket.listen()
-
+                    self.START_CONNECT = True
                     client_socket, addr = self.server_socket.accept()
                     client_socket.sendall(player_one.encode("utf-8"))
                     print("First player is connected")
@@ -309,9 +311,6 @@ class Server():
                     self.RESTART = False
                     continue
             except Exception as error:
-                self.server_socket.close()
-                client_socket.close()
-                client_socket_second.close()
                 pass
 
 SERVER = Server()

@@ -102,7 +102,6 @@ class Font_Shop:
         screen.blit(self.text_surface, (self.X_COR, self.Y_COR))
 
     def update_text_for_task(self):
-        self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
         self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
         self.text_surface = pygame.transform.scale(self.text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
 
@@ -146,7 +145,7 @@ first_task = Font_Shop(
     y_cor = -(45 + (832 - (136 + 45))),
     size = 45 ,
     name_font = "Jersey15.ttf",
-    text = list_first_task[2],
+    text = random.choice(list_first_task),
     target_y = 136 , 
     max_width = 161 ,
     max_height = 31 ,
@@ -159,7 +158,7 @@ second_task = Font_Shop(
     y_cor = -(25 + (832 - (192 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = list_second_task[2],
+    text = list_second_task[0],
     target_y = 192 , 
     max_width = 220 ,
     max_height = 28 ,
@@ -172,7 +171,7 @@ third_task = Font_Shop(
     y_cor = -(25 + (832 - (244 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = list_third_task[3],
+    text = random.choice(list_third_task),
     target_y = 244 ,
     max_width = 180 ,
     max_height = 28 , 
@@ -193,14 +192,14 @@ fourth_task = Font_Shop(
 )
 
 player_balance = Font_Shop(
-    x_cor = 475 ,
-    y_cor = - (96 + (832 - (190 + 96))),
-    size = 96 ,
+    x_cor = 485 ,
+    y_cor = - (70 + (832 - (299 + 70))),
+    size = 70 ,
     name_font = "Jersey15.ttf",
     text = str(money_list[0]),
-    target_y = 190 ,
-    max_width = 62 ,
-    max_height = 105 , 
+    target_y = 299 ,
+    max_width = 50,
+    max_height = 70, 
     text_color = "Yellow"
 )
 

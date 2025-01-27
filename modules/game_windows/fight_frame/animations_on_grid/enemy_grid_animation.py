@@ -3,7 +3,7 @@ import modules.server as server_module
 from ....classes import Animation
 from ....screens import list_object_map_enemy
 
-def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocket_animation: list, list_cross: list, our_miss_anim: list):
+def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocket_animation: list, list_cross: list, our_miss_anim: list, list_fire: list):
     """
      Функция которая отрисовывает крестики и зачеркнутые клеточки на вражеском поле(то есть поле которое слева)
     """
@@ -19,27 +19,32 @@ def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocke
                         if cross.X_COR == x_anim_miss and cross.Y_COR == y_anim_miss:
                             list_cross.remove(cross)
                 if enemy_matrix[row][cell] == 7:
-                    cltka = (row * 10) + cell
-                    x_anim_miss = list_object_map_enemy[cltka].x
-                    y_anim_miss = list_object_map_enemy[cltka].y
+                    exist = False
+                    for row_col in list_fire:
+                        if row_col[0] == row and row_col[1] == cell and row_col[-1] == 0:
+                            exist = True
+                    if not exist:
+                        cltka = (row * 10) + cell
+                        x_anim_miss = list_object_map_enemy[cltka].x
+                        y_anim_miss = list_object_map_enemy[cltka].y
 
-                    cross_animation = Animation(
-                    image_name = "0.png", 
-                    width = 55, 
-                    height = 55, 
-                    x_cor = x_anim_miss, 
-                    y_cor = y_anim_miss, 
-                    need_clear = False , 
-                    name_folder = "animation_cross",
-                    animation_speed = 3
-                    )
-                    exists = False
-                    for cross in list_cross:
-                        if cross.X_COR == cross_animation.X_COR and cross.Y_COR == cross_animation.Y_COR:
-                            exists = True
-                            break
-                    if not exists:
-                        list_cross.append(cross_animation)
+                        cross_animation = Animation(
+                        image_name = "0.png", 
+                        width = 55, 
+                        height = 55, 
+                        x_cor = x_anim_miss, 
+                        y_cor = y_anim_miss, 
+                        need_clear = False , 
+                        name_folder = "animation_cross",
+                        animation_speed = 3
+                        )
+                        exists = False
+                        for cross in list_cross:
+                            if cross.X_COR == cross_animation.X_COR and cross.Y_COR == cross_animation.Y_COR:
+                                exists = True
+                                break
+                        if not exists:
+                            list_cross.append(cross_animation)
                 elif enemy_matrix[row][cell] == 5:
                     cltka = (row * 10) + cell
                     x_anim_miss = list_object_map_enemy[cltka].x

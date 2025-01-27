@@ -11,6 +11,7 @@ class MusicPlayer:
         sound_path = abspath(join(__file__, "..", "..", "..", "static", "sounds", f"{self.NAME_SOUND}"))
 # Відтворення музики. Параметр loop визначає кількість повторень (-1 - безперервно).
         pygame.mixer.music.load(sound_path)
+        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(loop)
         self.is_paused = False
 

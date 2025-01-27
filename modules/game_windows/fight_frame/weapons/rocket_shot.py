@@ -10,11 +10,8 @@ from ....classes.class_medal import magnat_medal
 from ....shop.text_shop import money_list
 from ....classes.class_button import Button
 
-money_flag = [False]
-def money_shop_flag():
-    money_flag[0] = True
+
     
-test2_button = Button(x = 1000, y = 50, image_path="restart_game.png", image_hover_path = "restart_game_hover.png" , width = 75, height = 105, action= money_shop_flag)
 
 
 
@@ -47,9 +44,7 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
         # 5 - значить , що гравець зробив постріл , але схибив його
         if enemy_matrix[row][col] == 0:
-            data_player_shot.append("rocket_shot")
-            data_player_shot.append(str(row))
-            data_player_shot.append(str(col))
+            data_player_shot.extend(["shot",str(row),str(col)])
             list_check_need_send[0] = True
             # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
             flag_miss_rocket_animation[0] = "start_animation"
@@ -84,18 +79,16 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
         # 7 - значить , що гравець зробив постріл і попав по кораблю
         elif enemy_matrix[row][col] != 0 and enemy_matrix[row][col] != 5 and enemy_matrix[row][col] != 7:
-            if money_flag[0] == True:
-                money_list[0] += 30
-                print(money_list[0])
-            data_player_shot.append("rocket_shot")
-            data_player_shot.append(str(row))
-            data_player_shot.append(str(col))
+            data_player_shot.extend(["shot",str(row),str(col)])
             list_check_need_send[0] = True
+
             if magnat_medal.ACTIVE == True:
-                count_money_hit[0] += 20
-            count_money_hit[0] += 10
+                count_money_hit[0] += 3
+
+            count_money_hit[0] += 3
             # передаем в список где хранится флаг нужно ли отрисовывать анимацию удара "start_animation" - то есть надо
-            check_animation_rocket[0] = "start_animation"
+            if check_animation_rocket[0] != "fire_rocket":
+                check_animation_rocket[0] = "start_animation"
             # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
             x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
             y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y

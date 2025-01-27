@@ -5,7 +5,8 @@ from ..screens import FPS
 from os.path import abspath, join
 from ..classes import buy_product_sound
 from ..volume_settings import turn_off_volume_func, volume_up_func, volume_down_func
-from .text_shop import list_first_task, list_second_task, list_third_task, list_fourth_task, first_task, second_task, third_task,fourth_task
+from .shop_image import done_task_four, done_task_one, done_task_two, done_task_three, shop_item
+from .text_shop import list_first_task, list_second_task, list_third_task, list_fourth_task, first_task, second_task, third_task,fourth_task, money_list
 
 
 #класс для кнопки в магазині
@@ -86,7 +87,7 @@ class Button_Shop:
                 if self.Y_COR > -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
                     self.Y_COR -= current_speed
                     self.RECT.y -= current_speed
-                    self.fade_out()
+                    self.VISIBLE = 0
                     if self.Y_COR <= -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):  
                         self.Y_COR = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
                         self.RECT.y = -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT)))
@@ -96,22 +97,28 @@ class Button_Shop:
         if self.Y_COR == self.TARGET_Y or self.Y_COR == -(self.HEIGHT + (832- (self.TARGET_Y + self.HEIGHT))):
             self.ACTIVE = False
 
-# копии списков с задниями чтоюы моэно было брать новые
+# # копии списков с задниями чтоюы моэно было брать новые
 first_tasks_copy = list_first_task.copy()
 second_tasks_copy = list_second_task.copy()
 third_tasks_copy = list_third_task.copy()
 fourth_tasks_copy = list_fourth_task.copy()
-def new_tasks():
-    print(938493434398489348934899)
-    first_task.TEXT = random.choice(first_tasks_copy)
-    first_task.update_text_for_task()
-    second_task.TEXT = random.choice(second_tasks_copy)
-    second_task.update_text_for_task()
-    third_task.TEXT = random.choice(third_tasks_copy)
-    third_task.update_text_for_task()
-    fourth_task.TEXT = random.choice(fourth_tasks_copy)
-    fourth_task.update_text_for_task()
-    print(8888888888888)
+# # def new_tasks():
+# #     if done_task_three in shop_item:
+# #         done_task_three.VISIBLE = 0
+# #     if done_task_two in shop_item:
+# #         done_task_two.VISIBLE = 0
+# #     if done_task_one in shop_item:
+# #         done_task_one.VISIBLE = 0
+# #     if done_task_four in shop_item:
+# #         done_task_four.VISIBLE = 0
+# #     first_task.TEXT = random.choice(first_tasks_copy)
+# #     first_task.update_text_for_task()
+# #     second_task.TEXT = random.choice(second_tasks_copy)
+# #     second_task.update_text_for_task()
+# #     third_task.TEXT = random.choice(third_tasks_copy)
+# #     third_task.update_text_for_task()
+# #     fourth_task.TEXT = random.choice(fourth_tasks_copy)
+# #     fourth_task.update_text_for_task()
 
 
 def test():
@@ -120,48 +127,85 @@ def test():
 # список в котором храним сколько потртили монет
 waste_money = [0]
 
+flag_arson = ["no"]
+flag_put_out_the_fire = ["no"]
+def buy_fire_rocket():
+    # if money_list[0] >= 80:
+    buy_product_sound.play2(loops = 1)
+    waste_money[0] += 80
+    flag_arson[0] = "yes"
+
+def buy_fire_fighter():
+    if flag_put_out_the_fire[0] == "no":
+        if money_list[0] >= 50:
+            buy_product_sound.play2(loops = 1)
+            flag_put_out_the_fire[0] = "yes"
+            waste_money[0] += 50
+
 # флаг для проверки того , купил ли игрок бомбу.True - значиит что купил
 check_buy_bomb_attack = [False]
 def buy_bomb():
-    waste_money[0] += 150
-    # if money_list[0] >= 150:
-    #     if check_buy_bomb_attack[0] == False:
-    #         if money_list[0] >= 0:
-    buy_product_sound.play2(loops = 1)
-    if check_buy_bomb_attack[0] == False:
-        check_buy_bomb_attack[0] = True
-    
+    if money_list[0] >= 150:
+        if check_buy_bomb_attack[0] == False:
+            buy_product_sound.play2(loops = 1)
+            if check_buy_bomb_attack[0] == False:
+                waste_money[0] += 150
+                check_buy_bomb_attack[0] = True
+                
 
 flagbimb200=["no"]
 cheak = [9,19,29,39,49,59,69,79,89,99,10,20,30,40,50,60,70,80,90,100]
 check_2= [11,12,13,14,15,16,17,18,19,20]
 def buy_auto_rocket():
-    waste_money[0] += 200
-    # if money_list[0] >= 200:
-    #     if flagbimb200[0] == "no":
-    buy_product_sound.play2(loops = 1)
-    if flagbimb200[0] == "no":
-        flagbimb200[0] = "yes"
-    
-   
+    if money_list[0] >= 200:
+        buy_product_sound.play2(loops = 1)
+        if flagbimb200[0] == "no":
+            waste_money[0] += 200
+            flagbimb200[0] = "yes"
+            
 but_flag = [False]
 def buy_restore_cell():
-    waste_money[0] += 50
-    # if money_list[0] >= 50:
-    buy_product_sound.play2(loops = 1)
-    if but_flag[0] == False:
-        but_flag[0] = True
+    if money_list[0] >= 75:
+        buy_product_sound.play2(loops = 1)
+        if but_flag[0] == False:
+            waste_money[0] += 75
+            but_flag[0] = True
 
+flag_radar = [False]
+def buy_radar():
+    if money_list[0] >= 20:
+        buy_product_sound.play2(loops = 1)
+        if flag_radar[0] == False:
+            waste_money[0] += 20
+            flag_radar[0] = True
 
+random_hits = [False]
+def buy_random_hits():
+    if money_list[0] >= 25:
+        buy_product_sound.play2(loops = 1)
+        if random_hits[0] == False:
+            waste_money[0] += 25
+            random_hits[0] = True
+            
+
+button_radar = Button_Shop(
+    x = 472,
+    y = -(35 + (832- (214 + 38))),
+    width = 103,
+    height = 38,
+    image_name = "radar.png",
+    action = buy_radar,
+    target_y = 214
+)
 # створюємо елементи від цього класу
-button_armor_for_ship = Button_Shop(
+button_random_hits = Button_Shop(
     x = 600 ,
     y = -(98 + (832- (263 + 98))),
     width = 96 ,
     height = 98 ,
-    image_name = "armor_for_ship.png",
+    image_name = "random_hits.png",
     target_y = 263,
-    action = test,
+    action = buy_random_hits,
 )
 
 button_stop_fire = Button_Shop(
@@ -171,7 +215,7 @@ button_stop_fire = Button_Shop(
     height = 98 ,
     image_name = "stop_fire.png",
     target_y = 263,
-    action = test
+    action = buy_fire_fighter
 )
 
 button_restores_cell = Button_Shop(
@@ -191,7 +235,7 @@ button_fire_rocket = Button_Shop(
     height = 98 ,
     image_name = "fire_rocket.png",
     target_y = 263,
-    action = test
+    action = buy_fire_rocket
 )
 
 button_bomb = Button_Shop(
@@ -244,17 +288,17 @@ turn_off_button = Button_Shop(
     target_y = 8
 )
 
-new_random_tasks = Button_Shop(
-    x = 331 ,
-    y = -(21 + (832 - (350 + 21))),
-    width = 80,
-    height = 21,
-    image_name = 'new_tasks.png',
-    target_y = 349,
-    action = new_tasks
-)
+# new_random_tasks = Button_Shop(
+#     x = 331 ,
+#     y = -(21 + (832 - (350 + 21))),
+#     width = 80,
+#     height = 21,
+#     image_name = 'new_tasks.png',
+#     target_y = 349,
+#     action = new_tasks
+# )
 
 
 
 # додаємо кнопки до списку де збергіються елементи магазину , щоб можна було через цикл їх всіх відмалювати
-shop_item.extend([button_restores_cell ,button_armor_for_ship , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, new_random_tasks])
+shop_item.extend([button_restores_cell ,button_random_hits , button_auto_attack , button_bomb , button_fire_rocket , button_stop_fire, volume_up, volume_down,turn_off_button, button_radar])

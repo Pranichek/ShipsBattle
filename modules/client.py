@@ -7,6 +7,7 @@ import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
 from threading import Thread
+from .server import SERVER
 
 
 # лист для клиента в котором храним надо ли что то изменять после его атаки
@@ -22,8 +23,7 @@ check_two_times = []
 check_can_connect_to_fight = [0, False, False]
 # список в котором сохраняем расставил ли игрок корабли
 save_data_posistion_ships = [""]
-TARGET_COUNT = 0
-
+connection = [True]
 
 dict_save_information = {
     "player_nick": "",
@@ -81,21 +81,24 @@ def start_client():
         # Бесконечный цикл для отправки и получения данных
         while True:
             try:
+                connection[0] = True
                 if check_can_connect_to_fight[2] != 'True':
-                    time.sleep(0.1)
+                    time.sleep(0.2)
                     status_game = [save_data_posistion_ships[0], input_nick.user_text, input_password.user_text, list_users[input_nick.user_text]["points"],check_can_connect_to_fight[0]]
                     str_data = ""
                     for data in status_game:
                         str_data += f"{str(data)} "
                     client_socket.sendall(str_data.encode("utf-8"))
                     try:
+                        if check_can_connect_to_fight[2] != False:
+                            client_socket.settimeout(3)
                         data_enemy = client_socket.recv(1024).decode("utf-8")
                     except:
                         raise Exception("Reconnect")
                     print(data_enemy)
                     data = data_enemy.split(" ")
                     check_connection_users[0] = save_data_posistion_ships[0]
-                    if len(data) > 4:
+                    if len(data) >= 4:
                         check_can_connect_to_fight[2] = data[4]
                         if data[1] not in list_users:
                             list_users[data[1]] = {"points": data[3], "password": data[2]}
@@ -115,7 +118,7 @@ def start_client():
                     else:
                         print("Index error")
                 else:
-                    time.sleep(0.5)
+                    time.sleep(0.2)
                     check_two_times.append(3)
                     # Перевірка значення в списку перед відправкою даних
                     if list_check_need_send[0] == True:  # Перевірка на `True`
@@ -126,27 +129,28 @@ def start_client():
                         data_player_shot.clear()  # Очищаем список перед новым входом
                         list_check_need_send[0] = False
                     else:
-                        client_socket.settimeout(4.9)
                         client_socket.sendall("keep-alive".encode("utf-8") + b"END")
                     try:
+                        if server_module.enemy_data[0] != "":
+                            client_socket.settimeout(3)
                         enemy_data = recv_all(client_socket)
                     except:
                         raise Exception("Reconnect")
                     server_module.enemy_data[0] = enemy_data.decode("utf-8")
                     # print(server_module.enemy_data, "enemy_data") 
             except Exception as e:
-                print(1)
-                try:
-                    client_socket.close()
-                except:
-                    pass
-                print(2)
                 port_client += 1
-                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                print(3)
-                print(port_client)
                 while True:
                     try:
+                        try:
+                            client_socket.close()
+                        except:
+                            pass
+                        print(2)
+                        connection[0] = False
+                        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        print(3)
+                        print(port_client)
                         client_socket.connect((str(input_ip_adress.user_text), port_client)) 
                         print(5)
                         break
@@ -154,11 +158,6 @@ def start_client():
                         time.sleep(1)
                         continue
                 
-    #             print("Ошибка клиента:", e)
-    #             pass
-    # except Exception as e:
-    #     print(f"Ошибка клиента: {e}")
-
 connect_to_game = Thread(target = start_client, daemon = True)
 
 # def connect_user():

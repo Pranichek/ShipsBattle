@@ -18,4 +18,4 @@ def first_shot(cell: int):
                 first_hit_medal.ACTIVE = True
                 list_save_coords_achiv.append(4)
                 list_save_coords_achiv[0] = True
-                count_money_hit[0] += 20
+                count_money_hit[0] += 7

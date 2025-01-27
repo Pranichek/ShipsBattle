@@ -42,8 +42,16 @@ class DrawImage:
         fps = FPS.get_fps()
         if fps <= 0:
             fps = 0.01
-        current_speed =  (60 / fps)
+        current_speed = (60 / fps)
         if self.visible > 0:
             self.visible -= 10 * current_speed
             if self.visible <= 0:
                 self.visible = 0
+    def fade_in(self):
+        fps = FPS.get_fps()
+        if fps <= 0:
+            fps = 0.01
+        if self.visible < 255:
+            self.visible += 1 * (60 / fps)
+            if self.visible >= 255:
+                self.visible = 255
