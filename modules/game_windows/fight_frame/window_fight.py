@@ -16,7 +16,7 @@ from ...classes.achive_window import list_achieves, target_attack_achievement, d
 from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.radar_class import radar
-from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound
+from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound, all_sounds
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_auto_rocket
@@ -25,6 +25,7 @@ from ...client import list_check_need_send, check_two_times, send_matrix, dict_s
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 from ..button_pressed import check_press_button
+from ...volume_settings import save_data_volume
 
 
 list_check_shop = [None]
@@ -201,6 +202,9 @@ def fight_window():
     music_load_waiting.stop()
     # вмикаємо музику для бою
     fight_music.play()
+    for song in all_sounds:
+        song.set_volume(save_data_volume[0])
+        pygame.mixer.music.set_volume(save_data_volume[0])
     # задаємо назву вікну
     pygame.display.set_caption("Battle Screen")
     # створюємо змінну для нескінченого циклу гри

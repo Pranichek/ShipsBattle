@@ -12,6 +12,8 @@ from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
 from ...client import check_connection_users, check_can_connect_to_fight, save_data_posistion_ships, connection
 from ...volume_settings import volume_down_button, volume_up_button, off_sound_button
+from ...classes.class_click import all_sounds
+from ...volume_settings import save_data_volume
 
 #фон для очікування користувача
 waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "waiting_background.png")
@@ -22,6 +24,10 @@ def waiting_window():
     run_game = True
     music_load_main.stop()
     music_load_waiting.play()
+
+    for song in all_sounds:
+        song.set_volume(save_data_volume[0])
+        pygame.mixer.music.set_volume(save_data_volume[0])
 
     volume_down_button.x = 1096
     volume_down_button.y = 26

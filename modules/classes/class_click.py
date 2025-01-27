@@ -1,5 +1,6 @@
 import pygame
 from os.path import abspath, join
+from .class_music import music_load_main, music_load_waiting, fight_music
 
 class Sound:
       def __init__(self, name_sound):

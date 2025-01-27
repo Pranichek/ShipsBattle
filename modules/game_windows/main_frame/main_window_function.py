@@ -10,6 +10,8 @@ from ..change_window import change_scene
 from ..button_pressed import button_action, check_press_button
 from ...volume_settings import off_sound_button, volume_up_button, volume_down_button
 from ..waiting_frame import apply_fade_effect
+from ...classes.class_click import all_sounds
+from ...volume_settings import save_data_volume
 
 
 #картинки
@@ -28,7 +30,7 @@ def change_on_rules():
     apply_fade_effect(screen = main_screen)
     change_scene(game_windows.rules_window())
     check_run_game[0] = True
-    
+
 rule_button = Button(
     x = 1173,
     y = 27,
@@ -53,6 +55,10 @@ def main_window():
     if once_play_music[0] < 1:
         music_load_main.play()
 
+    for song in all_sounds:
+        song.set_volume(save_data_volume[0])
+        pygame.mixer.music.set_volume(save_data_volume[0])
+    
     once_play_music[0] += 1
 
     volume_down_button.x = 113
