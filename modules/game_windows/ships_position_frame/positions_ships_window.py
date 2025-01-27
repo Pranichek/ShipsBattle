@@ -16,6 +16,8 @@ from ..button_pressed import check_press_button
 from .check_placing_ships import connect_to_fight
 from .random_placing import random_places_ships
 from ...json_functions import read_json
+from ...classes.class_click import all_sounds
+from ...volume_settings import save_data_volume
 
 #images 
 ships_position_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor=  0 ,folder_name= "backgrounds" , image_name= "position_ships_bg.png")
@@ -30,6 +32,10 @@ random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , im
 def ships_position_window():
     music_load_waiting.stop()
     music_load_main.play()
+
+    for song in all_sounds:
+        song.set_volume(save_data_volume[0])
+        pygame.mixer.music.set_volume(save_data_volume[0])
     pygame.display.set_caption("Position Ships")
     run_game = True
     #generate grid with class
