@@ -4,6 +4,8 @@ import modules.achievement as achievement
 from ....screens import enemy_matrix
 from ....client import list_check_need_send, data_player_shot
 from ....server import check_time, list_player_role, turn
+from ....classes.class_medal import magnat_medal
+from ....game_tools import count_money_hit
 
 
 def random_hits_matrix():
@@ -39,6 +41,9 @@ def random_hits_matrix():
         shots += 1  # Збільшуємо кількість ударів
     check_time[0] = 0  
     if count_hit >= 1:
+        count_money_hit[0] += 5
+        if magnat_medal.ACTIVE == True:
+            count_money_hit[0] += 15
         if shop.third_task.TEXT == shop.list_third_task[1]:
             shop.single_ships.extend(count_ships)
         if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
