@@ -1,9 +1,24 @@
 import pygame
 from os.path import abspath, join
-from .class_music import music_load_main, music_load_waiting, fight_music
 
 class Sound:
+      '''
+      ### Класс `звука` который будет `паралельно` `работать` `вместе` с `основной` `музыкой` ###
+      '''
       def __init__(self, name_sound):
+        '''
+         #### Метод конструктор, который позволит нам создавать `звуки` ####
+         Атрибуты:
+
+         - :mod:`NAME_SOUND`: имя файла звука, который будет загружен
+         - :mod:`SOUND`: объект звука, загруженный через pygame.mixer.Sound
+
+         Пример использования : 
+         ```python
+         radar_sound = Sound(name_sound = "radar_sound.mp3")
+         ```
+
+        '''
         pygame.mixer.init()
         self.NAME_SOUND = name_sound  
         #os.path.abspath(__file__ + f"/../../../static/sounds/{self.NAME_SOUND}")
@@ -12,11 +27,13 @@ class Sound:
         self.SOUND.set_volume(0.2)
               
       def play2(self, loops):
+         '''
+         `Метод` который будет проигрывать `звук` `паралельно` `от` `основной` `музыки`
+         '''
          self.SOUND.play(loops=0, maxtime=0, fade_ms=0)
 
       def set_volume(self, volume):
          self.SOUND.set_volume(volume)
-         
 
 music_click = Sound(name_sound = "button_pressed.mp3")
 music_achieve = Sound(name_sound = "get_achievement.mp3")

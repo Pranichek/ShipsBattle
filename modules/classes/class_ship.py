@@ -10,12 +10,49 @@ from ..screens import grid_player , list_grid , list_object_map
 check_for_shipsmoving = [0]
 
 class Ship:
+    '''
+    ### Клас `создания` кораблей ###
+
+    '''
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_ship: str, image_rotate_ship: str , length: int, position_ship: str):
         r'''
         :mod:`метод` ``__init__``, яка створює об'єкти класів, встановлює координати, розмір, позицію кораблів.
 
-        Приклад застосування: 
-        >>> self.X_COR, self.Y_COR = grid_player.snap_to_grid(self.X_COR, self.Y_COR) 
+        Атрибуты:
+        - :mod:`X_COR`: Координата корабля по оси X.
+        - :mod:`Y_COR`: Координата корабля по оси Y.
+        - :mod:`WIDTH`: Ширина корабля.
+        - :mod:`HEIGHT`: Высота корабля.
+        - :mod:`IMAGE_SHIP`: Имя файла с изображением обычного корабля.
+        - :mod:`ROTATE_SHIP`: Имя файла с изображением повёрнутого корабля.
+        - :mod:`LENGHT`: Длина корабля в клетках.
+        - :mod:`ORIENTATION_SHIP`: Ориентация корабля ("горизонтальная" или "вертикальная").
+        - :mod:`CHEK_ROTATION`: Проверка текущей ориентации корабля.
+        - :mod:`READY_IMAGE_SHIP`: Отмасштабированное изображение обычного корабля.
+        - :mod:`IMAGE_ROTATE_SHIP`: Отмасштабированное изображение повёрнутого корабля.
+        - :mod:`CHECK_MOVE`: Флаг для проверки движений мыши.
+        - :mod:`RECT`: Прямоугольник для отслеживания взаимодействия с кораблём.
+        - :mod:`STASIC_X`: Начальная координата X.
+        - :mod:`STASIC_Y`: Начальная координата Y.
+        - :mod:`number_cell`: Новая клетка, где стоит корабль.
+        - :mod:`number_ship_cell`: Старая клетка, где находился корабль.
+        - :mod:`row`: Номер строки матрицы, где находится корабль.
+        - :mod:`col`: Номер столбца матрицы, где находится корабль.
+        - :mod:`check_collision`: Флаг для проверки столкновения с другими кораблями.
+        - :mod:`check_after_random`: Флаг для проверки после рандомного расположения.
+
+        Пример использования :
+        ```python
+        ship_four = Ship(
+        x_cor = 882,
+        y_cor = 475,
+        width = 62,
+        height = 62,
+        image_ship = "ship_four.png", 
+        image_rotate_ship = "rotate_ship_four.png", 
+        length = 4, 
+        position_ship = "horizontal")
+        ```
         '''
         self.X_COR = x_cor#место где будет стоять корабыль по иксу
         self.Y_COR = y_cor#место где будет стоять корабль по игреку

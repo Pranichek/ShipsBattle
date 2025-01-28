@@ -2,9 +2,19 @@ from .class_image import DrawImage
 from ..screens import list_object_map_enemy
 
 class Radar:
+    '''
+    ### Класс для радара ###
+    '''
     def __init__(self):
-        self.list_cells = []
+        '''
+        #### Метод конструктор, который позволит нам создавать `поля` `ввода` ####
+        '''
+        
+        self.list_cells = [] # радарный список
     def check_target_grid(self, enemy_matrix: list, row: int, column: int):
+        '''
+        Метод для добавления клетки в радарный список.
+        '''
         for cell in range(0, 3):
             col = (row * 10) + ((column - 1) + cell)
             x_cell = list_object_map_enemy[col].x

@@ -4,7 +4,40 @@ import modules.screens as screen_module
 
 
 class Animation():
+    r'''
+    ### Класс для создания анимаций ###
+    '''
     def __init__(self, image_name: str , width: int , height: int , x_cor: int , y_cor: int , need_clear: bool , name_folder: str ,animation_speed: int):
+        '''
+        #### Метод конструктор, который позволит нам создавать `анимации` ####
+
+        Атрибуты:
+        - :mod:`ANIMATION_SPEED`: скорость анимации (определяет, как быстро будет сменяться кадр)
+        - :mod:`IMAGE_NAME`: имя исходного изображения для анимации
+        - :mod:`LIST_IMAGES`: список изображений, составляющих анимацию
+        - :mod:`COUNT_IMAGES`: индекс текущего изображения в списке
+        - :mod:`COUNT_MAIN_LOOP`: счётчик для управления темпом анимации
+        - :mod:`WIDTH`: ширина изображения
+        - :mod:`HEIGHT`: высота изображения
+        - :mod:`IMAGE`: текущее изображение для отображения
+        - :mod:`X_COR`: горизонтальная координата для рисования изображения
+        - :mod:`Y_COR`: вертикальная координата для рисования изображения
+        - :mod:`NEED_CLEAR`: флаг, указывающий, нужно ли очищать анимацию после её окончания
+        - :mod:`NAME_FOLDER`: имя папки с изображениями для анимации
+        - :mod:`IS_ANIMATION_DONE`: флаг, показывающий завершение анимации
+
+        Пример использования : 
+        ```python
+            miss_rocket_animation = Animation(
+            image_name = "0.png" , 
+            width = 311, 
+            height = 100, 
+            x_cor = 311, 
+            y_cor = 311, 
+            need_clear = True, 
+            name_folder = "animation_rocket",
+            animation_speed = 3)
+        ```'''
         self.ANIMATION_SPEED = animation_speed
         self.IMAGE_NAME = image_name
         self.LIST_IMAGES = []
@@ -19,11 +52,22 @@ class Animation():
         self.NAME_FOLDER = name_folder
         self.IS_ANIMATION_DONE = False  # Флаг который будет отслеживать завершение анимации
     def load_images(self):
+        '''
+        `Метод` загрузки изображений, и `трансформации` с нужными нам `атрибуты`
+        '''
         path = abspath(join(__file__, f"{self.IMAGE_NAME}"))
         image = pygame.image.load(path)
         transformed_image = pygame.transform.scale(image, (self.WIDTH, self.HEIGHT))
         self.IMAGE = transformed_image
     def animation(self, count_image: int, main_screen: pygame.Surface):
+        '''
+        `Метод` анимации, принимает в себя: 
+
+        - :mod:`COUNT_IMAGE`: количество кадров в анимации
+        - :mod:`main_screen`: экран, на котором будем рисовать изображение
+
+        Так же `дополнительно` `ускоряет` `анимацию`, если `количество` `кадров` `меньше` чем `надо` `(по специальной формуле)`
+        '''
         fps = screen_module.FPS.get_fps()
         if screen_module.FPS.get_fps() <= 0:
             fps = 0.01
@@ -52,8 +96,14 @@ class Animation():
         self.COUNT_MAIN_LOOP += 1
 
     def draw(self, screen: pygame.Surface):
+        '''
+        `Метод` отображения изображения на экране
+        '''
         screen.blit(self.IMAGE, (self.X_COR, self.Y_COR))
     def clear_animation(self):
+        '''
+        `Метод` очистки анимации
+        '''
         self.LIST_IMAGES = []
         self.COUNT_IMAGES = 0
         self.COUNT_MAIN_LOOP = 0

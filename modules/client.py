@@ -34,7 +34,6 @@ dict_save_information = {
 
 
 def send_matrix():
-    list_check_need_send[0] = True
     data_player_shot.clear()  # Очищаем данные перед добавлением новых
     data_player_shot.append("enemy_matrix")
     for row in list_grid:  # Предполагается, что list_grid соответствует enemy_matrix
@@ -45,6 +44,7 @@ def send_matrix():
         data_player_shot.append(str(ship.Y_COR))
         data_player_shot.append(str(ship.LENGHT))
         data_player_shot.append(str(ship.ORIENTATION_SHIP))
+    list_check_need_send[0] = True
 
 dict_status_game = {
     "status" : "places ships"

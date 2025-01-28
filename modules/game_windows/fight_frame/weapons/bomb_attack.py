@@ -12,16 +12,28 @@ check_need_change_turn = [True]
 
 def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list, count_5: int):
     """
-ВНИМАНИЕ ЖООООООООСКИЕ КАСТЫЛИ, ВСЕМ БАЯТЬСЯ ! ! !
-entry_cell для внутренних клеток, если надо ударить 3 на 3 во внутренних клеточках
-top_left_corner для верхнего левого угла 3 на 3 
-bot_left_corner для нижнего левого угла 3 на 3
-left_wall для левой стенки 3 на 3 
-top_right_corner для правого верхнего угла 3 на 3
-bot_right_corner для правого нижнего угла 3 на 3 
-bot_wall для нижней стенки 3 на 3
-top_wall для верхней стенки 3 на 3 
-right_wall для правой стенки 3 на 3 
+    `Функция` Для улучшение атаки, в диапозоне `3 на 3`
+
+    (можно было без них, но уже слишком поздно)
+
+    `Индексы` : Определяет тип области, где будет атака. Возможные значения:
+    - :mod:`entry_cell` — центральная клетка
+    - :mod:`'top_left_corner` — верхний левый угол
+    - :mod:`bot_left_corner` — нижний левый угол
+    - :mod:`left_wall` — левая стена
+    - :mod:`top_right_corner` — верхний правый угол
+    - :mod:`bot_right_corner` — нижний правый угол
+    - :mod:`bot_wall` — нижняя стена
+    - :mod:`top_wall` — верхняя стена
+    - :mod:`right_wall` — правая стена
+
+    `Параметры`
+    - :mod:`col`: Колона на игровом поле, где происходит атака
+    - :mod:`row`: Ряд на игровом поле, где происходит атака
+    - :mod:`count_7`: Счётчик количества клеток, которые были обновлены в результате атаки (например, повреждённые корабли)
+    - :mod:`count_ships`: Список для хранения информации о попаданиях в корабли (значения клеток поля)
+    - :mod:`count_misses`: Список для хранения количества промахов
+    - :mod:`count_5`: Счётчик количества обнаруженных защитных элементов (например, защитных полей)
     """
     check_need_change_turn[0] = True
     client_module.data_player_shot.append("bomb")
@@ -197,8 +209,6 @@ right_wall для правой стенки 3 на 3
 
   
 
-
-
 def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count_misses: list, check_bomb:list):
     """
     Ця функція для удару бомбою
@@ -238,8 +248,7 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
             if shop.third_task.TEXT == shop.list_third_task[2]:
                 shop.check_three_2decker_ship_in_row.extend(count_ships)
             if shop.first_task.TEXT == shop.list_first_task[-1]:
-                for hit in range(0, count_7[0]):
-                    shop.three_hits_in_row(7)
+                shop.three_hits_in_row(7)
             if shop.third_task.TEXT == shop.list_third_task[-1]:
                 shop.count_three_ships.extend(count_ships)
             if shop.second_task.TEXT == shop.list_second_task[2]:
@@ -247,17 +256,13 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
             if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
                 shop.ship_hits_three.extend(count_ships)
             if shop.first_task.TEXT == shop.list_first_task[0]:
-                for hit in range(0, count_7[0]):
-                    shop.two_hits_in_row(number_cell = 7)
+                shop.two_hits_in_row(number_cell = 7)
             if shop.first_task.TEXT == shop.list_first_task[1]:
-                for hit in range(0, count_7[0]):
-                    shop.four_hits_in_row(number_cell = 7)
+                shop.four_hits_in_row(number_cell = 7)
             if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                for hit in range(0, count_7[0]):
-                    shop.eight_hits_in_row(number_cell = 7)
+                shop.eight_hits_in_row(number_cell = 7)
             # ачивки
-            for hit in range(0, count_7[0]):
-                achievement.ten_shoot_in_row(7)
+            achievement.ten_shoot_in_row(7)
             achievement.first_shot(7)
             achievement.single_ships_achiv.append(count_ships)
             achievement.list_hits_achiv.append(count_ships)

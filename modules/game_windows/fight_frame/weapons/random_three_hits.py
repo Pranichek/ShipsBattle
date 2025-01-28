@@ -9,6 +9,9 @@ from ....game_tools import count_money_hit
 
 
 def random_hits_matrix():
+    '''
+    `Функция` которая делает `3` `рандомных` ударов, по вражеской матрице
+    '''
     count_hit = 0
     shots = 0  # Лічильник ударів
     available_cells = []  # Список координат доступних клітинок (рядок, стовпець)
@@ -54,8 +57,7 @@ def random_hits_matrix():
         if shop.third_task.TEXT == shop.list_third_task[2]:
             shop.check_three_2decker_ship_in_row.extend(count_ships)
         if shop.first_task.TEXT == shop.list_first_task[-1]:
-            for hit in range(0, count_7[0]):
-                shop.three_hits_in_row(7)
+            shop.three_hits_in_row(7)
         if shop.third_task.TEXT == shop.list_third_task[-1]:
             shop.count_three_ships.extend(count_ships)
         if shop.second_task.TEXT == shop.list_second_task[2]:
@@ -63,17 +65,13 @@ def random_hits_matrix():
         if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
             shop.ship_hits_three.extend(count_ships)
         if shop.first_task.TEXT == shop.list_first_task[0]:
-            for hit in range(0, count_7[0]):
-                shop.two_hits_in_row(number_cell = 7)
+            shop.two_hits_in_row(number_cell = 7)
         if shop.first_task.TEXT == shop.list_first_task[1]:
-            for hit in range(0, count_7[0]):
-                shop.four_hits_in_row(number_cell = 7)
+            shop.four_hits_in_row(number_cell = 7)
         if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-            for hit in range(0, count_7[0]):
-                shop.eight_hits_in_row(number_cell = 7)
+            shop.eight_hits_in_row(number_cell = 7)
         # ачивки
-        for hit in range(0, count_7[0]):
-            achievement.ten_shoot_in_row(7)
+        achievement.ten_shoot_in_row(7)
         achievement.first_shot(7)
         achievement.single_ships_achiv.append(count_ships)
         achievement.list_hits_achiv.append(count_ships)

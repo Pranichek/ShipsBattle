@@ -7,7 +7,36 @@ pygame.init()
 list_achieves = []
 
 class Acievement:
+    r'''
+    ### Класс для управления достижениями в игре ###
+
+    Позволяет создавать и анимировать изображения достижений ( плавное изменение прозрачности, движение, изменение масштаба и т.д).
+    '''
     def __init__(self , achievement_image_name: str):
+        '''
+        #### Метод конструктор, который позволит нам создавать `изображение` достижений ####
+        
+        Принимает в себя `achievement_image_name`, которое позволяет изменить изображение самого достижения
+
+        Атрибуты:
+
+        - :mod:`IMAGE_NAME`: строка, имя изображения для достижения
+        - :mod:`X_COR`,`Y_COR`: координаты положения изображения
+        - :mod:`WIDTH`,`HEIGHT`: размеры изображения
+        - :mod:`MAX_WIDTH`,`MAX_HEIGHT`: максимальные размеры изображения
+        - :mod:`PATH_BORDER_IMAGE`: путь к изображению достижения
+        - :mod:`BORDER_IMAGE`: изображение, отмасштабированное для отображения
+        - :mod:`ACTIVE`: флаг активности достижения
+        - :mod:`CHECK_END_ANIM`: флаг окончания анимации
+        - :mod:`DIRECTION`: направление движения изображения (влево/вправо)
+        - :mod:`VISIBLE`: уровень прозрачности изображения (от 0 до 255)
+        - :mod:`COUNT_REPEAT`,`COUNT_MOVE`: счётчики повторений и движений
+
+        Пример использование : 
+        ```python
+        lone_hunter_achievement = Acievement(achievement_image_name = "lone_hunter")
+        ```
+        '''
         self.IMAGE_NAME = achievement_image_name
         self.X_COR = 640
         self.Y_COR = 319
@@ -29,6 +58,9 @@ class Acievement:
         self.COUNT_MOVE = 0
     # Плавно змінює прозорість зображення:fade_in() збільшує прозорість до 255 (повністю видимий стан)
     def fade_in(self):
+        '''
+        `Метод`, который позволяет сделать достижение `прозрачным` `(постепенно)`
+        '''
         fps = FPS.get_fps()
         if fps <= 0:
             fps = 0.01
@@ -38,6 +70,9 @@ class Acievement:
                 self.VISIBLE = 255
     # fade_out() зменшує прозорість до 0 (невидимий стан)
     def fade_out(self):
+        '''
+        `Метод`, который позволяет сделать достижение `менее` прозрачным `(постепенно)`
+        '''
         fps = FPS.get_fps()
         if fps <= 0:
             fps = 0.01
@@ -46,6 +81,9 @@ class Acievement:
             if self.VISIBLE <= 0:
                 self.VISIBLE = 0
     def reset(self):
+        '''
+        `Метод`, который позволяет сбросить `все` `настройки` `достижений`
+        '''
         self.X_COR = 640
         self.Y_COR = 319
         self.MAX_WIDTH = 354
@@ -57,6 +95,9 @@ class Acievement:
         self.COUNT_MOVE = 0
 
     def move(self):
+        '''
+        `Метод`, который позволяет `двигать` `достижение` в `сторону` в `зависимости` от `атрибута` `класса` на экран
+        '''
         fps = FPS.get_fps()
         if fps <= 0:
             fps = 0.01
@@ -124,6 +165,9 @@ class Acievement:
             self.BORDER_IMAGE = pygame.transform.scale(pygame.image.load(self.PATH_BORDER_IMAGE), (self.WIDTH, self.HEIGHT)).convert_alpha() 
                     
     def draw(self , screen: pygame.Surface):
+        '''
+        `Метод`, который позволяет `отобразить` `достиження` на `экране`
+        '''
         self.BORDER_IMAGE.set_alpha(self.VISIBLE)
         screen.blit(self.BORDER_IMAGE , (self.X_COR, self.Y_COR))
 

@@ -19,7 +19,7 @@ from ...classes.radar_class import radar
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound, all_sounds
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_auto_rocket
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
 from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix
@@ -736,6 +736,7 @@ def fight_window():
                                     flagstop = True
                                     tsest[0]=True
                                     Schechik_before_removeall[0] = 40
+                                
 
                                 if flagstop != True: 
                                     enemy_matrix[row_fire][col_fire] = 7
@@ -745,13 +746,14 @@ def fight_window():
                                     if len(row_fire_col_anim) > 0:
                                         for fire in list_fire:
                                             fire[-1] += 1
-
                                     row_fire_col_anim.append([row_fire, 0])
                                     col_fire_row_anim.append([col_fire, 0])
-                                    if Cordi_Burning_Ship[index][0] <= 5 - len(element)-1:  
-                                        Cordi_Burning_Ship[index][0]= 0
+                                    print(Cordi_Burning_Ship[index][0], "first one")
+                                    print( 5 - len(element) - 1, "Second one")
+                                    if Cordi_Burning_Ship[index][0] <= 5 - len(element) - 1: 
+                                        Cordi_Burning_Ship[index][0] = 0
                                     else:
-                                        Cordi_Burning_Ship[index][0] -=1
+                                        Cordi_Burning_Ship[index][0] -= 1
                             else:
                                 # очищаем данные если потушили пожар
                                 flagstop = False 
@@ -761,7 +763,7 @@ def fight_window():
                     
                 list_check_need_send[0] = True
                 test_time[0] = server_module.check_time[0]
-                
+
         #----------------------------------------------------------------
         # когда игрок стреляет огнем анимация
         if len(row_fire_col_anim) > 0 and check_animation[0] == "":
@@ -1358,7 +1360,7 @@ def fight_window():
                                                             if magnat_medal.ACTIVE == True:
                                                                 count_money_hit[0] += 15
                                                             count_money_hit[0] += 5
-                                                            xxxxx = find_all_auto_rocket(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
+                                                            xxxxx = find_all_neighbors(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
                                                             colich = len(xxxxx)
                                                             Cordi_Burning_Ship.append([])
                                                             Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
@@ -1442,8 +1444,7 @@ def fight_window():
                                                                 if shop.third_task.TEXT == shop.list_third_task[2]:
                                                                     shop.check_three_2decker_ship_in_row.extend(count_killed_ships)
                                                                 if shop.first_task.TEXT == shop.list_first_task[-1]:
-                                                                    for hit in range(0, lenkord):
-                                                                        shop.three_hits_in_row(7)
+                                                                    shop.three_hits_in_row(7)
                                                                 if shop.third_task.TEXT == shop.list_third_task[-1]:
                                                                     shop.count_three_ships.extend(count_killed_ships)
                                                                 if shop.second_task.TEXT == shop.list_second_task[2]:
@@ -1451,17 +1452,13 @@ def fight_window():
                                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
                                                                     shop.ship_hits_three.extend(count_killed_ships)
                                                                 if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                                    for hit in range(0, lenkord):
-                                                                        shop.two_hits_in_row(number_cell = 7)
+                                                                    shop.two_hits_in_row(number_cell = 7)
                                                                 if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                                    for hit in range(0, lenkord):
-                                                                        shop.four_hits_in_row(number_cell = 7)
+                                                                    shop.four_hits_in_row(number_cell = 7)
                                                                 if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                                    for hit in range(0, lenkord):
-                                                                        shop.eight_hits_in_row(number_cell = 7)
+                                                                    shop.eight_hits_in_row(number_cell = 7)
                                                                 # ачивки
-                                                                for hit in range(0, lenkord):
-                                                                    achievement.ten_shoot_in_row(7)
+                                                                achievement.ten_shoot_in_row(7)
                                                                 achievement.first_shot(7)
                                                                 achievement.single_ships_achiv.extend(count_killed_ships)
                                                                 achievement.list_hits_achiv.extend(count_killed_ships)
