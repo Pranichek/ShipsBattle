@@ -53,7 +53,6 @@ def kill_enemy_ships():
                         list_direction_enemy[0] = ship[3]
                         break
 
-
                 if num_cell not in check_number_cell_enemy:
                     if count_len_enemy[0] == 1 and list_direction_enemy[0] != "":
                         print("убили корабль" , count_len_enemy[0])

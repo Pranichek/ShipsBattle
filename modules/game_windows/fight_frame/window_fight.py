@@ -320,7 +320,7 @@ def fight_window():
 
 
         if animation_random_player.IS_ANIMATION_DONE == True:
-            if check_two_times.count(3) >= 5:
+            if check_two_times.count(3) >= 2:
                 server_module.check_time[0] += 1
                 check_two_times.clear()
         try:
@@ -669,7 +669,7 @@ def fight_window():
                             number_cell_cross = list_object_map.index(cltk)
                     row_anim = number_cell_cross // 10
                     col_anim = number_cell_cross % 10
-
+                    check_time = None
                     for row_col_enemy in enemy_list_fire:
                         if row_col_enemy[0] == row_anim and row_col_enemy[1] == col_anim:
                             check_time = row_col_enemy[-1]
@@ -750,9 +750,6 @@ def fight_window():
                                     col_fire_row_anim.append([col_fire, 0])
                                     if Cordi_Burning_Ship[index][0] <= 5 - len(element)-1:  
                                         Cordi_Burning_Ship[index][0]= 0
-                                        for fire in list_fire:
-                                            if fire[0] == row_fire and fire[1] == col_fire:
-                                                fire[-1] += 1
                                     else:
                                         Cordi_Burning_Ship[index][0] -=1
                             else:
@@ -764,6 +761,7 @@ def fight_window():
                     
                 list_check_need_send[0] = True
                 test_time[0] = server_module.check_time[0]
+                
         #----------------------------------------------------------------
         # когда игрок стреляет огнем анимация
         if len(row_fire_col_anim) > 0 and check_animation[0] == "":
@@ -838,36 +836,6 @@ def fight_window():
                     enemy_fire[2].IS_ANIMATION_DONE = False
 
         
-
-        #----------------------------------------------------------------
-        #зарисовка зачеркнутых клеточек если враг ударил обычным выстрелом в игрока(на поле игрока)
-        for row in range(len(list_grid)):
-            for cell in range(len(list_grid[row])):
-                if list_grid[row][cell] == 5:
-                    cltka = (row * 10) + cell
-                    x_anim_miss = list_object_map[cltka].x
-                    y_anim_miss = list_object_map[cltka].y
-
-                    miss_cell_animation = Animation(
-                    image_name = "0.png", 
-                    width = 55, 
-                    height = 55, 
-                    x_cor = x_anim_miss, 
-                    y_cor = y_anim_miss, 
-                    need_clear = False, 
-                    name_folder = "animation_miss",
-                    animation_speed = 3
-                    )
-                    
-                    exists = False
-                    for misses_cells in list_animation_miss:
-                        if misses_cells.X_COR == miss_cell_animation.X_COR and misses_cells.Y_COR == miss_cell_animation.Y_COR:
-                            exists = True
-                            break
-                    if not exists:
-                        list_animation_miss.append(miss_cell_animation)
-
-
         #----------------------------------------------------------------
         # отрисовываем анимации зачерканных клеточек на своем поле, если враг промазал
         for animation_miss in list_animation_miss:
@@ -979,13 +947,14 @@ def fight_window():
 
         # эти функция для проверки , попал ли соперник по нашем кораблям
         check_fire = server_module.enemy_data[0].split(' ')
-        if check_fire[0] == "keep-alive":
-            check_and_add_hit_markers(
-                x_enemy_cross = x_enemy_cross, 
-                y_enemy_cross = y_enemy_cross, 
-                list_cross_player = list_cross_player,
-                enemy_list_fire = enemy_list_fire 
-            )
+        # if check_fire[0] == "keep-alive":
+        check_and_add_hit_markers(
+            x_enemy_cross = x_enemy_cross, 
+            y_enemy_cross = y_enemy_cross, 
+            list_cross_player = list_cross_player,
+            enemy_list_fire = enemy_list_fire,
+            list_animation_miss = list_animation_miss
+        )
 
         # анимация использования аптечки
         if health_anim[0] == True:
@@ -1617,7 +1586,6 @@ def fight_window():
                     animation_bomb_boom.clear_animation()
                     server_module.flag_bomb_animation[0] = False
         #************************************************************************************************
-
         
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
         if achievement.strategist_achievement.ACTIVE == False:

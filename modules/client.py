@@ -61,7 +61,8 @@ def recv_all(sock):
             break
         data += part
     return data
-check_start_connect = [False]
+
+check_start_connect = [False, False]
 def start_client():
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
@@ -73,16 +74,18 @@ def start_client():
     check_start_connect[0] = True
     while True:
         try:
-            # Создание нового сокета при каждой попытке
-            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client_socket.settimeout(0.1)
-            # Попытка подключения к серверу
-            port_client = int(input_port.user_text)
-            client_socket.connect((str(input_ip_adress.user_text), port_client))
-            print("Успешное подключение!")
-            client_socket.settimeout(None)
-            break
+            if check_start_connect[1] == True:
+                # Создание нового сокета при каждой попытке
+                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                client_socket.settimeout(0.1)
+                # Попытка подключения к серверу
+                port_client = int(input_port.user_text)
+                client_socket.connect((str(input_ip_adress.user_text), port_client))
+                print("Успешное подключение!")
+                client_socket.settimeout(None)
+                break
         except Exception as error:
+            check_start_connect[1] = False
             print("Неправильные данные", error)
             time.sleep(0.1)
             continue
@@ -133,7 +136,7 @@ def start_client():
                     if save_data_posistion_ships[0] == "fight":
                         check_can_connect_to_fight[0] = True
             else:
-                time.sleep(0.2)
+                time.sleep(0.5)
                 check_two_times.append(3)
                 # Перевірка значення в списку перед відправкою даних
                 if list_check_need_send[0] == True:  # Перевірка на `True`

@@ -78,23 +78,26 @@ class Font_Shop:
             self.ACTIVE = False
 
     def update_text(self):
-        if int(self.TEXT) == 0:
-            self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
-            self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
-        elif int(self.TEXT) >= 100:
-            self.MAX_WIDTH = 100
-            self.MAX_HEIGHT = 105
-            self.X_COR = 455
-            self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
-            self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
-            self.text_surface = pygame.transform.scale(self.text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
-        elif int(self.TEXT) > 0 and int(self.TEXT) < 100:
-            self.MAX_WIDTH = 100
-            self.MAX_HEIGHT = 105
-            self.X_COR = 457
-            self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
-            self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
-            self.text_surface = pygame.transform.scale(self.text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
+        self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
+        self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
+        self.text_surface = pygame.transform.scale(self.text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
+        # if int(self.TEXT) == 0:
+        #     self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
+        #     self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
+        # elif int(self.TEXT) >= 100:
+        #     self.MAX_WIDTH = 100
+        #     self.MAX_HEIGHT = 105
+        #     self.X_COR = 455
+        #     self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
+        #     self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
+        #     self.text_surface = pygame.transform.scale(self.text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
+        # elif int(self.TEXT) > 0 and int(self.TEXT) < 100:
+        #     self.MAX_WIDTH = 100
+        #     self.MAX_HEIGHT = 105
+        #     self.X_COR = 457
+        #     self.font = pygame.font.Font(self.PATH_TO_FONT, self.SIZE)
+        #     self.text_surface = self.font.render(self.TEXT, False , self.TEXT_COLOR)
+        #     self.text_surface = pygame.transform.scale(self.text_surface,(self.MAX_WIDTH, self.MAX_HEIGHT))
 
      # відмальовка тексту із заданою прозорістю
     def draw(self, screen: pygame.Surface):
@@ -192,14 +195,14 @@ fourth_task = Font_Shop(
 )
 
 player_balance = Font_Shop(
-    x_cor = 485 ,
-    y_cor = - (70 + (832 - (299 + 70))),
+    x_cor = 475 ,
+    y_cor = - (70 + (832 - (287 + 70))),
     size = 70 ,
     name_font = "Jersey15.ttf",
     text = str(money_list[0]),
-    target_y = 299 ,
-    max_width = 50,
-    max_height = 70, 
+    target_y = 287 ,
+    max_width = 80,
+    max_height = 110, 
     text_color = "Yellow"
 )
 

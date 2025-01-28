@@ -112,8 +112,10 @@ def connect_to_server():
         # якщо усі перевірки пройдені і користувач вперше натиснув на цю кнопку то запускаємо підключення до серверу
         # if event_connect_to_server.is_set():
         if check_start_connect[0] == False:
+            check_start_connect[1] = True
             connect_to_game.start()
         else:
+            check_start_connect[1] = True
             pass
         # якщо усі перевікри пройдені але це не перший запуск, наприклад перший раз увів айди сервера якого ще немає, а тепер такий сервер є 
         # то передаємо у  event_connect_to_server значення True за допомогою .set()

@@ -119,15 +119,17 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         player_balance_in_jar.text = str(task_game.money_list[0])
         player_balance_in_jar.update_text()
     if buy_fire_rocket[0] >= 1:
-        if buy_fire_rocket[0] <= 80:
+        if buy_fire_rocket[0] < 80:
             buy_fire_rocket[0] += 1
             task_game.money_list[0] -= 1
             task_game.player_balance.TEXT = str(task_game.money_list[0])
             task_game.player_balance.update_text()
             player_balance_in_jar.text = str(task_game.money_list[0])
             player_balance_in_jar.update_text()
-        elif cehck_buy_fire_rocket == "no" and buy_fire_rocket[0] >= 80:
-            buy_fire_rocket[0] = 0
+        else:
+            if cehck_buy_fire_rocket == "no":
+                print("Pencil")
+                buy_fire_rocket[0] = 0
 
     
     if check_buy_fire_fighter == "yes" and buy_fire_fighter[0] == 0:
