@@ -88,6 +88,7 @@ def start_client():
             check_start_connect[1] = False
             print("Неправильные данные", error)
             time.sleep(0.1)
+            client_socket.settimeout(None)
             continue
 
     print("Клиент подключён к серверу.")
