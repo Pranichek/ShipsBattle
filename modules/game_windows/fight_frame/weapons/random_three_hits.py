@@ -6,6 +6,9 @@ from ....server import check_time, list_player_role, turn
 flag_shield = [False]
 
 def random_hits_matrix():
+    '''
+    `Функция` которая делает `3` `рандомных` ударов, по вражеской матрице
+    '''
     count_hit = 0
     shots = 0  # Лічильник ударів
     available_cells = []  # Список координат доступних клітинок (рядок, стовпець)
@@ -38,7 +41,6 @@ def random_hits_matrix():
             data_player_shot.append(str(col))
             list_check_need_send[0] = True
         shots += 1  # Збільшуємо кількість ударів
-    list_check_need_send[0] = True
     check_time[0] = 0  
     if count_hit >= 1:
         if list_player_role[0] == "server_player":

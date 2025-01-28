@@ -4,7 +4,36 @@ from os.path import abspath, join
 pygame.init()
 #координаты  x y , width , height , active , image_name
 class Medal:
+    '''
+    ### Клас `отрисовки` медали ###
+    '''
     def __init__(self, x_cor: int, y_cor: int, width: int, height: int, image_name: str , medal_image_description: str):
+        '''
+        #### Метод конструктор, который позволит нам создавать `изображения` `медалей` ####
+
+        Атрибуты:
+        - :mod:`X_COR`: Координата X для позиционирования медали на экране.
+        - :mod:`Y_COR`: Координата Y для позиционирования медали на экране.
+        - :mod:`WIDTH`: Ширина изображения медали.
+        - :mod:`HEIGHT`: Высота изображения медали.
+        - :mod:`MEDAL_IMAGE_NAME`: Название файла изображения медали.
+        - :mod:`MEDAL_IMAGE_DESCRIPTION`: Название файла изображения с описанием медали.
+        - :mod:`PATH_IMAGE`: Путь к изображению медали.
+        - :mod:`MEDAL_DESDESCRIPTION_PATH` : Путь к изображению с описанием медали.
+        - :mod:`MEDAL_IMAGE`: Изображение медали, преобразованное и масштабированное.
+        - :mod:`MEDAL_DESDESCRIPTION_IMAGE`: Изображение с описанием медали, преобразованное и масштабированное.
+        - :mod:`ACTIVE` : Флаг, который указывает, активна ли медаль.
+        - :mod:`VISIBLE` : Прозрачность медали (100 — видимая, 0 — невидимая).
+        - :mod:`DESCRIPRION_VISIBLE` : Прозрачность описания медали (100 — видимая, 0 — невидимая).
+        - :mod:`RECT`: Прямоугольник, определяющий область, в которой отображается медаль на экране.
+
+        Пример использования :
+            ```python
+            four_decker_sniper_medal = Medal(x_cor = 750, y_cor = 24, width = 60, height = 60, image_name = "medal_four_decker",
+            medal_image_description = "four_decker_sniper")
+            ```
+
+        '''
         self.X_COR = x_cor
         self.Y_COR = y_cor
         self.WIDTH = width
@@ -23,31 +52,49 @@ class Medal:
         self.RECT = self.MEDAL_IMAGE.get_rect(topleft=(self.X_COR - 10, self.Y_COR + 5))
         self.RECT = self.RECT.inflate(-20, -20)
     def draw_medals(self, screen: pygame.Surface):
+        '''
+        `Метод` `отрисовки` изображений медалей, на `указанном` `экране`
+        '''
         self.MEDAL_IMAGE.set_alpha(self.VISIBLE)
         screen.blit(self.MEDAL_IMAGE , (self.X_COR, self.Y_COR))
     #для самой медали
     def fade_in(self):
+        '''
+        `Метод`, который позволяет сделать медали `прозрачным` `(постепенно)`
+        '''
         if self.VISIBLE < 255:
             self.VISIBLE += 5  
             if self.VISIBLE >= 255:
                 self.VISIBLE = 255  
     # для окошка под медлью
     def fade_in_descriprion(self):
+        '''
+        `Метод`, который позволяет сделать описание медали `прозрачным` `(постепенно)`
+        '''
         if self.DESCRIPRION_VISIBLE < 255:
             self.DESCRIPRION_VISIBLE += 20
             if self.DESCRIPRION_VISIBLE >= 255:
                 self.DESCRIPRION_VISIBLE = 255  
     def fade_out_description(self):
+        '''
+        `Метод`, который позволяет сделать описание медали `не прозрачным` `(постепенно)`
+        '''
         if self.DESCRIPRION_VISIBLE > 0:
             self.DESCRIPRION_VISIBLE -= 20
             if self.DESCRIPRION_VISIBLE <= 0:
                 self.DESCRIPRION_VISIBLE = 0
 
     def completed_task(self):
+        '''
+        `Метод`, который `проверяет` `выполнено` ли `задание`
+        '''
         if self.ACTIVE == True:
             self.fade_in()
             
     def show_descriptions(self, screen: pygame.Surface):
+        '''
+        `Метод`, который `отрисовывает` описание медали, на `указанном` `экране`
+        '''
         mouse = pygame.mouse.get_pos()
         if self.RECT.collidepoint(mouse):
             self.fade_in_descriprion()

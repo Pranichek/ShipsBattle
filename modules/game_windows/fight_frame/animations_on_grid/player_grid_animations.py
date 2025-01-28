@@ -1,17 +1,17 @@
 from ....screens import list_grid, list_object_map
 from ....classes import Animation
 
-def check_and_add_hit_markers(x_enemy_cross: list, y_enemy_cross: list, list_cross_player: list, enemy_fire: list):
-    for index_row ,row in enumerate(list_grid):
-        for index_cell , cell in enumerate(row):
+def check_and_add_hit_markers(x_enemy_cross: list, y_enemy_cross: list, list_cross_player: list, enemy_list_fire: list):
+    for index_row, row in enumerate(list_grid):
+        for index_cell, cell in enumerate(row):
             # то есть если в нашей матрице находится 7 , то это значит что соперник выстрелил успешно
             # 7 - значит что соперник выстрелил успешно по нашей сетке
             if cell == 7:
                 exist = False
-                for row_col in enemy_fire:
-                    if row_col[0] == row and row_col[1] == cell:
+                for row_col in enemy_list_fire:
+                    if row_col[0] == row and row_col[1] == cell and row_col[-1] <= 0:
                         exist = True
-                if not exist:
+                if exist == False:
                     # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
                     row = index_row
                     cell = str(index_cell)

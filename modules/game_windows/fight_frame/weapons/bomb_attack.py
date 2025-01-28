@@ -7,20 +7,34 @@ import modules.achievement as achievement
 from ....classes.class_ship import list_ships
 from ....screens import enemy_matrix
 import time
+# Флаги 
 flag_shield = [False]
+
 can_send = [False]
 def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list, count_5: int):
     """
-ВНИМАНИЕ ЖООООООООСКИЕ КАСТЫЛИ, ВСЕМ БАЯТЬСЯ ! ! !
-entry_cell для внутренних клеток, если надо ударить 3 на 3 во внутренних клеточках
-top_left_corner для верхнего левого угла 3 на 3 
-bot_left_corner для нижнего левого угла 3 на 3
-left_wall для левой стенки 3 на 3 
-top_right_corner для правого верхнего угла 3 на 3
-bot_right_corner для правого нижнего угла 3 на 3 
-bot_wall для нижней стенки 3 на 3
-top_wall для верхней стенки 3 на 3 
-right_wall для правой стенки 3 на 3 
+    `Функция` Для улучшение атаки, в диапозоне `3 на 3`
+
+    (можно было без них, но уже слишком поздно)
+
+    `Индексы` : Определяет тип области, где будет атака. Возможные значения:
+    - :mod:`entry_cell` — центральная клетка
+    - :mod:`'top_left_corner` — верхний левый угол
+    - :mod:`bot_left_corner` — нижний левый угол
+    - :mod:`left_wall` — левая стена
+    - :mod:`top_right_corner` — верхний правый угол
+    - :mod:`bot_right_corner` — нижний правый угол
+    - :mod:`bot_wall` — нижняя стена
+    - :mod:`top_wall` — верхняя стена
+    - :mod:`right_wall` — правая стена
+
+    `Параметры`
+    - :mod:`col`: Колона на игровом поле, где происходит атака
+    - :mod:`row`: Ряд на игровом поле, где происходит атака
+    - :mod:`count_7`: Счётчик количества клеток, которые были обновлены в результате атаки (например, повреждённые корабли)
+    - :mod:`count_ships`: Список для хранения информации о попаданиях в корабли (значения клеток поля)
+    - :mod:`count_misses`: Список для хранения количества промахов
+    - :mod:`count_5`: Счётчик количества обнаруженных защитных элементов (например, защитных полей)
     """
     client_module.data_player_shot.append("bomb_shot")
     if index == "entry_cell":

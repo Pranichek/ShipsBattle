@@ -3,6 +3,7 @@ from ..classes import Button
 from..classes.class_click import all_sounds
 pygame.init()
 
+
 def turn_off_volume_func():
     pygame.mixer.music.set_volume(0)
     for sound_effects in all_sounds:

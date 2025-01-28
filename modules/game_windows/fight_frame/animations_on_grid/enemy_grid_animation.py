@@ -21,7 +21,7 @@ def update_enemy_matrix_animations(check_animation_rocket: list, flag_miss_rocke
                 if enemy_matrix[row][cell] == 7:
                     exist = False
                     for row_col in list_fire:
-                        if row_col[0] == row and row_col[1] == cell:
+                        if row_col[0] == row and row_col[1] == cell and row_col[-1] == 0:
                             exist = True
                     if not exist:
                         cltka = (row * 10) + cell

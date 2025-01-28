@@ -7,6 +7,15 @@ import modules.shop as shop
 from ....screens import enemy_matrix
 
 def restore_part_of_ship(row:int, col: int, str_col: str, health_anim: list):
+    '''
+    `Функция` которая позволяет восстановить часть повреждённого корабля (не мёртвого)
+
+    `Параметры` 
+    - :mod:`row`:номер ряда клетки
+    - :mod:`col`: номер столбца клетки
+    - :mod:`str_col`: строковое представление номера столбца
+    - :mod:`health_anim`: список  для анимации восстановления
+    '''
      # сохраняем индекс рядка и клеточки в которой находится наш подсетрленный корабль
     if enemy_matrix != "yes":
         cltx = (row * 10) + int(str_col[-1])
