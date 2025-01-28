@@ -1,6 +1,7 @@
 import modules.shop as shop
 import modules.server as server_module
 import modules.client as client_module
+import random
 from ....game_tools import count_money_hit
 import modules.achievement as achievement
 from ....classes.class_ship import list_ships
@@ -233,7 +234,7 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
                 if 1 in count_ships:
                     shop.first_shot_is_kill(1)
                 else:
-                    shop.first_shot_is_kill(2)
+                    shop.first_shot_is_kill(random.choice(count_ships))
             if shop.third_task.TEXT == shop.list_third_task[2]:
                 shop.check_three_2decker_ship_in_row.extend(count_ships)
             if shop.first_task.TEXT == shop.list_first_task[-1]:
@@ -265,19 +266,19 @@ def bomb_shot(row: int, col:int, count_7: list, count_5,count_ships: list, count
     elif count_7[0] <= 1:  # Передаємо хід серверу
         try:
             if shop.third_task.TEXT == shop.list_third_task[1]:
-                shop.single_ships.extend(count_misses)
+                shop.single_ships.append(0)
             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
                 shop.first_shot_is_kill(0)
             if shop.third_task.TEXT == shop.list_third_task[2]:
-                shop.check_three_2decker_ship_in_row.extend(count_misses)
+                shop.check_three_2decker_ship_in_row.append(0)
             if shop.first_task.TEXT == shop.list_first_task[-1]:
                 shop.three_hits_in_row(0)
             if shop.third_task.TEXT == shop.list_third_task[-1]:
-                shop.count_three_ships.extend(count_misses)
+                shop.count_three_ships.append(0)
             if shop.second_task.TEXT == shop.list_second_task[2]:
-                shop.ship_hits.extend(count_misses)
+                shop.ship_hits.append(0)
             if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                shop.ship_hits_three.extend(count_misses)
+                shop.ship_hits_three.append(0)
             if shop.first_task.TEXT == shop.list_first_task[0]:
                 shop.two_hits_in_row(number_cell = 5)
             if shop.first_task.TEXT == shop.list_first_task[1]:
