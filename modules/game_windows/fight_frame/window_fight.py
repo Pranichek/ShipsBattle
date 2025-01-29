@@ -258,6 +258,10 @@ def fight_window():
 
     Schechik_before_removeall = [0]
     tsest = [False]
+
+    one_data_fire = [0]
+    target_time = [1]
+    one_enemy_fire = [0, False]
     while run_game:
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
@@ -354,12 +358,7 @@ def fight_window():
                                 server_module.turn[0] = "server_turn"
                         for data_enemy in check_data:
                             if "fire" in check_data:
-                                if enemy_check_fire[0] == 0:
-                                    if len(enemy_row_fire) > 0:
-                                        for fire in enemy_list_fire:
-                                            fire[-1] += 1
-
-                                enemy_check_fire[0] += 1
+                                one_enemy_fire[1] = True
                                 indices_fire = []
                                 for i, value in enumerate(check_data):
                                     if value == "fire":
@@ -377,6 +376,9 @@ def fight_window():
                                 index_fire  = check_data.index("put_out_the_fire")
                                 stew_row.append(int(check_data[(index_fire +1)]))
                                 stew_col.append(int(check_data[(index_fire +2)]))
+                                for arson in list_fire:
+                                    if arson[0] == row and arson[1] == col:
+                                        arson[-1] += 1
                             elif data_enemy == "shot":
                                 server_module.check_time[0] = 0
                                 count_hit = 0
@@ -500,6 +502,20 @@ def fight_window():
                         enemy_check_fire[0] = 0
         except:
             continue
+        # # кнопка для открытия магазина
+        # if one_enemy_fire[0] >= 1 and server_module.check_time[0] == 0:
+        #     one_enemy_fire[0] = 0
+        # shop_and_tasks.draw(surface = module_screen.main_screen)
+        # if server_module.check_time[0] >= 1 and one_enemy_fire[0] == 0:
+        #     print("Pirog")
+        #     one_enemy_fire[1] = False
+        #     one_enemy_fire[0] += 1
+        #     try:
+        #         for fire in enemy_list_fire:
+        #             fire[-1] += 1
+        #     except:
+        #         pass
+        
         
         # обнуление времени и хода, если игрок не походил
         if server_module.check_time[0] >= 30:
@@ -681,12 +697,23 @@ def fight_window():
                 cross_animation.animation(main_screen = module_screen.main_screen , count_image = 13)
 
         # кнопка для открытия магазина
+        if one_data_fire[0] >= 1 and server_module.check_time[0] == 1:
+            one_data_fire[0] = 0
         shop_and_tasks.draw(surface = module_screen.main_screen)
-
-        if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
-            if server_module.check_time[0] == 0:
+        if server_module.check_time[0] == 0 and one_data_fire[0] == 0:
+            if len(row_fire_col_anim) > 0:
+                for fire in list_fire:
+                    fire[-1] += 1
+            try:
+                for fire in enemy_list_fire:
+                    fire[-1] += 1
+            except:
+                pass
+            one_data_fire[0] += 1
+        if server_module.check_time[0] == 0:
                 test_time[0] = 0
-            if (server_module.check_time[0] == 1 and test_time[0] == 0):
+        if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
+            if test_time[0] == 0 and len(data_player_shot) == 0 and server_module.check_time[0] == 1:
                 test_time[0] += 1
                 for index, element in enumerate(Cordi_Burning_Ship):
                     try:
@@ -756,9 +783,6 @@ def fight_window():
                                     data_player_shot.append("fire")
                                     data_player_shot.append(row_fire)
                                     data_player_shot.append(col_fire)
-                                    if len(row_fire_col_anim) > 0:
-                                        for fire in list_fire:
-                                            fire[-1] += 1
                                     row_fire_col_anim.append([row_fire, 0])
                                     col_fire_row_anim.append([col_fire, 0])
                                     print(Cordi_Burning_Ship[index][0], "first one")
@@ -1324,7 +1348,9 @@ def fight_window():
                                                 col = int(str_col_our[-1])
                                                 if row in pozhar_row:
                                                     if col in pozhar_col:
-                                                        shop.flag_put_out_the_fire[0] = "no"
+                                                        for arson in enemy_list_fire:
+                                                            if arson[0] == row and arson[1] == col:
+                                                                arson[-1] += 1
                                                         activate_fire_fighter[0] = False
                                                         fire_fighter_anim[0] = True
                                                         fire_fighter_animation.X_COR = x_animation
@@ -1337,8 +1363,6 @@ def fight_window():
                                                         active_product_shine.x_cor = -100
                                                         active_product_shine.y_cor = -100
 
-                                        
-                                        
                 x_mouse, y_mouse = pygame.mouse.get_pos()                                           
                 if shop.shop_item[0].TURN != "Up" and connection[0] == True:
                     if check_animation[0] == "" and flag_miss_rocket_animation[0] == "" and len(radar.list_cells) == 0:
@@ -1412,6 +1436,7 @@ def fight_window():
                                                     active_product_shine.y_cor = -100
                                                 # автоудар
                                                 elif shop.flagbimb200[0] == "yes" and numberofbim[0] not in shop.cheak and activate_auto_rocket[0] == True: 
+
                                                     kord = Missile_200(row,col,enemy_matrix)
                                                     count_killed_ships = []
                                                     #если false flag  то бан клетка и если NOne значит нету корабликов 
@@ -1536,7 +1561,6 @@ def fight_window():
                                                     x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
                                                     y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
                                                     count_7 = [0]
-                                                    
                                                     count_ships = []
                                                     count_misses = []
                                                     old_killed_ships[0] = len(server_module.enemy_died_ships)
