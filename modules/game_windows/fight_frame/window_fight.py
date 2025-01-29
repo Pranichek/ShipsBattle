@@ -358,8 +358,8 @@ def fight_window():
                                     if len(enemy_row_fire) > 0:
                                         for fire in enemy_list_fire:
                                             fire[-1] += 1
-                                enemy_check_fire[0] += 1
 
+                                enemy_check_fire[0] += 1
                                 indices_fire = []
                                 for i, value in enumerate(check_data):
                                     if value == "fire":
@@ -684,13 +684,14 @@ def fight_window():
         shop_and_tasks.draw(surface = module_screen.main_screen)
 
         if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
-            if server_module.check_time[0]==2:
-                test_time[0] = 2
-            if server_module.check_time[0]== 1 and server_module.check_time[0] != test_time[0]:
+            if server_module.check_time[0] == 0:
+                test_time[0] = 0
+            if (server_module.check_time[0] == 1 and test_time[0] == 0) or (server_module.check_time[0] == 2 and test_time[0] == 0):
+                test_time[0] += 1
                 for index, element in enumerate(Cordi_Burning_Ship):
                     try:
                         if len(element) != 0:
-                            if Cordi_Burning_Ship[index][0] != 0 and  Cordi_Burning_Ship[index]:
+                            if Cordi_Burning_Ship[index][0] != 0 and Cordi_Burning_Ship[index]:
                                 if Cordi_Burning_Ship[index][0] == 4:
                                     ship_element = 1
                                 elif Cordi_Burning_Ship[index][0] == 3:
@@ -706,6 +707,19 @@ def fight_window():
                                     ship_element -= 1
                                     row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
                                     Cordi_Burning_Ship[index][0] = 0
+
+                                for sublist in Cordi_Burning_Ship:
+                                    try:
+                                        for coords in sublist[1:]:  
+                                            row, column = coords
+                                            if enemy_matrix[row][column] == 7 and row != row_fire and column != col_fire:
+                                                sublist.remove(coords) 
+                                    except:
+                                        pass
+
+                                print(Cordi_Burning_Ship, "CORDI")
+                                print(Cordi_Burning_Ship[index][ship_element], "cell")
+
                                 
                                 if  row_fire in stew_row  and  col_fire in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
@@ -734,10 +748,9 @@ def fight_window():
                                 if  row_fire in stew_row  and  (col_fire - 1) in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
                                     flagstop = True
-                                    tsest[0]=True
+                                    tsest[0] = True
                                     Schechik_before_removeall[0] = 40
                                 
-
                                 if flagstop != True: 
                                     enemy_matrix[row_fire][col_fire] = 7
                                     data_player_shot.append("fire")
@@ -762,7 +775,6 @@ def fight_window():
                         continue
                     
                 list_check_need_send[0] = True
-                test_time[0] = server_module.check_time[0]
 
         #----------------------------------------------------------------
         # когда игрок стреляет огнем анимация

@@ -100,7 +100,7 @@ def start_client():
         try:
             connection[0] = True
             if check_can_connect_to_fight[2] != 'True':
-                time.sleep(0.2)
+                time.sleep(0.1)
                 status_game = [save_data_posistion_ships[0], input_nick.user_text, input_password.user_text, list_users[input_nick.user_text]["points"],check_can_connect_to_fight[0]]
                 str_data = ""
                 for data in status_game:
@@ -135,7 +135,7 @@ def start_client():
                 else:
                     print("Index error")
                     if save_data_posistion_ships[0] == "fight":
-                        check_can_connect_to_fight[0] = True
+                        check_can_connect_to_fight[2] = 'True'
             else:
                 time.sleep(0.5)
                 check_two_times.append(3)
