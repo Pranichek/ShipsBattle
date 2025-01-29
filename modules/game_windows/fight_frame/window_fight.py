@@ -686,7 +686,7 @@ def fight_window():
         if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
             if server_module.check_time[0] == 0:
                 test_time[0] = 0
-            if (server_module.check_time[0] == 1 and test_time[0] == 0) or (server_module.check_time[0] == 2 and test_time[0] == 0):
+            if (server_module.check_time[0] == 1 and test_time[0] == 0):
                 test_time[0] += 1
                 for index, element in enumerate(Cordi_Burning_Ship):
                     try:
