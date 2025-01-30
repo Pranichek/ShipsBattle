@@ -5,7 +5,7 @@ from ...classes.class_image import DrawImage
 from ...server import SERVER
 from ...classes.class_text import Font
 from ...classes.class_button import Button
-from ...classes.class_click import music_click
+from ...classes.class_click import music_click, create
 from ...classes.class_input_text import input_ip_adress, input_nick, input_port, input_password
 from .launch_server import check_server_started, fail_start_server, start_server
 from ..button_pressed import check_press_button, button_action
@@ -52,6 +52,7 @@ input_data_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,fol
 third_cold_image = DrawImage(width=  150, height= 68 , x_cor= 536 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 fourth_cold_image = DrawImage(width= 150, height= 68 , x_cor= 686 , y_cor= 705 , folder_name= "decorations" , image_name= "ice.png")
 room_data = DrawImage(width = 297, height = 75, x_cor = 500, y_cor = 25, folder_name = "backgrounds", image_name = "room_data.png")
+room_data_bg = DrawImage(width = 325, height = 100, x_cor = 490, y_cor = 15, folder_name = "backgrounds", image_name = "bg_green.png")
 
 #buttons
 lan_ip_button = Button(x = 790, y = 410, image_path = "lan_ip_button.png", image_hover_path = "lan_ip_button_hover.png", width = 58, height = 60, action = get_local_ip)
@@ -85,7 +86,8 @@ def create_game_window():
     volume_up_button.y = 26
     off_sound_button.x = 1188
     off_sound_button.y = 26
-
+    count_music = 1
+    list_serv = [False]
     #основний цикл роботи вікна користувача
     while run_game:
         if input_ip_adress.user_text != "ip adress":
@@ -112,7 +114,20 @@ def create_game_window():
         third_cold_image.draw_image(screen = module_screen.main_screen)
         fourth_cold_image.draw_image(screen = module_screen.main_screen)
         start_game_button.draw(surface =module_screen.main_screen)
+        room_data_bg.draw_image(screen = module_screen.main_screen)
+        room_data_bg.visible = 0
 
+        if SERVER.START_CONNECT == True:
+            list_serv[0] = True
+            print("hahahhahhahahhahha")
+            room_data_bg.visible = 255
+            room_data_bg.fade_in()
+            if count_music == 1: 
+                print("musicaaaaaaaaa")
+                create.play2(0)
+                count_music += 1
+        elif SERVER.START_CONNECT == False:
+            room_data_bg.visible = 0
         room_data.draw_image(screen = module_screen.main_screen)
         ip_room_text.draw_font()
         port_room_text.draw_font()
@@ -166,6 +181,8 @@ def create_game_window():
                 off_sound_button.check_click(event = event)
                 volume_down_button.check_click(event = event)
                 volume_up_button.check_click(event = event)
+                # room_data_bg.fade_out()
+                # room_data_bg.visible = 0
 
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None

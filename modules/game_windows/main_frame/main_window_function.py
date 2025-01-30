@@ -1,4 +1,5 @@
 import pygame
+# import modules.game_tools as fade_effect
 import modules.game_windows as game_windows
 import modules.screens.screen as module_screen
 import modules.server as server_module
@@ -9,7 +10,14 @@ from ...classes.class_button import Button
 from ..change_window import change_scene
 from ..button_pressed import button_action, check_press_button
 from ...volume_settings import off_sound_button, volume_up_button, volume_down_button
+from .rules_frame import rules_window
 
+
+rules_list = [False]
+def go_to_rules():
+    # fade_effect.apply_fade_effect(main_screen= module_screen.main_screen)
+    change_scene(game_windows.rules_window())
+    rules_list[0] = True
 
 #картинки
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")
@@ -23,6 +31,8 @@ create_game_frame = Button(x= 113, y = 653,image_path= "button_create.png" , ima
 join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_hover_path= "join_button_hover.png" , width= 346 , height = 80 , action = button_action)
 # список для того чтобы гланая музыка играла тоьлко один раз
 once_play_music = [0]
+# кнопка меню
+rule_button = Button(x= 1173 , y = 27,image_path= "rules_button.png" , image_hover_path= "rules_button_hover.png" , width= 80 , height = 58 , action = go_to_rules)
 
 
 #створюємо функцію, яка викликається при запуску гри для користувача який запускає сервер
@@ -57,6 +67,7 @@ def main_window():
         off_sound_button.draw(surface = main_screen)
         volume_up_button.draw(surface = main_screen)
         volume_down_button.draw(surface = main_screen)
+        rule_button.draw(surface = main_screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -69,6 +80,7 @@ def main_window():
                 off_sound_button.check_click(event = event)
                 volume_up_button.check_click(event = event)
                 volume_down_button.check_click(event = event)
+                rule_button.check_click(event = event)
 
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()
@@ -86,4 +98,14 @@ def main_window():
                             if y_pos <= create_game_frame.y + create_game_frame.height:
                                 print("Create window")
                                 change_scene(game_windows.create_game_window())
+                elif x_pos >= rule_button.x:
+                    if x_pos <= rule_button.x + rule_button.width:
+                        if y_pos >= rule_button.y:
+                            if y_pos <= rule_button.y + rule_button.height:
+                                print("go_rules")
+                                change_scene(game_windows.rules_window())
+            if rules_list[0] == True:
+                rules_list[0] = False
+                run_game = False
+                
         pygame.display.flip()

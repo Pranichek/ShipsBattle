@@ -16,8 +16,8 @@ class Sound:
       def set_volume(self, volume):
          self.SOUND.set_volume(volume)
          
-     def get_busy(self):
-        return pygame.mixer.get_busy()
+      def get_busy(self):
+         return pygame.mixer.get_busy()
          
 
 music_click = Sound(name_sound = "button_pressed.mp3")
@@ -33,10 +33,11 @@ get_coin_sound = Sound(name_sound = "coin.mp3")
 player_turn_sound = Sound(name_sound = "player_turn.mp3")
 enemy_turn_sound = Sound(name_sound = "enemy_turn.mp3")
 radar_sound = Sound(name_sound = "radar_sound.mp3")
+create =Sound(name_sound = "create.mp3")
 
 all_sounds = [
    music_click, music_achieve, death_ship_sound, miss_water_sound,
    del_letter_sound, typing_sound, shot_sound, buy_product_sound,
    random_first_choice_sound, get_coin_sound, player_turn_sound, enemy_turn_sound,
-   radar_sound
+   radar_sound, create
 ]

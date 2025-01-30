@@ -12,6 +12,8 @@ from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
 from ...client import check_connection_users, check_can_connect_to_fight, save_data_posistion_ships, connection
 from ...volume_settings import volume_down_button, volume_up_button, off_sound_button
+from modules.volume_settings.turn_off_volume import save_data_loud
+from modules.classes.class_click import all_sounds
 
 #фон для очікування користувача
 waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "waiting_background.png")
@@ -20,8 +22,11 @@ def waiting_window():
     print("Зашло")
     pygame.display.set_caption("Waiting window")
     run_game = True
-    music_load_main.stop()
-    music_load_waiting.play()
+    for song in all_sounds:
+        song.set_volume(save_data_loud[0])
+    # music_load_main.stop()
+    # music_load_waiting.play()
+
 
     volume_down_button.x = 1096
     volume_down_button.y = 26

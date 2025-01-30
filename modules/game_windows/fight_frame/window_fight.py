@@ -25,6 +25,8 @@ from ...client import list_check_need_send, check_two_times, send_matrix, dict_s
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 from ..button_pressed import check_press_button
+from modules.volume_settings.turn_off_volume import save_data_loud
+from modules.classes.class_click import all_sounds
 
 
 list_check_shop = [None]
@@ -307,11 +309,15 @@ def fight_window():
 
 
         if server_module.list_player_role[0] != "server_player" and animation_random_player.COUNT_IMAGES >= 29 and count_sound_time[0] == 0:
-            enemy_turn_sound.play2(loops = 1)
-            count_sound_time[0] = 1
+            for song in all_sounds:
+                song.set_volume(save_data_loud[0])
+            # enemy_turn_sound.play2(loops = 1)
+            # count_sound_time[0] = 1
         elif animation_random_player.COUNT_IMAGES >= 28 and count_sound_time[0] == 0 and server_module.list_player_role[0] != "client_player":
-            player_turn_sound.play2(loops = 1)
-            count_sound_time[0] = 1
+            for song in all_sounds:
+                song.set_volume(save_data_loud[0])
+            # player_turn_sound.play2(loops = 1)
+            # count_sound_time[0] = 1
     
 
 
