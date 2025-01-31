@@ -331,7 +331,6 @@ def fight_window():
                 check_two_times.clear()
         try:
             if len(server_module.enemy_data) > 0:
-
                 check_data = server_module.enemy_data[0].split(' ')
                 if check_data[0] == "enemy_matrix":
                     check_list = server_module.enemy_data[0].split(' ')
@@ -391,8 +390,6 @@ def fight_window():
                                         else:
                                             list_grid[int(check_data[1])][int(check_data[2])] = 7
                                             server_module.check_time[0] = 0
-                                        data_player_shot.append("enemy_turn")
-                                        list_check_need_send[0] = True
                                         if server_module.list_player_role[0] == "server_player":
                                             server_module.turn[0] = "client_turn"
                                         elif server_module.list_player_role[0] == "client_player":
@@ -424,8 +421,6 @@ def fight_window():
                                     elif server_module.list_player_role[0] == "client_player":
                                         server_module.turn[0] = "client_turn"
                                 elif count_hit >= 1:
-                                    data_player_shot.append("enemy_turn")
-                                    list_check_need_send[0] = True
                                     if server_module.list_player_role[0] == "server_player":
                                         server_module.turn[0] = "client_turn"
                                     elif server_module.list_player_role[0] == "client_player":
@@ -451,8 +446,6 @@ def fight_window():
                                     elif server_module.list_player_role[0] == "client_player":
                                         server_module.turn[0] = "client_turn"
                                 else:
-                                    data_player_shot.append("enemy_turn")
-                                    list_check_need_send[0] = True
                                     if server_module.list_player_role[0] == "server_player":
                                         server_module.turn[0] = "client_turn"
                                     elif server_module.list_player_role[0] == "client_player":
@@ -1589,17 +1582,13 @@ def fight_window():
                                                         shop.flag_arson[0] = False
                                                     active_product_shine.x_cor = -100
                                                     active_product_shine.y_cor = -100
-                                                    
-
+        
         if shop.third_task.TEXT == shop.list_third_task[-1]:
             shop.kill_two_three_decker_in_a_row()
-
         if shop.third_task.TEXT == shop.list_third_task[1]:
             shop.kill_four_single_ships_in_a_row() 
-
         if shop.third_task.TEXT == shop.list_third_task[2]:
             shop.kill_three_double_decker_in_a_row()
-
         achievement.monster_of_perfictionists()
 
     

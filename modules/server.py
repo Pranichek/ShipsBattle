@@ -36,7 +36,7 @@ check_repeat = [0]
 # список для проверки перехода на фрейм боя
 list_check_ready_to_fight = [None]
 # лист очереди
-turn = ["server_turn"]
+turn = ["server_turn", False]
 # лист таймер времени
 check_time = [0]
 # Лист для проверки за кого мы играем(сервер или клиент)
