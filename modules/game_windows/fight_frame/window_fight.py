@@ -447,13 +447,13 @@ def fight_window():
                         continue
                     if "fire_fighter" == check_data[0]:
                         print("STOP FIRE")
+                        for arson in list_fire:
+                            if arson[0] == int(check_data[(1)]) and arson[1] == int(check_data[(2)]):
+                                arson[-1] += 1
                         stew_row.append(int(check_data[(1)]))
                         stew_col.append(int(check_data[(2)]))
-                        for arson in list_fire:
-                            if arson[0] == row and arson[1] == col:
-                                arson[-1] += 1
 
-                    if check_data[0] == 'random_hits':
+                    elif check_data[0] == 'random_hits':
                         print(check_data)
                         index_cell = 0
                         count_hit = 0
