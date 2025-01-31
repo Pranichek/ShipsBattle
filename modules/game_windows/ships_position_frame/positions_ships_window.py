@@ -11,7 +11,7 @@ from ...classes.class_ship import list_ships
 from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
 from ...game_tools import apply_fade_effect
-from ..change_window import change_scene, list_current_scene
+from ..change_window import change_scene
 from ..button_pressed import check_press_button
 from .check_placing_ships import connect_to_fight
 from .random_placing import random_places_ships
@@ -30,7 +30,7 @@ ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , imag
 random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height = 48 , action = random_places_ships)
 
 def ships_position_window():
-    
+
     music_load_waiting.stop()
     music_load_main.play()
 
@@ -101,7 +101,7 @@ def ships_position_window():
 
             if event.type == pygame.QUIT:
                 run_game = False  
-                change_scene(None)
+                change_scene("END GAME")
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 ready_for_battle.check_click(event = event)
                 random_place_ships.check_click(event = event)

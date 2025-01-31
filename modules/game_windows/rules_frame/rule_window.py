@@ -43,6 +43,7 @@ def rules_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False
+                change_scene("END GAME")
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_main.check_click(event = event)
         if check_run_game[0] == True:

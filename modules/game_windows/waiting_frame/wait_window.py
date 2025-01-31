@@ -6,7 +6,7 @@ import modules.game_windows as game_windows
 from ...screens import main_screen
 from ...classes.class_music import music_load_main, music_load_waiting
 from ...classes.class_image import DrawImage
-from ..change_window import change_scene, list_current_scene
+from ..change_window import change_scene
 from ..button_pressed import button_action, check_press_button
 from ...json_functions import read_json
 from ...game_tools import apply_fade_effect
@@ -48,7 +48,6 @@ def waiting_window():
             change_scene(fight_window())
             run_game = False
             check_press_button[0] = None
-            break
 
         if check_connection_users[0] != False and save_data_posistion_ships[0]=="":
             apply_fade_effect(screen = module_screen.main_screen)
@@ -62,7 +61,7 @@ def waiting_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                change_scene(None)
+                change_scene("END GAME")
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 volume_up_button.check_click(event = event)
                 volume_down_button.check_click(event = event)

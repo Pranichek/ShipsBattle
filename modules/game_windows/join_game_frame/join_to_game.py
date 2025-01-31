@@ -145,7 +145,7 @@ def join_game_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                change_scene(None)
+                change_scene("END GAME")
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text

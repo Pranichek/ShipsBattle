@@ -372,14 +372,6 @@ def fight_window():
 
                                     enemy_row_fire.append([int(check_data[(index_fire + 1)]), 0])
                                     enemy_col_fire.append([int(check_data[(index_fire + 2)]), 0])
-                                
-                            elif "put_out_the_fire" in check_data:
-                                index_fire  = check_data.index("put_out_the_fire")
-                                stew_row.append(int(check_data[(index_fire +1)]))
-                                stew_col.append(int(check_data[(index_fire +2)]))
-                                for arson in list_fire:
-                                    if arson[0] == row and arson[1] == col:
-                                        arson[-1] += 1
                             elif data_enemy == "shot":
                                 server_module.check_time[0] = 0
                                 count_hit = 0
@@ -453,6 +445,14 @@ def fight_window():
                                 server_module.check_time[0] = 0
                     except:
                         continue
+                    if "fire_fighter" == check_data[0]:
+                        print("STOP FIRE")
+                        stew_row.append(int(check_data[(1)]))
+                        stew_col.append(int(check_data[(2)]))
+                        for arson in list_fire:
+                            if arson[0] == row and arson[1] == col:
+                                arson[-1] += 1
+
                     if check_data[0] == 'random_hits':
                         print(check_data)
                         index_cell = 0
@@ -725,6 +725,18 @@ def fight_window():
                                         row_fire , col_fire = Cordi_Burning_Ship[index][ship_element + 1]
                                 except:
                                     pass
+
+                                if row_fire in stew_row:
+                                    Cordi_Burning_Ship[index][0] = 0
+                                    flagstop = True
+                                    tsest[0]= True
+                                    Schechik_before_removeall[0] = 40
+
+                                if col_fire in stew_col:
+                                    Cordi_Burning_Ship[index][0] = 0
+                                    flagstop = True
+                                    tsest[0] = True
+                                    Schechik_before_removeall[0] = 40
                         
                                 if  row_fire in stew_row  and  col_fire in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
@@ -1156,7 +1168,7 @@ def fight_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                change_scene(None)
+                change_scene("END GAME")
             # перевіряємо чи натиснули на кнопку показу магазину 
             if list_check_shop[0] == True:
                 # якщо так , то говоримо щоб усі елементи рухались униз(щоб гравець зміг їх побачити)
@@ -1333,7 +1345,7 @@ def fight_window():
                                                         fire_fighter_anim[0] = True
                                                         fire_fighter_animation.X_COR = x_animation
                                                         fire_fighter_animation.Y_COR = y_animation
-                                                        data_player_shot.append("put_out_the_fire")
+                                                        data_player_shot.append("fire_fighter")
                                                         data_player_shot.append(row)
                                                         data_player_shot.append(col)
                                                         list_check_need_send[0] = True
@@ -1616,7 +1628,7 @@ def fight_window():
                     # зупиняємо цикл гри
                     run_game = False
                     # змінюємо фрейм бою , на фрейм показу результатів
-                    change_scene(scene =game_windows.finish_window())
+                    change_scene(scene = game_windows.finish_window())
                     check_press_button[0] = None
 
         if screen_shake[0] > 1:

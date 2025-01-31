@@ -157,7 +157,7 @@ def create_game_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False  
-                list_current_scene[0] = None
+                list_current_scene[0] = "END GAME"
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)
