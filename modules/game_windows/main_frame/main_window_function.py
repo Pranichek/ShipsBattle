@@ -112,7 +112,6 @@ def main_window():
                             if y_pos <= create_game_frame.y + create_game_frame.height:
                                 print("Create window")
                                 change_scene(game_windows.create_game_window())
-            
             if check_run_game[0] == True:
                 check_run_game[0] = False
                 run_game = False

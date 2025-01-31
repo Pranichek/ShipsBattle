@@ -19,7 +19,7 @@ from ...classes.radar_class import radar
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound, all_sounds
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors, find_all_auto_rocket
 from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix
@@ -133,6 +133,8 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
 list_fire = []
 row_fire_col_anim = []
 col_fire_row_anim = []
+list_already_fire_cells = []
+first_shot_fire = []
 
 enemy_col_fire = []
 enemy_row_fire = []
@@ -501,22 +503,7 @@ def fight_window():
                     if check_data[0] == "keep-alive":
                         enemy_check_fire[0] = 0
         except:
-            continue
-        # # кнопка для открытия магазина
-        # if one_enemy_fire[0] >= 1 and server_module.check_time[0] == 0:
-        #     one_enemy_fire[0] = 0
-        # shop_and_tasks.draw(surface = module_screen.main_screen)
-        # if server_module.check_time[0] >= 1 and one_enemy_fire[0] == 0:
-        #     print("Pirog")
-        #     one_enemy_fire[1] = False
-        #     one_enemy_fire[0] += 1
-        #     try:
-        #         for fire in enemy_list_fire:
-        #             fire[-1] += 1
-        #     except:
-        #         pass
-        
-        
+            continue        
         # обнуление времени и хода, если игрок не походил
         if server_module.check_time[0] >= 30:
             server_module.check_time[0] = 0
@@ -710,15 +697,16 @@ def fight_window():
             except:
                 pass
             one_data_fire[0] += 1
-        if server_module.check_time[0] == 0:
+        if server_module.check_time[0] < 1:
                 test_time[0] = 0
         if number_of_ship_sonfire != 0:  # Проверяет, есть ли хотя бы один непустой
-            if test_time[0] == 0 and len(data_player_shot) == 0 and server_module.check_time[0] == 1:
+            if test_time[0] == 0 and len(data_player_shot) == 0 and server_module.check_time[0] >= 1 and check_animation[0] == "" and flag_miss_rocket_animation[0] == "":
                 test_time[0] += 1
                 for index, element in enumerate(Cordi_Burning_Ship):
                     try:
                         if len(element) != 0:
                             if Cordi_Burning_Ship[index][0] != 0 and Cordi_Burning_Ship[index]:
+                                # check_need_skip = False
                                 if Cordi_Burning_Ship[index][0] == 4:
                                     ship_element = 1
                                 elif Cordi_Burning_Ship[index][0] == 3:
@@ -734,20 +722,17 @@ def fight_window():
                                     ship_element -= 1
                                     row_fire , col_fire = Cordi_Burning_Ship[index][ship_element]
                                     Cordi_Burning_Ship[index][0] = 0
-
-                                for sublist in Cordi_Burning_Ship:
-                                    try:
-                                        for coords in sublist[1:]:  
-                                            row, column = coords
-                                            if enemy_matrix[row][column] == 7 and row != row_fire and column != col_fire:
-                                                sublist.remove(coords) 
-                                    except:
-                                        pass
-
-                                print(Cordi_Burning_Ship, "CORDI")
-                                print(Cordi_Burning_Ship[index][ship_element], "cell")
-
-                                
+  
+                                try:
+                                    str_col = str(col_fire)
+                                    cell_number = row_fire * 10 + int(str_col[-1])
+                                    print(first_shot_fire)
+                                    print(cell_number)
+                                    if enemy_matrix[row_fire][col_fire] == 7 and cell_number not in first_shot_fire:
+                                        row_fire , col_fire = Cordi_Burning_Ship[index][ship_element + 1]
+                                except:
+                                    pass
+                        
                                 if  row_fire in stew_row  and  col_fire in stew_col:
                                     Cordi_Burning_Ship[index][0] = 0
                                     flagstop = True
@@ -1396,13 +1381,26 @@ def fight_window():
                                                             if magnat_medal.ACTIVE == True:
                                                                 count_money_hit[0] += 15
                                                             count_money_hit[0] += 5
-                                                            xxxxx = find_all_neighbors(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
-                                                            colich = len(xxxxx)
-                                                            Cordi_Burning_Ship.append([])
-                                                            Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
-                                                            Cordi_Burning_Ship[number_of_ship_sonfire[0]].insert(0, 0)
-                                                            Cordi_Burning_Ship[number_of_ship_sonfire[0]][0] = 4
-                                                            number_of_ship_sonfire[0] += 1
+                                                            str_col_gav = str(col)
+                                                            cell_meow = (row * 10) + int(str_col_gav[-1])
+                                                            first_shot_fire.append(cell_meow)
+                                                            try:
+                                                                xxxxx = find_all_neighbors(matrix=enemy_matrix, row=row, col=col, target_value=number_of_decks)
+                                                                # xxxxx = find_all_auto_rocket(matrix=[row [:] for row in enemy_matrix], row=row, col=col, target_value=number_of_decks)  
+                                                                # if len (xxxxx) == 10 :  
+                                                                #     unique_data = []  
+                                                                #     for item in xxxxx:  
+                                                                #         if item not in unique_data:  
+                                                                #             unique_data.append(item)  
+                                                                #     xxxxx =  unique_data
+                                                                colich = len(xxxxx)
+                                                                Cordi_Burning_Ship.append([])
+                                                                Cordi_Burning_Ship[number_of_ship_sonfire[0]] = xxxxx
+                                                                Cordi_Burning_Ship[number_of_ship_sonfire[0]].insert(0, 0)
+                                                                Cordi_Burning_Ship[number_of_ship_sonfire[0]][0] = 4
+                                                                number_of_ship_sonfire[0] += 1
+                                                            except:
+                                                                pass
                                                         active_product_shine.x_cor = -100
                                                         active_product_shine.y_cor = -100
                                                 # else:

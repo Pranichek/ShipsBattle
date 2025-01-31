@@ -1,6 +1,5 @@
 import pygame
 import modules.game_windows as game_windows
-
 import modules.screens.screen as module_screen
 from ...classes.class_image import DrawImage
 from ...classes.class_text import Font
@@ -30,7 +29,7 @@ win_background = DrawImage(width=315, height=199, x_cor=97, y_cor=416, folder_na
 defeat_background = DrawImage(width=315, height=199, x_cor=860, y_cor=416, folder_name="backgrounds", image_name="result_game_bg.png")
 
 # Fonts
-win_lose_text = Font(size=96, name_font="Goldman_Bold.ttf", text="", screen=module_screen.main_screen, x_cor=383, y_cor=248, text_color="White")
+win_lose_text = Font(size=96, name_font="Goldman_Bold.ttf", text="", screen=module_screen.main_screen, x_cor = 383, y_cor = 248, text_color="White")
 player_nick = Font(size=48, name_font="Jersey15.ttf", text=dict_save_information["player_nick"], screen=module_screen.main_screen, x_cor=914, y_cor=126, text_color="White")
 enemy_nick = Font(size=48, name_font="Jersey15.ttf", text=dict_save_information["enemy_nick"], screen=module_screen.main_screen, x_cor=437, y_cor=126, text_color="White")
 player_points = Font(size=48, name_font="Jersey15.ttf", text=str(dict_save_information["player_points"]), screen=module_screen.main_screen, x_cor=743, y_cor=126, text_color="White")

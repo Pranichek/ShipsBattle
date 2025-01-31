@@ -41,40 +41,8 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
         achievement.single_ships_achiv.append(enemy_matrix[row][col])
         achievement.list_hits_achiv.append(enemy_matrix[row][col])
         
-        # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
-        # 5 - значить , що гравець зробив постріл , але схибив його
-        if enemy_matrix[row][col] == 0:
-            data_player_shot.extend(["shot",str(row),str(col)])
-            list_check_need_send[0] = True
-            # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
-            flag_miss_rocket_animation[0] = "start_animation"
-            # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
-            x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
-            y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
-            # записуємо у матрицю ворога 5
-            print(enemy_matrix, "enemy_matrix")
-            enemy_matrix[row][col] = 5
-            # обнуляємо час для ходу
-            if server_module.list_player_role[0] == "server_player":
-                # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
-                server_module.turn[0] = "client_turn"
-            elif server_module.list_player_role[0] ==  "player_client":
-                client_module.list_check_need_send[0] = "yes"  # Готуємо дані для відправки
-                server_module.turn[0] = "server_turn"  # Передаємо хід серверу
-            if shop.first_task.TEXT == shop.list_first_task[0]:
-                shop.two_hits_in_row(number_cell = 5)
-            if shop.first_task.TEXT == shop.list_first_task[1]:
-                shop.four_hits_in_row(number_cell = 5)
-            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                shop.eight_hits_in_row(number_cell = 5)
-            if server_module.list_player_role[0] == "server_player":
-                server_module.turn[0] = "client_turn"
-            else:
-                server_module.turn[0] = "server_turn"
-            server_module.check_time[0] = 0
-
         # робимо умову для випадку коли по клітичнці вже били
-        elif enemy_matrix[row][col] == 5 or enemy_matrix[row][col] == 7:
+        if enemy_matrix[row][col] == 5 or enemy_matrix[row][col] == 7:
             print("Уже стреляли в эту клетку")
         # якщо гравець зробив постріл , і попав по кораблю , то у матрицю ворога запсиуємо 7
         # 7 - значить , що гравець зробив постріл і попав по кораблю
@@ -95,17 +63,40 @@ def simple_shot(row: int, col: int, cell: int, x_hit_the_ship: list, y_hit_the_s
             # у матрицю ворога записуємо 7
             enemy_matrix[row][col] = 7
             # обнуляємо час для ходу
-            if server_module.list_player_role[0] == "player_client":
-                client_module.list_check_need_send[0] = "yes"
+            if server_module.list_player_role[0] == "client_player":
                 server_module.turn[0] = "client_turn"   
+            if server_module.list_player_role[0] == "server_player":
+                server_module.turn[0] = "server_turn"
             if shop.first_task.TEXT == shop.list_first_task[0]:
                 shop.two_hits_in_row(number_cell = 7)
             if shop.first_task.TEXT == shop.list_first_task[1]:
                 shop.four_hits_in_row(number_cell = 7)
             if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
                 shop.eight_hits_in_row(number_cell = 7)
+            server_module.check_time[0] = 0
+        else:
+            # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
+            # 5 - значить , що гравець зробив постріл , але схибив його
+            data_player_shot.extend(["shot",str(row),str(col)])
+            list_check_need_send[0] = True
+            # передаем в список котором храним флаг о том нужно ли запускать анимацию промаха ракетой флаг который запустит эту анимацию
+            flag_miss_rocket_animation[0] = "start_animation"
+            # передаем в список координаты клетки в которую ударили , чтобы в этой же клеточке мы и отрисовывали анимацию
+            x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
+            y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
+            # записуємо у матрицю ворога 5
+            print(enemy_matrix, "enemy_matrix")
+            enemy_matrix[row][col] = 5
+            # обнуляємо час для ходу
             if server_module.list_player_role[0] == "server_player":
-                server_module.turn[0] = "server_turn"
-            else:
+                # оскільки гравець не потрапив по кораблю , то змінюємо чергу ходу
                 server_module.turn[0] = "client_turn"
+            elif server_module.list_player_role[0] ==  "client_player":
+                server_module.turn[0] = "server_turn"  # Передаємо хід серверу
+            if shop.first_task.TEXT == shop.list_first_task[0]:
+                shop.two_hits_in_row(number_cell = 5)
+            if shop.first_task.TEXT == shop.list_first_task[1]:
+                shop.four_hits_in_row(number_cell = 5)
+            if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
+                shop.eight_hits_in_row(number_cell = 5)
             server_module.check_time[0] = 0

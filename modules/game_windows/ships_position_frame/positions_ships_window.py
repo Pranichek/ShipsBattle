@@ -30,6 +30,7 @@ ready_for_battle = Button(x= 798 , y = 626,image_path= "start_battle.png" , imag
 random_place_ships = Button(x= 205 , y = 709,image_path= "random_place.png" , image_hover_path= "random_place_hover.png" , width= 318 , height = 48 , action = random_places_ships)
 
 def ships_position_window():
+    
     music_load_waiting.stop()
     music_load_main.play()
 
