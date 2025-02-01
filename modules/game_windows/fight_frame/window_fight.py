@@ -97,13 +97,6 @@ clear_weapon = Button(x = 1064, y = 8, image_path = "clear_weapon.png" , image_h
 
 
 screen_shake = [0]
-
-list_check_shop = [None]
-def show_shop():
-    if shop.shop_item[0].TURN == "Down": 
-        list_check_shop[0] = True
-
-
 # функция которая отрисовывает сетку при авто-ударе
 def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5, grid_height=5, cell_size=55):
     # Привязываем центральную точку курсора к сетке
@@ -1628,8 +1621,7 @@ def fight_window():
                     # зупиняємо цикл гри
                     run_game = False
                     # змінюємо фрейм бою , на фрейм показу результатів
-                    change_scene(scene = game_windows.finish_window())
-                    check_press_button[0] = None
+                    change_scene(game_windows.finish_window())
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1
