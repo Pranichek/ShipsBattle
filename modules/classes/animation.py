@@ -224,7 +224,7 @@ animation_auto_rocket = Animation(
     y_cor = 185,
     need_clear = True,
     name_folder = "animation_auto_rocket",
-    animation_speed = 4
+    animation_speed = 3
 )
 
 # промах авто ракетой
