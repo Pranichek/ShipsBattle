@@ -7,7 +7,7 @@ from ...classes.class_text import Font
 from ...classes.class_button import Button
 from ...classes.class_click import music_click, create
 from ...classes.class_input_text import input_ip_adress, input_nick, input_port, input_password
-from .launch_server import check_server_started, fail_start_server, start_server
+from .launch_server import check_server_started, fail_start_server, start_server, list_serv, count_music
 from ..button_pressed import check_press_button, button_action
 from ..change_window import change_scene, list_current_scene
 from ...json_functions import read_json
@@ -86,8 +86,7 @@ def create_game_window():
     volume_up_button.y = 26
     off_sound_button.x = 1188
     off_sound_button.y = 26
-    count_music = 1
-    list_serv = [False]
+    # count_music = 1
     #основний цикл роботи вікна користувача
     while run_game:
         if input_ip_adress.user_text != "ip adress":
@@ -118,16 +117,18 @@ def create_game_window():
         room_data_bg.visible = 0
 
         if SERVER.START_CONNECT == True:
-            list_serv[0] = True
-            print("hahahhahhahahhahha")
-            room_data_bg.visible = 255
-            room_data_bg.fade_in()
-            if count_music == 1: 
-                print("musicaaaaaaaaa")
-                create.play2(0)
-                count_music += 1
+            if list_serv[0] == True:
+                room_data_bg.visible = 255
+                room_data_bg.fade_in()
+                if count_music[0] == True: 
+                    print("musicaaaaaaaaa")
+                    create.play2(0)
+                    count_music[0] = False
         elif SERVER.START_CONNECT == False:
-            room_data_bg.visible = 0
+            if list_serv[0] == False:
+                room_data_bg.visible = 0
+                print("pered")
+                # count_music[0] = False
         room_data.draw_image(screen = module_screen.main_screen)
         ip_room_text.draw_font()
         port_room_text.draw_font()
@@ -181,8 +182,6 @@ def create_game_window():
                 off_sound_button.check_click(event = event)
                 volume_down_button.check_click(event = event)
                 volume_up_button.check_click(event = event)
-                # room_data_bg.fade_out()
-                # room_data_bg.visible = 0
 
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
