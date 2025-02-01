@@ -63,7 +63,7 @@ check_connection = [True]
 def listen_client(client, second_client):
     while True:
         try:
-            if SERVER.clients >= 1:
+            if SERVER.clients > 1:
                 client.settimeout(5)
             data = client.recv(1024)
             if data:
@@ -71,16 +71,17 @@ def listen_client(client, second_client):
         except ConnectionResetError:
             SERVER.RESTART = True
             SERVER.clients = 0
+            client.settimeout(None)
             # SERVER.server_socket.close()
-            # client.close()
-            # second_client.close()
+            client.close()
+            second_client.close()
             break
         except Exception as error:
             SERVER.RESTART = True
             SERVER.clients = 0
             # SERVER.server_socket.close()
-            # client.close()
-            # second_client.close()
+            client.close()
+            second_client.close()
             break
 
 players = ["server_player", "client_player"]

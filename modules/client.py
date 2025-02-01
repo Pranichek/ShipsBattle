@@ -138,6 +138,7 @@ def start_client():
                         check_can_connect_to_fight[2] = 'True'
             else:
                 check_two_times.append(3)
+                time.sleep(0.5)
                 # Перевірка значення в списку перед відправкою даних
                 if list_check_need_send[0] == True:  # Перевірка на `True`
                     str_line = ""
@@ -155,7 +156,7 @@ def start_client():
                 except:
                     raise Exception("Reconnect")
                 server_module.enemy_data[0] = enemy_data.decode("utf-8")
-                time.sleep(0.5)
+                
                 # print(server_module.enemy_data, "enemy_data") 
         except Exception as e:
             print(e)
