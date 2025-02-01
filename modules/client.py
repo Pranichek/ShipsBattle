@@ -62,7 +62,7 @@ def recv_all(sock):
         data += part
     return data
 
-check_start_connect = [False, False]
+check_start_connect = [False, False, False]
 def start_client():
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов

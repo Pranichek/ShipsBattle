@@ -20,8 +20,10 @@ def connect_to_server():
     if len(ip_address) != 4:
         list_check_connection[0] = "error_connection"
         print("зашло")
-        if fail_connect.visible == False:
-            fail_connect.visible = True
+        list_check_connection[0] = "error_connection"
+        print("зашло")
+        if fail_connect.check_show == False:
+            fail_connect.check_show = True
             print("error_connection")
         # return False - означає що сталася помилка ,та код не буде далі рухатися
         return False
@@ -29,8 +31,8 @@ def connect_to_server():
     if input_password.user_text == "password" or input_password.user_text == "" or  input_password.user_text == " " or input_nick.user_text == "" or input_nick.user_text == "nickname":
             list_check_connection[0] = "error_connection"
             print("зашло")
-            if fail_connect.visible == False:
-                fail_connect.visible = True
+            if fail_connect.check_show == False:
+                fail_connect.check_show = True
                 print("error_connection")
             # return False - означає що сталася помилка ,та код не буде далі рухатися
             return False
@@ -39,25 +41,19 @@ def connect_to_server():
             if list_users[input_nick.user_text]["password"] == "password":
                 list_check_connection[0] = "error_connection"
                 print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
+                if fail_connect.check_show == False:
+                    fail_connect.check_show = True
                     print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
-            if list_users[input_nick.user_text]["password"] == input_password.user_text:
-                print("пароль подтвердил")
             if list_users[input_nick.user_text]["password"] != input_password.user_text:
                 list_check_connection[0] = "error_connection"
                 print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
+                if fail_connect.check_show == False:
+                    fail_connect.check_show = True
                     print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
-        
-        elif input_nick.user_text not in list_users:
-            print("первая игра")
-    
         # перевіряємо чи кожне число в межах допустимого діапазону
         for number in ip_address:
             # перевіряємо чи це взагалі числа а не наприклад літери
@@ -65,8 +61,8 @@ def connect_to_server():
                 # якшо це не цифри, то передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
                 list_check_connection[0] = "error_connection"
                 print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
+                if fail_connect.check_show == False:
+                    fail_connect.check_show = True
                     print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
@@ -74,8 +70,8 @@ def connect_to_server():
             if not 0 <= int(number) <= 255:
                 list_check_connection[0] = "error_connection"
                 print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
+                if fail_connect.check_show == False:
+                    fail_connect.check_show = True
                     print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
@@ -86,8 +82,8 @@ def connect_to_server():
             if len(ip_address) <= 1:
                     list_check_connection[0] = "error_connection"
                     print("зашло")
-                    if fail_connect.visible == False:
-                        fail_connect.visible = True
+                    if fail_connect.check_show == False:
+                        fail_connect.check_show = True
                         print("error_connection")
                     # return False - означає що сталася помилка ,та код не буде далі рухатися
                     return False
@@ -95,8 +91,8 @@ def connect_to_server():
             elif not 1240 < port < 65553:
                 list_check_connection[0] = "error_connection"
                 print("зашло")
-                if fail_connect.visible == False:
-                    fail_connect.visible = True
+                if fail_connect.check_show == False:
+                    fail_connect.check_show = True
                     print("error_connection")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
@@ -104,8 +100,8 @@ def connect_to_server():
             #  якщо порт взагалі не цифри то також виводимо окно із помилкою
             list_check_connection[0] = "error_connection"
             print("зашло")
-            if fail_connect.visible == False:
-                fail_connect.visible = True
+            if fail_connect.check_show == False:
+                fail_connect.check_show = True
                 print("error_connection")
             # return False - означає що сталася помилка ,та код не буде далі рухатися
             return False
@@ -113,9 +109,11 @@ def connect_to_server():
         # if event_connect_to_server.is_set():
         if check_start_connect[0] == False:
             check_start_connect[1] = True
+            check_start_connect[2] = True
             connect_to_game.start()
         else:
             check_start_connect[1] = True
+            check_start_connect[2] = True
             pass
         # якщо усі перевікри пройдені але це не перший запуск, наприклад перший раз увів айди сервера якого ще немає, а тепер такий сервер є 
         # то передаємо у  event_connect_to_server значення True за допомогою .set()

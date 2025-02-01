@@ -51,7 +51,7 @@ def ships_position_window():
         if check_can_connect_to_fight[2] == 'True':
             server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)
-            change_scene(fight_window())
+            change_scene(fight_window)
             run_game = False
             break
         elif check_can_connect_to_fight[2] != 'True' and status_ready_to_game == "fight":
@@ -59,7 +59,7 @@ def ships_position_window():
             if check_connect_fight >= 31:
                 server_module.list_check_ready_to_fight[0] = "wait"
                 apply_fade_effect(screen = main_screen)
-                change_scene(game_windows.waiting_window())
+                change_scene(game_windows.waiting_window)
                 run_game = False
                 break
         

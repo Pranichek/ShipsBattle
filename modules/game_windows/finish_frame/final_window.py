@@ -14,7 +14,7 @@ from ...classes import Button
 leave_game = [False]
 def back_to_main():
     apply_fade_effect(screen = module_screen.main_screen)
-    change_scene(game_windows.main_window())
+    change_scene(game_windows.main_window)
     leave_game[0] = True
 
 #Button

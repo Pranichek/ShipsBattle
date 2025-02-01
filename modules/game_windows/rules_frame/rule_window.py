@@ -19,7 +19,7 @@ rules = DrawImage(
 check_run_game = [False]
 def change_on_main():
     apply_fade_effect(screen = main_screen)
-    change_scene(game_windows.main_window())
+    change_scene(game_windows.main_window)
     check_run_game[0] = True
 
 back_to_main = Button(

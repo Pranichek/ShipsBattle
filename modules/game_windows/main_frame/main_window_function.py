@@ -28,7 +28,7 @@ join_game_frame = Button(x= 832 , y = 653,image_path= "join_button.png" , image_
 check_run_game = [False]
 def change_on_rules():
     apply_fade_effect(screen = main_screen)
-    change_scene(game_windows.rules_window())
+    change_scene(game_windows.rules_window)
     check_run_game[0] = True
 
 rule_button = Button(
@@ -107,13 +107,15 @@ def main_window():
                         if y_pos >= join_game_frame.y:
                             if y_pos <= join_game_frame.y + join_game_frame.height:
                                 print("Join windo")
-                                change_scene(game_windows.join_game_window())
+                                change_scene(game_windows.join_game_window)
+                                check_press_button[0] = None 
                 elif x_pos >= create_game_frame.x:
                     if x_pos <= create_game_frame.x + create_game_frame.width:
                         if y_pos >= create_game_frame.y:
                             if y_pos <= create_game_frame.y + create_game_frame.height:
                                 print("Create window")
-                                change_scene(game_windows.create_game_window())
+                                change_scene(game_windows.create_game_window)
+                                check_press_button[0] = None 
             if check_run_game[0] == True:
                 check_run_game[0] = False
                 run_game = False

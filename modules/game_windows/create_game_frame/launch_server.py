@@ -21,8 +21,8 @@ def start_server():
         # передаємо у список повідомлення про помилку шоб можна було вивести на екрані вікно помилки
         check_server_started[0] = "error_server"
         # якщо вже було це вікно , то робимо його видимим 
-        if fail_start_server.visible == False:
-            fail_start_server.visible = True
+        if fail_start_server.check_show == False:
+            fail_start_server.check_show = True
             print("error_server")
             return False
         # перевіряємо чи кожне число в межах допустимого діапазону
@@ -33,8 +33,8 @@ def start_server():
                 check_server_started[0] = "error_server"
                 print("зашло")
                 # якщо вже було це вікно , то робимо його видимим 
-                if fail_start_server.visible == False:
-                    fail_start_server.visible = True
+                if fail_start_server.check_show == False:
+                    fail_start_server.check_show = True
                     print("error_server")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
@@ -42,8 +42,8 @@ def start_server():
             if not 0 <= int(number) <= 255:
                 check_server_started[0] = "error_server"
                 print("зашло")
-                if fail_start_server.visible == False:
-                    fail_start_server.visible = True
+                if fail_start_server.check_show == False:
+                    fail_start_server.check_show = True
                     print("error_server")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
@@ -54,8 +54,8 @@ def start_server():
             if len(ip_address) <= 1:
                     check_server_started[0] = "error_server"
                     print("зашло")
-                    if fail_start_server.visible == False:
-                        fail_start_server.visible = True
+                    if fail_start_server.check_show == False:
+                        fail_start_server.check_show = True
                         print("error_server")
                     # return False - означає що сталася помилка ,та код не буде далі рухатися
                     return False
@@ -63,8 +63,8 @@ def start_server():
             elif not 1240 < port < 65553:
                 check_server_started[0] = "error_server"
                 print("зашло")
-                if fail_start_server.visible == False:
-                    fail_start_server.visible = True
+                if fail_start_server.check_show == False:
+                    fail_start_server.check_show = True
                     print("error_server")
                 # return False - означає що сталася помилка ,та код не буде далі рухатися
                 return False
@@ -72,12 +72,12 @@ def start_server():
             #  якщо порт взагалі не цифри то також виводимо окно із помилкою
             check_server_started[0] = "error_server"
             print("зашло")
-            if fail_start_server.visible == False:
-                fail_start_server.visible = True
+            if fail_start_server.check_show == False:
+                fail_start_server.check_show = True
                 print("error_server")
             # return False - означає що сталася помилка ,та код не буде далі рухатися
             return False
-    print(113)
+        
     if int(input_port.user_text) != SERVER.PORT:
-        server_thread = Thread(target=run_server, args=(str(input_ip_adress.user_text), (input_port.user_text)), daemon = True)
+        server_thread = Thread(target = run_server, args=(str(input_ip_adress.user_text), (input_port.user_text)), daemon = True)
         server_thread.start()

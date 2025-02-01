@@ -34,6 +34,7 @@ class DrawImage:
         self.image_name = image_name
         self.image = None
         self.visible = True  # Видима картинка спочатку
+        self.check_show = True
         self.rect = None
         self.load_image()
         self.visible = 255
@@ -55,7 +56,7 @@ class DrawImage:
         '''
         # Відображаємо тільки якщо картинка видима
         self.image.set_alpha(self.visible)  
-        if self.visible:
+        if self.check_show:
             screen.blit(self.image, (self.x_cor, self.y_cor))
 
     def check_touch(self):
@@ -67,7 +68,12 @@ class DrawImage:
         # Якщо мишка наводиться на картинку, робимо її невидимою
         if self.rect.collidepoint(mouse_pos):
             # False -  значить шо змінюємо стан на невидимий
-            self.visible = False  
+            self.check_show = False  
+
+        # Возвращаем картинку через 2 секунды
+        if self.visible <= 254:
+            self.visible = 255
+
 
     def fade_out(self):
         '''

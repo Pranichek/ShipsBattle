@@ -1,6 +1,7 @@
 import pygame, sys
 import modules.screens.screen as module_screen
 import modules.server as server_module
+from ...client import check_start_connect
 from ..create_game_frame import room_data, ip_room_text, port_room_text
 from ...server import SERVER
 from ...client import check_can_connect_to_fight
@@ -49,6 +50,14 @@ def join_game_window():
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen.FPS.tick(60)
+
+        if check_start_connect[2] == True:
+            if check_start_connect[1] == False:
+                check_start_connect[2] = False
+                list_check_connection[0] = "error_connection"
+                if fail_connect.check_show == False:
+                    fail_connect.check_show = True
+                print("Zahodit")
         try:
             data = read_json(name_file = "utility.json")
             status_server = data["status"]
@@ -112,6 +121,7 @@ def join_game_window():
             if input_password.user_text == "" or input_password.user_text == input_password.base_text:
                 input_password.user_text = input_password.base_text
                 input_password.fade_in()
+                
 
         #если не нашли сервер по которому подключаемся или ввели что то неправильно, выводим табличку о том что таокго сервера нет
         #этот список находится в файле connect_to_server.check_after_randomy
@@ -128,12 +138,12 @@ def join_game_window():
             check_connect_to_game += 1
             if check_connect_to_game >= 13:
                 apply_fade_effect(screen = module_screen.main_screen)
-                change_scene(game_windows.waiting_window())
+                change_scene(game_windows.waiting_window)
                 check_press_button[0] = None
                 run_game = False
         elif server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] != False:
             apply_fade_effect(screen = module_screen.main_screen)
-            change_scene(game_windows.ships_position_window())
+            change_scene(game_windows.ships_position_window)
             check_press_button[0] = None
             run_game = False
 
@@ -155,7 +165,7 @@ def join_game_window():
                 input_port.user_text = input_port.base_text
                 input_password.user_text = input_password.base_text
                 run_game = False
-                change_scene(game_windows.main_window())
+                change_scene(game_windows.main_window)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event= event)
                 join_game_button.check_click(event= event)

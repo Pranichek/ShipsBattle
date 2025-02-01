@@ -1623,7 +1623,7 @@ def fight_window():
                     # зупиняємо цикл гри
                     run_game = False
                     # змінюємо фрейм бою , на фрейм показу результатів
-                    change_scene(game_windows.finish_window())
+                    change_scene(game_windows.finish_window)
 
         if screen_shake[0] > 1:
             screen_shake[0] -= 1

@@ -59,12 +59,11 @@ wan_ip_button = Button(x = 437, y = 410, image_path = "wan_ip.png", image_hover_
 #кнопка которая возвращает назад к главному окну
 back_to_menu = Button(x= 33 , y = 41 ,image_path= "back_button.png" , image_hover_path= "back_button_hover.png" , width= 158 , height = 41 , action = button_action)
 #кнопка которая запускает сервер(игру)
-start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width = 575 , height = 80 , action= start_server)
+start_game_button = Button(x= 352 , y = 642,image_path= "create_game_button.png" , image_hover_path= "create_game_button_hover.png" , width = 575 , height = 80 , action = start_server)
 
 #fonts 
 ip_room_text = Font(size = 29, x_cor = 620, y_cor = 31, text = "", text_color = "white", screen = module_screen.main_screen, name_font = "Jersey15.ttf")
 port_room_text = Font(size = 29, x_cor = 640, y_cor = 60, text = "", text_color = "white", screen = module_screen.main_screen, name_font = "Jersey15.ttf") 
-
 
 
 def create_game_window():
@@ -148,10 +147,11 @@ def create_game_window():
             
         #если попытались создать сервер кторый нельзя(например неправильны айпи) , то выводим предуприждение об этом
         if check_server_started[0] == "error_server":
+            fail_start_server.check_show = True
             fail_start_server.draw_image(screen = module_screen.main_screen)
             fail_start_server.check_touch()
             #когда игрок закрыл табличку записываем True в список , чтобы знали что уже пытались запустить сервер
-            if fail_start_server.visible == False:
+            if fail_start_server.check_show == False:
                 check_server_started[0] = True
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
@@ -176,7 +176,7 @@ def create_game_window():
                 input_ip_adress.user_text = input_ip_adress.base_text
                 input_port.user_text = input_port.base_text
                 input_password.user_text = input_password.base_text
-                change_scene(game_windows.main_window())
+                change_scene(game_windows.main_window)
         
             input_nick.check_event(event)
             input_ip_adress.check_event(event)
