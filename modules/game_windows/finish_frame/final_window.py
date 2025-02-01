@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import modules.game_windows as game_windows
 import modules.screens.screen as module_screen
 from ...classes.class_image import DrawImage
@@ -216,6 +216,8 @@ def finish_window():
             if event.type == pygame.QUIT:
                 run_game = False
                 change_scene("END GAME")
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 restart_button.check_click(event = event)
         if leave_game[0] == True:

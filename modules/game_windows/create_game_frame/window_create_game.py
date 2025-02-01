@@ -1,4 +1,4 @@
-import pygame, socket
+import pygame, socket, sys
 import modules.game_windows as game_windows
 import modules.screens.screen as module_screen
 from ...classes.class_image import DrawImage
@@ -158,6 +158,8 @@ def create_game_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 list_current_scene[0] = "END GAME"
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)

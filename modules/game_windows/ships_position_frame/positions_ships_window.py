@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import modules.screens as module_screen
 from ...client import connection, check_can_connect_to_fight
 from ..fight_frame import fight_window
@@ -53,7 +53,6 @@ def ships_position_window():
             apply_fade_effect(screen = main_screen)
             change_scene(fight_window())
             run_game = False
-            check_press_button[0] = None
             break
         elif check_can_connect_to_fight[2] != 'True' and status_ready_to_game == "fight":
             check_connect_fight += 1
@@ -62,7 +61,6 @@ def ships_position_window():
                 apply_fade_effect(screen = main_screen)
                 change_scene(game_windows.waiting_window())
                 run_game = False
-                check_press_button[0] = None
                 break
         
 
@@ -102,6 +100,8 @@ def ships_position_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene("END GAME")
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 ready_for_battle.check_click(event = event)
                 random_place_ships.check_click(event = event)

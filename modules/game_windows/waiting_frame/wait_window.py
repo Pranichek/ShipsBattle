@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 from ..fight_frame import fight_window
 from ..ships_position_frame import ships_position_window
 import modules.screens.screen as module_screen
@@ -62,6 +62,8 @@ def waiting_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene("END GAME")
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 volume_up_button.check_click(event = event)
                 volume_down_button.check_click(event = event)

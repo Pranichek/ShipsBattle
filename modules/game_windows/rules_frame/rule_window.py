@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 from ...classes.class_image import DrawImage
 import modules.game_windows as game_windows
 from ...classes.class_button import Button
@@ -44,6 +44,8 @@ def rules_window():
             if event.type == pygame.QUIT:
                 run_game = False
                 change_scene("END GAME")
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_main.check_click(event = event)
         if check_run_game[0] == True:

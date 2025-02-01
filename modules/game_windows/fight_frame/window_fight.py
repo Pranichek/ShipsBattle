@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, sys
 import modules.game_windows as game_windows
 import modules.shop as shop
 from ...screens import main_screen
@@ -1162,6 +1162,8 @@ def fight_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene("END GAME")
+                pygame.quit()
+                sys.exit()
             # перевіряємо чи натиснули на кнопку показу магазину 
             if list_check_shop[0] == True:
                 # якщо так , то говоримо щоб усі елементи рухались униз(щоб гравець зміг їх побачити)

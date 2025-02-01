@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import modules.game_windows as game_windows
 import modules.screens.screen as module_screen
 import modules.server as server_module
@@ -87,6 +87,8 @@ def main_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene("END GAME")
+                pygame.quit()
+                sys.exit()
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 create_game_frame.check_click(event = event)

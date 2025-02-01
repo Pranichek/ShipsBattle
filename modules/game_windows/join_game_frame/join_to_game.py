@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import modules.screens.screen as module_screen
 import modules.server as server_module
 from ..create_game_frame import room_data, ip_room_text, port_room_text
@@ -146,6 +146,8 @@ def join_game_window():
             if event.type == pygame.QUIT:
                 run_game = False  
                 change_scene("END GAME")
+                pygame.quit()
+                sys.exit()
             elif check_press_button[0] == "button is pressed":
                 check_press_button[0] = None
                 input_nick.user_text =  input_nick.base_text
