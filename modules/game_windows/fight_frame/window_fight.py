@@ -1438,6 +1438,7 @@ def fight_window():
                                                         row = cellek // 10
                                                         col = cellek % 10
                                                         if enemy_matrix[row][col] in [1, 2, 3, 4]:
+                                                            screen_shake[0] = 31
                                                             print("hit")
                                                             check_animation[0] = "auto_rocket" 
                                                             server_module.check_time[0] = 0
@@ -1548,100 +1549,6 @@ def fight_window():
                                                     active_product_shine.y_cor = -100
                                                 # простой удар
                                                 elif activate_bomb[0] == False and activate_auto_rocket[0] == False and activate_radar[0] == False and activate_random_hits[0] == False:
-                                                    # cells = auto_aim(row = row, column = col)
-                                                    # if len(cells) > 0:
-                                                    #     data_player_shot.append("auto_rocket")
-                                                    #     cellek = cells[0]
-                                                    #     row = cellek // 10
-                                                    #     col = cellek % 10
-                                                    #     if enemy_matrix[row][col] in [1, 2, 3, 4]:
-                                                    #         print("hit")
-                                                    #         check_animation[0] = "auto_rocket" 
-                                                    #         server_module.check_time[0] = 0
-                                                    #         # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                    #         if server_module.list_player_role[0] == "server_player":
-                                                    #                 server_module.turn[0] = "server_turn"
-                                                    #         elif server_module.list_player_role[0] == "client_player":
-                                                    #             server_module.turn[0] = "client_turn"   
-                                                    #         x_hit_the_ship[0] = list_object_map_enemy[cellek].x
-                                                    #         y_hit_the_ship[0] = list_object_map_enemy[cellek].y
-                                                    #         if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    #             shop.single_ships.append(enemy_matrix[row][col])
-                                                    #         if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-                                                    #             if 1 in count_killed_ships:
-                                                    #                 shop.first_shot_is_kill(1)
-                                                    #             else:
-                                                    #                 shop.first_shot_is_kill(2)
-                                                    #         if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                    #             shop.check_three_2decker_ship_in_row.append(enemy_matrix[row][col])
-                                                    #         if shop.first_task.TEXT == shop.list_first_task[-1]:
-                                                    #             shop.three_hits_in_row(7)
-                                                    #         if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                    #             shop.count_three_ships.append(enemy_matrix[row][col])
-                                                    #         if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                    #             shop.ship_hits.append(enemy_matrix[row][col])
-                                                    #         if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                    #             shop.ship_hits_three.append(enemy_matrix[row][col])
-                                                    #         if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                    #             shop.two_hits_in_row(number_cell = 7)
-                                                    #         if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                    #             shop.four_hits_in_row(number_cell = 7)
-                                                    #         if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                    #             shop.eight_hits_in_row(number_cell = 7)
-                                                    #         # ачивки
-                                                    #         achievement.ten_shoot_in_row(7)
-                                                    #         achievement.first_shot(7)
-                                                    #         achievement.single_ships_achiv.extend(enemy_matrix[row][col])
-                                                    #         achievement.list_hits_achiv.extend(enemy_matrix[row][col])
-                                                    #     elif enemy_matrix[row][col] in [0, 5]:
-                                                    #         print("miss")
-                                                    #         server_module.check_time[0] = 0
-                                                    #         # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
-                                                    #         if server_module.list_player_role[0] == "server_player":
-                                                    #                 server_module.turn[0] = "client_turn"   
-                                                    #         elif server_module.list_player_role[0] == "client_player":
-                                                    #             server_module.turn[0] = "server_turn"   
-                                                    #         flag_miss_rocket_animation[0] = "miss_auto_rocket"
-                                                    #         x_hit_the_ship[0] = list_object_map_enemy[cellek].x
-                                                    #         y_hit_the_ship[0] = list_object_map_enemy[cellek].y
-                                                    #         if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                    #             shop.single_ships.append(enemy_matrix[row][col])
-                                                    #         if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-                                                    #             if 1 in count_killed_ships:
-                                                    #                 shop.first_shot_is_kill(1)
-                                                    #             else:
-                                                    #                 shop.first_shot_is_kill(2)
-                                                    #         if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                    #             shop.check_three_2decker_ship_in_row.append(enemy_matrix[row][col])
-                                                    #         if shop.first_task.TEXT == shop.list_first_task[-1]:
-                                                    #             shop.three_hits_in_row(7)
-                                                    #         if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                    #             shop.count_three_ships.append(enemy_matrix[row][col])
-                                                    #         if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                    #             shop.ship_hits.append(enemy_matrix[row][col])
-                                                    #         if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                    #             shop.ship_hits_three.append(enemy_matrix[row][col])
-                                                    #         if shop.first_task.TEXT == shop.list_first_task[0]:
-                                                    #             shop.two_hits_in_row(number_cell = 5)
-                                                    #         if shop.first_task.TEXT == shop.list_first_task[1]:
-                                                    #             shop.four_hits_in_row(number_cell = 5)
-                                                    #         if shop.fourth_task.TEXT == shop.list_fourth_task[-1]:
-                                                    #             shop.eight_hits_in_row(number_cell = 5)
-                                                    #         # ачивки
-                                                    #         achievement.ten_shoot_in_row(5)
-                                                    #         achievement.first_shot(5)
-                                                    #         achievement.single_ships_achiv.extend(enemy_matrix[row][col])
-                                                    #         achievement.list_hits_achiv.extend(enemy_matrix[row][col])
-                                                    #     print("countinue")
-                                                    #     for cell in cells:
-                                                    #         data_player_shot.append(cell)
-                                                    #         row = cell // 10
-                                                    #         col = cell % 10
-                                                    #         if enemy_matrix[row][col] in [1, 2, 3, 4]:
-                                                    #             enemy_matrix[row][col] = 7
-                                                    #         elif enemy_matrix[row][col] in [0, 5]:
-                                                    #             enemy_matrix[row][col] = 5
-                                                    #     list_check_need_send[0] = True
                                                     simple_shot(
                                                         col = col, 
                                                         row = row, 
