@@ -19,7 +19,7 @@ from ...classes.radar_class import radar
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound, all_sounds
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, Missile_200, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors, find_all_auto_rocket
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
 from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection, count_time_thread
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix, auto_aim
