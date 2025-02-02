@@ -133,7 +133,8 @@ enemy_col_fire = []
 enemy_row_fire = []
 enemy_list_fire =[]
 enemy_check_fire = [0]
-
+# счетчик для удрара авто ракетой
+count_hit_auto_rocket = [0]
 # флаг для анимации огнетушителя
 fire_fighter_anim = [False]
 # флаг для анимации аптечки
@@ -388,29 +389,39 @@ def fight_window():
                                         elif server_module.list_player_role[0] == "client_player":
                                             server_module.turn[0] = "client_turn"
                             elif data_enemy == "auto_rocket":
-                                count_hit = 0
                                 for cell in check_data[1:-1]:
                                     row = int(cell) // 10
                                     col = int(cell) % 10
-                                    if list_grid[row][col] in [1, 2, 3, 4, 7]:
-                                        count_hit += 1
+                                    if list_grid[row][col] in [1, 2, 3, 4]:
+                                        count_hit_auto_rocket[0] += 1
                                         list_grid[row][col] = 7
+                                        if server_module.list_player_role[0] == "server_player":
+                                            server_module.turn[0] = "client_turn"
+                                        elif server_module.list_player_role[0] == "client_player":
+                                            server_module.turn[0] = "server_turn"
+                                        continue
                                     elif list_grid[row][col] in [0, 5]:
                                         list_grid[row][col] = 5
-                                if count_hit == 0:
-                                    if server_module.list_player_role[0] == "server_player":
-                                        server_module.turn[0] = "server_turn"
-                                    elif server_module.list_player_role[0] == "client_player":
-                                        server_module.turn[0] = "client_turn"
-                                elif count_hit >= 1:
-                                    if server_module.list_player_role[0] == "server_player":
-                                        server_module.turn[0] = "client_turn"
-                                    elif server_module.list_player_role[0] == "client_player":
-                                        server_module.turn[0] = "server_turn"
+                                        if server_module.list_player_role[0] == "server_player":
+                                            server_module.turn[0] = "server_turn"
+                                        elif server_module.list_player_role[0] == "client_player":
+                                            server_module.turn[0] = "client_turn"
+                                        continue
+                                    elif list_grid[row][col] == 7:
+                                        if count_hit_auto_rocket[0] == 0:
+                                            if server_module.list_player_role[0] == "server_player":
+                                                server_module.turn[0] = "server_turn"
+                                            elif server_module.list_player_role[0] == "client_player":
+                                                server_module.turn[0] = "client_turn"
+                                        elif count_hit_auto_rocket[0] >= 1:
+                                            if server_module.list_player_role[0] == "server_player":
+                                                server_module.turn[0] = "client_turn"
+                                            elif server_module.list_player_role[0] == "client_player":
+                                                server_module.turn[0] = "server_turn"
+
                                 server_module.check_time[0] = 0
                             elif data_enemy == "bomb":
                                 for cell in range(1 , 19):
-                                    print("bomb")
                                     try:
                                         if cell % 2 == 0:
                                             if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
@@ -436,7 +447,6 @@ def fight_window():
                     except:
                         continue
                     if "fire_fighter" == check_data[0]:
-                        print("STOP FIRE")
                         for arson in list_fire:
                             if arson[0] == int(check_data[(1)]) and arson[1] == int(check_data[(2)]):
                                 arson[-1] += 1
@@ -444,11 +454,9 @@ def fight_window():
                         stew_col.append(int(check_data[(2)]))
 
                     elif check_data[0] == 'random_hits':
-                        print(check_data)
                         index_cell = 0
                         count_hit = 0
                         for cell in range(1 , 7):
-                            print("bomb")
                             try:
                                 if cell % 2 == 0:
                                     if list_grid[int(check_data[cell - 1])][int(check_data[cell])] in [1, 2, 3, 4, 7]:
@@ -462,7 +470,6 @@ def fight_window():
                             except:
                                 continue
                         server_module.check_time[0] = 0
-                        print(server_module.check_time[0], "random hits time")
                         if count_hit == 0:
                             if server_module.list_player_role[0] == "server_player":
                                 server_module.turn[0] = "server_turn"
@@ -477,7 +484,6 @@ def fight_window():
                         enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
                     elif check_data[0] == "medal":
                         for medal in check_data[1:-1]:
-                            print(check_data[1:-1])
                             if int(medal) not in server_module.save_medals_coordinates:
                                 server_module.save_medals_coordinates.append(int(medal))
                     elif check_data[0] == "money":
@@ -485,6 +491,7 @@ def fight_window():
                         enemy_balance_in_jar.update_text()
                     if check_data[0] == "keep-alive":
                         enemy_check_fire[0] = 0
+                        count_hit_auto_rocket[0] = 0
         except:
             continue        
         # обнуление времени и хода, если игрок не походил
@@ -523,7 +530,6 @@ def fight_window():
                 stew_row.clear()
                 stew_col.clear()
                 tsest[0]=False
-                print (stew_row, stew_col)
             Schechik_before_removeall[0] -= 1
 
 
@@ -709,8 +715,6 @@ def fight_window():
                                 try:
                                     str_col = str(col_fire)
                                     cell_number = row_fire * 10 + int(str_col[-1])
-                                    print(first_shot_fire)
-                                    print(cell_number)
                                     if enemy_matrix[row_fire][col_fire] == 7 and cell_number not in first_shot_fire:
                                         row_fire , col_fire = Cordi_Burning_Ship[index][ship_element + 1]
                                 except:
@@ -765,8 +769,6 @@ def fight_window():
                                     data_player_shot.append(col_fire)
                                     row_fire_col_anim.append([row_fire, 0])
                                     col_fire_row_anim.append([col_fire, 0])
-                                    print(Cordi_Burning_Ship[index][0], "first one")
-                                    print( 5 - len(element) - 1, "Second one")
                                     if Cordi_Burning_Ship[index][0] <= 5 - len(element) - 1: 
                                         Cordi_Burning_Ship[index][0] = 0
                                     else:
@@ -806,7 +808,6 @@ def fight_window():
                     if fireok[0] == row_anim and fireok[1] == col_anim:
                         bolinka = False
                 if bolinka:
-                    print(4434)
                     list_fire.append([row_anim, col_anim, fire_animation, 0])
 
         for fire_animation in list_fire:
@@ -1369,7 +1370,6 @@ def fight_window():
                                                 if enemy_matrix[row][col] not in (5, 7, 0):
                                                     if shop.flag_arson[0] == "yes" and activate_fire_rocket[0] is True:
                                                         check_animation[0] = "fire_rocket"
-                                                        print(f"row col: {row, col}")
                                                         number_of_decks = enemy_matrix[row][col]
                                                         shop.flag_arson[0] = "no"
                                                         activate_fire_rocket[0] = False
@@ -1439,7 +1439,6 @@ def fight_window():
                                                         col = cellek % 10
                                                         if enemy_matrix[row][col] in [1, 2, 3, 4]:
                                                             screen_shake[0] = 31
-                                                            print("hit")
                                                             check_animation[0] = "auto_rocket" 
                                                             server_module.check_time[0] = 0
                                                             # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
@@ -1474,8 +1473,7 @@ def fight_window():
                                                             achievement.first_shot(7)
                                                             achievement.single_ships_achiv.append(enemy_matrix[row][col])
                                                             achievement.list_hits_achiv.append(enemy_matrix[row][col])
-                                                        elif enemy_matrix[row][col] in [0, 5]:
-                                                            print("miss")
+                                                        elif enemy_matrix[row][col] in [0, 5, 7]:
                                                             server_module.check_time[0] = 0
                                                             # записуємо у лист який перевіряє чи потрібно відпарвляти дані на сервер флаг "yes", але чергу не змінюємо оскільки гравець попав по кораблю
                                                             if server_module.list_player_role[0] == "server_player":
@@ -1486,19 +1484,19 @@ def fight_window():
                                                             x_hit_the_ship[0] = list_object_map_enemy[cellek].x
                                                             y_hit_the_ship[0] = list_object_map_enemy[cellek].y
                                                             if shop.third_task.TEXT == shop.list_third_task[1]:
-                                                                shop.single_ships.append(enemy_matrix[row][col])
+                                                                shop.single_ships.append(0)
                                                             if shop.fourth_task.TEXT == shop.list_fourth_task[0]:
-                                                                shop.first_shot_is_kill(enemy_matrix[row][col])
+                                                                shop.first_shot_is_kill(0)
                                                             if shop.third_task.TEXT == shop.list_third_task[2]:
-                                                                shop.check_three_2decker_ship_in_row.append(enemy_matrix[row][col])
+                                                                shop.check_three_2decker_ship_in_row.append(0)
                                                             if shop.first_task.TEXT == shop.list_first_task[-1]:
                                                                 shop.three_hits_in_row(7)
                                                             if shop.third_task.TEXT == shop.list_third_task[-1]:
-                                                                shop.count_three_ships.append(enemy_matrix[row][col])
+                                                                shop.count_three_ships.append(0)
                                                             if shop.second_task.TEXT == shop.list_second_task[2]:
-                                                                shop.ship_hits.append(enemy_matrix[row][col])
+                                                                shop.ship_hits.append(0)
                                                             if shop.fourth_task.TEXT == shop.list_fourth_task[1]:
-                                                                shop.ship_hits_three.append(enemy_matrix[row][col])
+                                                                shop.ship_hits_three.append(0)
                                                             if shop.first_task.TEXT == shop.list_first_task[0]:
                                                                 shop.two_hits_in_row(number_cell = 5)
                                                             if shop.first_task.TEXT == shop.list_first_task[1]:
@@ -1508,9 +1506,8 @@ def fight_window():
                                                             # ачивки
                                                             achievement.ten_shoot_in_row(5)
                                                             achievement.first_shot(5)
-                                                            achievement.single_ships_achiv.append(enemy_matrix[row][col])
-                                                            achievement.list_hits_achiv.append(enemy_matrix[row][col])
-                                                        print("countinue")
+                                                            achievement.single_ships_achiv.append(5)
+                                                            achievement.list_hits_achiv.append(5)
                                                         for cell in cells:
                                                             data_player_shot.append(cell)
                                                             row = cell // 10
