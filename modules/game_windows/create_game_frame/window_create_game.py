@@ -86,6 +86,7 @@ def create_game_window():
 
     #основний цикл роботи вікна користувача
     while run_game:
+        room_data.visible = 255
         if input_ip_adress.user_text != "ip adress":
             ip_room_text.text = input_ip_adress.user_text
             ip_room_text.update_text()
@@ -124,6 +125,10 @@ def create_game_window():
                     create.play2(0)
                     count_music[0] = False
         elif SERVER.START_CONNECT == False:
+            ip_room_text.text = ""
+            ip_room_text.update_text()
+            port_room_text.text = ""
+            port_room_text.update_text()
             if list_serv[0] == False:
                 count_music[0] = False
 

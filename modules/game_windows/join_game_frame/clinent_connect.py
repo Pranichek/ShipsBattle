@@ -1,7 +1,8 @@
+from threading import Thread
 from ...classes.class_input_text import input_ip_adress , input_port, input_nick, input_password
 from ...classes.class_image import DrawImage
 from ...classes.class_click import music_click
-from ...client import connect_to_game , list_check_connection, list_users, check_start_connect
+from ...client import start_client, list_check_connection, list_users, check_start_connect
 
 
 
@@ -108,8 +109,10 @@ def connect_to_server():
         # якщо усі перевірки пройдені і користувач вперше натиснув на цю кнопку то запускаємо підключення до серверу
         # if event_connect_to_server.is_set():
         if check_start_connect[0] == False:
+            print("Пытаюсь подключится к серверу")
             check_start_connect[1] = True
             check_start_connect[2] = True
+            connect_to_game = Thread(target = start_client, daemon = True)
             connect_to_game.start()
         else:
             check_start_connect[1] = True

@@ -534,8 +534,6 @@ def fight_window():
 
 
 
-        server_module.player_died_ships
-        server_module.enemy_died_ships
         if len(server_module.player_died_ships) >= 10 and len(server_module.enemy_died_ships) <= 9:
             if server_module.list_player_role[0] == "server_player":
                 # список для хранения кто выиграл
@@ -548,6 +546,32 @@ def fight_window():
                 server_module.list_check_win[0] = "win_server"
             elif server_module.list_player_role[0] == "client_player":
                 server_module.list_check_win[0] = "win_client"
+
+        if server_module.list_check_win[0] == None:
+            count_ships_player = 0
+            count_ships_enemy = 0
+            count_zero = 0
+            for row in list_grid:
+                for cell in row:
+                    if cell in [1, 2, 3, 4]:
+                        count_ships_player += 1
+            for row in enemy_matrix:
+                for cell in row:
+                    if cell in [1, 2, 3, 4]:
+                        count_ships_enemy += 1
+                    if cell == 0:
+                        count_zero += 1
+            if count_ships_player >= 1 and count_ships_enemy == 0 and count_zero != 100:
+                if server_module.list_player_role[0] == "server_player":
+                    # список для хранения кто выиграл
+                    server_module.list_check_win[0] = "win_server"
+                elif server_module.list_player_role[0] == "client_player":
+                    server_module.list_check_win[0] = "win_client"
+            elif count_ships_player == 0 and count_ships_enemy >= 1 and count_zero != 100:
+                if server_module.list_player_role[0] == "server_player":
+                    server_module.list_check_win[0] = "win_client"
+                elif server_module.list_player_role[0] == "client_player":
+                    server_module.list_check_win[0] = "win_server"
         #----------------------------------------------------------------
         check_player_balance[0] = shop.money_list[0]
         # функция которая красиво добавляет/отнимает монетки

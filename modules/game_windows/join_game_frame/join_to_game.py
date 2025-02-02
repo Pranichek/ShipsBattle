@@ -33,7 +33,7 @@ def join_game_window():
     pygame.display.set_caption("Join to Game Window")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
-
+    print("Заходит")
     volume_down_button.x = 1096
     volume_down_button.y = 26
     volume_up_button.x = 1004
@@ -43,10 +43,12 @@ def join_game_window():
     
     check_connect_to_game = 0
     if SERVER.START_CONNECT == False:
+        room_data.visible = 0
         ip_room_text.text = ""
         ip_room_text.update_text()
         port_room_text.text = ""
         port_room_text.update_text()
+        
     #основний цикл роботи вікна користувача
     while run_game:
         module_screen.FPS.tick(60)
@@ -78,6 +80,7 @@ def join_game_window():
         fourth_cold_image.draw_image(screen= module_screen.main_screen)
         join_game_button.draw(surface= module_screen.main_screen)
         if SERVER.START_CONNECT == True:
+            room_data.visible = 255
             room_data.draw_image(screen= module_screen.main_screen)
             ip_room_text.draw_font()
             port_room_text.draw_font()

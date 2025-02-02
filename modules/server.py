@@ -121,6 +121,7 @@ class Server():
 
                     thread1 = Thread(target = listen_client, args = (client_socket, client_socket_second))
                     thread1.start()
+                    self.clients = 0
                     self.clients += 1
 
                     thread2 = Thread(target = listen_client, args = (client_socket_second, client_socket))

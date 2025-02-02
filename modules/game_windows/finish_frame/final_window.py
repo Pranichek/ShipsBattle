@@ -3,13 +3,15 @@ import modules.game_windows as game_windows
 import modules.screens.screen as module_screen
 from ...classes.class_image import DrawImage
 from ...classes.class_text import Font
-from ...classes import input_nick
+from ...classes import input_nick, input_ip_adress, input_port, input_password
 from ...client import dict_save_information
 from ...server import list_player_role, list_check_win
 from ..change_window import change_scene
 from ...json_functions import read_json, write_json, list_users
 from ...game_tools import apply_fade_effect
 from ...classes import Button
+from ...server import list_check_win, SERVER
+from ...client import check_can_connect_to_fight, check_start_connect
 
 leave_game = [False]
 def back_to_main():
@@ -43,6 +45,14 @@ def finish_window():
     run_game = True
     check_points[0] = 0
     leave_game[0] = False
+
+    check_can_connect_to_fight[0] = 0
+    check_can_connect_to_fight[1] = False
+    check_can_connect_to_fight[2] = False
+
+    check_start_connect[0] = False
+    check_start_connect[1] = False
+    check_start_connect[2] = False
     while run_game:
         module_screen.FPS.tick(60)
         module_screen.main_screen.fill((0, 0, 0))  # Очищення екрану чорним фоном
@@ -212,6 +222,13 @@ def finish_window():
         enemy_points.draw_font()
 
         restart_button.draw(surface = module_screen.main_screen)
+        list_check_win[0] = None
+        list_player_role[0] = ""
+        SERVER.START_CONNECT = False
+        input_nick.user_text = input_nick.base_text
+        input_ip_adress.user_text = input_ip_adress.base_text
+        input_password.user_text = input_password.base_text
+        input_port.user_text = input_port.base_text
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False

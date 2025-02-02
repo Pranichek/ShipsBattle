@@ -64,6 +64,7 @@ def recv_all(sock):
 
 check_start_connect = [False, False, False]
 def start_client():
+    print("Запуска клиента происходит")
     if input_nick.user_text not in list_users:
         #создаем игрока с его ником и даем базовое количество баллов
         list_users[input_nick.user_text] = {"points": 0,
@@ -181,12 +182,14 @@ def start_client():
                 except:
                     time.sleep(1)
                     continue
-    list_check_win[0] = None
+    print("Клиент отключён от сервера.")
                 
-connect_to_game = Thread(target = start_client, daemon = True)
+# connect_to_game = Thread(target = start_client, daemon = True)
 
 def count_time():
     while True:
+        if list_check_win[0] != None:
+            break
         if connection[0] == True:
             check_two_times.append(3)
         time.sleep(0.5)
