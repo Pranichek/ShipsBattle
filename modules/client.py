@@ -7,7 +7,7 @@ import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
 from threading import Thread
-from .server import SERVER
+from .server import SERVER, list_check_win
 
 
 # лист для клиента в котором храним надо ли что то изменять после его атаки
@@ -97,6 +97,8 @@ def start_client():
     server_module.list_player_role[0] = role
     # Бесконечный цикл для отправки и получения данных
     while True:
+        if list_check_win[0] != None:
+            break
         try:
             connection[0] = True
             if check_can_connect_to_fight[2] != 'True':
@@ -161,6 +163,8 @@ def start_client():
             print(e)
             port_client += 1
             while True:
+                if list_check_win[0] != None:
+                    break
                 try:
                     try:
                         client_socket.close()
@@ -177,6 +181,7 @@ def start_client():
                 except:
                     time.sleep(1)
                     continue
+    list_check_win[0] = None
                 
 connect_to_game = Thread(target = start_client, daemon = True)
 
