@@ -12,6 +12,7 @@ from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
 from ...game_tools import apply_fade_effect
 from ..change_window import change_scene
+from ...screens import list_grid
 from ..button_pressed import check_press_button
 from .check_placing_ships import connect_to_fight
 from .random_placing import random_places_ships
@@ -42,12 +43,17 @@ def ships_position_window():
     #generate grid with class
     grid_player.generate_grid()
     check_connect_fight = 0
+    for row in range(0, len(list_grid)):
+        for col in range(0, len(list_grid[row])):
+            list_grid[row][col] == 0
+    for ship in list_ships:
+        ship.X_COR = ship.STASIC_X 
+        ship.Y_COR = ship.STASIC_Y
     while run_game:
         module_screen.FPS.tick(60)
         data_ready = read_json(name_file = "status_connect_game.json")
         status_ready_to_game = data_ready["status"] 
 
-   
         if check_can_connect_to_fight[2] == 'True':
             server_module.list_check_ready_to_fight[0] = "fight"
             apply_fade_effect(screen = main_screen)

@@ -10,7 +10,8 @@ from ..change_window import change_scene
 from ...json_functions import read_json, write_json, list_users
 from ...game_tools import apply_fade_effect
 from ...classes import Button
-from ...server import list_check_win, SERVER
+from ...json_functions import write_json
+from ...server import list_check_win, SERVER, list_check_ready_to_fight
 from ...client import check_can_connect_to_fight, check_start_connect
 
 leave_game = [False]
@@ -53,6 +54,16 @@ def finish_window():
     check_start_connect[0] = False
     check_start_connect[1] = False
     check_start_connect[2] = False
+
+    list_check_ready_to_fight[0] = None
+
+    clear_json_data = {
+        "status": "places ships"
+    }
+    write_json(
+        filename = "status_connect_game.json",
+        object_dict = clear_json_data
+    )
     while run_game:
         module_screen.FPS.tick(60)
         module_screen.main_screen.fill((0, 0, 0))  # Очищення екрану чорним фоном
