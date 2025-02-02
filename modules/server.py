@@ -132,7 +132,6 @@ class Server():
                     print("Congratulations")
                     self.PORT += 1
                 if self.RESTART:
-                    self.server_socket.close()
                     self.RESTART = False
                     continue
             except Exception as error:

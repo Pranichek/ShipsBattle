@@ -5,9 +5,9 @@ from ...classes.class_image import DrawImage
 from ...server import SERVER
 from ...classes.class_text import Font
 from ...classes.class_button import Button
-from ...classes.class_click import music_click
+from ...classes.class_click import music_click, create
 from ...classes.class_input_text import input_ip_adress, input_nick, input_port, input_password
-from .launch_server import check_server_started, fail_start_server, start_server
+from .launch_server import check_server_started, fail_start_server, start_server, list_serv,count_music
 from ..button_pressed import check_press_button, button_action
 from ..change_window import change_scene, list_current_scene
 from ...json_functions import read_json
@@ -24,7 +24,7 @@ def get_local_ip():
             ip = sock.getsockname()[0]
             sock.close()
         except:
-            # Если IPv4 недоступен пробуем IPv6
+            # Если IPv4 недоступен пробуем IPv6(эта часть кода из инета)
             sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
             sock.connect(("2001:4860:4860::8888", 80)) 
             ip = sock.getsockname()[0]
@@ -44,7 +44,6 @@ def set_wan_ip():
     input_ip_adress.VISIBLE = 0
     input_ip_adress.active = True 
     flag_ip[0] = True
-
 
 #images 
 #фон для окон д=где вводим данные для запуска сервера и подключение к нему
@@ -111,7 +110,6 @@ def create_game_window():
         third_cold_image.draw_image(screen = module_screen.main_screen)
         fourth_cold_image.draw_image(screen = module_screen.main_screen)
         start_game_button.draw(surface =module_screen.main_screen)
-
         room_data.draw_image(screen = module_screen.main_screen)
         ip_room_text.draw_font()
         port_room_text.draw_font()
@@ -119,6 +117,15 @@ def create_game_window():
         off_sound_button.draw(surface = module_screen.main_screen)
         volume_down_button.draw(surface = module_screen.main_screen)
         volume_up_button.draw(surface = module_screen.main_screen)
+
+        if SERVER.START_CONNECT == True:
+            if list_serv[0] == True:
+                if count_music[0] == True: 
+                    create.play2(0)
+                    count_music[0] = False
+        elif SERVER.START_CONNECT == False:
+            if list_serv[0] == False:
+                count_music[0] = False
 
             
         if input_ip_adress.active == True or flag_ip[0] == True:
