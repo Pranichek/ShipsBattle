@@ -98,7 +98,7 @@ def start_client():
     role = client_socket.recv(1024).decode("utf-8")
     server_module.list_player_role[0] = role
     # Бесконечный цикл для отправки и получения данных
-    while True:
+    while list_check_win[0] == None:
         if list_check_win[0] != None:
             break
         try:
@@ -122,20 +122,22 @@ def start_client():
                 if len(data) >= 4:
                     check_can_connect_to_fight[2] = data[4]
                     if data[1] not in list_users:
-                        list_users[data[1]] = {"points": data[3], "password": data[2]}
+                        list_users[data[1]] = {"points": int(data[3]), "password": data[2]}
                         write_json(filename = "data_base.json" , object_dict = list_users)
                     #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
                     elif data[1] in list_users:
-                        list_users[data[1]]["points"] = data[3]
+                        list_users[data[1]]["points"] = int(data[3])
                         write_json(filename = "data_base.json" , object_dict = list_users)
 
                     if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
                         check_can_connect_to_fight[0] = True
-
-                    dict_save_information["player_nick"] = input_nick.user_text
-                    dict_save_information["enemy_nick"] = data[1]
-                    dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
-                    dict_save_information["enemy_points"] = int(data[3])
+                    try:
+                        dict_save_information["player_nick"] = input_nick.user_text
+                        dict_save_information["enemy_nick"] = data[1]
+                        dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+                        dict_save_information["enemy_points"] = int(data[3])
+                    except:
+                        pass
                 else:
                     print("Index error")
                     if save_data_posistion_ships[0] == "fight":
@@ -184,12 +186,13 @@ def start_client():
                     time.sleep(1)
                     continue
     print("Клиент отключён от сервера.")
+    client_socket.close()
                 
 # connect_to_game = Thread(target = start_client, daemon = True)
 
 def count_time():
     check_start_time_thread[0] = True
-    while True:
+    while list_check_win[0] == None:
         if list_check_win[0] != None:
             break
         if connection[0] == True:

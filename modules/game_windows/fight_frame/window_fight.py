@@ -244,7 +244,6 @@ def fight_window():
     enemy_points.update_text()
     send_matrix()
     check_two_times.clear()
-
     count_time_thread = threading.Thread(target = count_time, daemon = True)
     count_time_thread.start()
     random_first_choice_sound.play2(loops = 1)
@@ -262,6 +261,7 @@ def fight_window():
     one_data_fire = [0]
     target_time = [1]
     one_enemy_fire = [0, False]
+    count_sound_time[0] = 0
     while run_game:
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
@@ -274,28 +274,52 @@ def fight_window():
         for medal in range(0 , len(server_module.save_medals_coordinates)):
             if server_module.save_medals_coordinates[medal] == 1:
                 class_medal.enemy_four_decker_sniper_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 2:
+            else:
+                class_medal.enemy_four_decker_sniper_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 2:
                 class_medal.enemy_perfect_shooter_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 3:
+            else:
+                class_medal.enemy_perfect_shooter_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 3:
                 class_medal.enemy_strategist_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 4:
+            else:
+                class_medal.enemy_strategist_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 4:
                 class_medal.enemy_first_hit_medal.ACTIVE= True
-            elif server_module.save_medals_coordinates[medal] == 5:
+            else:
+                class_medal.enemy_first_hit_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 5:
                 class_medal.enemy_magnat_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 6:
+            else:
+                class_medal.enemy_magnat_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 6:
                 class_medal.enemy_master_of_disguist_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 7:
+            else:
+                class_medal.enemy_master_of_disguist_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 7:
                 class_medal.enemy_lone_hunter_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 8:
+            else:
+                class_medal.enemy_lone_hunter_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 8:
                 class_medal.enemy_pioneer_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 9:
+            else:
+                class_medal.enemy_pioneer_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 9:
                 class_medal.enemy_destroyer_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 10:
+            else:
+                class_medal.enemy_destroyer_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 10:
                 class_medal.enemy_opening_battle_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 11:
+            else:
+                class_medal.enemy_opening_battle_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 11:
                 class_medal.enemy_target_attack_medal.ACTIVE = True
-            elif server_module.save_medals_coordinates[medal] == 12:
+            else:  
+                class_medal.enemy_target_attack_medal.ACTIVE = False
+            if server_module.save_medals_coordinates[medal] == 12:
                 class_medal.enemy_collector_medal = True
+            else:
+                class_medal.enemy_collector_medal = False
 
         if animation_random_player.COUNT_IMAGES >= 5 and animation_random_player.COUNT_IMAGES <= 10:
             animation_random_player.ANIMATION_SPEED = 3.2
@@ -311,8 +335,6 @@ def fight_window():
         elif server_module.list_player_role[0] == "client_player":
             if animation_random_player.COUNT_IMAGES >= 29 and animation_random_player.COUNT_IMAGES <= 31:
                 animation_random_player.ANIMATION_SPEED = 120
-
-
 
         if server_module.list_player_role[0] != "server_player" and animation_random_player.COUNT_IMAGES >= 29 and count_sound_time[0] == 0:
             enemy_turn_sound.play2(loops = 1)
@@ -564,13 +586,13 @@ def fight_window():
                         count_ships_enemy += 1
                     if cell == 0:
                         count_zero += 1
-            if count_ships_player >= 1 and count_ships_enemy == 0:
+            if count_ships_player >= 1 and count_ships_enemy == 0 and count_zero != 100:
                 if server_module.list_player_role[0] == "server_player":
                     # список для хранения кто выиграл
                     server_module.list_check_win[0] = "win_server"
                 elif server_module.list_player_role[0] == "client_player":
                     server_module.list_check_win[0] = "win_client"
-            elif count_ships_player == 0 and count_ships_enemy >= 1:
+            elif count_ships_player == 0 and count_ships_enemy >= 1 and count_zero != 100:
                 if server_module.list_player_role[0] == "server_player":
                     server_module.list_check_win[0] = "win_client"
                 elif server_module.list_player_role[0] == "client_player":

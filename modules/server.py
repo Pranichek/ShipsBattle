@@ -73,15 +73,15 @@ def listen_client(client, second_client):
             SERVER.clients = 0
             client.settimeout(None)
             # SERVER.server_socket.close()
-            client.close()
-            second_client.close()
+            # client.close()
+            # second_client.close()
             break
         except Exception as error:
             SERVER.RESTART = True
             SERVER.clients = 0
             # SERVER.server_socket.close()
-            client.close()
-            second_client.close()
+            # client.close()
+            # second_client.close()
             break
 
 players = ["server_player", "client_player"]
