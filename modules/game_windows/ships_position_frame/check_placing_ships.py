@@ -17,7 +17,7 @@ def connect_to_fight():
         client_module.save_data_posistion_ships[0] = "fight"
     elif count_zero >= 81:
         dict_game_status = {
-                "status": "position ships"
+                "status": "position"
             }
         write_json(filename = "status_connect_game.json" , object_dict = dict_game_status)
-        client_module.save_data_posistion_ships[0] = "position ships"
+        client_module.save_data_posistion_ships[0] = "position"

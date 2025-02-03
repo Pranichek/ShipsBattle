@@ -2,5 +2,5 @@
 from .screens import *
 from .game_windows import main_window, list_current_scene, fight_window
 from .server import *
-from .client import list_check_need_send, count_time_thread, start_client
+from .client import list_check_need_send, count_time, start_client, check_connection_users
 

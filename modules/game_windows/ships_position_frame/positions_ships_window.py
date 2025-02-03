@@ -12,7 +12,7 @@ from ...classes.class_image import DrawImage
 from ...classes.class_button import Button
 from ...game_tools import apply_fade_effect
 from ..change_window import change_scene
-from ...screens import list_grid
+from ...screens import list_grid, enemy_matrix
 from ..button_pressed import check_press_button
 from .check_placing_ships import connect_to_fight
 from .random_placing import random_places_ships
@@ -41,14 +41,25 @@ def ships_position_window():
     pygame.display.set_caption("Position Ships")
     run_game = True
     #generate grid with class
+    grid_player.X_SCREEN = 81
+    grid_player.Y_SCREEN = 76
     grid_player.generate_grid()
     check_connect_fight = 0
     for row in range(0, len(list_grid)):
         for col in range(0, len(list_grid[row])):
             list_grid[row][col] == 0
+    for row in range(0, len(enemy_matrix)):
+        for col in range(0, len(enemy_matrix[row])):
+            enemy_matrix[row][col] = 0
     for ship in list_ships:
         ship.X_COR = ship.STASIC_X 
         ship.Y_COR = ship.STASIC_Y
+        ship.ORIENTATION_SHIP = "horizontal"
+        ship.WIDTH = 62
+        ship.HEIGHT = 62
+        ship.CHECK_ORIENTATION = "horizontal"
+        ship.load_image()
+        
     while run_game:
         module_screen.FPS.tick(60)
         data_ready = read_json(name_file = "status_connect_game.json")

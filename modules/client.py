@@ -22,8 +22,9 @@ check_two_times = []
 # список для подсчета сколько времени оба игрока расставели корабли, чтобы точно все успели прдклюючиться к бою
 check_can_connect_to_fight = [0, False, False]
 # список в котором сохраняем расставил ли игрок корабли
-save_data_posistion_ships = [""]
+save_data_posistion_ships = ["start"]
 connection = [True]
+check_start_time_thread = [False]
 
 dict_save_information = {
     "player_nick": "",
@@ -134,7 +135,7 @@ def start_client():
                     dict_save_information["player_nick"] = input_nick.user_text
                     dict_save_information["enemy_nick"] = data[1]
                     dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
-                    dict_save_information["enemy_points"] = int(list_users[data[1]]["points"])
+                    dict_save_information["enemy_points"] = int(data[3])
                 else:
                     print("Index error")
                     if save_data_posistion_ships[0] == "fight":
@@ -187,10 +188,11 @@ def start_client():
 # connect_to_game = Thread(target = start_client, daemon = True)
 
 def count_time():
+    check_start_time_thread[0] = True
     while True:
         if list_check_win[0] != None:
             break
         if connection[0] == True:
             check_two_times.append(3)
         time.sleep(0.5)
-count_time_thread = Thread(target = count_time, daemon = True)
+# count_time_thread = Thread(target = count_time, daemon = True)

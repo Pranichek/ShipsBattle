@@ -1,4 +1,4 @@
-import pygame, random, sys
+import pygame, random, sys, threading
 import modules.game_windows as game_windows
 import modules.shop as shop
 from ...screens import main_screen
@@ -21,7 +21,7 @@ from ...classes.animation import Animation, rocket_animation, miss_rocket_animat
 from ...classes.class_ship import list_ships
 from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
 from ..change_window import change_scene
-from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection, count_time_thread
+from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection, count_time, check_start_time_thread
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix, auto_aim
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 from ..button_pressed import check_press_button
@@ -243,6 +243,9 @@ def fight_window():
     player_points.update_text()
     enemy_points.update_text()
     send_matrix()
+    check_two_times.clear()
+
+    count_time_thread = threading.Thread(target = count_time, daemon = True)
     count_time_thread.start()
     random_first_choice_sound.play2(loops = 1)
 
@@ -561,13 +564,13 @@ def fight_window():
                         count_ships_enemy += 1
                     if cell == 0:
                         count_zero += 1
-            if count_ships_player >= 1 and count_ships_enemy == 0 and count_zero != 100:
+            if count_ships_player >= 1 and count_ships_enemy == 0:
                 if server_module.list_player_role[0] == "server_player":
                     # список для хранения кто выиграл
                     server_module.list_check_win[0] = "win_server"
                 elif server_module.list_player_role[0] == "client_player":
                     server_module.list_check_win[0] = "win_client"
-            elif count_ships_player == 0 and count_ships_enemy >= 1 and count_zero != 100:
+            elif count_ships_player == 0 and count_ships_enemy >= 1:
                 if server_module.list_player_role[0] == "server_player":
                     server_module.list_check_win[0] = "win_client"
                 elif server_module.list_player_role[0] == "client_player":

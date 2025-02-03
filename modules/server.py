@@ -95,7 +95,7 @@ class Server():
 
     def start_server(self, ip_adress: str, port: int):
         self.PORT = int(port) 
-        while True:
+        while list_check_win[0] == None:
             try:
                 if not self.RESTART:
                     self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -137,6 +137,7 @@ class Server():
                     continue
             except Exception as error:
                 pass
+        self.server_socket.close()
 
 SERVER = Server()
 

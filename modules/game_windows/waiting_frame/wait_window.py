@@ -49,7 +49,7 @@ def waiting_window():
             run_game = False
             check_press_button[0] = None
 
-        if check_connection_users[0] != False and save_data_posistion_ships[0]=="":
+        if check_connection_users[0] != False and save_data_posistion_ships[0] == "start":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(ships_position_window)
             check_press_button[0] = None

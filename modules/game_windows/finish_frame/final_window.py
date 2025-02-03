@@ -12,7 +12,8 @@ from ...game_tools import apply_fade_effect
 from ...classes import Button
 from ...json_functions import write_json
 from ...server import list_check_win, SERVER, list_check_ready_to_fight
-from ...client import check_can_connect_to_fight, check_start_connect
+from ...client import check_can_connect_to_fight, check_start_connect, save_data_posistion_ships, check_connection_users
+from ..main_frame import once_play_music
 
 leave_game = [False]
 def back_to_main():
@@ -47,23 +48,6 @@ def finish_window():
     check_points[0] = 0
     leave_game[0] = False
 
-    check_can_connect_to_fight[0] = 0
-    check_can_connect_to_fight[1] = False
-    check_can_connect_to_fight[2] = False
-
-    check_start_connect[0] = False
-    check_start_connect[1] = False
-    check_start_connect[2] = False
-
-    list_check_ready_to_fight[0] = None
-
-    clear_json_data = {
-        "status": "places ships"
-    }
-    write_json(
-        filename = "status_connect_game.json",
-        object_dict = clear_json_data
-    )
     while run_game:
         module_screen.FPS.tick(60)
         module_screen.main_screen.fill((0, 0, 0))  # Очищення екрану чорним фоном
@@ -240,6 +224,27 @@ def finish_window():
         input_ip_adress.user_text = input_ip_adress.base_text
         input_password.user_text = input_password.base_text
         input_port.user_text = input_port.base_text
+        save_data_posistion_ships[0] = "start"
+        check_can_connect_to_fight[0] = 0
+        check_can_connect_to_fight[1] = False
+        check_can_connect_to_fight[2] = False
+
+        check_start_connect[0] = False
+        check_start_connect[1] = False
+        check_start_connect[2] = False
+
+        check_connection_users[0] = False
+        check_connection_users[1] = False
+
+        list_check_ready_to_fight[0] = None
+        once_play_music[0] = 0
+        clear_json_data = {
+            "status": "places"
+        }
+        write_json(
+            filename = "status_connect_game.json",
+            object_dict = clear_json_data
+        )
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False
