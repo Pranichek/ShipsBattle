@@ -130,10 +130,10 @@ waste_money = [0]
 flag_arson = ["no"]
 flag_put_out_the_fire = ["no"]
 def buy_fire_rocket():
-    # if money_list[0] >= 80:
-    buy_product_sound.play2(loops = 1)
-    waste_money[0] += 80
-    flag_arson[0] = "yes"
+    if money_list[0] >= 80:
+        buy_product_sound.play2(loops = 1)
+        waste_money[0] += 80
+        flag_arson[0] = "yes"
 
 def buy_fire_fighter():
     if flag_put_out_the_fire[0] == "no":

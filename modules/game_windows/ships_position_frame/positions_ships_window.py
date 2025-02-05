@@ -47,7 +47,7 @@ def ships_position_window():
     check_connect_fight = 0
     for row in range(0, len(list_grid)):
         for col in range(0, len(list_grid[row])):
-            list_grid[row][col] == 0
+            list_grid[row][col] = 0
     for row in range(0, len(enemy_matrix)):
         for col in range(0, len(enemy_matrix[row])):
             enemy_matrix[row][col] = 0

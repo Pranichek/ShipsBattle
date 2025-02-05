@@ -9,7 +9,6 @@ from ....screens import enemy_matrix
 from ....classes.class_medal import magnat_medal
 
 check_need_change_turn = [True]
-
 def upgrade_attack(index : str, col: int, row: int, count_7: int, count_ships: list, count_misses: list, count_5: int):
     """
     `Функция` Для улучшение атаки, в диапозоне `3 на 3`

@@ -276,13 +276,15 @@ from ...json_functions import write_json
 from ...server import list_check_win, SERVER, list_check_ready_to_fight
 from ...client import check_can_connect_to_fight, check_start_connect, save_data_posistion_ships, check_connection_users, list_check_need_send, list_check_connection, data_player_shot, connection
 from ..main_frame import once_play_music
-from ...shop import money_list
+from ...shop import money_list, player_balance
 import modules.game_tools as game_tools_module
 import modules.shop.tasks as tasks_module
 import modules.achievement as achievement_module
 from ...shop.shop_image import done_task_one, done_task_two, done_task_three, done_task_four
 import modules.game_windows.fight_frame.window_fight as window_fight_frame
 from ...classes.animation import animation_random_player
+from ..fight_frame.window_fight import enemy_before_choice, player_before_choice, count_sound_time
+from ...classes.class_medal import player_medal, enemy_medals
 
 leave_game = [False]
 def back_to_main():
@@ -314,9 +316,12 @@ check_points = [0]
 def finish_window():
     pygame.display.set_caption("Finish Window")
     run_game = True
-    check_points[0] = 0
-    leave_game[0] = False
-
+    SERVER.server_socket.close()
+    SERVER.run = False
+    SERVER.clients = 0
+    SERVER.START_CONNECT = False
+    SERVER.RESTART = False
+    SERVER.PORT = 0
     while run_game:
         module_screen.FPS.tick(60)
         module_screen.main_screen.fill((0, 0, 0))  # Очищення екрану чорним фоном
@@ -514,10 +519,12 @@ def finish_window():
             filename = "status_connect_game.json",
             object_dict = clear_json_data
         )
+        count_sound_time[0] = 0
+        check_points[0] = 0
+        leave_game[0] = False
         server_module.enemy_data[0] = ""
         #где стоят корабли соперника
         server_module.enemy_ships.clear()
-        server_module.player_ships_coord_len.clear()
         # для восстановления клеточки
         server_module.number_list[0] = 100
         server_module.row_list[0] = 100
@@ -526,11 +533,10 @@ def finish_window():
         server_module.list_check_ready_to_fight[0] = None
         # лист очереди
         server_module.turn[0] = "server_turn"
-        server_module.turn[0] = False
+        server_module.turn[1] = False
         # лист таймер времени
         server_module.check_time[0] = 0 
         # Лист для проверки за кого мы играем(сервер или клиент)
-        server_module.list_player_role[0] = ""
         # список куда сохраняем кто выиграл
         server_module.list_check_win[0] = None
         # список где сохраняем баланс врага
@@ -674,7 +680,6 @@ def finish_window():
         game_tools_module.list_direction_enemy[0] = ""
         game_tools_module.check_number_cell_enemy.clear()
         game_tools_module.check_kill_enemy[0] = False
-        game_tools_module.enemy_data_kill[0] = ''
         game_tools_module.count_len_enemy[0] = 1
         game_tools_module.count_five_around[0] = 0
         game_tools_module.check_money_two_hits_in_row[0] = 0
@@ -706,11 +711,23 @@ def finish_window():
         game_tools_module.list_direction[0] = ""
         game_tools_module.check_number_cell.clear()
         game_tools_module.check_kill[0] = False
-        game_tools_module.enemy_data_kill[0] = ''
         game_tools_module.count_len[0] = 1
         game_tools_module.list_animation_miss.clear()
         game_tools_module.count_fives[0] = 0
         animation_random_player.clear_animation()
+        animation_random_player.ANIMATION_SPEED = 6
+        enemy_before_choice.visible = 255
+        player_before_choice.visible = 255
+        player_balance.update_text()
+        game_tools_module.player_balance_in_jar.update_text()
+        game_tools_module.enemy_balance_in_jar.update_text()
+
+        for medal in player_medal:
+            medal.VISIBLE = 100
+            medal.ACTIVE = False
+        for enm_medal in enemy_medals:
+            enm_medal.VISIBLE = 100
+            enm_medal.ACTIVE = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False

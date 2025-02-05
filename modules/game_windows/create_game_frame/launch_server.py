@@ -88,6 +88,7 @@ def start_server():
     list_serv[0] = True
     count_music[0] = True
     if int(input_port.user_text) != SERVER.PORT:
+        SERVER.run = True
         server_thread = Thread(target = run_server, args=(str(input_ip_adress.user_text), (input_port.user_text)), daemon = True)
         server_thread.start()
 

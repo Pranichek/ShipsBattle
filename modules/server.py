@@ -21,16 +21,11 @@ def recv_all(sock):
 enemy_data = [""]
 #где стоят корабли соперника
 enemy_ships = []
-player_ships_coord_len = []
 # для восстановления клеточки
 number_list = [100]
 row_list = [100]
 col_list = [100]
 check_send_data_health = [0]
-# счетчик чтобы взять новые данные про умершие корабли врага
-get_new_killed_data = [0]
-# список для того чтобы от времени отнималась ровно одна секунда
-check_ten_times = []
 # список для того чтобы мы получили матрицу соперника только один раз
 check_repeat = [0]
 # список для проверки перехода на фрейм боя
@@ -61,28 +56,22 @@ check_connection = [True]
 
 
 def listen_client(client, second_client):
-    while True:
+    while SERVER.run == True:
         try:
-            if SERVER.clients > 1:
-                client.settimeout(5)
+            # if SERVER.clients > 1:
+            #     client.settimeout(5)
             data = client.recv(1024)
             if data:
                 second_client.sendall(data)
         except ConnectionResetError:
             SERVER.RESTART = True
             SERVER.clients = 0
-            client.settimeout(None)
-            # SERVER.server_socket.close()
-            # client.close()
-            # second_client.close()
             break
         except Exception as error:
             SERVER.RESTART = True
             SERVER.clients = 0
-            # SERVER.server_socket.close()
-            # client.close()
-            # second_client.close()
             break
+
 
 players = ["server_player", "client_player"]
 class Server():
@@ -92,10 +81,11 @@ class Server():
         self.clients = 0
         self.PORT = 0
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.run = True
 
     def start_server(self, ip_adress: str, port: int):
         self.PORT = int(port) 
-        while list_check_win[0] == None:
+        while self.run == True:
             try:
                 if not self.RESTART:
                     self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -137,7 +127,13 @@ class Server():
                     continue
             except Exception as error:
                 pass
-        self.server_socket.close()
+        # self.server_socket.close()
+        # self.PORT = 0
+        # self.RESTART = False
+        # self.START_CONNECT = False
+        # self.clients = 0
+        # print("Server cloesed")
+        # print(f"{colorama.Fore.RED} SERVER CLOSED {colorama.Style.RESET_ALL}")
 
 SERVER = Server()
 

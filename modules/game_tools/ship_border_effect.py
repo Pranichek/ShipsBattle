@@ -13,15 +13,12 @@ check_number_cell = []
 # длина корабля\
 # флаг убитого корабля
 check_kill = [False]
-enemy_data_kill = ['']
 
 count_len = [1]
 # список в котором сохраняем все обьекты зачерканных клеточек
 list_animation_miss = []
 
-
 count_fives = [0]
-
 def ship_border():
     for rowee in range(len(list_grid)):
         for cellee in range(len(list_grid[rowee])):
@@ -42,7 +39,7 @@ def ship_border():
                 y = list_object_map[num_cell].y
 
                 for ship in list_ships:
-                    if ship.X_COR == x and ship.Y_COR == y:
+                    if ship.row == rowee and ship.col == cellee:
                         count_len[0] = ship.LENGHT
                         list_direction[0] = ship.ORIENTATION_SHIP
                         break
@@ -100,7 +97,7 @@ def ship_border():
                                     height = 55,
                                     need_clear = False,
                                     name_folder = "animation_miss",
-                                    animation_speed = 3
+                                    animation_speed = 1.5
                                 )
                                 existss = False
                                 for anim_miss in list_animation_miss:
@@ -128,7 +125,7 @@ def ship_border():
                                     height = 55,
                                     need_clear = False,
                                     name_folder = "animation_miss",
-                                    animation_speed = 3
+                                    animation_speed = 1.5
                                 )
                                 # print(5)
                                 existss = False
@@ -158,7 +155,7 @@ def ship_border():
                                     height = 55,
                                     need_clear = False,
                                     name_folder = "animation_miss",
-                                    animation_speed = 3
+                                    animation_speed = 1.5
                                 )
                                 # print(5)
                                 existss = False
@@ -188,7 +185,7 @@ def ship_border():
                                     height = 55,
                                     need_clear = False,
                                     name_folder = "animation_miss",
-                                    animation_speed = 3
+                                    animation_speed = 1.5
                                 )
                                 # print(5)
                                 existss = False
@@ -218,7 +215,7 @@ def ship_border():
                                     height = 55,
                                     need_clear = False,
                                     name_folder = "animation_miss",
-                                    animation_speed = 3
+                                    animation_speed = 1.5
                                 )
                                 # print(7)
                                 existss = False
@@ -251,7 +248,7 @@ def ship_border():
                                     height = 55,
                                     need_clear = False,
                                     name_folder = "animation_miss",
-                                    animation_speed = 3
+                                    animation_speed = 1.5
                                 )
                                 # print(7)
                                 existss = False

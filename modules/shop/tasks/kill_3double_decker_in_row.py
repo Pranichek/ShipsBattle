@@ -47,7 +47,6 @@ def kill_three_double_decker_in_a_row():
                         check_three_2decker_ship_in_row.append("You kill three double decker in row")
                         check_completed_tasks[0] += 1
                         print("Ты убил три двухпалубных кораблей подряд")
-                        del third_tasks_copy[2]
                         if done_task_three.VISIBLE != 255:
                             done_task_three.VISIBLE = 255
                     elif "You kill two three decker in row" in check_three_2decker_ship_in_row:

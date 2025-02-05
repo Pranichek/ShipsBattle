@@ -141,7 +141,6 @@ list_fourth_task = [
 # лист збереження грошей
 money_list = [0]
 
-
 # створюємо текст із рандомним першим завданням
 first_task = Font_Shop(
     x_cor = 52 ,

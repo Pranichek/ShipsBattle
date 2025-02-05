@@ -19,7 +19,6 @@ def three_hits_in_row(cell: int):
                 check_completed_tasks[0] += 1
                 print("Three hits in a row")
                 three_hits_in_a_row.append("True")
-                del first_tasks_copy[-1]
                 if done_task_one.VISIBLE != 255:
                     done_task_one.VISIBLE = 255
     except:

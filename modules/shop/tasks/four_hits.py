@@ -19,7 +19,6 @@ def four_hits_in_row(number_cell: int):
                 check_completed_tasks[0] += 1
                 print("Four hits in a row")
                 four_hits_in_a_row.append("True")
-                del first_tasks_copy[1]
                 if "True" in four_hits_in_a_row and done_task_one.VISIBLE != 255:
                     done_task_one.VISIBLE = 255
     except:

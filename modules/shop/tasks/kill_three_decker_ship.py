@@ -14,7 +14,6 @@ def kill_one_three_decker_ship():
                     kill_three_deckcer_ship[0] = "kill three deck ship"
                     check_completed_tasks[0] += 1
                     print("Ты убил один трехбалубный кораблик")
-                    del first_tasks_copy[2]
                     if done_task_one.VISIBLE != 255:
                         done_task_one.VISIBLE = 255
     except:

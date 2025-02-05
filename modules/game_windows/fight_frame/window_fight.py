@@ -52,8 +52,6 @@ fire_extinguisher=["no"]
 number_of_ship_sonfire=[0]
 pozhar_row= []
 pozhar_col =[]
-
-
 #((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
 # картинка курсора
@@ -261,7 +259,6 @@ def fight_window():
     one_data_fire = [0]
     target_time = [1]
     one_enemy_fire = [0, False]
-    count_sound_time[0] = 0
     while run_game:
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
@@ -1303,7 +1300,6 @@ def fight_window():
                         active_product_shine.x_cor = random_hits_icon.x_cor - 15
                         active_product_shine.y_cor = random_hits_icon.y_cor - 15
 
-                    
                 # робимо перебор списку де знаходяться елементи магазину , та для кнопок застосовуємо функцію check_click()
                 for button in shop.shop_item:
                     try:
@@ -1352,7 +1348,7 @@ def fight_window():
                                                 active_product_shine.x_cor = -100
                                                 active_product_shine.y_cor = -100
 
-                                        if pozhar_col !=  [] :
+                                        if pozhar_col !=  []:
                                             if shop.flag_put_out_the_fire[0] == "yes" and activate_fire_fighter[0] == True:
                                                 # Узнаем номер клетки где стоит кораблик
                                                 number_cell_our = list_object_map.index(cell)

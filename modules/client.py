@@ -41,8 +41,8 @@ def send_matrix():
         for cell in row:
             data_player_shot.append(str(cell))
     for ship in list_ships:
-        data_player_shot.append(str(ship.X_COR))
-        data_player_shot.append(str(ship.Y_COR))
+        data_player_shot.append(str(ship.row))
+        data_player_shot.append(str(ship.col))
         data_player_shot.append(str(ship.LENGHT))
         data_player_shot.append(str(ship.ORIENTATION_SHIP))
     list_check_need_send[0] = True

@@ -22,7 +22,6 @@ def kill_three_ships_in_a_row():
                     count_kill_three[0] = "You killes three ships in row"
                     check_completed_tasks[0] += 1
                     print("Ты убил три корабля подряд")
-                    del fourth_tasks_copy[1]
                     if done_task_four.VISIBLE != 255:
                         done_task_four.VISIBLE = 255
     except:

@@ -18,7 +18,6 @@ def first_kill_three_decker():
                         enemy_ships_3decker[0] = "kill three-decker ship"
                         check_completed_tasks[0] += 1
                         print("You are first kill three-decker ship")
-                        del second_tasks_copy[-1]
                         if done_task_two.VISIBLE != 255:
                             done_task_two.VISIBLE = 255
                 elif enemy_ships_3decker[0] == "kill three-decker ship":
