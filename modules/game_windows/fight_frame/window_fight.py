@@ -265,9 +265,9 @@ def fight_window():
     for enm_medal in enemy_medals:
         enm_medal.VISIBLE = 100
         enm_medal.ACTIVE = False
-    shop.player_balance.TEXT = 0
-    player_balance_in_jar.text = 0
-    enemy_balance_in_jar.text = 0
+    shop.player_balance.TEXT = '0'
+    player_balance_in_jar.text = '0'
+    enemy_balance_in_jar.text = '0'
     shop.player_balance.update_text()
     player_balance_in_jar.update_text()
     enemy_balance_in_jar.update_text()
