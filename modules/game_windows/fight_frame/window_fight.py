@@ -223,7 +223,7 @@ def fight_window():
         list_ships[num].WIDTH = 55
         list_ships[num].HEIGHT = 55
         list_ships[num].load_image()
-
+    print("Заходит за пределы цикла vsegda?")
     # Завантажуємо картинку для сітки , по якій можемо ореєнутватися куди бити(тобто A1 , B9 і тд)
     grid_image.width = 597
     grid_image.height = 597
@@ -265,6 +265,9 @@ def fight_window():
     for enm_medal in enemy_medals:
         enm_medal.VISIBLE = 100
         enm_medal.ACTIVE = False
+    shop.player_balance.TEXT = 0
+    player_balance_in_jar.text = 0
+    enemy_balance_in_jar.text = 0
     shop.player_balance.update_text()
     player_balance_in_jar.update_text()
     enemy_balance_in_jar.update_text()
@@ -274,8 +277,6 @@ def fight_window():
         ship_border()
         #----------------------------------------------------------------
         kill_enemy_ships()
-        print(len(server_module.enemy_ships), "dadada")
-        print(server_module.enemy_ships)
         if len(server_module.enemy_died_ships) > 0:
             achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
             achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships
@@ -351,8 +352,6 @@ def fight_window():
             player_turn_sound.play2(loops = 1)
             count_sound_time[0] = 1
     
-
-
         if animation_random_player.IS_ANIMATION_DONE == True:
             if check_two_times.count(3) >= 2:
                 server_module.check_time[0] += 1
@@ -371,7 +370,7 @@ def fight_window():
                             row += 1
                             column = 0
 
-                    server_module.enemy_ships.clear()  # Очистка перед заполнением
+                    server_module.enemy_ships.clear()  
                     count_data = 1
                     enemy_ship = []
                     for data_ship in check_list[101:-1]:
@@ -383,11 +382,10 @@ def fight_window():
                         count_data += 1
 
                         if len(enemy_ship) >= 4:
-                            server_module.enemy_ships.append(enemy_ship.copy())  # Используем копию
+                            server_module.enemy_ships.append(enemy_ship.copy())  
                             enemy_ship.clear()
-                            count_data = 1  # Сбрасываем в 1, а не в 0!
-
-                    print(len(server_module.enemy_ships), "Данные от врага")  
+                            count_data = 1  
+                    print(server_module.enemy_ships)
 
                 else:
                     try:
@@ -604,31 +602,31 @@ def fight_window():
             elif server_module.list_player_role[0] == "client_player":
                 server_module.list_check_win[0] = "win_client"
 
-        # if server_module.list_check_win[0] == None:
-        #     count_ships_player = 0
-        #     count_ships_enemy = 0
-        #     count_zero = 0
-        #     for row in list_grid:
-        #         for cell in row:
-        #             if cell in [1, 2, 3, 4]:
-        #                 count_ships_player += 1
-        #     for row in enemy_matrix:
-        #         for cell in row:
-        #             if cell in [1, 2, 3, 4]:
-        #                 count_ships_enemy += 1
-        #             if cell == 0:
-        #                 count_zero += 1
-        #     if count_ships_player >= 1 and count_ships_enemy == 0 and count_zero != 100:
-        #         if server_module.list_player_role[0] == "server_player":
-        #             # список для хранения кто выиграл
-        #             server_module.list_check_win[0] = "win_server"
-        #         elif server_module.list_player_role[0] == "client_player":
-        #             server_module.list_check_win[0] = "win_client"
-        #     elif count_ships_player == 0 and count_ships_enemy >= 1 and count_zero != 100:
-        #         if server_module.list_player_role[0] == "server_player":
-        #             server_module.list_check_win[0] = "win_client"
-        #         elif server_module.list_player_role[0] == "client_player":
-        #             server_module.list_check_win[0] = "win_server"
+        if server_module.list_check_win[0] == None:
+            count_ships_player = 0
+            count_ships_enemy = 0
+            count_zero = 0
+            for row in list_grid:
+                for cell in row:
+                    if cell in [1, 2, 3, 4]:
+                        count_ships_player += 1
+            for row in enemy_matrix:
+                for cell in row:
+                    if cell in [1, 2, 3, 4]:
+                        count_ships_enemy += 1
+                    if cell == 0:
+                        count_zero += 1
+            if count_ships_player >= 1 and count_ships_enemy == 0 and count_zero != 100:
+                if server_module.list_player_role[0] == "server_player":
+                    # список для хранения кто выиграл
+                    server_module.list_check_win[0] = "win_server"
+                elif server_module.list_player_role[0] == "client_player":
+                    server_module.list_check_win[0] = "win_client"
+            elif count_ships_player == 0 and count_ships_enemy >= 1 and count_zero != 100:
+                if server_module.list_player_role[0] == "server_player":
+                    server_module.list_check_win[0] = "win_client"
+                elif server_module.list_player_role[0] == "client_player":
+                    server_module.list_check_win[0] = "win_server"
         #----------------------------------------------------------------
         check_player_balance[0] = shop.money_list[0]
         # функция которая красиво добавляет/отнимает монетки

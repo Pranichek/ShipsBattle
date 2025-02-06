@@ -608,7 +608,7 @@ def finish_window():
         achievement_module.enemy_ships_4decker_achiv[0] = ""
         achievement_module.single_ships_achiv.clear
         achievement_module.check_killed_for_single_ships_achiv.clear()
-        achievement_module.start_index_single_achiv.clear()
+        achievement_module.start_index_single_achiv[0] = 0
         achievement_module.player_ships[0] = 0
         achievement_module.enemy_ships[0] = 0  
         achievement_module.count_player_ships_achiv[0] = 0

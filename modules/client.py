@@ -179,8 +179,8 @@ def start_client():
                 server_module.enemy_data[0] = enemy_data.decode("utf-8")
                 
                 # print(server_module.enemy_data, "enemy_data") 
-        except Exception as e:
-            print(e)
+        except Exception as error:
+            print(f"Error(client error): {error}")
             port_client += 1
             while True:
                 if list_check_win[0] != None:
@@ -191,9 +191,10 @@ def start_client():
                     except Exception as error:
                         print(f"Error(client_socket.close): {error}")
                     print(2)
-                    connection[0] = False
+                    
                     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     print(3)
+                    connection[0] = False
                     print(port_client)
                     client_socket.connect((str(input_ip_adress.user_text), port_client)) 
                     print(5)
