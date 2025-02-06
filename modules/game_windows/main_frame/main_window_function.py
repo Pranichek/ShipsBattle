@@ -12,7 +12,7 @@ from ...volume_settings import off_sound_button, volume_up_button, volume_down_b
 from ..waiting_frame import apply_fade_effect
 from ...classes.class_click import all_sounds
 from ...volume_settings import save_data_volume
-
+import modules.achievement as achievement_module
 
 #картинки
 main_bg = DrawImage(width = 1280,height = 832 , x_cor = 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "main_background.png")

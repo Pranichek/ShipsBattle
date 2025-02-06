@@ -259,12 +259,23 @@ def fight_window():
     one_data_fire = [0]
     target_time = [1]
     one_enemy_fire = [0, False]
+    for medal in player_medal:
+            medal.VISIBLE = 100
+            medal.ACTIVE = False
+    for enm_medal in enemy_medals:
+        enm_medal.VISIBLE = 100
+        enm_medal.ACTIVE = False
+    shop.player_balance.update_text()
+    player_balance_in_jar.update_text()
+    enemy_balance_in_jar.update_text()
     while run_game:
         module_screen.FPS.tick(60)
         #----------------------------------------------------------------
         ship_border()
         #----------------------------------------------------------------
         kill_enemy_ships()
+        print(len(server_module.enemy_ships), "dadada")
+        print(server_module.enemy_ships)
         if len(server_module.enemy_died_ships) > 0:
             achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
             achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships
@@ -359,8 +370,25 @@ def fight_window():
                         if column == 10:
                             row += 1
                             column = 0
-                    for data_ship in range(101, len(check_list) - 1, 4):
-                        server_module.enemy_ships.append((int(check_list[data_ship]), int(check_list[data_ship + 1]), int(check_list[data_ship + 2]), (check_list[data_ship + 3])))
+
+                    server_module.enemy_ships.clear()  # Очистка перед заполнением
+                    count_data = 1
+                    enemy_ship = []
+                    for data_ship in check_list[101:-1]:
+                        if count_data <= 3:
+                            enemy_ship.append(int(data_ship))
+                        else:
+                            enemy_ship.append(data_ship)
+
+                        count_data += 1
+
+                        if len(enemy_ship) >= 4:
+                            server_module.enemy_ships.append(enemy_ship.copy())  # Используем копию
+                            enemy_ship.clear()
+                            count_data = 1  # Сбрасываем в 1, а не в 0!
+
+                    print(len(server_module.enemy_ships), "Данные от врага")  
+
                 else:
                     try:
                         if check_data[0] == "enemy_turn":
@@ -514,6 +542,13 @@ def fight_window():
                     if check_data[0] == "keep-alive":
                         enemy_check_fire[0] = 0
                         count_hit_auto_rocket[0] = 0
+
+                        for number_cell in check_data[1:-1]:
+                            int_number_cell = int(number_cell)
+                            row = int_number_cell // 10
+                            col = int_number_cell % 10
+                            if list_grid[row][col] != 7:
+                                list_grid[row][col] = 7
         except:
             continue        
         # обнуление времени и хода, если игрок не походил
@@ -569,31 +604,31 @@ def fight_window():
             elif server_module.list_player_role[0] == "client_player":
                 server_module.list_check_win[0] = "win_client"
 
-        if server_module.list_check_win[0] == None:
-            count_ships_player = 0
-            count_ships_enemy = 0
-            count_zero = 0
-            for row in list_grid:
-                for cell in row:
-                    if cell in [1, 2, 3, 4]:
-                        count_ships_player += 1
-            for row in enemy_matrix:
-                for cell in row:
-                    if cell in [1, 2, 3, 4]:
-                        count_ships_enemy += 1
-                    if cell == 0:
-                        count_zero += 1
-            if count_ships_player >= 1 and count_ships_enemy == 0 and count_zero != 100:
-                if server_module.list_player_role[0] == "server_player":
-                    # список для хранения кто выиграл
-                    server_module.list_check_win[0] = "win_server"
-                elif server_module.list_player_role[0] == "client_player":
-                    server_module.list_check_win[0] = "win_client"
-            elif count_ships_player == 0 and count_ships_enemy >= 1 and count_zero != 100:
-                if server_module.list_player_role[0] == "server_player":
-                    server_module.list_check_win[0] = "win_client"
-                elif server_module.list_player_role[0] == "client_player":
-                    server_module.list_check_win[0] = "win_server"
+        # if server_module.list_check_win[0] == None:
+        #     count_ships_player = 0
+        #     count_ships_enemy = 0
+        #     count_zero = 0
+        #     for row in list_grid:
+        #         for cell in row:
+        #             if cell in [1, 2, 3, 4]:
+        #                 count_ships_player += 1
+        #     for row in enemy_matrix:
+        #         for cell in row:
+        #             if cell in [1, 2, 3, 4]:
+        #                 count_ships_enemy += 1
+        #             if cell == 0:
+        #                 count_zero += 1
+        #     if count_ships_player >= 1 and count_ships_enemy == 0 and count_zero != 100:
+        #         if server_module.list_player_role[0] == "server_player":
+        #             # список для хранения кто выиграл
+        #             server_module.list_check_win[0] = "win_server"
+        #         elif server_module.list_player_role[0] == "client_player":
+        #             server_module.list_check_win[0] = "win_client"
+        #     elif count_ships_player == 0 and count_ships_enemy >= 1 and count_zero != 100:
+        #         if server_module.list_player_role[0] == "server_player":
+        #             server_module.list_check_win[0] = "win_client"
+        #         elif server_module.list_player_role[0] == "client_player":
+        #             server_module.list_check_win[0] = "win_server"
         #----------------------------------------------------------------
         check_player_balance[0] = shop.money_list[0]
         # функция которая красиво добавляет/отнимает монетки

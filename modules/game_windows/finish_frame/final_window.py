@@ -316,7 +316,8 @@ check_points = [0]
 def finish_window():
     pygame.display.set_caption("Finish Window")
     run_game = True
-    SERVER.server_socket.close()
+    if SERVER.START_CONNECT == True:
+        SERVER.server_socket.close()
     SERVER.run = False
     SERVER.clients = 0
     SERVER.START_CONNECT = False
@@ -493,7 +494,6 @@ def finish_window():
         restart_button.draw(surface = module_screen.main_screen)
         list_check_win[0] = None
         list_player_role[0] = ""
-        SERVER.START_CONNECT = False
         input_nick.user_text = input_nick.base_text
         input_ip_adress.user_text = input_ip_adress.base_text
         input_password.user_text = input_password.base_text
@@ -524,7 +524,7 @@ def finish_window():
         leave_game[0] = False
         server_module.enemy_data[0] = ""
         #где стоят корабли соперника
-        server_module.enemy_ships.clear()
+        # server_module.enemy_ships.clear()
         # для восстановления клеточки
         server_module.number_list[0] = 100
         server_module.row_list[0] = 100
@@ -728,6 +728,7 @@ def finish_window():
         for enm_medal in enemy_medals:
             enm_medal.VISIBLE = 100
             enm_medal.ACTIVE = False
+        print("UBANAYA OTCHISTKA IDI NAHUI")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False
@@ -738,4 +739,5 @@ def finish_window():
                 restart_button.check_click(event = event)
         if leave_game[0] == True:
             run_game = False
+            break
         pygame.display.flip()

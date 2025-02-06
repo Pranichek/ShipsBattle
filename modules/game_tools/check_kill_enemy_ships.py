@@ -216,45 +216,45 @@ def kill_enemy_ships():
                 
                 num_cell = (rowee * 10) + int(str_cel[-1])
 
-                x = list_object_map_enemy[num_cell].x
-                y = list_object_map_enemy[num_cell].y
+                print(len(enemy_ships), "pered ciclom")
+                if len(enemy_ships) > 1:
+                    for ship in enemy_ships:
+                        if ship[0] == rowee and ship[1] == cellee:
+                            count_len_enemy[0] = ship[2]
+                            list_direction_enemy[0] = ship[3]
+                            break
+                print(len(enemy_ships), "posle cycla")
 
-                for ship in enemy_ships:
-                    if ship[0] == rowee and ship[1] == cellee:
-                        count_len_enemy[0] = ship[2]
-                        list_direction_enemy[0] = ship[3]
-                        break
-
-                if num_cell not in check_number_cell_enemy:
-                    if count_len_enemy[0] == 1 and list_direction_enemy[0] != "":
-                        print("убили корабль" , count_len_enemy[0])
-                        check_kill_enemy[0] = True
-                        check_number_cell_enemy.append(num_cell)
-                        enemy_died_ships.append(count_len_enemy[0])
-                    elif list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] != True:
-                        for len_ship in range(1 , count_len_enemy[0]):
-                            if enemy_matrix[rowee][cellee + len_ship] == 7:
-                                pass
-                            elif enemy_matrix[rowee][cellee + len_ship]!= 7:
-                                break
-                            if len_ship == count_len_enemy[0] - 1:
-                                print("убили корабль" , count_len_enemy[0])
-                                check_kill_enemy[0] = True
-                                for i in range(0, count_len_enemy[0]):
-                                    check_number_cell_enemy.append(num_cell + i)
-                                enemy_died_ships.append(count_len_enemy[0])           
-                    elif list_direction_enemy[0] == "vertical" and check_kill_enemy[0] != True:
-                        for len_ship in range(1 , count_len_enemy[0]):
-                            if enemy_matrix[rowee + len_ship][cellee] == 7:
-                                pass
-                            elif enemy_matrix[rowee + len_ship][cellee]!= 7:
-                                break
-                            if len_ship == count_len_enemy[0] - 1:
-                                print("убили корабль" , count_len_enemy[0])
-                                check_kill_enemy[0] = True
-                                for i in range(0, count_len_enemy[0]):
-                                    check_number_cell_enemy.append(num_cell + i)
-                                enemy_died_ships.append(count_len_enemy[0])
+                # if num_cell not in check_number_cell_enemy:
+                if count_len_enemy[0] == 1 and list_direction_enemy[0] != "":
+                    print("убили корабль" , count_len_enemy[0])
+                    check_kill_enemy[0] = True
+                    check_number_cell_enemy.append(num_cell)
+                    enemy_died_ships.append(count_len_enemy[0])
+                elif list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] != True:
+                    for len_ship in range(1 , count_len_enemy[0]):
+                        if enemy_matrix[rowee][cellee + len_ship] == 7:
+                            pass
+                        elif enemy_matrix[rowee][cellee + len_ship]!= 7:
+                            break
+                        if len_ship == count_len_enemy[0] - 1:
+                            print("убили корабль" , count_len_enemy[0])
+                            check_kill_enemy[0] = True
+                            for i in range(0, count_len_enemy[0]):
+                                check_number_cell_enemy.append(num_cell + i)
+                            enemy_died_ships.append(count_len_enemy[0])           
+                elif list_direction_enemy[0] == "vertical" and check_kill_enemy[0] != True:
+                    for len_ship in range(1 , count_len_enemy[0]):
+                        if enemy_matrix[rowee + len_ship][cellee] == 7:
+                            pass
+                        elif enemy_matrix[rowee + len_ship][cellee]!= 7:
+                            break
+                        if len_ship == count_len_enemy[0] - 1:
+                            print("убили корабль" , count_len_enemy[0])
+                            check_kill_enemy[0] = True
+                            for i in range(0, count_len_enemy[0]):
+                                check_number_cell_enemy.append(num_cell + i)
+                            enemy_died_ships.append(count_len_enemy[0])
 
                 if list_direction_enemy[0] == "vertical" and check_kill_enemy[0] == True:      
                     for anim_miss in range(0, count_len_enemy[0] + 2):
@@ -300,7 +300,6 @@ def kill_enemy_ships():
                                 if enemy_matrix[rowka][cellka] == 0:
                                     enemy_matrix[rowka][cellka] = 5
             
-                            
                 if list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] == True:
                     for anim_miss in range(0, count_len_enemy[0] + 2):
                         rowka = miss_row_enemy[0] - 1

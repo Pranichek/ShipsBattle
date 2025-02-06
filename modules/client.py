@@ -2,7 +2,7 @@ import socket, json, time, pickle
 from .classes import input_port, input_ip_adress, input_nick ,list_ships
 from .json_functions import write_json , list_users 
 import modules.server as server_module
-from .screens import list_grid
+from .screens import list_grid, enemy_matrix
 import modules.shop as shop
 import modules.achievement as achievement
 from .classes.class_input_text import input_password
@@ -37,7 +37,7 @@ dict_save_information = {
 def send_matrix():
     data_player_shot.clear()  # Очищаем данные перед добавлением новых
     data_player_shot.append("enemy_matrix")
-    for row in list_grid:  # Предполагается, что list_grid соответствует enemy_matrix
+    for row in list_grid:  
         for cell in row:
             data_player_shot.append(str(cell))
     for ship in list_ships:
@@ -46,6 +46,8 @@ def send_matrix():
         data_player_shot.append(str(ship.LENGHT))
         data_player_shot.append(str(ship.ORIENTATION_SHIP))
     list_check_need_send[0] = True
+    print(len(data_player_shot))
+    
 
 dict_status_game = {
     "status" : "places ships"
@@ -89,7 +91,7 @@ def start_client():
         except Exception as error:
             check_start_connect[1] = False
             print("Неправильные данные", error)
-            time.sleep(0.1)
+            time.sleep(1)
             client_socket.settimeout(None)
             continue
 
@@ -121,13 +123,16 @@ def start_client():
                 check_connection_users[0] = save_data_posistion_ships[0]
                 if len(data) >= 4:
                     check_can_connect_to_fight[2] = data[4]
-                    if data[1] not in list_users:
-                        list_users[data[1]] = {"points": int(data[3]), "password": data[2]}
-                        write_json(filename = "data_base.json" , object_dict = list_users)
-                    #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
-                    elif data[1] in list_users:
-                        list_users[data[1]]["points"] = int(data[3])
-                        write_json(filename = "data_base.json" , object_dict = list_users)
+                    try:
+                        if data[1] not in list_users:
+                            list_users[data[1]] = {"points": int(data[3]), "password": data[2]}
+                            write_json(filename = "data_base.json" , object_dict = list_users)
+                        #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+                        elif data[1] in list_users:
+                            list_users[data[1]]["points"] = int(data[3])
+                            write_json(filename = "data_base.json" , object_dict = list_users)
+                    except:
+                        pass
 
                     if save_data_posistion_ships[0] == "fight" and data[0] == 'fight':
                         check_can_connect_to_fight[0] = True
@@ -153,7 +158,18 @@ def start_client():
                     data_player_shot.clear()  # Очищаем список перед новым входом
                     list_check_need_send[0] = False
                 else:
-                    client_socket.sendall("keep-alive".encode("utf-8") + b"END")
+                    data_player_shot.append("keep-alive")
+                    str_line = ""
+                    for row in range(len(enemy_matrix)):
+                        for col in range(len(enemy_matrix[row])):
+                            if enemy_matrix[row][col] == 7:
+                                str_col = str(col)
+                                number_cell = (row * 10) + int(str_col[-1])
+                                data_player_shot.append(number_cell)
+                    for cell in data_player_shot:
+                        str_line += str(cell) + " "
+                    client_socket.sendall(str_line.encode("utf-8") + b"END")
+                    data_player_shot.clear()
                 try:
                     if server_module.enemy_data[0] != "":
                         client_socket.settimeout(3)
@@ -172,8 +188,8 @@ def start_client():
                 try:
                     try:
                         client_socket.close()
-                    except:
-                        pass
+                    except Exception as error:
+                        print(f"Error(client_socket.close): {error}")
                     print(2)
                     connection[0] = False
                     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
