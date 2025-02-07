@@ -215,16 +215,16 @@ def kill_enemy_ships():
                 count_len_enemy[0] = 1
                 
                 num_cell = (rowee * 10) + int(str_cel[-1])
-
+                index = None
                 print(len(enemy_ships), "pered ciclom")
-                if len(enemy_ships) > 1:
+                if len(enemy_ships) >= 1:
                     for ship in enemy_ships:
                         if ship[0] == rowee and ship[1] == cellee:
                             count_len_enemy[0] = ship[2]
                             list_direction_enemy[0] = ship[3]
-                            enemy_ships.remove(ship)
+                            index = enemy_ships.index(ship)
                             break
-                print(len(enemy_ships), "posle cycla")
+
                 if list_direction_enemy[0] != "":
                     if count_len_enemy[0] == 1 and list_direction_enemy[0] != "":
                         print("убили корабль" , count_len_enemy[0])
@@ -258,7 +258,8 @@ def kill_enemy_ships():
                                 check_number_cell_enemy.append(num_cell)
                                 enemy_died_ships.append(count_len_enemy[0])
 
-                    if list_direction_enemy[0] == "vertical" and check_kill_enemy[0] == True:      
+                    if list_direction_enemy[0] == "vertical" and check_kill_enemy[0] == True:    
+                        enemy_ships.pop(index)  
                         for anim_miss in range(0, count_len_enemy[0] + 2):
                             rowka = miss_row_enemy[0] - 1 + anim_miss
                             cellka = miss_col_enemy[0] - 1 
@@ -303,6 +304,7 @@ def kill_enemy_ships():
                                         enemy_matrix[rowka][cellka] = 5
                 
                     if list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] == True:
+                        enemy_ships.pop(index) 
                         for anim_miss in range(0, count_len_enemy[0] + 2):
                             rowka = miss_row_enemy[0] - 1
                             cellka = miss_col_enemy[0] - 1 + anim_miss
