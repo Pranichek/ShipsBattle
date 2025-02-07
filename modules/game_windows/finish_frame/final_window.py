@@ -293,7 +293,7 @@ def back_to_main():
     leave_game[0] = True
 
 #Button
-restart_button = Button(x = 436, y = 700, image_path = "restart_button_hover.png", image_hover_path = "restart_button_hover.png", width = 436, height = 68, action = back_to_main)
+restart_button = Button(x = 436, y = 700, image_path = "restart_game_button.png", image_hover_path = "restart_game_button_hover.png", width = 436, height = 68, action = back_to_main)
 
 # Images
 finish_bg = DrawImage(width=1280, height=832, x_cor=0, y_cor=0, folder_name="backgrounds", image_name="win_game_bg.png")
