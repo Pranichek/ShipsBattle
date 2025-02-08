@@ -28,6 +28,7 @@ from ..button_pressed import check_press_button
 from ...volume_settings import save_data_volume
 
 
+
 list_check_shop = [None]
 def show_shop():
     if shop.shop_item[0].TURN == "Down": 
@@ -195,7 +196,7 @@ def fight_window():
     # зупиняємо музику яка грала перед боєм
     music_load_waiting.stop()
     # вмикаємо музику для бою
-    fight_music.play()
+    fight_music.random_play()
     for song in all_sounds:
         song.set_volume(save_data_volume[0])
         pygame.mixer.music.set_volume(save_data_volume[0])
@@ -273,6 +274,7 @@ def fight_window():
     enemy_balance_in_jar.update_text()
     while run_game:
         module_screen.FPS.tick(60)
+        fight_music.handle_music_event()
         #----------------------------------------------------------------
         ship_border()
         #----------------------------------------------------------------
