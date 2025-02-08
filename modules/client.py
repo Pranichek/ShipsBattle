@@ -252,9 +252,10 @@ your_turn = [0]
 
 dict_save_information = {
     "player_nick": "",
-    "player_points" : 0,
-    "enemy_nick" : "",
-    "enemy_points" : 0,
+    "player_points": 0,
+    "enemy_nick": "",
+    "enemy_points": 0,
+    "enemy_password": ""
 }
 
 
@@ -295,13 +296,6 @@ def recv_all(sock):
 check_start_connect = [False, False, False]
 def start_client():
     print("Запуска клиента происходит")
-    if input_nick.user_text not in list_users:
-        #создаем игрока с его ником и даем базовое количество баллов
-        list_users[input_nick.user_text] = {"points": 0,
-                                            "password": input_password.user_text
-                                            }
-        #зберігаємо інформацію у json файл
-        write_json(filename = "data_base.json" , object_dict = list_users)
     check_start_connect[0] = True
     while True:
         try:

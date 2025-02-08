@@ -279,7 +279,6 @@ def fight_window():
         ship_border()
         #----------------------------------------------------------------
         kill_enemy_ships()
-        print(len(server_module.enemy_ships))
         if len(server_module.enemy_died_ships) > 0:
             achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
             achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships
@@ -351,9 +350,23 @@ def fight_window():
         if server_module.list_player_role[0] != "server_player" and animation_random_player.COUNT_IMAGES >= 29 and count_sound_time[0] == 0:
             enemy_turn_sound.play2(loops = 1)
             count_sound_time[0] = 1
+            if dict_save_information["enemy_nick"] not in list_users:
+                list_users[dict_save_information["enemy_nick"]] = {"points": int(dict_save_information["player_points"]), "password": dict_save_information["enemy_password"]}
+                write_json(filename = "data_base.json" , object_dict = list_users)
+            #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+            elif dict_save_information["player_nick"] in list_users:
+                list_users[dict_save_information["player_nick"]]["points"] = int(dict_save_information["player_points"])
+                write_json(filename = "data_base.json" , object_dict = list_users)
         elif animation_random_player.COUNT_IMAGES >= 28 and count_sound_time[0] == 0 and server_module.list_player_role[0] != "client_player":
             player_turn_sound.play2(loops = 1)
             count_sound_time[0] = 1
+            if dict_save_information["enemy_nick"] not in list_users:
+                list_users[dict_save_information["enemy_nick"]] = {"points": int(dict_save_information["player_points"]), "password": dict_save_information["enemy_password"]}
+                write_json(filename = "data_base.json" , object_dict = list_users)
+            #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+            elif dict_save_information["player_nick"] in list_users:
+                list_users[dict_save_information["player_nick"]]["points"] = int(dict_save_information["player_points"])
+                write_json(filename = "data_base.json" , object_dict = list_users)
     
         if animation_random_player.IS_ANIMATION_DONE == True:
             if check_two_times.count(3) >= 2:
@@ -373,6 +386,21 @@ def fight_window():
                             row += 1
                             column = 0
 
+                    dict_save_information["player_nick"] = str(input_nick.user_text)
+                    dict_save_information["enemy_nick"] = str(check_list[141])
+                    dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+                    dict_save_information["enemy_points"] = int(check_list[143])
+                    dict_save_information["enemy_password"] = str(check_list[142])
+                    player_nick.text = dict_save_information["player_nick"]
+                    enemy_nick.text = dict_save_information["enemy_nick"]
+                    player_points.text = str(dict_save_information["player_points"])
+                    enemy_points.text = str(dict_save_information["enemy_points"])
+                    player_nick.update_text()
+                    enemy_nick.update_text()
+                    player_points.update_text()
+                    enemy_points.update_text()
+
+
                     server_module.enemy_ships.clear()  
                     count_data = 1
                     enemy_ship = []
@@ -389,22 +417,7 @@ def fight_window():
                             enemy_ship.clear()
                             count_data = 1  
 
-                    print(check_list[141], "dfv")
-
-                    # if check_list[141] not in list_users:
-                    #     list_users[check_list[141]] = {"points": int(check_list[143]), "password": check_achiv[142]}
-                    #     write_json(filename = "data_base.json" , object_dict = list_users)
-                    # #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
-                    # elif check_list[141] in list_users:
-                    #     list_users[check_list[141]]["points"] = int(check_list[143])
-                    #     write_json(filename = "data_base.json" , object_dict = list_users)
-                    # print(check_list[141], "iche")
-                    # dict_save_information["player_nick"] = input_nick.user_text
-                    # dict_save_information["enemy_nick"] = check_list[141]
-                    # dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
-                    # dict_save_information["enemy_points"] = int(check_list[143])
-                    # print(server_module.enemy_ships)
-
+                    
                 else:
                     try:
                         if check_data[0] == "enemy_turn":

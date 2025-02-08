@@ -15,6 +15,7 @@ from ..change_window import change_scene
 from ...game_tools import apply_fade_effect
 from ...json_functions import read_json
 from ...volume_settings import volume_down_button, off_sound_button, volume_up_button
+from ...json_functions import list_users, write_json
 
 
 #images
@@ -138,11 +139,27 @@ def join_game_window():
                 list_check_connection[0] = True
 
         if your_turn[0] == "2":
+            if input_nick.user_text not in list_users:
+                #создаем игрока с его ником и даем базовое количество баллов
+                list_users[input_nick.user_text] = {
+                    "points": 0,
+                    "password": input_password.user_text
+                }
+                #зберігаємо інформацію у json файл
+                write_json(filename = "data_base.json" , object_dict = list_users)
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window)
             check_press_button[0] = None
             run_game = False
         elif your_turn[0] == "1":
+            if input_nick.user_text not in list_users:
+                #создаем игрока с его ником и даем базовое количество баллов
+                list_users[input_nick.user_text] = {
+                    "points": 0,
+                    "password": input_password.user_text
+                }
+                #зберігаємо інформацію у json файл
+                write_json(filename = "data_base.json" , object_dict = list_users)
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.waiting_window)
             check_press_button[0] = None

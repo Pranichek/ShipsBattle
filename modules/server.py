@@ -15,9 +15,6 @@ def recv_all(sock):
         data += part
     return data
 
-
-
-
 enemy_data = [""]
 #где стоят корабли соперника
 enemy_ships = []
