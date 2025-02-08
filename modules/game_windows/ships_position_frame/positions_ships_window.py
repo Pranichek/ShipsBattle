@@ -1,6 +1,6 @@
 import pygame, sys
 import modules.screens as module_screen
-from ...client import connection, check_can_connect_to_fight
+from ...client import connection, check_can_connect_to_fight, check_connection_users, save_data_posistion_ships
 from ..fight_frame import fight_window
 import modules.game_windows as game_windows
 import modules.server as server_module
@@ -62,26 +62,18 @@ def ships_position_window():
         
     while run_game:
         module_screen.FPS.tick(60)
-        data_ready = read_json(name_file = "status_connect_game.json")
-        status_ready_to_game = data_ready["status"] 
-
-        if check_can_connect_to_fight[2] == 'True':
-            server_module.list_check_ready_to_fight[0] = "fight"
-            apply_fade_effect(screen = main_screen)
-            change_scene(fight_window)
-            run_game = False
-            break
-        elif check_can_connect_to_fight[2] != 'True' and status_ready_to_game == "fight":
-            check_connect_fight += 1
-            if check_connect_fight >= 31:
-                server_module.list_check_ready_to_fight[0] = "wait"
+        if save_data_posistion_ships[0] == "fight" and check_can_connect_to_fight[1] == "fight":
+            if check_connection_users[1] == True:
                 apply_fade_effect(screen = main_screen)
-                change_scene(game_windows.waiting_window)
+                change_scene(fight_window)
                 run_game = False
                 break
-        
-
-        
+        elif check_can_connect_to_fight[0] != True and save_data_posistion_ships[0] == "fight" and check_connection_users[1] == True:
+            apply_fade_effect(screen = main_screen)
+            change_scene(game_windows.waiting_window)
+            run_game = False
+            break
+            
         ships_position_bg.draw_image(screen = main_screen)
         # прямокутник де стоять коряблі перед початком бою
         place_for_ships.draw_image(screen = main_screen)

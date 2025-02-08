@@ -42,14 +42,14 @@ def waiting_window():
         volume_up_button.draw(surface = main_screen)
         volume_down_button.draw(surface = main_screen)
         off_sound_button.draw(surface = main_screen)
-        if check_can_connect_to_fight[2] == 'True':
-            check_connection_users[0] = "fight"
-            apply_fade_effect(screen = main_screen)
-            change_scene(fight_window)
-            run_game = False
-            check_press_button[0] = None
-
-        if check_connection_users[0] != False and save_data_posistion_ships[0] == "start":
+        if check_can_connect_to_fight[0] == True:
+            if check_connection_users[1] == True:
+                check_connection_users[0] = "fight"
+                apply_fade_effect(screen = main_screen)
+                change_scene(fight_window)
+                run_game = False
+                check_press_button[0] = None
+        elif check_connection_users[0] != False and save_data_posistion_ships[0] == "start":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(ships_position_window)
             check_press_button[0] = None

@@ -16,6 +16,7 @@ from ...classes.achive_window import list_achieves, target_attack_achievement, d
 from ...classes.class_button import Button
 from ...classes.class_text import Font
 from ...classes.radar_class import radar
+from ...classes.class_input_text import input_nick
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound, all_sounds
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
@@ -26,6 +27,7 @@ from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_m
 from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hit_markers
 from ..button_pressed import check_press_button
 from ...volume_settings import save_data_volume
+from ...json_functions import list_users, write_json
 
 
 list_check_shop = [None]
@@ -277,6 +279,7 @@ def fight_window():
         ship_border()
         #----------------------------------------------------------------
         kill_enemy_ships()
+        print(len(server_module.enemy_ships))
         if len(server_module.enemy_died_ships) > 0:
             achievement.player_died_ships_for_achiv[0] = server_module.player_died_ships
             achievement.enemy_dies_ships_for_ahiv[0] = server_module.enemy_died_ships
@@ -373,7 +376,7 @@ def fight_window():
                     server_module.enemy_ships.clear()  
                     count_data = 1
                     enemy_ship = []
-                    for data_ship in check_list[101:-1]:
+                    for data_ship in check_list[101:141]:
                         if count_data <= 3:
                             enemy_ship.append(int(data_ship))
                         else:
@@ -385,7 +388,22 @@ def fight_window():
                             server_module.enemy_ships.append(enemy_ship.copy())  
                             enemy_ship.clear()
                             count_data = 1  
-                    print(server_module.enemy_ships)
+
+                    print(check_list[141], "dfv")
+
+                    # if check_list[141] not in list_users:
+                    #     list_users[check_list[141]] = {"points": int(check_list[143]), "password": check_achiv[142]}
+                    #     write_json(filename = "data_base.json" , object_dict = list_users)
+                    # #якщо його нікнейм вже є , тоді просто оновлюємо його кількість баллів 
+                    # elif check_list[141] in list_users:
+                    #     list_users[check_list[141]]["points"] = int(check_list[143])
+                    #     write_json(filename = "data_base.json" , object_dict = list_users)
+                    # print(check_list[141], "iche")
+                    # dict_save_information["player_nick"] = input_nick.user_text
+                    # dict_save_information["enemy_nick"] = check_list[141]
+                    # dict_save_information["player_points"] = int(list_users[input_nick.user_text]["points"])
+                    # dict_save_information["enemy_points"] = int(check_list[143])
+                    # print(server_module.enemy_ships)
 
                 else:
                     try:

@@ -231,6 +231,7 @@ def kill_enemy_ships():
                         check_kill_enemy[0] = True
                         check_number_cell_enemy.append(num_cell)
                         enemy_died_ships.append(count_len_enemy[0])
+
                     elif list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] != True:
                         for len_ship in range(1 , count_len_enemy[0]):
                             if enemy_matrix[rowee][cellee + len_ship] == 7:
@@ -243,7 +244,8 @@ def kill_enemy_ships():
                                 for i in range(1, count_len_enemy[0]):
                                    check_number_cell_enemy.append(num_cell + i)
                                 check_number_cell_enemy.append(num_cell)
-                                enemy_died_ships.append(count_len_enemy[0])           
+                                enemy_died_ships.append(count_len_enemy[0])   
+                                        
                     elif list_direction_enemy[0] == "vertical" and check_kill_enemy[0] != True:
                         for len_ship in range(1 , count_len_enemy[0]):
                             if enemy_matrix[rowee + len_ship][cellee] == 7:

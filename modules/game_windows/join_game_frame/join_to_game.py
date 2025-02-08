@@ -1,7 +1,7 @@
 import pygame, sys
 import modules.screens.screen as module_screen
 import modules.server as server_module
-from ...client import check_start_connect
+from ...client import check_start_connect, your_turn
 from ..create_game_frame import room_data, ip_room_text, port_room_text
 from ...server import SERVER
 from ...client import check_can_connect_to_fight
@@ -136,19 +136,18 @@ def join_game_window():
             fail_connect.check_touch()
             if fail_connect.visible == False:
                 list_check_connection[0] = True
-    
-        if server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] == False:
-            check_connect_to_game += 1
-            if check_connect_to_game >= 13:
-                apply_fade_effect(screen = module_screen.main_screen)
-                change_scene(game_windows.waiting_window)
-                check_press_button[0] = None
-                run_game = False
-        elif server_module.list_player_role[0] != "" and check_can_connect_to_fight[2] != False:
+
+        if your_turn[0] == "2":
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window)
             check_press_button[0] = None
             run_game = False
+        elif your_turn[0] == "1":
+            apply_fade_effect(screen = module_screen.main_screen)
+            change_scene(game_windows.waiting_window)
+            check_press_button[0] = None
+            run_game = False
+        
 
         volume_up_button.draw(surface = module_screen.main_screen)
         volume_down_button.draw(surface = module_screen.main_screen)
