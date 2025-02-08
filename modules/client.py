@@ -272,7 +272,10 @@ def send_matrix():
         data_player_shot.append(str(ship.ORIENTATION_SHIP))
     data_player_shot.append(input_nick.user_text)
     data_player_shot.append(input_password.user_text)
-    data_player_shot.append(list_users[input_nick.user_text]["points"])
+    try:
+        data_player_shot.append(list_users[input_nick.user_text]["points"])
+    except:
+        data_player_shot.append(0)
     list_check_need_send[0] = True
     print(len(data_player_shot))
     
