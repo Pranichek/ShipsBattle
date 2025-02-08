@@ -274,12 +274,13 @@ import modules.server as server_module
 import modules.shop.shop_button as shop_button_module
 from ...json_functions import write_json
 from ...server import list_check_win, SERVER, list_check_ready_to_fight
-from ...client import check_can_connect_to_fight, check_start_connect, save_data_posistion_ships, check_connection_users, list_check_need_send, list_check_connection, data_player_shot, connection
+from ...client import check_can_connect_to_fight, check_start_connect, save_data_posistion_ships, check_connection_users, list_check_need_send, list_check_connection, data_player_shot, connection, your_turn
 from ..main_frame import once_play_music
 from ...shop import money_list, player_balance
 import modules.game_tools as game_tools_module
 import modules.shop.tasks as tasks_module
 import modules.achievement as achievement_module
+from ...shop.text_shop import change_tasks
 from ...shop.shop_image import done_task_one, done_task_two, done_task_three, done_task_four
 import modules.game_windows.fight_frame.window_fight as window_fight_frame
 from ...classes.animation import animation_random_player
@@ -556,6 +557,7 @@ def finish_window():
         list_check_need_send[0] = False
         connection[0] = True
         data_player_shot.clear()
+        your_turn[0] = 0
         shop_button_module.waste_money[0] = 0
         shop_button_module.flag_arson[0] = "no"
         shop_button_module.flag_put_out_the_fire[0] = "no"
@@ -565,6 +567,7 @@ def finish_window():
         shop_button_module.flag_radar[0] = False
         shop_button_module.random_hits[0] = False
         money_list[0] = 0
+        change_tasks()
         tasks_module.check_completed_tasks[0] = 0
         tasks_module.our_ships_2decker[0] = 0
         tasks_module.enemy_ships_2decker[0] = 0

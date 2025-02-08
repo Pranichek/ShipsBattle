@@ -373,7 +373,7 @@ def start_client():
                     data_player_shot.clear()
                 try:
                     if server_module.enemy_data[0] != "":
-                        client_socket.settimeout(3)
+                        client_socket.settimeout(6)
                     enemy_data = recv_all(client_socket)
                 except:
                     raise Exception("Reconnect")

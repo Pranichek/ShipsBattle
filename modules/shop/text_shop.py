@@ -160,7 +160,7 @@ second_task = Font_Shop(
     y_cor = -(25 + (832 - (192 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = list_second_task[0],
+    text = random.choice(list_second_task),
     target_y = 192 , 
     max_width = 220 ,
     max_height = 28 ,
@@ -186,12 +186,22 @@ fourth_task = Font_Shop(
     y_cor = - (25 + (832 - (298 + 25))),
     size = 25 ,
     name_font = "Jersey15.ttf",
-    text = list_fourth_task[1],
+    text = random.choice(list_fourth_task),
     target_y = 298 ,
     max_width = 225 ,
     max_height = 31 , 
     text_color = "White"
 )
+
+def change_tasks():
+    first_task.TEXT = random.choice(list_first_task)
+    second_task.TEXT = random.choice(list_second_task)
+    third_task.TEXT = random.choice(list_third_task)
+    fourth_task.TEXT = random.choice(list_fourth_task)
+    first_task.update_text()
+    second_task.update_text()
+    third_task.update_text()
+    fourth_task.update_text()
 
 player_balance = Font_Shop(
     x_cor = 475 ,
@@ -204,7 +214,6 @@ player_balance = Font_Shop(
     max_height = 110, 
     text_color = "Yellow"
 )
-
 
 # додаємо тексти до списку shop_item для відображення їх за допомогою циклу
 shop_item.extend([first_task , second_task , third_task , fourth_task , player_balance])
