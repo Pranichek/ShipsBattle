@@ -183,6 +183,7 @@ our_miss_anim = []
 # список где хранятся крестики которые отрисовываются в том случаи если игрок попал ко кораблю
 list_cross = []
 
+killed_ships_draw = []
 # номер рядка и клеточки в этом рядке где отрисовываются зачеркиванные клеточки
 miss_row_enemy = [0]
 miss_col_enemy = [0]
@@ -213,8 +214,14 @@ def kill_enemy_ships():
                 check_kill_enemy[0] = False
                 list_direction_enemy[0] = ""
                 count_len_enemy[0] = 1
+          
                 
+               
+
                 num_cell = (rowee * 10) + int(str_cel[-1])
+                x = list_object_map_enemy[num_cell].x
+                y = list_object_map_enemy[num_cell].y
+                # print(f"str_cell: {str_cel}, cell_number: {cell_number}, num_cell: {num_cell}")
                 index = None
                 print(len(enemy_ships), "pered ciclom")
                 if len(enemy_ships) >= 1:
@@ -231,6 +238,7 @@ def kill_enemy_ships():
                         check_kill_enemy[0] = True
                         check_number_cell_enemy.append(num_cell)
                         enemy_died_ships.append(count_len_enemy[0])
+                        killed_ships_draw.append([x, y, count_len_enemy[0], "horizontal"])
 
                     elif list_direction_enemy[0] == "horizontal" and check_kill_enemy[0] != True:
                         for len_ship in range(1 , count_len_enemy[0]):
@@ -244,7 +252,9 @@ def kill_enemy_ships():
                                 for i in range(1, count_len_enemy[0]):
                                    check_number_cell_enemy.append(num_cell + i)
                                 check_number_cell_enemy.append(num_cell)
-                                enemy_died_ships.append(count_len_enemy[0])   
+                                enemy_died_ships.append(count_len_enemy[0])
+
+                                killed_ships_draw.append([x, y, count_len_enemy[0], "horizontal"])
                                         
                     elif list_direction_enemy[0] == "vertical" and check_kill_enemy[0] != True:
                         for len_ship in range(1 , count_len_enemy[0]):
@@ -259,6 +269,7 @@ def kill_enemy_ships():
                                     check_number_cell_enemy.append(num_cell + i)
                                 check_number_cell_enemy.append(num_cell)
                                 enemy_died_ships.append(count_len_enemy[0])
+                                killed_ships_draw.append([x, y, count_len_enemy[0], "vertical"])
 
                     if list_direction_enemy[0] == "vertical" and check_kill_enemy[0] == True:    
                         enemy_ships.pop(index)  

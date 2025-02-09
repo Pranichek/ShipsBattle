@@ -20,7 +20,7 @@ from ...classes.class_input_text import input_nick
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound, all_sounds
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors, killed_ships_draw
 from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection, count_time, check_start_time_thread
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix, auto_aim
@@ -28,6 +28,7 @@ from .animations_on_grid import update_enemy_matrix_animations, check_and_add_hi
 from ..button_pressed import check_press_button
 from ...volume_settings import save_data_volume
 from ...json_functions import list_users, write_json
+
 
 
 list_check_shop = [None]
@@ -95,6 +96,17 @@ enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action = show_shop)
 clear_weapon = Button(x = 1064, y = 8, image_path = "clear_weapon.png" , image_hover_path = "clear_weapon_hover.png" , width = 109, height = 13, action = clear_weapon_function)
 
+killed_1ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 55, folder_name = "ships", image_name = "rotate_ship_one.png")
+killed_1ship = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 55, folder_name = "ships", image_name = "ship_one.png")
+
+killed_2ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 110, folder_name = "ships", image_name = "rotate_ship_two.png")
+killed_2ship = DrawImage(x_cor = 0, y_cor = 0, width = 110, height = 55, folder_name = "ships", image_name = "ship_two.png")
+
+killed_3ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 165, folder_name = "ships", image_name = "rotate_ship_three.png")
+killed_3ship = DrawImage(x_cor = 0, y_cor = 0, width = 165, height = 55, folder_name = "ships", image_name = "ship_three.png")
+
+killed_4ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 220, folder_name = "ships", image_name = "rotate_ship_four.png")
+killed_4ship = DrawImage(x_cor = 0, y_cor = 0, width = 220, height = 55, folder_name = "ships", image_name = "ship_four.png")
 
 screen_shake = [0]
 # функция которая отрисовывает сетку при авто-ударе
@@ -761,6 +773,46 @@ def fight_window():
         # відмалбовуємо кораблі які ми роставляли , але у змнешаному вигялді , та у іншому місці(сітці яка також зменшилась у розмірі)
         for num , ship  in enumerate(list_ships):
             list_ships[num].draw_sheep(screen = module_screen.main_screen)
+
+            
+        for killed_ship_draw in killed_ships_draw:
+   
+            if killed_ship_draw[2] == 1:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_1ship.x_cor = killed_ship_draw[0]
+                    killed_1ship.y_cor = killed_ship_draw[1]
+                    killed_1ship.draw_image(screen= main_screen)
+                elif killed_ship_draw[3] == "vertical":
+                    killed_1ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_1ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_1ship_rotate.draw_image(screen= main_screen)
+            if killed_ship_draw[2] == 2:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_2ship.x_cor = killed_ship_draw[0]
+                    killed_2ship.y_cor = killed_ship_draw[1]
+                    killed_2ship.draw_image(screen= main_screen)
+                elif killed_ship_draw[3] == "vertical":
+                    killed_2ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_2ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_2ship_rotate.draw_image(screen= main_screen)
+            if killed_ship_draw[2] == 3:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_3ship.x_cor = killed_ship_draw[0]
+                    killed_3ship.y_cor = killed_ship_draw[1]
+                    killed_3ship.draw_image(screen= main_screen)
+                elif killed_ship_draw[3] == "vertical":
+                    killed_3ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_3ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_3ship_rotate.draw_image(screen= main_screen)
+            if killed_ship_draw[2] == 4:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_4ship.x_cor = killed_ship_draw[0]
+                    killed_4ship.y_cor = killed_ship_draw[1]
+                    killed_4ship.draw_image(screen= main_screen)
+                elif killed_ship_draw[3] == "vertical":
+                    killed_4ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_4ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_4ship_rotate.draw_image(screen= main_screen)           
 
         for cross_animation in list_cross_player:
             if len(enemy_list_fire) > 0:
