@@ -40,6 +40,20 @@ rule_button = Button(
     image_hover_path = "rules_button_hover.png",
     action = change_on_rules
 )
+def change_on_settings():
+    apply_fade_effect(screen = main_screen)
+    change_scene(game_windows.settings)
+    check_run_game[0] = True
+
+setting_button = Button(
+    x = 750, 
+    y = 50,
+    width = 80,
+    height = 58,
+    image_path = "rules_button.png",
+    image_hover_path = "rules_button_hover.png",
+    action = change_on_settings
+)
 # список для того чтобы гланая музыка играла тоьлко один раз
 once_play_music = [0]
 
@@ -82,6 +96,7 @@ def main_window():
         volume_down_button.draw(surface = main_screen)
 
         rule_button.draw(surface = main_screen)  # рисуем кнопку правил
+        setting_button.draw(surface = main_screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -97,6 +112,7 @@ def main_window():
                 volume_up_button.check_click(event = event)
                 volume_down_button.check_click(event = event)
                 rule_button.check_click(event = event)
+                setting_button.check_click(event = event)
 
             elif check_press_button[0] == "button is pressed":
                 x_pos , y_pos = pygame.mouse.get_pos()

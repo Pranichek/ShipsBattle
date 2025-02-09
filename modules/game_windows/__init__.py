@@ -8,3 +8,4 @@ from .finish_frame import finish_window
 from .fight_frame import fight_window
 from .rules_frame import rules_window
 from .change_window import change_scene, list_current_scene
+from .setting import *
