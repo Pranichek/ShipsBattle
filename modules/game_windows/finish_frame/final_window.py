@@ -286,6 +286,7 @@ import modules.game_windows.fight_frame.window_fight as window_fight_frame
 from ...classes.animation import animation_random_player
 from ..fight_frame.window_fight import enemy_before_choice, player_before_choice, count_sound_time
 from ...classes.class_medal import player_medal, enemy_medals
+from ...classes.class_music import victory_music, lose_music, fight_music
 
 leave_game = [False]
 def back_to_main():
@@ -316,6 +317,7 @@ check_points = [0]
 
 def finish_window():
     pygame.display.set_caption("Finish Window")
+    fight_music.stop()
     run_game = True
     if SERVER.START_CONNECT == True:
         SERVER.server_socket.close()
@@ -331,6 +333,8 @@ def finish_window():
         if list_player_role[0] == "client_player":
             #якщо клієнт виграв, відображається повідомлення про перемогу, бали гравця збільшуються на 100
             if list_check_win[0] == "win_client":
+                finish_bg.image_name = "win_game_bg.png"
+                victory_music.play()
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
                 # відмальовка ників та балів
                 player_nick.text = dict_save_information["player_nick"]
@@ -360,6 +364,8 @@ def finish_window():
                     write_json(filename = "data_base.json" , object_dict = list_users)
             # якщо клієнт програв, його бали зменшуються на 50 (якщо вони більше 0)
             else:
+                lose_music.play()
+                finish_bg.image_name = "lose_game_bg.png"
                 win_lose_text.text = dict_save_information["player_nick"] + " Lost"
 
                 # відмальовка ників та балів
@@ -398,6 +404,8 @@ def finish_window():
         # аналогічно клієнту, але логіка перевірки пов'язана з win_server та lose_server
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
+                finish_bg.image_name = "win_game_bg.png"
+                victory_music.play()
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
                 win_lose_text.draw_font()
                 # відмальовка ників та балів
@@ -428,6 +436,8 @@ def finish_window():
                     list_users[nickname]["points"] += 100
                     write_json(filename = "data_base.json" , object_dict = list_users)
             else:
+                lose_music.play()
+                finish_bg.image_name = "lose_game_bg.png"
                 win_lose_text.text = dict_save_information["player_nick"] + " Lost"
                 win_lose_text.draw_font()
                 # відмальовка ників та балів

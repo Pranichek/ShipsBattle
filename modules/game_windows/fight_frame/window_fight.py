@@ -562,9 +562,10 @@ def fight_window():
                     elif check_data[0] == "restore_cell":
                         enemy_matrix[int(check_data[2])][int(check_data[3])] = int(check_data[1])
                     elif check_data[0] == "medal":
+                        server_module.save_medals_coordinates.clear()
                         for medal in check_data[1:-1]:
-                            if int(medal) not in server_module.save_medals_coordinates:
-                                server_module.save_medals_coordinates.append(int(medal))
+                            # if int(medal) not in server_module.save_medals_coordinates:
+                            server_module.save_medals_coordinates.append(int(medal))
                     elif check_data[0] == "money":
                         server_module.enemy_balance[0] = int(check_data[1])
                         enemy_balance_in_jar.update_text()

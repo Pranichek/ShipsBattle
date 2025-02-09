@@ -201,7 +201,7 @@ def kill_enemy_ships():
     for rowee in range(len(enemy_matrix)):
         for cellee in range(len(enemy_matrix[rowee])):
             if enemy_matrix[rowee][cellee] == 7:
-                if check_target_attack[0] == "None" and  check_kill_enemy[0] == True:
+                if check_target_attack[0] == "None" and check_kill_enemy[0] == True:
                     check_target_attack[0] = True
 
                 if check_target_attack[0] != True:
