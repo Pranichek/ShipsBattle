@@ -203,6 +203,7 @@ def kill_enemy_ships():
             if enemy_matrix[rowee][cellee] == 7:
                 if check_target_attack[0] == "None" and check_kill_enemy[0] == True:
                     check_target_attack[0] = True
+                    print("Выполнена ачивка")
 
                 if check_target_attack[0] != True:
                     check_target_attack[0] = "None"
@@ -216,7 +217,7 @@ def kill_enemy_ships():
                 
                 num_cell = (rowee * 10) + int(str_cel[-1])
                 index = None
-                print(len(enemy_ships), "pered ciclom")
+
                 if len(enemy_ships) >= 1:
                     for ship in enemy_ships:
                         if ship[0] == rowee and ship[1] == cellee:

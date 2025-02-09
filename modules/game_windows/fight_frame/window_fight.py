@@ -261,9 +261,11 @@ def fight_window():
     one_data_fire = [0]
     target_time = [1]
     one_enemy_fire = [0, False]
+    shop.money_list[0] = 0
+    count_money_hit[0] = 0
     for medal in player_medal:
-            medal.VISIBLE = 100
-            medal.ACTIVE = False
+        medal.VISIBLE = 100
+        medal.ACTIVE = False
     for enm_medal in enemy_medals:
         enm_medal.VISIBLE = 100
         enm_medal.ACTIVE = False
