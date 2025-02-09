@@ -334,6 +334,7 @@ def finish_window():
             #якщо клієнт виграв, відображається повідомлення про перемогу, бали гравця збільшуються на 100
             if list_check_win[0] == "win_client":
                 finish_bg.image_name = "win_game_bg.png"
+                finish_bg.load_image()
                 victory_music.play()
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
                 # відмальовка ників та балів
@@ -366,6 +367,7 @@ def finish_window():
             else:
                 lose_music.play()
                 finish_bg.image_name = "lose_game_bg.png"
+                finish_bg.load_image()
                 win_lose_text.text = dict_save_information["player_nick"] + " Lost"
 
                 # відмальовка ників та балів
@@ -405,6 +407,7 @@ def finish_window():
         elif list_player_role[0] == "server_player":
             if list_check_win[0] == "win_server":
                 finish_bg.image_name = "win_game_bg.png"
+                finish_bg.load_image()
                 victory_music.play()
                 win_lose_text.text = dict_save_information["player_nick"] + " won"
                 win_lose_text.draw_font()
@@ -438,6 +441,7 @@ def finish_window():
             else:
                 lose_music.play()
                 finish_bg.image_name = "lose_game_bg.png"
+                finish_bg.load_image()
                 win_lose_text.text = dict_save_information["player_nick"] + " Lost"
                 win_lose_text.draw_font()
                 # відмальовка ників та балів
