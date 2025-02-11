@@ -55,6 +55,9 @@ def kill_enemy_ships():
                 if list_direction_enemy[0] != "":
                     if count_len_enemy[0] == 1 and list_direction_enemy[0] != "":
                         print("убили корабль" , count_len_enemy[0])
+                        if enemy_matrix[rowee][cellee] == 7:
+                            if check_target_attack[0] == "None" and  check_kill_enemy[0] == True:
+                                check_target_attack[0] = True
                         check_kill_enemy[0] = True
                         check_number_cell_enemy.append(num_cell)
                         enemy_died_ships.append(count_len_enemy[0])
