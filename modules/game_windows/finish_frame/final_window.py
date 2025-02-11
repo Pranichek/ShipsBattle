@@ -1077,8 +1077,8 @@ check_points = [0]
 def finish_window():
     pygame.display.set_caption("Finish Window")
     run_game = True
-    if SERVER.START_CONNECT == True:
-        SERVER.server_socket.close()
+    # if SERVER.START_CONNECT == True:
+    #     SERVER.server_socket.close()
     SERVER.run = False
     SERVER.clients = 0
     SERVER.START_CONNECT = False

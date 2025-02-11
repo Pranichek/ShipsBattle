@@ -68,6 +68,9 @@ def listen_client(client, second_client):
             SERVER.RESTART = True
             SERVER.clients = 0
             break
+    client.close()
+    second_client.close()
+    SERVER.server_socket.close()
 
 
 players = ["server_player", "client_player"]

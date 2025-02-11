@@ -21,7 +21,7 @@ def first_kill_four_decker_achivment():
                 enemy_ships_4decker_achiv[0] = 1 - enemy_dies_ships_for_ahiv[0].count(4)
 
                 if enemy_ships_4decker_achiv[0] != "kill four-decker ship":
-                    if our_ships_4decker_achiv[0] > enemy_ships_4decker_achiv[0] and enemy_ships_4decker_achiv[0] == 0 and enemy_ships_4decker_achiv[0]!= "kill four-decker ship":
+                    if our_ships_4decker_achiv[0] == 1 and enemy_ships_4decker_achiv[0] == 0 and enemy_ships_4decker_achiv[0]!= "kill four-decker ship":
                         enemy_ships_4decker_achiv[0] = "kill four-decker ship"
                         first_four_decker_achivment.ACTIVE = True
                         four_decker_sniper_medal.ACTIVE = True
