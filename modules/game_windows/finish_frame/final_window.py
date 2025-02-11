@@ -1084,6 +1084,8 @@ def finish_window():
     SERVER.START_CONNECT = False
     SERVER.RESTART = False
     SERVER.PORT = 0
+    achievement_module.list_save_coords_achiv.clear()
+    achievement_module.list_save_coords_achiv.append(False)
     while run_game:
         module_screen.FPS.tick(60)
         module_screen.main_screen.fill((0, 0, 0))  # Очищення екрану чорним фоном
@@ -1364,7 +1366,8 @@ def finish_window():
         achievement_module.killed_ships[0] = ""
         achievement_module.count_shot[0] = 0
         achievement_module.shoots.clear()
-        achievement_module.list_save_coords_achiv[0] = False
+        # achievement_module.list_save_coords_achiv.clear()
+        # achievement_module.list_save_coords_achiv.append(False)
         achievement_module.player_died_ships_for_achiv[0] = ""
         achievement_module.enemy_dies_ships_for_ahiv[0] = ""
         achievement_module.our_ships_4decker_achiv[0] = ""

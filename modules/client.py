@@ -10,7 +10,7 @@ from threading import Thread
 from .server import SERVER, list_check_win
 
 colorama.init(autoreset = True)
-RED = colorama.Fore.RED()
+RED = colorama.Fore.RED
 
 # лист для клиента в котором храним надо ли что то изменять после его атаки
 list_check_need_send = [False]
