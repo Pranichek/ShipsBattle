@@ -203,15 +203,15 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
         player_balance_in_jar.text = str(task_game.money_list[0])
         player_balance_in_jar.update_text()
     if check_money_bomb[0] >= 1:
-        if check_money_bomb[0] != 150:
-            check_money_bomb[0] += 1
-            task_game.money_list[0] -= 1
-            task_game.player_balance.TEXT = str(task_game.money_list[0])
-            task_game.player_balance.update_text()
-            player_balance_in_jar.text = str(task_game.money_list[0])
-            player_balance_in_jar.update_text()
-        elif check_buy_bomb == False and check_money_bomb[0] >= 150:
-            check_money_bomb[0] = 0
+        # if check_money_bomb[0] != 150:
+        check_money_bomb[0] += 1
+        task_game.money_list[0] -= 1
+        task_game.player_balance.TEXT = str(task_game.money_list[0])
+        task_game.player_balance.update_text()
+        player_balance_in_jar.text = str(task_game.money_list[0])
+        player_balance_in_jar.update_text()
+        # elif check_buy_bomb == False and check_money_bomb[0] >= 150:
+        #     check_money_bomb[0] = 0
 
 
 

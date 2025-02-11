@@ -675,7 +675,7 @@ def finish_window():
         window_fight_frame.check_player_balance[0] = False
         window_fight_frame.check_alive_ten[0] = False
         window_fight_frame.check_alive_five[0] = False
-        window_fight_frame.check_target_attack[0] = "None"
+        window_fight_frame.check_target_attack[0] = "False"
         window_fight_frame.our_miss_anim.clear()
         window_fight_frame.list_cross.clear()
         game_tools_module.miss_row_enemy[0] = 0
