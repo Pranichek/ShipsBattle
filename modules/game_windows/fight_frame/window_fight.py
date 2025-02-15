@@ -20,7 +20,7 @@ from ...classes.class_input_text import input_nick
 from ...classes.class_click import random_first_choice_sound, player_turn_sound, enemy_turn_sound, miss_water_sound, shot_sound, radar_sound, all_sounds
 from ...classes.animation import Animation, rocket_animation, miss_rocket_animation, animation_boom, animation_bomb_boom, animation_health, bomb_animation, animation_connection_problem, animation_random_player, animation_auto_rocket, miss_rocket, miss_auto_rocket, radar_animation, fire_rocket_animation, fire_fighter_animation, fire_animation
 from ...classes.class_ship import list_ships
-from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors
+from ...game_tools import player_balance_in_jar, enemy_balance_in_jar, ship_border, list_animation_miss, check_number_cell, kill_enemy_ships, list_cross, our_miss_anim, check_target_attack, count_money_hit, find_all_neighbors, killed_ships_draw
 from ..change_window import change_scene
 from ...client import list_check_need_send, check_two_times, send_matrix, dict_save_information, data_player_shot, connection, count_time, check_start_time_thread
 from .weapons import simple_shot, bomb_shot, restore_part_of_ship, random_hits_matrix, auto_aim
@@ -95,7 +95,6 @@ enemy_points = Font(size = 48 , name_font= "Jersey15.ttf" , text = str(dict_save
 shop_and_tasks = Button(x= 33 , y = 32,image_path= "show_shop.png" , image_hover_path= "show_shop_hover.png" , width = 36, height = 31 , action = show_shop)
 clear_weapon = Button(x = 1064, y = 8, image_path = "clear_weapon.png" , image_hover_path = "clear_weapon_hover.png" , width = 109, height = 13, action = clear_weapon_function)
 
-
 screen_shake = [0]
 # функция которая отрисовывает сетку при авто-ударе
 def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5, grid_height=5, cell_size=55):
@@ -122,6 +121,7 @@ def draw_cursor(screen, mouse_x, mouse_y, grid, color=(0, 255, 0), grid_width=5,
     return center_x, center_y
 
 
+killed_ships = []
 # список в котором храним анимацию огня если игрок поджог корабль
 list_fire = []
 row_fire_col_anim = []
@@ -988,7 +988,123 @@ def fight_window():
             our_miss_anim = our_miss_anim,
             list_fire = list_fire
         )
-                        
+
+        #----------------------------------------------------------------   
+        for killed_ship_draw in killed_ships_draw:
+            if killed_ship_draw[2] == 1:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_1ship = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 55, folder_name = "ships", image_name = "rotate_ship_one.png")
+                    killed_1ship.x_cor = killed_ship_draw[0]
+                    killed_1ship.y_cor = killed_ship_draw[1]
+                    killed_1ship.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_1ship.x_cor and ships.y_cor == killed_1ship.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_1ship)
+                elif killed_ship_draw[3] == "vertical":
+                    killed_1ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 55, folder_name = "ships", image_name = "rotate_ship_one.png")
+                    killed_1ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_1ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_1ship_rotate.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_1ship_rotate.x_cor and ships.y_cor == killed_1ship_rotate.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_1ship_rotate)
+            if killed_ship_draw[2] == 2:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_2ship = DrawImage(x_cor = 0, y_cor = 0, width = 110, height = 55, folder_name = "ships", image_name = "ship_two.png")
+                    killed_2ship.x_cor = killed_ship_draw[0]
+                    killed_2ship.y_cor = killed_ship_draw[1]
+                    killed_2ship.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_2ship.x_cor and ships.y_cor == killed_2ship.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_2ship)
+                    
+                elif killed_ship_draw[3] == "vertical":
+                    killed_2ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 110, folder_name = "ships", image_name = "rotate_ship_two.png")
+
+                    killed_2ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_2ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_2ship_rotate.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_2ship_rotate.x_cor and ships.y_cor == killed_2ship_rotate.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_2ship_rotate)
+            if killed_ship_draw[2] == 3:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_3ship = DrawImage(x_cor = 0, y_cor = 0, width = 165, height = 55, folder_name = "ships", image_name = "ship_three.png")
+                    killed_3ship.x_cor = killed_ship_draw[0]
+                    killed_3ship.y_cor = killed_ship_draw[1]
+                    killed_3ship.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_3ship.x_cor and ships.y_cor == killed_3ship.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_3ship)
+                elif killed_ship_draw[3] == "vertical":
+                    killed_3ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 165, folder_name = "ships", image_name = "rotate_ship_three.png")
+                    killed_3ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_3ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_3ship_rotate.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_3ship_rotate.x_cor and ships.y_cor == killed_3ship_rotate.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_3ship_rotate)
+            if killed_ship_draw[2] == 4:
+                if killed_ship_draw[3] == "horizontal":
+                    killed_4ship = DrawImage(x_cor = 0, y_cor = 0, width = 220, height = 55, folder_name = "ships", image_name = "ship_four.png")
+                    killed_4ship.x_cor = killed_ship_draw[0]
+                    killed_4ship.y_cor = killed_ship_draw[1]
+                    killed_4ship.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_4ship.x_cor and ships.y_cor == killed_4ship.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_4ship)
+                elif killed_ship_draw[3] == "vertical":
+                    killed_4ship_rotate = DrawImage(x_cor = 0, y_cor = 0, width = 55, height = 220, folder_name = "ships", image_name = "rotate_ship_four.png")
+                    killed_4ship_rotate.x_cor = killed_ship_draw[0]
+                    killed_4ship_rotate.y_cor = killed_ship_draw[1]
+                    killed_4ship_rotate.visible = 0
+                    check = True
+                    if len(killed_ships) > 0:
+                        for ships in killed_ships:
+                            if ships.x_cor == killed_4ship_rotate.x_cor and ships.y_cor == killed_4ship_rotate.y_cor:
+                                check = False
+                                break
+                    if check:
+                        killed_ships.append(killed_4ship_rotate)
+
+        for killed_ship in killed_ships:
+            killed_ship.fade_in()
+            killed_ship.draw_image(screen = main_screen)
         # отрисовка крестиков если игрок попал по кораблю(на поле врага , слева)
         for cross in list_cross:
             cross.animation(main_screen = module_screen.main_screen , count_image = 13)
@@ -1255,6 +1371,8 @@ def fight_window():
 
         if connection[0] == False:
             reonnect_image.draw_image(screen = main_screen)
+
+
 
         for button in shop.shop_item:
             try:
