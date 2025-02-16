@@ -128,7 +128,6 @@ def count_money(check_buy_bomb: bool, check_buy_restorce: bool, check_buy_auto_r
             player_balance_in_jar.update_text()
         else:
             if cehck_buy_fire_rocket == "no":
-                print("Pencil")
                 buy_fire_rocket[0] = 0
 
     

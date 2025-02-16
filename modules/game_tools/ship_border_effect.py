@@ -46,7 +46,6 @@ def ship_border():
                 
                 if list_direction[0] != "":
                     if count_len[0] == 1 and list_direction[0] != "":
-                        print("убили корабль" , count_len[0])
                         check_kill[0] = True
                         if num_cell not in check_number_cell:
                             check_number_cell.append(num_cell)
@@ -59,7 +58,6 @@ def ship_border():
                             elif list_grid[rowee][cellee + len_ship]!= 7:
                                 break
                             if len_ship + 1 == count_len[0]:
-                                print("убили корабль" , count_len[0])
                                 check_kill[0] = True
                                 for i in range(1, count_len[0]):
                                     if num_cell + i not in check_number_cell:
@@ -75,7 +73,6 @@ def ship_border():
                             elif list_grid[rowee + len_ship][cellee]!= 7:
                                 break
                             if len_ship + 1 == count_len[0]:
-                                print("убили корабль" , count_len[0])
                                 check_kill[0] = True
                                 for i in range(1, count_len[0]):
                                     if num_cell + i not in check_number_cell:
@@ -134,7 +131,6 @@ def ship_border():
                                         name_folder = "animation_miss",
                                         animation_speed = 1.5
                                     )
-                                    # print(5)
                                     existss = False
                                     if list_grid[rowka][cellka] == 7:
                                         existss = True
@@ -164,7 +160,6 @@ def ship_border():
                                         name_folder = "animation_miss",
                                         animation_speed = 1.5
                                     )
-                                    # print(5)
                                     existss = False
                                     for anim_miss in list_animation_miss:
                                         if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
@@ -194,7 +189,6 @@ def ship_border():
                                         name_folder = "animation_miss",
                                         animation_speed = 1.5
                                     )
-                                    # print(5)
                                     existss = False
                                     for anim_miss in list_animation_miss:
                                         if anim_miss.X_COR == animation_miss.X_COR and anim_miss.Y_COR == animation_miss.Y_COR:
@@ -224,7 +218,6 @@ def ship_border():
                                         name_folder = "animation_miss",
                                         animation_speed = 1.5
                                     )
-                                    # print(7)
                                     existss = False
 
                                     if list_grid[rowka][cellka] == 7:
@@ -257,7 +250,6 @@ def ship_border():
                                         name_folder = "animation_miss",
                                         animation_speed = 1.5
                                     )
-                                    # print(7)
                                     existss = False
 
                                     if list_grid[rowka][cellka] == 7:
@@ -272,5 +264,4 @@ def ship_border():
 
     # Отображение анимации
     for anim_miss in list_animation_miss:
-        # print(len(list_animation_miss))
         anim_miss.animation(main_screen = main_screen, count_image=29)

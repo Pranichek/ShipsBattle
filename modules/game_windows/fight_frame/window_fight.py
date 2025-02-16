@@ -225,7 +225,6 @@ def fight_window():
         list_ships[num].WIDTH = 55
         list_ships[num].HEIGHT = 55
         list_ships[num].load_image()
-    print("Заходит за пределы цикла vsegda?")
     # Завантажуємо картинку для сітки , по якій можемо ореєнутватися куди бити(тобто A1 , B9 і тд)
     grid_image.width = 597
     grid_image.height = 597

@@ -106,14 +106,12 @@ def main_window():
                     if x_pos <= join_game_frame.x + join_game_frame.width:
                         if y_pos >= join_game_frame.y:
                             if y_pos <= join_game_frame.y + join_game_frame.height:
-                                print("Join windo")
                                 change_scene(game_windows.join_game_window)
                                 check_press_button[0] = None 
                 elif x_pos >= create_game_frame.x:
                     if x_pos <= create_game_frame.x + create_game_frame.width:
                         if y_pos >= create_game_frame.y:
                             if y_pos <= create_game_frame.y + create_game_frame.height:
-                                print("Create window")
                                 change_scene(game_windows.create_game_window)
                                 check_press_button[0] = None 
             if check_run_game[0] == True:

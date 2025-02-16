@@ -19,7 +19,6 @@ from ...volume_settings import save_data_volume
 waiting_background = DrawImage(width = 1280,height = 832 , x_cor= 0 , y_cor = 0 ,folder_name= "backgrounds" , image_name= "waiting_background.png")
 
 def waiting_window():
-    print("Зашло")
     pygame.display.set_caption("Waiting window")
     run_game = True
     music_load_main.stop()

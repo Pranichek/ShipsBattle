@@ -304,11 +304,7 @@ class Ship:
 
         elif event.type == pygame.MOUSEBUTTONUP and self.CHECK_MOVE:
             self.CHECK_MOVE = False
-            print(self.WIDTH , "self_width")
-            print(self.RECT.width , "self_rect")
-
             if self.check_after_random == True:
-                print("Зашло")
                 self.clear_matrix()
                 self.check_after_random = None
                 print(list_grid)
@@ -319,7 +315,6 @@ class Ship:
                 # Проверяем ship != self - это для того чтобы не проверять кораблик сам с собой
                 # self.RECT.colliderect(ship.RECT) - проверям каждый корабль из списка с текущим кораблем, если ихние прямоугольники(колизии) пересекаются то ставим кораблик на начальные координаты
                 if ship != self and self.RECT.colliderect(ship.RECT):
-                    print("пересекается")
                     self.return_start_code()
                     # self.number_cell = self.number_ship_cell
                     # # Переделываем значение клетки в строку чтобы можно было лекго узнать в калоночке он стоит
@@ -331,7 +326,6 @@ class Ship:
                     else:
                         check_for_shipsmoving[0] = 0
                     self.clear_matrix()
-                    print(list_grid)
                     return False
  
             if grid_player.X_SCREEN - 30 <= self.X_COR and self.X_COR + self.RECT.width <= grid_player.X_SCREEN + 650:
@@ -348,7 +342,6 @@ class Ship:
                     self.number_ship_cell = self.center_to_cell_number(x = self.X_COR,y = self.Y_COR)
 
 
-                    print(list_grid)
                     print("------------------------------------------------------------------------------------------------")
                     for cell in list_object_map: 
                             if cell.x <= self.X_COR and self.X_COR < cell.x + 62:
@@ -382,7 +375,6 @@ class Ship:
                                             if self.Y_COR < shiper.Y_COR + 124:
                                                 self.X_COR = self.STASIC_X
                                                 self.Y_COR = self.STASIC_Y
-                                                print(self.row , self.col)
                                                 self.check_collision = True
                                                 self.clear_matrix()
                                                 self.return_start_code()
@@ -397,7 +389,6 @@ class Ship:
                                                             
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
-                                                            print(self.row , self.col)
                                                             self.check_collision = True
                                                             self.clear_matrix()
                                                             self.return_start_code()
@@ -406,10 +397,8 @@ class Ship:
                                             elif self.ORIENTATION_SHIP == "vertical":
                                                 if self.Y_COR + self.RECT.height > shiper.Y_COR - 62:
                                                     if self.Y_COR + self.RECT.height <= shiper.Y_COR + 124:
-                                                            print("HAAHAHAHAHHAHA")
                                                             self.X_COR = self.STASIC_X
                                                             self.Y_COR = self.STASIC_Y
-                                                            print(self.row , self.col)
                                                             self.check_collision = True
                                                             self.clear_matrix()
                                                             self.return_start_code()
@@ -423,7 +412,6 @@ class Ship:
                                             if self.Y_COR < shiper.Y_COR + shiper.RECT.height + 62:
                                                     self.X_COR = self.STASIC_X
                                                     self.Y_COR = self.STASIC_Y
-                                                    print(self.row , self.col)
                                                     self.check_collision = True
                                                     self.clear_matrix()
                                                     self.return_start_code()
@@ -436,7 +424,6 @@ class Ship:
                                                 if self.Y_COR + self.RECT.height <= shiper.Y_COR + shiper.RECT.height + 62:
                                                         self.X_COR = self.STASIC_X
                                                         self.Y_COR = self.STASIC_Y
-                                                        print(self.row , self.col)
                                                         self.check_collision = True
                                                         self.clear_matrix()
                                                         self.return_start_code()
@@ -444,16 +431,13 @@ class Ship:
                         
             
                     print("------------------------------------------------------------------------------------------------")
-                    print(list_grid)
                 else:
                     self.clear_matrix()
                     self.return_start_code()
-                    print(list_grid)
        
             else:
                 self.clear_matrix()
                 self.return_start_code()
-                print(list_grid)
                 
  
             # Обновляем прямоугольник в конце

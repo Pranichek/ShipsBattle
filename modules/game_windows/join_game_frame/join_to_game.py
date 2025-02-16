@@ -34,7 +34,6 @@ def join_game_window():
     pygame.display.set_caption("Join to Game Window")
     #створюжмо змінну для того щоб відстежувати коли треба закривати вікно
     run_game = True
-    print("Заходит")
     volume_down_button.x = 1096
     volume_down_button.y = 26
     volume_up_button.x = 1004
@@ -60,7 +59,6 @@ def join_game_window():
                 list_check_connection[0] = "error_connection"
                 if fail_connect.check_show == False:
                     fail_connect.check_show = True
-                print("Zahodit")
         try:
             data = read_json(name_file = "utility.json")
             status_server = data["status"]

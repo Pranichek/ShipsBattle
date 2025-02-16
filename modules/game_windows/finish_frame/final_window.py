@@ -476,7 +476,6 @@ def finish_window():
         for enm_medal in enemy_medals:
             enm_medal.VISIBLE = 100
             enm_medal.ACTIVE = False
-        print("UBANAYA OTCHISTKA IDI NAHUI")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False

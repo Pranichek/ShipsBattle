@@ -55,8 +55,7 @@ check_connection = [True]
 def listen_client(client, second_client):
     while SERVER.run == True:
         try:
-            # if SERVER.clients > 1:
-            #     client.settimeout(5)
+
             data = client.recv(1024)
             if data:
                 second_client.sendall(data)
@@ -109,7 +108,6 @@ class Server():
                     print("Second player is connecter")
                     self.RESTART = False
 
-                    print(client_socket , client_socket_second)
 
                     thread1 = Thread(target = listen_client, args = (client_socket, client_socket_second))
                     thread1.start()
@@ -122,20 +120,13 @@ class Server():
 
                     thread1.join()
                     thread2.join()
-                    print("Congratulations")
                     self.PORT += 1
                 if self.RESTART:
                     self.RESTART = False
                     continue
             except Exception as error:
                 pass
-        # self.server_socket.close()
-        # self.PORT = 0
-        # self.RESTART = False
-        # self.START_CONNECT = False
-        # self.clients = 0
-        # print("Server cloesed")
-        # print(f"{colorama.Fore.RED} SERVER CLOSED {colorama.Style.RESET_ALL}")
+
 
 SERVER = Server()
 

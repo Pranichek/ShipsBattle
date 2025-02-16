@@ -57,7 +57,6 @@ def random_places_ships():
                         list_ships[shipka].row = row
                         list_ships[shipka].col = col
                         list_ships[shipka].check_after_random = True
-                        print(list_grid)
                         break
                 else:
                     continue
@@ -148,7 +147,6 @@ def random_places_ships():
                             list_ships[shipka].row = row
                             list_ships[shipka].col = col
                             list_ships[shipka].check_after_random = True
-                            print(list_grid)
                             break
                     if orientation == 'vertical':
                         if row + list_ships[shipka].LENGHT < 11:
@@ -165,7 +163,6 @@ def random_places_ships():
                             list_ships[shipka].row = row
                             list_ships[shipka].col = col
                             list_ships[shipka].check_after_random = True
-                            print(list_grid)
                             is_collision[0] = True
                             break
                     else:

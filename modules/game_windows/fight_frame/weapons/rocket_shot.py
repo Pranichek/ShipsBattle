@@ -41,7 +41,7 @@ def simple_shot(row: int, col: int, cell:int, x_hit_the_ship: list, y_hit_the_sh
         
         # робимо умову для випадку коли по клітичнці вже били
         if enemy_matrix[row][col] == 5 or enemy_matrix[row][col] == 7:
-            print("Уже стреляли в эту клетку")
+            print("PLayer is already shoted in this cell")
         elif enemy_matrix[row][col] == 0:
             # якщо гравець натиснув на пусту клітинку , то у матрицю ворога записуємо цифру 5
             # 5 - значить , що гравець зробив постріл , але схибив його
@@ -53,10 +53,8 @@ def simple_shot(row: int, col: int, cell:int, x_hit_the_ship: list, y_hit_the_sh
             x_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].x
             y_hit_the_ship[0] = list_object_map_enemy[list_object_map_enemy.index(cell)].y
             # записуємо у матрицю ворога 5
-            print(enemy_matrix, "enemy_matrix")
             enemy_matrix[row][col] = 5
             # обнуляємо час для ходу
-            print("mimo")
             server_module.turn[1] = True
             if server_module.list_player_role[0] == "client_player":
                 server_module.turn[0] = "server_turn"

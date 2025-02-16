@@ -102,27 +102,6 @@ first_tasks_copy = list_first_task.copy()
 second_tasks_copy = list_second_task.copy()
 third_tasks_copy = list_third_task.copy()
 fourth_tasks_copy = list_fourth_task.copy()
-# # def new_tasks():
-# #     if done_task_three in shop_item:
-# #         done_task_three.VISIBLE = 0
-# #     if done_task_two in shop_item:
-# #         done_task_two.VISIBLE = 0
-# #     if done_task_one in shop_item:
-# #         done_task_one.VISIBLE = 0
-# #     if done_task_four in shop_item:
-# #         done_task_four.VISIBLE = 0
-# #     first_task.TEXT = random.choice(first_tasks_copy)
-# #     first_task.update_text_for_task()
-# #     second_task.TEXT = random.choice(second_tasks_copy)
-# #     second_task.update_text_for_task()
-# #     third_task.TEXT = random.choice(third_tasks_copy)
-# #     third_task.update_text_for_task()
-# #     fourth_task.TEXT = random.choice(fourth_tasks_copy)
-# #     fourth_task.update_text_for_task()
-
-
-def test():
-    print("Hello world!") 
 
 # список в котором храним сколько потртили монет
 waste_money = [0]

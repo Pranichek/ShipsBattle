@@ -12,7 +12,6 @@ def auto_aim(row: int, column: int):
         if column - 2 >= 0 and column + 2 < 10:
             for col in range(0, 5):
                 if enemy_matrix[row - 2][(column - 2) + col] in [1, 2, 3, 4]:
-                    print("Maybe baby")
                     row_ship = row - 2
                     col_ship = (column - 2) + col
                     str_col = str(col_ship)

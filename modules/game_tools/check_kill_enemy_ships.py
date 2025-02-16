@@ -31,7 +31,6 @@ def kill_enemy_ships():
             if enemy_matrix[rowee][cellee] == 7:
                 if check_target_attack[0] == "None" and check_kill_enemy[0] == True:
                     check_target_attack[0] = True
-                    print("Выполнена ачивка")
 
                 if check_target_attack[0] != True:
                     check_target_attack[0] = "None"
@@ -59,7 +58,6 @@ def kill_enemy_ships():
 
                 if list_direction_enemy[0] != "":
                     if count_len_enemy[0] == 1 and list_direction_enemy[0] != "":
-                        print("убили корабль" , count_len_enemy[0])
                         check_kill_enemy[0] = True
                         check_number_cell_enemy.append(num_cell)
                         enemy_died_ships.append(count_len_enemy[0])
@@ -72,7 +70,6 @@ def kill_enemy_ships():
                             elif enemy_matrix[rowee][cellee + len_ship]!= 7:
                                 break
                             if len_ship + 1 >= count_len_enemy[0]:
-                                print("убили корабль" , count_len_enemy[0])
                                 check_kill_enemy[0] = True
                                 for i in range(1, count_len_enemy[0]):
                                    check_number_cell_enemy.append(num_cell + i)
@@ -87,7 +84,6 @@ def kill_enemy_ships():
                             elif enemy_matrix[rowee + len_ship][cellee]!= 7:
                                 break
                             if len_ship + 1 >= count_len_enemy[0]:
-                                print("убили корабль" , count_len_enemy[0])
                                 check_kill_enemy[0] = True
                                 for i in range(1, count_len_enemy[0]):
                                     check_number_cell_enemy.append(num_cell + i)

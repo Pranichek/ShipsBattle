@@ -56,7 +56,6 @@ def send_matrix():
     except:
         data_player_shot.append(0)
     list_check_need_send[0] = True
-    print(len(data_player_shot))
     
 
 dict_status_game = {
@@ -77,7 +76,6 @@ def recv_all(sock):
 
 check_start_connect = [False, False, False]
 def start_client():
-    print("Запуска клиента происходит")
     check_start_connect[0] = True
     while True:
         try:
@@ -93,17 +91,13 @@ def start_client():
                 break
         except Exception as error:
             check_start_connect[1] = False
-            print("Неправильные данные", error)
             time.sleep(1)
             client_socket.settimeout(None)
             continue
 
-    print("Клиент подключён к серверу.")
     # Получение сообщения от сервера (роль клиента)
     role = client_socket.recv(1024).decode("utf-8")
-    print("jkdfjkdsfjdjvnjkfnvjfnjndf")
     server_data = role.split(" ")
-    print(server_data, "ide?")
     server_module.list_player_role[0] = server_data[0]
     your_turn[0] = server_data[1]
     # Бесконечный цикл для отправки и получения данных
@@ -169,20 +163,16 @@ def start_client():
                         client_socket.close()
                     except Exception as error:
                         print(f"Error(client_socket.close): {RED}{error}")
-                    print(2)
                     
                     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    print(3)
                     connection[0] = False
                     print(port_client)
                     client_socket.connect((str(input_ip_adress.user_text), port_client)) 
-                    print(5)
                     break
                 except:
                     time.sleep(1)
                     continue
-    print("Клиент отключён от сервера.")
-    # client_socket.close()
+
                 
 def count_time():
     check_start_time_thread[0] = True
