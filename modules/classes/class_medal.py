@@ -108,7 +108,7 @@ class Medal:
            
             
 four_decker_sniper_medal = Medal(x_cor = 750, y_cor = 24, width = 60, height = 60, image_name = "medal_four_decker" , medal_image_description = "four_decker_sniper")
-magnat_medal = Medal(x_cor = 900, y_cor = 24, width = 55, height = 55, image_name = "auto_sight_medal", medal_image_description = "auto_sight")
+magnat_medal = Medal(x_cor = 900, y_cor = 24, width = 55, height = 55, image_name = "auto_sight_medal", medal_image_description = "auto_sight")#
 destroyer_medal = Medal(x_cor = 850, y_cor = 68, width = 60, height = 60, image_name = "destroyer", medal_image_description = "destroyer")
 first_hit_medal = Medal(x_cor = 800, y_cor = 26, width = 60, height = 60, image_name = "first_hit_medal", medal_image_description = "first_shot")
 lone_hunter_medal = Medal(x_cor = 850, y_cor = 24, width = 60, height = 60, image_name = "lone_hunter_medal", medal_image_description = "lone_hunter")
@@ -122,7 +122,7 @@ target_attack_medal = Medal(x_cor = 950, y_cor = 64, width = 60, height = 60, im
 player_medal = [four_decker_sniper_medal, magnat_medal, destroyer_medal, first_hit_medal, lone_hunter_medal, master_of_disguist_medal, opening_battle_medal, collector_medal, perfect_shooter_medal, pioneer_medal, strategist_medal, target_attack_medal]
 
 enemy_four_decker_sniper_medal = Medal(x_cor = 220, y_cor = 24, width = 60, height = 60, image_name = "medal_four_decker" , medal_image_description = "four_decker_sniper")
-enemy_magnat_medal = Medal(x_cor = 370, y_cor = 24, width = 55, height = 55, image_name = "auto_sight_medal", medal_image_description = "auto_sight")
+enemy_magnat_medal = Medal(x_cor = 370, y_cor = 24, width = 55, height = 55, image_name = "auto_sight_medal", medal_image_description = "auto_sight")#
 enemy_destroyer_medal = Medal(x_cor = 320, y_cor = 68, width = 60, height = 60, image_name = "destroyer", medal_image_description = "destroyer")
 enemy_first_hit_medal = Medal(x_cor = 270, y_cor = 26, width = 60, height = 60, image_name = "first_hit_medal", medal_image_description = "first_shot")
 enemy_lone_hunter_medal = Medal(x_cor = 320, y_cor = 24, width = 60, height = 60, image_name = "lone_hunter_medal", medal_image_description = "lone_hunter")
