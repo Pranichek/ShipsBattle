@@ -1817,7 +1817,7 @@ def fight_window():
         # Перевіряємо чи не пустий список який зберігає чи хтось виграв
         if achievement.strategist_achievement.ACTIVE == False:
             if server_module.list_check_win[0] != None:
-                if check_animation[0] == "" and flag_miss_rocket_animation[0] == "":   
+                if check_animation[0] == "" and flag_miss_rocket_animation[0] == "" and server_module.flag_bomb_animation[0] == False:   
                     # якщо вже їтось виграв , то робимо ефект затемнення
                     apply_fade_effect(screen = module_screen.main_screen)
                     # зупиняємо цикл гри
