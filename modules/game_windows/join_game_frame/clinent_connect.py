@@ -2,7 +2,8 @@ from threading import Thread
 from ...classes.class_input_text import input_ip_adress , input_port, input_nick, input_password
 from ...classes.class_image import DrawImage
 from ...classes.class_click import music_click
-from ...client import start_client, list_check_connection, list_users, check_start_connect
+from ...client import start_client, list_check_connection , check_start_connect
+from ...json_functions import list_users
 
 
 

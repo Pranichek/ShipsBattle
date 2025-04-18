@@ -80,6 +80,7 @@ def start_client():
     while True:
         try:
             if check_start_connect[1] == True:
+                print("Успешное подключение!")
                 # Создание нового сокета при каждой попытке
                 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 client_socket.settimeout(0.1)
@@ -99,7 +100,7 @@ def start_client():
     role = client_socket.recv(1024).decode("utf-8")
     server_data = role.split(" ")
     server_module.list_player_role[0] = server_data[0]
-    your_turn[0] = server_data[1]
+    your_turn[0] = "1"
     # Бесконечный цикл для отправки и получения данных
     while list_check_win[0] == None:
         if list_check_win[0] != None:

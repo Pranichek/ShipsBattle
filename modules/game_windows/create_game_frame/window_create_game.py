@@ -12,6 +12,7 @@ from ..button_pressed import check_press_button, button_action
 from ..change_window import change_scene, list_current_scene
 from ...json_functions import read_json
 from ...volume_settings import off_sound_button, volume_down_button, volume_up_button
+from ...game_tools import apply_fade_effect
 
 
 flag_ip = [None]
@@ -86,6 +87,7 @@ def create_game_window():
 
     #основний цикл роботи вікна користувача
     while run_game:
+        print(123)
         room_data.visible = 255
         if input_ip_adress.user_text != "ip adress":
             ip_room_text.text = input_ip_adress.user_text
@@ -105,6 +107,8 @@ def create_game_window():
 
         input_ip_adress.draw_text()
         input_port.draw_text()
+        input_nick.draw_text()
+        input_password.draw_text()
 
         back_to_menu.draw(surface = module_screen.main_screen)
 
@@ -120,10 +124,14 @@ def create_game_window():
         volume_up_button.draw(surface = module_screen.main_screen)
 
         if SERVER.START_CONNECT == True:
+            print(113)
+            apply_fade_effect(screen = module_screen.main_screen)
+            change_scene(game_windows.waiting_window)
             if list_serv[0] == True:
                 if count_music[0] == True: 
                     create.play2(0)
                     count_music[0] = False
+                    run_game = False
         elif SERVER.START_CONNECT == False:
             ip_room_text.text = ""
             ip_room_text.update_text()
@@ -144,7 +152,16 @@ def create_game_window():
             if input_ip_adress.user_text == "" or input_ip_adress.user_text == input_ip_adress.base_text:
                 input_ip_adress.user_text = input_ip_adress.base_text
                 input_ip_adress.fade_in()
-     
+
+        if input_nick.active == True:
+            if input_nick.user_text == input_nick.base_text or input_nick.user_text == "":
+                input_nick.fade_out()
+            else:
+                input_nick.fade_in()
+        else:  # Если поле неактивно
+            if input_nick.user_text == "" or input_nick.user_text == input_nick.base_text:  # Если пользователь ничего не ввел
+                input_nick.user_text = input_nick.base_text  # Восстановление базового текста
+                input_nick.fade_in()  # Плавное появление базового текста
         
         if input_port.active == True:
             if input_port.user_text == input_port.base_text or input_port.user_text == "":
@@ -156,6 +173,16 @@ def create_game_window():
                 input_port.user_text = input_port.base_text
                 input_port.fade_in()
 
+        if input_password.active == True:
+            if input_password.user_text == input_password.base_text or input_password.user_text == "":
+                input_password.fade_out()
+            else:
+                input_password.fade_in()
+        else:
+            if input_password.user_text == "" or input_password.user_text == input_password.base_text:
+                input_password.user_text = input_password.base_text
+                input_password.fade_in()
+
             
         #если попытались создать сервер кторый нельзя(например неправильны айпи) , то выводим предуприждение об этом
         if check_server_started[0] == "error_server":
@@ -165,6 +192,7 @@ def create_game_window():
             #когда игрок закрыл табличку записываем True в список , чтобы знали что уже пытались запустить сервер
             if fail_start_server.check_show == False:
                 check_server_started[0] = True
+
         #Обробляємо всі події у вікні
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -172,6 +200,7 @@ def create_game_window():
                 list_current_scene[0] = "END GAME"
                 pygame.quit()
                 sys.exit()
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu.check_click(event = event)
                 start_game_button.check_click(event = event)

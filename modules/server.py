@@ -100,10 +100,10 @@ class Server():
                     self.START_CONNECT = True
                     client_socket, addr = self.server_socket.accept()
                     first_player_data = player_one + " 1"
-                    client_socket.sendall(first_player_data.encode("utf-8"))
                     print("First player is connected")
                     client_socket_second, addr_second = self.server_socket.accept()
                     second_player_data = player_two + " 2"
+                    client_socket.sendall(first_player_data.encode("utf-8"))
                     client_socket_second.sendall(second_player_data.encode("utf-8"))
                     print("Second player is connecter")
                     self.RESTART = False

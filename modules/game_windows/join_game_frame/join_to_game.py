@@ -136,7 +136,7 @@ def join_game_window():
             if fail_connect.visible == False:
                 list_check_connection[0] = True
 
-        if your_turn[0] == "2":
+        if your_turn[0] != 0:
             if input_nick.user_text not in list_users:
                 #создаем игрока с его ником и даем базовое количество баллов
                 list_users[input_nick.user_text] = {
@@ -147,19 +147,6 @@ def join_game_window():
                 write_json(filename = "data_base.json" , object_dict = list_users)
             apply_fade_effect(screen = module_screen.main_screen)
             change_scene(game_windows.ships_position_window)
-            check_press_button[0] = None
-            run_game = False
-        elif your_turn[0] == "1":
-            if input_nick.user_text not in list_users:
-                #создаем игрока с его ником и даем базовое количество баллов
-                list_users[input_nick.user_text] = {
-                    "points": 0,
-                    "password": input_password.user_text
-                }
-                #зберігаємо інформацію у json файл
-                write_json(filename = "data_base.json" , object_dict = list_users)
-            apply_fade_effect(screen = module_screen.main_screen)
-            change_scene(game_windows.waiting_window)
             check_press_button[0] = None
             run_game = False
         

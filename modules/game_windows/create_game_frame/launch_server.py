@@ -1,8 +1,10 @@
 from ...classes.class_click import music_click
-from ...classes.class_input_text import input_port, input_ip_adress
+from ...classes.class_input_text import input_port, input_ip_adress, input_nick, input_password
 from ...classes.class_image import DrawImage
 from threading import Thread
 from ...server import run_server, SERVER
+from ...client import start_client, check_start_connect
+from ...json_functions import list_users, write_json
 
 #список для відслуджування чи нажати кнопка заупску серверу чи ні
 check_server_started = [False]
@@ -27,6 +29,34 @@ def start_server():
             fail_start_server.check_show = True
             print("error_server")
             return False
+        
+    if input_password.user_text == "password" or input_password.user_text == "" or  input_password.user_text == " " or input_nick.user_text == "" or input_nick.user_text == "nickname":
+        check_server_started[0] = "error_server"
+        list_serv[0] = False
+        if fail_start_server.check_show == False:
+            fail_start_server.check_show = True
+            print("error_connection")
+        # return False - означає що сталася помилка ,та код не буде далі рухатися
+        return False
+    
+    if input_nick.user_text in list_users:
+        if list_users[input_nick.user_text]["password"] == "password":
+            check_server_started[0] = "error_server"
+            list_serv[0] = False
+            if fail_start_server.check_show == False:
+                fail_start_server.check_show = True
+                print("error_connection")
+            # return False - означає що сталася помилка ,та код не буде далі рухатися
+            return False
+        if list_users[input_nick.user_text]["password"] != input_password.user_text:
+            check_server_started[0] = "error_server"
+            list_serv[0] = False
+            if fail_start_server.check_show == False:
+                fail_start_server.check_show = True
+                print("error_connection")
+            # return False - означає що сталася помилка ,та код не буде далі рухатися
+            return False
+    
     # перевіряємо чи кожне число в межах допустимого діапазону
     for number in ip_address:
         # перевіряємо чи це взагалі числа а не наприклад літери
@@ -84,6 +114,18 @@ def start_server():
     count_music[0] = True
     if int(input_port.user_text) != SERVER.PORT:
         SERVER.run = True
+        if input_nick.user_text not in list_users:
+            #создаем игрока с его ником и даем базовое количество баллов
+            list_users[input_nick.user_text] = {
+                "points": 0,
+                "password": input_password.user_text
+            }
+            #зберігаємо інформацію у json файл
+            write_json(filename = "data_base.json" , object_dict = list_users)
         server_thread = Thread(target = run_server, args=(str(input_ip_adress.user_text), (input_port.user_text)), daemon = True)
         server_thread.start()
+        check_start_connect[1] = True
+        check_start_connect[2] = True
+        connect_to_game = Thread(target = start_client, daemon = True)
+        connect_to_game.start()
 
